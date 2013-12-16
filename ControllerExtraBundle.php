@@ -7,7 +7,7 @@
  * @since 2013
  */
 
-namespace Mmoreram\ControllerExtra;
+namespace Mmoreram\ControllerExtraBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Doctrine\Common\Annotations\AnnotationRegistry;
