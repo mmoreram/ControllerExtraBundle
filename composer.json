@@ -1,0 +1,30 @@
+{
+    "name": "mmoreram/controller-extra-bundle",
+    "description": "Some specific controller features",
+    "keywords": ["symfony2", "controller", "annotations", "controller-extra-bundle"],
+    "homepage": "https://github.com/mmoreram/ControllerExtraBundle",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Marc Morera",
+            "email": "yuhu@mmoreram.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "3.7.*"
+    },
+    "target-dir": "Mmoreram/ControllerExtraBundle",
+    "autoload": {
+        "psr-0": { "Mmoreram\\ControllerExtraBundle": "" }
+    },
+    "minimum-stability": "stable",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    }
+}

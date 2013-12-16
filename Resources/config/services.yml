@@ -1,0 +1,44 @@
+services:
+
+    #
+    # Event Listeners
+    #
+    mmoreram.controllerextra.event_listeners.form_annotation_event_listener:
+        class: %mmoreram.controllerextra.event_listeners.form_annotation_event_listener.class%
+        arguments:
+            kernel: @kernel
+            annotations_reader: @annotation_reader
+            form_registry: @form.registry
+            form_factory: @form.factory
+        calls:
+            - [setActive, [%mmoreram.controllerextra.form_active%]]
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
+
+    mmoreram.controllerextra.event_listeners.flush_annotation_event_listener:
+        class: %mmoreram.controllerextra.event_listeners.flush_annotation_event_listener.class%
+        arguments:
+            kernel: @kernel
+            annotations_reader: @annotation_reader
+            entity_manager: @doctrine.orm.entity_manager
+        calls:
+            - [setActive, [%mmoreram.controllerextra.flush_active%]]
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
+
+    mmoreram.controllerextra.event_listeners.paginator_annotation_event_listener:
+        class: %mmoreram.controllerextra.event_listeners.paginator_annotation_event_listener.class%
+        arguments:
+            kernel: @kernel
+            annotations_reader: @annotation_reader
+            entity_manager: @doctrine.orm.entity_manager
+            knp_paginator: "@?knp_paginator"
+        calls:
+            - [setActive, [%mmoreram.controllerextra.paginator_active%]]
+            - [setDefaultNumber, [%mmoreram.controllerextra.paginator_number_default%]]
+            - [setDefaultPage, [%mmoreram.controllerextra.paginator_page_default%]]
+            - [setDefaultOrderByField, [%mmoreram.controllerextra.paginator_orderby_field_default%]]
+            - [setDefaultOrderByMode, [%mmoreram.controllerextra.paginator_orderby_mode_default%]]
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
