@@ -19,7 +19,6 @@ Table of contents
 2. [Annotations](#annotations)
     * [Mmoreram\Form](#mmoreram-form)
     * [Mmoreram\Flush](#mmoreram-flush)
-    * [Mmoreram\Paginator](#mmoreram-paginator)
 3. [Contributing](#contribute)
 
 # Installing/Configuring
@@ -122,7 +121,7 @@ To inject a Form object you only need to cast method variable as such.
     {
     }
 
-You can also, using [SensioFrameworkExtraBundle][1]'s [ParamConverter][2], create Form object with existing entity.
+You can also, using [SensioFrameworkExtraBundle][1]'s [ParamConverter][2], create a Form object with an previously created entity. you can define this entity by using `entity` parameter.
 
     use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
     use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
