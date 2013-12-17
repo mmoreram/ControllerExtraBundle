@@ -70,6 +70,23 @@ abstract class AbstractEventListener
 
 
     /**
+     * Specific annotation evaluation.
+     *
+     * This method must be implemented in every single EventListener with specific logic
+     *
+     * @param boolean $active Define if current annotation must be evaluated
+     *
+     * @return AbstractEventListener self Object
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
+
+        return $this;
+    }
+
+
+    /**
      * Return kernel object
      *
      * @return KernelInterface Kernel
@@ -92,6 +109,17 @@ abstract class AbstractEventListener
 
 
     /**
+     * Return active value
+     *
+     * @return boolean Current annotation parsing is active
+     */
+    protected function isActive()
+    {
+        return $this->active;
+    }
+
+
+    /**
      * Method executed while loading Controller
      *
      * @param FilterControllerEvent $event Filter Controller event
@@ -101,7 +129,7 @@ abstract class AbstractEventListener
     public function onKernelController(FilterControllerEvent $event)
     {
 
-        if (!$this->active) {
+        if (!$this->isActive()) {
 
             return;
         }
@@ -147,23 +175,6 @@ abstract class AbstractEventListener
                 $this->evaluateAnnotation($controller, $request, $annotation, $this->parametersIndexed);
             }
         }
-    }
-
-
-    /**
-     * Specific annotation evaluation.
-     *
-     * This method must be implemented in every single EventListener with specific logic
-     *
-     * @param boolean $active Define if current annotation must be evaluated
-     *
-     * @return AbstractEventListener self Object
-     */
-    public function setActive($active)
-    {
-        $this->active = $active;
-
-        return $this;
     }
 
 

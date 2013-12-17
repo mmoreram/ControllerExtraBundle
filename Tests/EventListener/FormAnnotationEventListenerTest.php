@@ -15,4 +15,20 @@ namespace Mmoreram\ControllerExtraBundle\Tests\EventListener;
 class FormAnnotationEventListenerTest extends \PHPUnit_Framework_TestCase
 {
 
+    /**
+     * Tests evaluateAnnotation method
+     *
+     * This case considers that Annotation is a Flush annotation and no manager is defined in it
+     */
+    public function testEvaluateAnnotationFlushAnnotation()
+    {
+        $flushAnnotationEventListener = $this
+            ->getMockBuilder('Mmoreram\ControllerExtraBundle\EventListener\FormAnnotationEventListener')
+            ->disableOriginalConstructor()
+            ->setMethods(array(
+                'getDoctrine',
+                'getDefaultManager',
+            ))
+            ->getMock();
+    }
 }

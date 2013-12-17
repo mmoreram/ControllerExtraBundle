@@ -49,4 +49,48 @@ class Form extends Annotation
      * Handle request
      */
     public $handleRequest = false;
+
+
+    /**
+     * return name
+     *
+     * @return string Name
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+
+    /**
+     * return variable
+     *
+     * @return string Variable
+     */
+    public function getVariable()
+    {
+        return $this->variable;
+    }
+
+
+    /**
+     * return entity
+     *
+     * @return string Entity
+     */
+    public function getEntity()
+    {
+        return $this->entity;
+    }
+
+
+    /**
+     * return handle request
+     *
+     * @return string Handle Request
+     */
+    public function getHandleRequest()
+    {
+        return $this->handleRequest;
+    }
 }
