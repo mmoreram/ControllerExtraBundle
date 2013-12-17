@@ -117,7 +117,7 @@ class FormAnnotationEventListener extends AbstractEventListener
      *
      * return Mixed object to inject as a method parameter
      */
-    private function getBuiltObject(Request $request, FormFactoryInterface $formFactory, $annotation, $parameterClass, $type)
+    private function getBuiltObject(Request $request, FormFactoryInterface $formFactory, Annotation $annotation, array $parameterClass, AbstractType $type)
     {
         /**
          * Checks if parameter typehinting is AbstractType

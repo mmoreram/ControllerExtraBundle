@@ -66,7 +66,7 @@ class FlushAnnotationEventListener extends AbstractEventListener
      * @param Reader                  $reader   Reader
      * @param AbstractManagerRegistry $doctrine Doctrine
      */
-    public function __construct(KernelInterface $kernel, Reader $reader, RegistryInterface $doctrine)
+    public function __construct(KernelInterface $kernel, Reader $reader, AbstractManagerRegistry $doctrine)
     {
         parent::__construct($kernel, $reader);
 
