@@ -103,8 +103,6 @@ class ResolverEventListener
      * Method executed while loading Controller
      *
      * @param FilterControllerEvent $event Filter Controller event
-     *
-     * @todo place all non-specific data in a service
      */
     public function onKernelController(FilterControllerEvent $event)
     {
