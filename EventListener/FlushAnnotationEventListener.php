@@ -14,6 +14,7 @@ use Doctrine\Common\Annotations\Reader;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpFoundation\Request;
+use Doctrine\Common\Persistence\AbstractManagerRegistry;
 
 use Mmoreram\ControllerExtraBundle\EventListener\Abstracts\AbstractEventListener;
 use Mmoreram\ControllerExtraBundle\Annotation\Flush as AnnotationFlush;
@@ -37,9 +38,17 @@ class FlushAnnotationEventListener extends AbstractEventListener
     /**
      * @var ObjectManager
      *
-     * Entity manager
+     * Manager
      */
-    protected $entityManager;
+    protected $manager;
+
+
+    /**
+     * @var string
+     *
+     * default manager
+     */
+    protected $defaultManager;
 
 
     /**
@@ -53,15 +62,48 @@ class FlushAnnotationEventListener extends AbstractEventListener
     /**
      * Construct method
      *
-     * @param KernelInterface $kernel   Kernel
-     * @param Reader          $reader   Reader
-     * @param Doctrine        $doctrine Doctrine
+     * @param KernelInterface         $kernel   Kernel
+     * @param Reader                  $reader   Reader
+     * @param AbstractManagerRegistry $doctrine Doctrine
      */
-    public function __construct(KernelInterface $kernel, Reader $reader, $doctrine)
+    public function __construct(KernelInterface $kernel, Reader $reader, RegistryInterface $doctrine)
     {
         parent::__construct($kernel, $reader);
 
         $this->doctrine = $doctrine;
+    }
+
+
+    /**
+     * Get Doctrine object
+     *
+     * @return AbstractManagerRegistry Doctrine instance
+     */
+    public function getDoctrine()
+    {
+        return $this->doctrine;
+    }
+
+
+    /**
+     * Get Manager object
+     *
+     * @return ObjectManager Manager
+     */
+    public function getManager()
+    {
+        return $this->manager;
+    }
+
+
+    /**
+     * Return if manager must be flushed
+     *
+     * @return boolean Manager must be flushed
+     */
+    public function getMustFlush()
+    {
+        return $this->mustFlush;
     }
 
 
@@ -81,15 +123,28 @@ class FlushAnnotationEventListener extends AbstractEventListener
 
 
     /**
+     * Get default manager name
+     *
+     * @return string Default manager
+     */
+    public function getDefaultManager()
+    {
+
+        return $this->defaultManager;
+    }
+
+
+    /**
      * Specific annotation evaluation.
      *
      * @param array $controller Controller
      * @param Request $request Request
      * @param Annotation $annotation Annotation
+     * @param array $parametersIndexed Parameters indexed
      *
      * @return AbstractEventListener self Object
      */
-    public function evaluateAnnotation(array $controller, Request $request, Annotation $annotation)
+    public function evaluateAnnotation(array $controller, Request $request, Annotation $annotation, array $parametersIndexed)
     {
 
         /**
@@ -97,8 +152,14 @@ class FlushAnnotationEventListener extends AbstractEventListener
          */
         if ($annotation instanceof AnnotationFlush) {
 
-            $manager = $annotation->manager ?: $this->defaultManager;
-            $this->entityManager = $ths->doctrine->getManager($manager);
+            $managerName = !is_null($annotation->getManager())
+                         ? $annotation->getManager()
+                         : $this->getDefaultManager();
+
+            $this->manager = $this
+                ->getDoctrine()
+                ->getManager($managerName);
+
             $this->mustFlush = true;
         }
     }
@@ -112,9 +173,11 @@ class FlushAnnotationEventListener extends AbstractEventListener
     public function onKernelResponse(FilterResponseEvent $event)
     {
 
-        if ($this->mustFlush) {
+        if ($this->getMustFlush()) {
 
-            $this->entityManager->flush();
+            $this
+                ->getManager()
+                ->flush();
         }
     }
 }

@@ -25,4 +25,15 @@ class Flush extends Annotation
      * Manager to use when flushing
      */
     public $manager;
+
+
+    /**
+     * return manager
+     *
+     * @return string Manager
+     */
+    public function getManager()
+    {
+        return $this->manager;
+    }
 }

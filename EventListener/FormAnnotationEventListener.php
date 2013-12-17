@@ -9,11 +9,9 @@
 
 namespace Mmoreram\ControllerExtraBundle\EventListener;
 
-use ReflectionMethod;
 use Doctrine\Common\Annotations\Reader;
 use Symfony\Component\Form\FormRegistryInterface;
 use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -67,10 +65,11 @@ class FormAnnotationEventListener extends AbstractEventListener
      * @param array $controller Controller
      * @param Request $request Request
      * @param Annotation $annotation Annotation
+     * @param array $parametersIndexed Parameters indexed
      *
      * @return AbstractEventListener self Object
      */
-    public function evaluateAnnotation(array $controller, Request $request, Annotation $annotation)
+    public function evaluateAnnotation(array $controller, Request $request, Annotation $annotation, array $parametersIndexed)
     {
 
         /**
@@ -93,59 +92,71 @@ class FormAnnotationEventListener extends AbstractEventListener
                         ->getType($annotationValue)
                         ->getInnerType();
 
-            $currentParameter = $this->parametersIndexed[$annotation->variable]
+            $parameterClass = $parametersIndexed[$annotation->variable]
                 ->getClass()
                 ->getName();
 
-            /**
-             * Checks if parameter typehinting is AbstractType
-             * In this case, form type as defined method parameter
-             */
-            if ('Symfony\\Component\\Form\\AbstractType' == $currentParameter) {
+            $request->attributes->set(
+                $annotation->variable,
+                $this->getBuiltObject($request, $this->formFactory, $annotation, $parameterClass, $type)
+            );
+        }
+    }
 
-                $request->attributes->set($annotation->variable, $type);
 
-                return;
-            }
+    /**
+     * Built desired object.
+     *
+     * @param Request $request Request
+     * @param FormFactoryInterface  $formFactory  Form Factory
+     * @param Annotation $annotation Annotation
+     * @param string $parameterClass Class type of  method parameter
+     * @param AbstractType $type Built Type object
+     *
+     * return Mixed object to inject as a method parameter
+     */
+    private function getBuiltObject(Request $request, FormFactoryInterface $formFactory, $annotation, $parameterClass, $type)
+    {
+        /**
+         * Checks if parameter typehinting is AbstractType
+         * In this case, form type as defined method parameter
+         */
+        if ('Symfony\\Component\\Form\\AbstractType' == $parameterClass) {
 
-            $entity = $request->attributes->get($annotation->entity);
+            return $type;
+        }
 
-            /**
-             * Creates form object from type
-             */
-            $form = $this
-                ->formFactory
-                ->create($type, $entity);
+        $entity = $request->attributes->get($annotation->entity);
 
-            /**
-             * Handling request if needed
-             */
-            if ($annotation->handleRequest) {
+        /**
+         * Creates form object from type
+         */
+        $form = $formFactory->create($type, $entity);
 
-                $form->handleRequest($request);
-            }
+        /**
+         * Handling request if needed
+         */
+        if ($annotation->handleRequest) {
 
-            /**
-             * Checks if parameter typehinting is Form
-             * In this case, inject form as defined method parameter
-             */
-            if ('Symfony\\Component\\Form\\Form' == $currentParameter) {
+            $form->handleRequest($request);
+        }
 
-                $request->attributes->set($annotation->variable, $form);
+        /**
+         * Checks if parameter typehinting is Form
+         * In this case, inject form as defined method parameter
+         */
+        if ('Symfony\\Component\\Form\\Form' == $parameterClass) {
 
-                return;
-            }
+            return $form;
+        }
 
-            /**
-             * Checks if parameter typehinting is FormView
-             * In this case, inject form's view as defined method parameter
-             */
-            if ('Symfony\\Component\\Form\\FormView' == $currentParameter) {
+        /**
+         * Checks if parameter typehinting is FormView
+         * In this case, inject form's view as defined method parameter
+         */
+        if ('Symfony\\Component\\Form\\FormView' == $parameterClass) {
 
-                $request->attributes->set($annotation->variable, $form->createView());
-
-                return;
-            }
+            return $form->createView();
         }
     }
 }

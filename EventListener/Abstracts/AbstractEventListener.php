@@ -14,7 +14,6 @@ use Doctrine\Common\Annotations\Reader;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
 
@@ -71,6 +70,28 @@ abstract class AbstractEventListener
 
 
     /**
+     * Return kernel object
+     *
+     * @return KernelInterface Kernel
+     */
+    protected function getKernel()
+    {
+        return $this->kernel;
+    }
+
+
+    /**
+     * Return reader
+     *
+     * @return Reader Reader
+     */
+    protected function getReader()
+    {
+        return $this->reader;
+    }
+
+
+    /**
      * Method executed while loading Controller
      *
      * @param FilterControllerEvent $event Filter Controller event
@@ -112,7 +133,9 @@ abstract class AbstractEventListener
         /**
          * Annotations load
          */
-        $methodAnnotations = $this->reader->getMethodAnnotations($method);
+        $methodAnnotations = $this
+            ->getReader()
+            ->getMethodAnnotations($method);
 
         /**
          * Every annotation found is parsed
@@ -121,7 +144,7 @@ abstract class AbstractEventListener
 
             if ($annotation instanceof Annotation) {
 
-                $this->evaluateAnnotation($controller, $request, $annotation);
+                $this->evaluateAnnotation($controller, $request, $annotation, $this->parametersIndexed);
             }
         }
     }
@@ -154,8 +177,9 @@ abstract class AbstractEventListener
      * @param array $controller Controller
      * @param Request $request Request
      * @param Annotation $annotation Annotation
+     * @param array $parametersIndexed Parameters indexed
      *
      * @return AbstractEventListener self Object
      */
-    abstract public function evaluateAnnotation(array $controller, Request $request, Annotation $annotation);
+    abstract public function evaluateAnnotation(array $controller, Request $request, Annotation $annotation, array $parametersIndexed);
 }

@@ -12,7 +12,6 @@ namespace Mmoreram\ControllerExtraBundle\EventListener;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Annotations\Reader;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpFoundation\Request;
 use Knp\Component\Pager\Paginator;
 
@@ -158,10 +157,11 @@ class PaginatorAnnotationEventListener extends AbstractEventListener
      * @param array $controller Controller
      * @param Request $request Request
      * @param Annotation $annotation Annotation
+     * @param array $parametersIndexed Parameters indexed
      *
      * @return AbstractEventListener self Object
      */
-    public function evaluateAnnotation(array $controller, Request $request, Annotation $annotation)
+    public function evaluateAnnotation(array $controller, Request $request, Annotation $annotation, array $parametersIndexed)
     {
 
         /**
