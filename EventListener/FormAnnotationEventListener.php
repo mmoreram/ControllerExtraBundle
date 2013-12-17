@@ -62,10 +62,10 @@ class FormAnnotationEventListener extends AbstractEventListener
     /**
      * Specific annotation evaluation.
      *
-     * @param array $controller Controller
-     * @param Request $request Request
-     * @param Annotation $annotation Annotation
-     * @param array $parametersIndexed Parameters indexed
+     * @param array      $controller        Controller
+     * @param Request    $request           Request
+     * @param Annotation $annotation        Annotation
+     * @param array      $parametersIndexed Parameters indexed
      *
      * @return AbstractEventListener self Object
      */
@@ -94,10 +94,16 @@ class FormAnnotationEventListener extends AbstractEventListener
                         ->getType($annotationValue)
                         ->getInnerType();
 
+            /**
+             * Get parameter class for TypeHinting
+             */
             $parameterClass = $parametersIndexed[$annotation->variable]
                 ->getClass()
                 ->getName();
 
+            /**
+             * Requiring result with calling getBuiltObject(), set as request attribute desired element
+             */
             $request->attributes->set(
                 $annotation->getVariable(),
                 $this->getBuiltObject($request, $this->formFactory, $annotation, $parameterClass, $type)
@@ -109,11 +115,11 @@ class FormAnnotationEventListener extends AbstractEventListener
     /**
      * Built desired object.
      *
-     * @param Request $request Request
-     * @param FormFactoryInterface  $formFactory  Form Factory
-     * @param Annotation $annotation Annotation
-     * @param string $parameterClass Class type of  method parameter
-     * @param AbstractType $type Built Type object
+     * @param Request               $request        Request
+     * @param FormFactoryInterface  $formFactory    Form Factory
+     * @param Annotation            $annotation     Annotation
+     * @param string                $parameterClass Class type of  method parameter
+     * @param AbstractType          $type           Built Type object
      *
      * return Mixed object to inject as a method parameter
      */

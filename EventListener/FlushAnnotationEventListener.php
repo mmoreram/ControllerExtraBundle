@@ -137,10 +137,10 @@ class FlushAnnotationEventListener extends AbstractEventListener
     /**
      * Specific annotation evaluation.
      *
-     * @param array $controller Controller
-     * @param Request $request Request
-     * @param Annotation $annotation Annotation
-     * @param array $parametersIndexed Parameters indexed
+     * @param array      $controller        Controller
+     * @param Request    $request           Request
+     * @param Annotation $annotation        Annotation
+     * @param array      $parametersIndexed Parameters indexed
      *
      * @return AbstractEventListener self Object
      */
@@ -156,10 +156,16 @@ class FlushAnnotationEventListener extends AbstractEventListener
                          ? $annotation->getManager()
                          : $this->getDefaultManager();
 
+            /**
+             * Loading locally desired Doctrine manager
+             */
             $this->manager = $this
                 ->getDoctrine()
                 ->getManager($managerName);
 
+            /**
+             * In this case, manager must be flushed after controller logic
+             */
             $this->mustFlush = true;
         }
     }
@@ -173,8 +179,14 @@ class FlushAnnotationEventListener extends AbstractEventListener
     public function onKernelResponse(FilterResponseEvent $event)
     {
 
+        /**
+         * Only flushes if exists AnnotationFlush as a controller annotations
+         */
         if ($this->getMustFlush()) {
 
+            /**
+             * Flushing manager
+             */
             $this
                 ->getManager()
                 ->flush();

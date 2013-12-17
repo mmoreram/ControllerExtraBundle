@@ -109,6 +109,17 @@ abstract class AbstractEventListener
 
 
     /**
+     * Return parameters indexed
+     *
+     * @return array Parameters indexed
+     */
+    protected function getParametersIndexed()
+    {
+        return $this->parametersIndexed;
+    }
+
+
+    /**
      * Return active value
      *
      * @return boolean Current annotation parsing is active
@@ -139,6 +150,9 @@ abstract class AbstractEventListener
          */
         $controller = $event->getController();
 
+        /**
+         * If is not a valid controller structure, return
+         */
         if (!is_array($controller)) {
 
             return;
@@ -159,11 +173,27 @@ abstract class AbstractEventListener
         }
 
         /**
+         * Given specific configuration, analyze full request
+         */
+        $this->analyzeRequest($request, $this->getReader(), $controller, $method, $parametersIndexed);
+    }
+
+
+    /**
+     * Evaluate request
+     *
+     * @param Request          $request           Request
+     * @param Reader           $reader            Reader
+     * @param array            $controller        Controller
+     * @param ReflectionMethod $method            Method
+     * @param array            $parametersIndexed Parameters indexed
+     */
+    public function analyzeRequest(Request $request, Reader $reader, array $controller, \ReflectionMethod $method, array $parametersIndexed)
+    {
+        /**
          * Annotations load
          */
-        $methodAnnotations = $this
-            ->getReader()
-            ->getMethodAnnotations($method);
+        $methodAnnotations = $reader->getMethodAnnotations($method);
 
         /**
          * Every annotation found is parsed
@@ -172,7 +202,7 @@ abstract class AbstractEventListener
 
             if ($annotation instanceof Annotation) {
 
-                $this->evaluateAnnotation($controller, $request, $annotation, $this->parametersIndexed);
+                $this->evaluateAnnotation($controller, $request, $annotation, $parametersIndexed);
             }
         }
     }
@@ -185,10 +215,10 @@ abstract class AbstractEventListener
      *
      * All method code will executed only if specific active flag is true
      *
-     * @param array $controller Controller
-     * @param Request $request Request
-     * @param Annotation $annotation Annotation
-     * @param array $parametersIndexed Parameters indexed
+     * @param array      $controller        Controller
+     * @param Request    $request           Request
+     * @param Annotation $annotation        Annotation
+     * @param array      $parametersIndexed Parameters indexed
      *
      * @return AbstractEventListener self Object
      */

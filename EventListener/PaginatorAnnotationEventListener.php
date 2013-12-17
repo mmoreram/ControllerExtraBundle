@@ -154,10 +154,10 @@ class PaginatorAnnotationEventListener extends AbstractEventListener
     /**
      * Specific annotation evaluation.
      *
-     * @param array $controller Controller
-     * @param Request $request Request
-     * @param Annotation $annotation Annotation
-     * @param array $parametersIndexed Parameters indexed
+     * @param array      $controller        Controller
+     * @param Request    $request           Request
+     * @param Annotation $annotation        Annotation
+     * @param array      $parametersIndexed Parameters indexed
      *
      * @return AbstractEventListener self Object
      */
