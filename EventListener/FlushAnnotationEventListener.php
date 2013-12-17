@@ -27,9 +27,17 @@ class FlushAnnotationEventListener extends AbstractEventListener
 {
 
     /**
+     * @var Doctrine
+     *
+     * Doctrine object
+     */
+    protected $doctrine;
+
+
+    /**
      * @var ObjectManager
      *
-     * EntityManager
+     * Entity manager
      */
     protected $entityManager;
 
@@ -45,15 +53,30 @@ class FlushAnnotationEventListener extends AbstractEventListener
     /**
      * Construct method
      *
-     * @param KernelInterface $kernel       Kernel
-     * @param Reader          $reader       Reader
-     * @param ObjectManager   $entityManager Entity Manager
+     * @param KernelInterface $kernel   Kernel
+     * @param Reader          $reader   Reader
+     * @param Doctrine        $doctrine Doctrine
      */
-    public function __construct(KernelInterface $kernel, Reader $reader, ObjectManager $entityManager)
+    public function __construct(KernelInterface $kernel, Reader $reader, $doctrine)
     {
         parent::__construct($kernel, $reader);
 
-        $this->entityManager = $entityManager;
+        $this->doctrine = $doctrine;
+    }
+
+
+    /**
+     * Set default manager name
+     *
+     * @param string $defaultManager Default manager name
+     *
+     * @return FlushAnnotationEventListener self Object
+     */
+    public function setDefaultManager($defaultManager)
+    {
+        $this->defaultManager = $defaultManager;
+
+        return $this;
     }
 
 
@@ -74,6 +97,8 @@ class FlushAnnotationEventListener extends AbstractEventListener
          */
         if ($annotation instanceof AnnotationFlush) {
 
+            $manager = $annotation->manager ?: $this->defaultManager;
+            $this->entityManager = $ths->doctrine->getManager($manager);
             $this->mustFlush = true;
         }
     }

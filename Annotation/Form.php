@@ -22,6 +22,14 @@ class Form extends Annotation
     /**
      * @var string
      *
+     * Name of form. This value can refer to a namespace or a service alias
+     */
+    public $name;
+
+
+    /**
+     * @var string
+     *
      * Variable where to put generated object
      */
     public $variable;

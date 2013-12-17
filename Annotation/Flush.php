@@ -19,4 +19,10 @@ use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
 class Flush extends Annotation
 {
 
+    /**
+     * @var string
+     *
+     * Manager to use when flushing
+     */
+    public $manager;
 }

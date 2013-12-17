@@ -81,7 +81,7 @@ class FormAnnotationEventListener extends AbstractEventListener
             /**
              * Once loaded Annotation info, we just instanced Service name
              */
-            $annotationValue = $annotation->value;
+            $annotationValue = $annotation->name ?: 'form';
 
             /**
              * Get FormType object given a service name
@@ -118,6 +118,14 @@ class FormAnnotationEventListener extends AbstractEventListener
                 ->create($type, $entity);
 
             /**
+             * Handling request if needed
+             */
+            if ($annotation->handleRequest) {
+
+                $form->handleRequest($request);
+            }
+
+            /**
              * Checks if parameter typehinting is Form
              * In this case, inject form as defined method parameter
              */
@@ -126,14 +134,6 @@ class FormAnnotationEventListener extends AbstractEventListener
                 $request->attributes->set($annotation->variable, $form);
 
                 return;
-            }
-
-            /**
-             * Handling request if needed
-             */
-            if ($annotation->handleRequest) {
-
-                $form->handleRequest($request);
             }
 
             /**
