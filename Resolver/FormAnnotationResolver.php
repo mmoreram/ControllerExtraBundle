@@ -7,23 +7,22 @@
  * @since 2013
  */
 
-namespace Mmoreram\ControllerExtraBundle\EventListener;
+namespace Mmoreram\ControllerExtraBundle\Resolver;
 
-use Doctrine\Common\Annotations\Reader;
 use Symfony\Component\Form\FormRegistryInterface;
 use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Form\AbstractType;
 
-use Mmoreram\ControllerExtraBundle\EventListener\Abstracts\AbstractEventListener;
+use Mmoreram\ControllerExtraBundle\Resolver\Abstracts\AbstractAnnotationResolver;
 use Mmoreram\ControllerExtraBundle\Annotation\Form as AnnotationForm;
 use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
 
 
 /**
- * FormAnnotationEventListener, an extension of AbstractEventListener
+ * FormAnnotationResolver, an extension of AbstractAnnotationResolver
  */
-class FormAnnotationEventListener extends AbstractEventListener
+class FormAnnotationResolver extends AbstractAnnotationResolver
 {
 
     /**
@@ -45,15 +44,11 @@ class FormAnnotationEventListener extends AbstractEventListener
     /**
      * Construct method
      *
-     * @param KernelInterface       $kernel       Kernel
-     * @param Reader                $reader       Reader
      * @param FormRegistryInterface $formRegistry Form Registry
      * @param FormFactoryInterface  $formFactory  Form Factory
      */
-    public function __construct(KernelInterface $kernel, Reader $reader, FormRegistryInterface $formRegistry, FormFactoryInterface $formFactory)
+    public function __construct(FormRegistryInterface $formRegistry, FormFactoryInterface $formFactory)
     {
-        parent::__construct($kernel, $reader);
-
         $this->formRegistry = $formRegistry;
         $this->formFactory = $formFactory;
     }
@@ -115,15 +110,15 @@ class FormAnnotationEventListener extends AbstractEventListener
     /**
      * Built desired object.
      *
-     * @param Request               $request        Request
-     * @param FormFactoryInterface  $formFactory    Form Factory
-     * @param Annotation            $annotation     Annotation
-     * @param string                $parameterClass Class type of  method parameter
-     * @param AbstractType          $type           Built Type object
+     * @param Request              $request        Request
+     * @param FormFactoryInterface $formFactory    Form Factory
+     * @param Annotation           $annotation     Annotation
+     * @param string               $parameterClass Class type of  method parameter
+     * @param AbstractType         $type           Built Type object
      *
-     * return Mixed object to inject as a method parameter
+     * @return Mixed object to inject as a method parameter
      */
-    private function getBuiltObject(Request $request, FormFactoryInterface $formFactory, Annotation $annotation, array $parameterClass, AbstractType $type)
+    private function getBuiltObject(Request $request, FormFactoryInterface $formFactory, Annotation $annotation, $parameterClass, AbstractType $type)
     {
         /**
          * Checks if parameter typehinting is AbstractType

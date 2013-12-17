@@ -7,24 +7,22 @@
  * @since 2013
  */
 
-namespace Mmoreram\ControllerExtraBundle\EventListener;
+namespace Mmoreram\ControllerExtraBundle\Resolver;
 
 use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\Common\Annotations\Reader;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\AbstractManagerRegistry;
 
-use Mmoreram\ControllerExtraBundle\EventListener\Abstracts\AbstractEventListener;
+use Mmoreram\ControllerExtraBundle\Resolver\Abstracts\AbstractAnnotationResolver;
 use Mmoreram\ControllerExtraBundle\Annotation\Flush as AnnotationFlush;
 use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
 
 
 /**
- * FormAnnotationEventListener, an extension of AbstractEventListener
+ * FormAnnotationResolver, an extension of AbstractAnnotationResolver
  */
-class FlushAnnotationEventListener extends AbstractEventListener
+class FlushAnnotationResolver extends AbstractAnnotationResolver
 {
 
     /**
@@ -62,14 +60,10 @@ class FlushAnnotationEventListener extends AbstractEventListener
     /**
      * Construct method
      *
-     * @param KernelInterface         $kernel   Kernel
-     * @param Reader                  $reader   Reader
      * @param AbstractManagerRegistry $doctrine Doctrine
      */
-    public function __construct(KernelInterface $kernel, Reader $reader, AbstractManagerRegistry $doctrine)
+    public function __construct(AbstractManagerRegistry $doctrine)
     {
-        parent::__construct($kernel, $reader);
-
         $this->doctrine = $doctrine;
     }
 
@@ -129,7 +123,6 @@ class FlushAnnotationEventListener extends AbstractEventListener
      */
     public function getDefaultManager()
     {
-
         return $this->defaultManager;
     }
 

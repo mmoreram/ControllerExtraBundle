@@ -7,7 +7,7 @@
  * @since 2013
  */
 
-namespace Mmoreram\ControllerExtraBundle\EventListener\Abstracts;
+namespace Mmoreram\ControllerExtraBundle\EventListener;
 
 use ReflectionMethod;
 use Doctrine\Common\Annotations\Reader;
@@ -16,12 +16,13 @@ use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpFoundation\Request;
 
 use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
+use Mmoreram\ControllerExtraBundle\Resolver\Abstracts\AbstractAnnotationResolver;
 
 
 /**
- * Abstract Event Listener
+ * Resolver Event Listener
  */
-abstract class AbstractEventListener
+class ResolverEventListener
 {
 
     /**
@@ -41,19 +42,11 @@ abstract class AbstractEventListener
 
 
     /**
-     * @var boolean
-     *
-     * Current annotation must be evaluated
-     */
-    protected $active;
-
-
-    /**
      * @var array
-     *
-     * Method parameters indexed
+     * 
+     * Resolver stack
      */
-    protected $parametersIndexed = array();
+    private $resolverStack = array();
 
 
     /**
@@ -66,23 +59,6 @@ abstract class AbstractEventListener
     {
         $this->kernel = $kernel;
         $this->reader = $reader;
-    }
-
-
-    /**
-     * Specific annotation evaluation.
-     *
-     * This method must be implemented in every single EventListener with specific logic
-     *
-     * @param boolean $active Define if current annotation must be evaluated
-     *
-     * @return AbstractEventListener self Object
-     */
-    public function setActive($active)
-    {
-        $this->active = $active;
-
-        return $this;
     }
 
 
@@ -109,24 +85,17 @@ abstract class AbstractEventListener
 
 
     /**
-     * Return parameters indexed
+     * Add resolver into stack
+     * 
+     * @param AbstractAnnotationResolver $resolver Resolver
      *
-     * @return array Parameters indexed
+     * @return AnnotationEventListener self Object
      */
-    protected function getParametersIndexed()
+    public function addResolver(AbstractAnnotationResolver $resolver)
     {
-        return $this->parametersIndexed;
-    }
+        $this->resolverStack[] = $resolver;
 
-
-    /**
-     * Return active value
-     *
-     * @return boolean Current annotation parsing is active
-     */
-    protected function isActive()
-    {
-        return $this->active;
+        return $this;
     }
 
 
@@ -139,11 +108,6 @@ abstract class AbstractEventListener
      */
     public function onKernelController(FilterControllerEvent $event)
     {
-
-        if (!$this->isActive()) {
-
-            return;
-        }
 
         /**
          * Data load
@@ -166,10 +130,11 @@ abstract class AbstractEventListener
          * A hash is created to access to all needed parameters with cost O(1)
          */
         $parameters = $method->getParameters();
+        $parametersIndexed = array();
 
         foreach ($parameters as $parameter) {
 
-            $this->parametersIndexed[$parameter->getName()] = $parameter;
+            $parametersIndexed[$parameter->getName()] = $parameter;
         }
 
         /**
@@ -202,25 +167,33 @@ abstract class AbstractEventListener
 
             if ($annotation instanceof Annotation) {
 
-                $this->evaluateAnnotation($controller, $request, $annotation, $parametersIndexed);
+                $this->analyzeAnnotation($request, $controller, $parametersIndexed, $annotation, $this->resolverStack);
             }
         }
     }
 
 
     /**
-     * Specific annotation evaluation.
+     * Allow every available resolver to solve its own logic
      *
-     * This method must be implemented in every single EventListener with specific logic
-     *
-     * All method code will executed only if specific active flag is true
-     *
-     * @param array      $controller        Controller
      * @param Request    $request           Request
-     * @param Annotation $annotation        Annotation
+     * @param array      $controller        Controller
      * @param array      $parametersIndexed Parameters indexed
-     *
-     * @return AbstractEventListener self Object
+     * @param Annotation $annotation        Annotation
+     * @param array      $resolverStack     Resolver stack
      */
-    abstract public function evaluateAnnotation(array $controller, Request $request, Annotation $annotation, array $parametersIndexed);
+    public function analyzeAnnotation(Request $request, array $controller, array $parametersIndexed, Annotation $annotation, array $resolverStack)
+    {
+
+        /**
+         * Every resolver must evaluate its logic
+         */
+        foreach ($resolverStack as $resolver) {
+
+            if ($resolver->isActive()) {
+
+                $resolver->evaluateAnnotation($controller, $request, $annotation, $parametersIndexed);
+            }
+        }
+    }
 }

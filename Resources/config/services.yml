@@ -3,35 +3,41 @@ services:
     #
     # Event Listeners
     #
-    mmoreram.controllerextra.event_listeners.form_annotation_event_listener:
-        class: %mmoreram.controllerextra.event_listeners.form_annotation_event_listener.class%
+    mmoreram.controllerextra.event_listeners.resolver_event_listener:
+        class: %mmoreram.controllerextra.event_listeners.resolver_event_listener.class%
         arguments:
             kernel: @kernel
             annotations_reader: @annotation_reader
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
+
+    #
+    # Resolvers
+    #
+    mmoreram.controllerextra.resolvers.form_annotation_resolver:
+        class: %mmoreram.controllerextra.resolvers.form_annotation_resolver.class%
+        arguments:
             form_registry: @form.registry
             form_factory: @form.factory
         calls:
             - [setActive, [%mmoreram.controllerextra.form_active%]]
         tags:
-            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
+            - { name: controller_extra.annotation }
 
-    mmoreram.controllerextra.event_listeners.flush_annotation_event_listener:
-        class: %mmoreram.controllerextra.event_listeners.flush_annotation_event_listener.class%
+    mmoreram.controllerextra.resolvers.flush_annotation_resolver:
+        class: %mmoreram.controllerextra.resolvers.flush_annotation_resolver.class%
         arguments:
-            kernel: @kernel
-            annotations_reader: @annotation_reader
-            entity_manager: @doctrine.orm.entity_manager
+            doctrine: @doctrine
         calls:
             - [setActive, [%mmoreram.controllerextra.flush_active%]]
+            - [setDefaultManager, [%mmoreram.controllerextra.flush_default_manager%]]
         tags:
-            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
             - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
+            - { name: controller_extra.annotation }
 
-    mmoreram.controllerextra.event_listeners.paginator_annotation_event_listener:
-        class: %mmoreram.controllerextra.event_listeners.paginator_annotation_event_listener.class%
+    mmoreram.controllerextra.resolvers.paginator_annotation_resolver:
+        class: %mmoreram.controllerextra.resolvers.paginator_annotation_resolver.class%
         arguments:
-            kernel: @kernel
-            annotations_reader: @annotation_reader
             entity_manager: @doctrine.orm.entity_manager
             knp_paginator: "@?knp_paginator"
         calls:
@@ -41,4 +47,4 @@ services:
             - [setDefaultOrderByField, [%mmoreram.controllerextra.paginator_orderby_field_default%]]
             - [setDefaultOrderByMode, [%mmoreram.controllerextra.paginator_orderby_mode_default%]]
         tags:
-            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
+            - { name: controller_extra.annotation }

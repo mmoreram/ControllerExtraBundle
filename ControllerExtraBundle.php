@@ -11,6 +11,9 @@ namespace Mmoreram\ControllerExtraBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Doctrine\Common\Annotations\AnnotationRegistry;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+
+use Mmoreram\ControllerExtraBundle\CompilerPass\ResolverCompilerPass;
 
 /**
  * ControllerExtraBundle, an extension of Bundle
@@ -36,5 +39,20 @@ class ControllerExtraBundle extends Bundle
         AnnotationRegistry::registerFile($kernel
             ->locateResource("@ControllerExtraBundle/Annotation/Paginator.php")
         );
+    }
+
+
+    /**
+     * Builds bundle
+     * 
+     * @param ContainerBuilder $container Container
+     */
+    public function build(ContainerBuilder $container)
+    {
+
+        /**
+         * Adds compiler pass
+         */
+        $container->addCompilerPass(new ResolverCompilerPass);
     }
 }

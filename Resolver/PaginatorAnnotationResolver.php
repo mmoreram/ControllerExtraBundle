@@ -7,23 +7,21 @@
  * @since 2013
  */
 
-namespace Mmoreram\ControllerExtraBundle\EventListener;
+namespace Mmoreram\ControllerExtraBundle\Resolver;
 
 use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\Common\Annotations\Reader;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Knp\Component\Pager\Paginator;
 
-use Mmoreram\ControllerExtraBundle\EventListener\Abstracts\AbstractEventListener;
+use Mmoreram\ControllerExtraBundle\Resolver\Abstracts\AbstractAnnotationResolver;
 use Mmoreram\ControllerExtraBundle\Annotation\Paginator as AnnotationPaginator;
 use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
 
 
 /**
- * PaginatorAnnotationEventListener, an extension of AbstractEventListener
+ * PaginatorAnnotationResolver, an extension of AbstractAnnotationResolver
  */
-class PaginatorAnnotationEventListener extends AbstractEventListener
+class PaginatorAnnotationResolver extends AbstractAnnotationResolver
 {
 
     /**
@@ -77,15 +75,11 @@ class PaginatorAnnotationEventListener extends AbstractEventListener
     /**
      * Construct method
      *
-     * @param KernelInterface $kernel        Kernel
-     * @param Reader          $reader        Reader
-     * @param ObjectManager   $entityManager Entity Manager
-     * @param Paginator       $paginator     Paginator
+     * @param ObjectManager $entityManager Entity Manager
+     * @param Paginator     $paginator     Paginator
      */
-    public function __construct(KernelInterface $kernel, Reader $reader, ObjectManager $entityManager, Paginator $paginator = null)
+    public function __construct(ObjectManager $entityManager, Paginator $paginator = null)
     {
-        parent::__construct($kernel, $reader);
-
         $this->entityManager = $entityManager;
         $this->paginator = $paginator;
     }

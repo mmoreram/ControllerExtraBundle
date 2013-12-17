@@ -7,12 +7,12 @@
  * @since 2013
  */
 
-namespace Mmoreram\ControllerExtraBundle\Tests\EventListener;
+namespace Mmoreram\ControllerExtraBundle\Tests\Resolver;
 
 /**
- * Tests FlushAnnotationEventListener class
+ * Tests FlushAnnotationResolver class
  */
-class FlushAnnotationEventListenerTest extends \PHPUnit_Framework_TestCase
+class FlushAnnotationResolverTest extends \PHPUnit_Framework_TestCase
 {
 
     /**
@@ -20,15 +20,15 @@ class FlushAnnotationEventListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function testDefaultManager()
     {
-        $flushAnnotationEventListener = $this
-            ->getMockBuilder('Mmoreram\ControllerExtraBundle\EventListener\FlushAnnotationEventListener')
+        $flushAnnotationResolver = $this
+            ->getMockBuilder('Mmoreram\ControllerExtraBundle\Resolver\FlushAnnotationResolver')
             ->disableOriginalConstructor()
             ->setMethods(null)
             ->getMock();
 
         $defaultManager = 'default';
-        $this->assertInstanceOf('Mmoreram\ControllerExtraBundle\EventListener\FlushAnnotationEventListener', $flushAnnotationEventListener->setDefaultManager($defaultManager));
-        $this->assertEquals($defaultManager, $flushAnnotationEventListener->getDefaultManager());
+        $this->assertInstanceOf('Mmoreram\ControllerExtraBundle\Resolver\FlushAnnotationResolver', $flushAnnotationResolver->setDefaultManager($defaultManager));
+        $this->assertEquals($defaultManager, $flushAnnotationResolver->getDefaultManager());
     }
 
 
@@ -39,8 +39,8 @@ class FlushAnnotationEventListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function testEvaluateAnnotationFlushAnnotationDefaultManager()
     {
-        $flushAnnotationEventListener = $this
-            ->getMockBuilder('Mmoreram\ControllerExtraBundle\EventListener\FlushAnnotationEventListener')
+        $flushAnnotationResolver = $this
+            ->getMockBuilder('Mmoreram\ControllerExtraBundle\Resolver\FlushAnnotationResolver')
             ->disableOriginalConstructor()
             ->setMethods(array(
                 'getDoctrine',
@@ -86,20 +86,20 @@ class FlushAnnotationEventListenerTest extends \PHPUnit_Framework_TestCase
             ->method('getManager')
             ->will($this->returnValue($manager));
 
-        $flushAnnotationEventListener
+        $flushAnnotationResolver
             ->expects($this->once())
             ->method('getDoctrine')
             ->will($this->returnValue($doctrine));
 
-        $flushAnnotationEventListener
+        $flushAnnotationResolver
             ->expects($this->once())
             ->method('getDefaultManager')
             ->will($this->returnValue('default'));
 
-        $flushAnnotationEventListener->evaluateAnnotation($controller, $request, $annotation, $parametersIndexed);
+        $flushAnnotationResolver->evaluateAnnotation($controller, $request, $annotation, $parametersIndexed);
 
-        $this->assertTrue($flushAnnotationEventListener->getMustFlush());
-        $this->assertEquals($flushAnnotationEventListener->getManager(), $manager);
+        $this->assertTrue($flushAnnotationResolver->getMustFlush());
+        $this->assertEquals($flushAnnotationResolver->getManager(), $manager);
     }
 
 
@@ -110,8 +110,8 @@ class FlushAnnotationEventListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function testEvaluateAnnotationFlushAnnotationSpecificManager()
     {
-        $flushAnnotationEventListener = $this
-            ->getMockBuilder('Mmoreram\ControllerExtraBundle\EventListener\FlushAnnotationEventListener')
+        $flushAnnotationResolver = $this
+            ->getMockBuilder('Mmoreram\ControllerExtraBundle\Resolver\FlushAnnotationResolver')
             ->disableOriginalConstructor()
             ->setMethods(array(
                 'getDoctrine',
@@ -156,19 +156,19 @@ class FlushAnnotationEventListenerTest extends \PHPUnit_Framework_TestCase
             ->method('getManager')
             ->will($this->returnValue($manager));
 
-        $flushAnnotationEventListener
+        $flushAnnotationResolver
             ->expects($this->once())
             ->method('getDoctrine')
             ->will($this->returnValue($doctrine));
 
-        $flushAnnotationEventListener
+        $flushAnnotationResolver
             ->expects($this->any())
             ->method('getDefaultManager');
 
-        $flushAnnotationEventListener->evaluateAnnotation($controller, $request, $annotation, $parametersIndexed);
+        $flushAnnotationResolver->evaluateAnnotation($controller, $request, $annotation, $parametersIndexed);
 
-        $this->assertTrue($flushAnnotationEventListener->getMustFlush());
-        $this->assertEquals($flushAnnotationEventListener->getManager(), $manager);
+        $this->assertTrue($flushAnnotationResolver->getMustFlush());
+        $this->assertEquals($flushAnnotationResolver->getManager(), $manager);
     }
 
 
@@ -179,8 +179,8 @@ class FlushAnnotationEventListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function testEvaluateAnnotationWrongAnnotation()
     {
-        $flushAnnotationEventListener = $this
-            ->getMockBuilder('Mmoreram\ControllerExtraBundle\EventListener\FlushAnnotationEventListener')
+        $flushAnnotationResolver = $this
+            ->getMockBuilder('Mmoreram\ControllerExtraBundle\Resolver\FlushAnnotationResolver')
             ->disableOriginalConstructor()
             ->setMethods(array(
                 'getDoctrine',
@@ -199,14 +199,14 @@ class FlushAnnotationEventListenerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $flushAnnotationEventListener
+        $flushAnnotationResolver
             ->expects($this->any())
             ->method('getDoctrine');
 
-        $flushAnnotationEventListener->evaluateAnnotation($controller, $request, $annotation, $parametersIndexed);
+        $flushAnnotationResolver->evaluateAnnotation($controller, $request, $annotation, $parametersIndexed);
 
-        $this->assertFalse($flushAnnotationEventListener->getMustFlush());
-        $this->assertNull($flushAnnotationEventListener->getManager());
+        $this->assertFalse($flushAnnotationResolver->getMustFlush());
+        $this->assertNull($flushAnnotationResolver->getManager());
     }
 
 
@@ -217,8 +217,8 @@ class FlushAnnotationEventListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function testOnKernelResponseMustFlushFalse()
     {
-        $flushAnnotationEventListener = $this
-            ->getMockBuilder('Mmoreram\ControllerExtraBundle\EventListener\FlushAnnotationEventListener')
+        $flushAnnotationResolver = $this
+            ->getMockBuilder('Mmoreram\ControllerExtraBundle\Resolver\FlushAnnotationResolver')
             ->disableOriginalConstructor()
             ->setMethods(array(
                 'getMustFlush',
@@ -242,12 +242,12 @@ class FlushAnnotationEventListenerTest extends \PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('flush');
 
-        $flushAnnotationEventListener
+        $flushAnnotationResolver
             ->expects($this->once())
             ->method('getMustFlush')
             ->will($this->returnValue(false));
 
-        $flushAnnotationEventListener->onKernelResponse($event);
+        $flushAnnotationResolver->onKernelResponse($event);
     }
 
 
@@ -258,8 +258,8 @@ class FlushAnnotationEventListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function testOnKernelResponseMustFlushTrue()
     {
-        $flushAnnotationEventListener = $this
-            ->getMockBuilder('Mmoreram\ControllerExtraBundle\EventListener\FlushAnnotationEventListener')
+        $flushAnnotationResolver = $this
+            ->getMockBuilder('Mmoreram\ControllerExtraBundle\Resolver\FlushAnnotationResolver')
             ->disableOriginalConstructor()
             ->setMethods(array(
                 'getMustFlush',
@@ -284,16 +284,16 @@ class FlushAnnotationEventListenerTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('flush');
 
-        $flushAnnotationEventListener
+        $flushAnnotationResolver
             ->expects($this->once())
             ->method('getMustFlush')
             ->will($this->returnValue(true));
 
-        $flushAnnotationEventListener
+        $flushAnnotationResolver
             ->expects($this->once())
             ->method('getManager')
             ->will($this->returnValue($manager));
 
-        $flushAnnotationEventListener->onKernelResponse($event);
+        $flushAnnotationResolver->onKernelResponse($event);
     }
 }
