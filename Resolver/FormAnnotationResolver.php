@@ -14,15 +14,15 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\AbstractType;
 
-use Mmoreram\ControllerExtraBundle\Resolver\Abstracts\AbstractAnnotationResolver;
+use Mmoreram\ControllerExtraBundle\Resolver\Interfaces\AnnotationResolverInterface;
 use Mmoreram\ControllerExtraBundle\Annotation\Form as AnnotationForm;
 use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
 
 
 /**
- * FormAnnotationResolver, an extension of AbstractAnnotationResolver
+ * FormAnnotationResolver, an implementation of  AnnotationResolverInterface
  */
-class FormAnnotationResolver extends AbstractAnnotationResolver
+class FormAnnotationResolver implements AnnotationResolverInterface
 {
 
     /**

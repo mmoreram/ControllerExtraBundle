@@ -4,10 +4,3 @@ parameters:
     # Event Listeners
     #
     mmoreram.controllerextra.event_listeners.resolver_event_listener.class: Mmoreram\ControllerExtraBundle\EventListener\ResolverEventListener
-
-    #
-    # Resolvers
-    #
-    mmoreram.controllerextra.resolvers.form_annotation_resolver.class: Mmoreram\ControllerExtraBundle\Resolver\FormAnnotationResolver
-    mmoreram.controllerextra.resolvers.flush_annotation_resolver.class: Mmoreram\ControllerExtraBundle\Resolver\FlushAnnotationResolver
-    mmoreram.controllerextra.resolvers.paginator_annotation_resolver.class: Mmoreram\ControllerExtraBundle\Resolver\PaginatorAnnotationResolver

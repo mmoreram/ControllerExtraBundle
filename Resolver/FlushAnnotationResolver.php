@@ -14,15 +14,15 @@ use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\AbstractManagerRegistry;
 
-use Mmoreram\ControllerExtraBundle\Resolver\Abstracts\AbstractAnnotationResolver;
+use Mmoreram\ControllerExtraBundle\Resolver\Interfaces\AnnotationResolverInterface;
 use Mmoreram\ControllerExtraBundle\Annotation\Flush as AnnotationFlush;
 use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
 
 
 /**
- * FormAnnotationResolver, an extension of AbstractAnnotationResolver
+ * FormAnnotationResolver, an implementation of  AnnotationResolverInterface
  */
-class FlushAnnotationResolver extends AbstractAnnotationResolver
+class FlushAnnotationResolver implements AnnotationResolverInterface
 {
 
     /**

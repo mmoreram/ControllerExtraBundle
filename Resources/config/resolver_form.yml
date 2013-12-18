@@ -1,0 +1,19 @@
+parameters:
+
+    #
+    # Resolvers
+    #
+    mmoreram.controllerextra.resolvers.form_annotation_resolver.class: Mmoreram\ControllerExtraBundle\Resolver\FormAnnotationResolver
+
+services:
+
+    #
+    # Resolvers
+    #
+    mmoreram.controllerextra.resolvers.form_annotation_resolver:
+        class: %mmoreram.controllerextra.resolvers.form_annotation_resolver.class%
+        arguments:
+            form_registry: @form.registry
+            form_factory: @form.factory
+        tags:
+            - { name: controller_extra.annotation }

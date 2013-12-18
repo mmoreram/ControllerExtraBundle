@@ -1,0 +1,21 @@
+parameters:
+
+    #
+    # Resolvers
+    #
+    mmoreram.controllerextra.resolvers.flush_annotation_resolver.class: Mmoreram\ControllerExtraBundle\Resolver\FlushAnnotationResolver
+
+services:
+
+    #
+    # Resolvers
+    #
+    mmoreram.controllerextra.resolvers.flush_annotation_resolver:
+        class: %mmoreram.controllerextra.resolvers.flush_annotation_resolver.class%
+        arguments:
+            doctrine: @doctrine
+        calls:
+            - [setDefaultManager, [%mmoreram.controllerextra.flush_default_manager%]]
+        tags:
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
+            - { name: controller_extra.annotation }

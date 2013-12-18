@@ -11,6 +11,7 @@ namespace Mmoreram\ControllerExtraBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
+use Mmoreram\ControllerExtraBundle\Annotation\Log as AnnotationLog;
 
 /**
  * Dependency Injection configuration
@@ -43,6 +44,27 @@ class Configuration implements ConfigurationInterface
                         ->end()
                         ->scalarNode('default_manager')
                             ->defaultValue('default')
+                        ->end()
+                    ->end()
+                ->end()
+                ->arrayNode('log')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->scalarNode('active')
+                            ->defaultTrue()
+                        ->end()
+                        ->enumNode('default_level')
+                            ->values(array(
+                                AnnotationLog::LVL_EMERG,
+                                AnnotationLog::LVL_CRIT,
+                                AnnotationLog::LVL_ERR,
+                                AnnotationLog::LVL_WARN,
+                                AnnotationLog::LVL_NOTICE,
+                                AnnotationLog::LVL_INFO,
+                                AnnotationLog::LVL_DEBUG,
+                                AnnotationLog::LVL_LOG,
+                            ))
+                            ->defaultValue(AnnotationLog::LVL_INFO)
                         ->end()
                     ->end()
                 ->end()

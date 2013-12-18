@@ -13,15 +13,15 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Request;
 use Knp\Component\Pager\Paginator;
 
-use Mmoreram\ControllerExtraBundle\Resolver\Abstracts\AbstractAnnotationResolver;
+use Mmoreram\ControllerExtraBundle\Resolver\Interfaces\AnnotationResolverInterface;
 use Mmoreram\ControllerExtraBundle\Annotation\Paginator as AnnotationPaginator;
 use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
 
 
 /**
- * PaginatorAnnotationResolver, an extension of AbstractAnnotationResolver
+ * PaginatorAnnotationResolver, an implementation of  AnnotationResolverInterface
  */
-class PaginatorAnnotationResolver extends AbstractAnnotationResolver
+class PaginatorAnnotationResolver implements AnnotationResolverInterface
 {
 
     /**

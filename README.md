@@ -17,8 +17,9 @@ Table of contents
     * [Tags](#tags)
     * [Installing ControllerExtraBundle](#installing-controllerextrabundle)
 2. [Annotations](#annotations)
-    * [Mmoreram\Form](#mmoreram-form)
-    * [Mmoreram\Flush](#mmoreram-flush)
+    * [@Form](#form)
+    * [@Flush](#flush)
+    * [@Log](#log)
 3. [Contributing](#contribute)
 
 # Installing/Configuring
@@ -59,22 +60,25 @@ And register the bundle in your appkernel.php file
         flush:
             active: true
             default_manager: default
+        log:
+            active: true
+            default_level: info
 
 # Annotations
 
 This bundle provide a reduced but useful set of annotations for your controller
 
-## Mmoreram\Form
+## @Form
 
 Provides form injection in your controller actions. This annotation only needs a name to be defined in, where you must define namespace where your form is placed.
 
-    use Mmoreram\ControllerExtraBundle\Annotation as Mmoreram;
+    use Mmoreram\ControllerExtraBundle\Annotation\Form;
     use Symfony\Component\Form\AbstractType;
 
     /**
      * Simple controller method
      *
-     * @Mmoreram\Form(
+     * @Form(
             name     = "\Mmoreram\CustomBundle\Form\Type\UserType",
      *      variable = "userType"
      * )
@@ -87,13 +91,13 @@ Provides form injection in your controller actions. This annotation only needs a
 
 You can not just define your Type location using the namespace, in which case a new AbstractType element will be created. but you can also define it using service alias, in which case this bundle will return instance, using dependency injection.
 
-    use Mmoreram\ControllerExtraBundle\Annotation as Mmoreram;
+    use Mmoreram\ControllerExtraBundle\Annotation\Form;
     use Symfony\Component\Form\AbstractType;
 
     /**
      * Simple controller method
      *
-     * @Mmoreram\Form(
+     * @Form(
             name     = "user_type",
      *      variable = "userType"
      * )
@@ -106,13 +110,13 @@ This annotation allows you to not only create an instance of FormType, but also 
 
 To inject a Form object you only need to cast method variable as such.
 
-    use Mmoreram\ControllerExtraBundle\Annotation as Mmoreram;
+    use Mmoreram\ControllerExtraBundle\Annotation\Form as AnnotationForm;
     use Symfony\Component\Form\Form;
 
     /**
      * Simple controller method
      *
-     * @Mmoreram\Form(
+     * @AnnotationForm(
             name     = "user_type",
      *      variable = "userForm"
      * )
@@ -125,7 +129,7 @@ You can also, using [SensioFrameworkExtraBundle][1]'s [ParamConverter][2], creat
 
     use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
     use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-    use Mmoreram\ControllerExtraBundle\Annotation as Mmoreram;
+    use Mmoreram\ControllerExtraBundle\Annotation\Form as AnnotationForm;
     use Symfony\Component\Form\Form;
 
     /**
@@ -133,7 +137,7 @@ You can also, using [SensioFrameworkExtraBundle][1]'s [ParamConverter][2], creat
      *
      * @Route("/user/{id}")
      * @ParamConverter("user", class="MmoreramCustomBundle:User")
-     * @Mmoreram\Form(
+     * @AnnotationForm(
             name        = "user_type",
      *      variable    = "userForm",
      *      entity      = "user"
@@ -145,13 +149,13 @@ You can also, using [SensioFrameworkExtraBundle][1]'s [ParamConverter][2], creat
 
 To inject a FormView object you only need to cast method variable as such.
 
-    use Mmoreram\ControllerExtraBundle\Annotation as Mmoreram;
+    use Mmoreram\ControllerExtraBundle\Annotation\Form;
     use Symfony\Component\Form\FormView;
 
     /**
      * Simple controller method
      *
-     * @Mmoreram\Form(
+     * @Form(
             name     = "user_type",
      *      variable = "userFormView"
      * )
@@ -160,17 +164,17 @@ To inject a FormView object you only need to cast method variable as such.
     {
     }
 
-## Mmoreram\Flush
+## @Flush
 
 Allow you to flush entityManager at the end of the request, using kernel.response event
 
-    use Mmoreram\ControllerExtraBundle\Annotation as Mmoreram;
+    use Mmoreram\ControllerExtraBundle\Annotation\Flush;
     use Symfony\Component\Form\FormView;
 
     /**
      * Simple controller method
      *
-     * @Mmoreram\Flush
+     * @Flush
      */
     public function indexAction()
     {
@@ -185,13 +189,13 @@ You can overwrite default Mangager in your config.yml file
 
 You can also overwrite overwrite this value in every single Flush Annotation instance by defining `manager` value
 
-    use Mmoreram\ControllerExtraBundle\Annotation as Mmoreram;
+    use Mmoreram\ControllerExtraBundle\Annotation\Flush;
     use Symfony\Component\Form\FormView;
 
     /**
      * Simple controller method
      *
-     * @Mmoreram\Flush(
+     * @Flush(
      *      manager = "my_customer_manager"
      * )
      */
@@ -200,6 +204,60 @@ You can also overwrite overwrite this value in every single Flush Annotation ins
     }
 
 > If multiple @Mmoreram\Flush are defined in same action, last instance will overwrite previous. Anyway just one instance should be defined.
+
+## @Log
+
+Allow you to log any plain message before executing action
+
+    use Mmoreram\ControllerExtraBundle\Annotation\Log;
+    use Symfony\Component\Form\FormView;
+
+    /**
+     * Simple controller method
+     *
+     * @Log(
+     *      message = "Executing index Action"
+     * )
+     */
+    public function indexAction()
+    {
+    }
+
+You can also define the level of the log. You can define default one if none is specified by overwriting it in your `config.yml` file.
+
+    controller_extra:
+        log:
+            default_level: warning
+
+Every Annotation instance can overwrite this value by using `level` field.
+
+    use Mmoreram\ControllerExtraBundle\Annotation\Flush;
+    use Symfony\Component\Form\FormView;
+
+    /**
+     * Simple controller method
+     *
+     * @Log(
+     *      message = "Executing index Action",
+     *      level = @Log::LVL_WARNING
+     * )
+     */
+    public function indexAction()
+    {
+    }
+
+Several levels can be used, as defined in [Psr\Log\LoggerInterface][6] interface
+
+* @Mmoreram\Log::LVL_EMERG
+* @Mmoreram\Log::LVL_CRIT
+* @Mmoreram\Log::LVL_ERR
+* @Mmoreram\Log::LVL_WARN
+* @Mmoreram\Log::LVL_NOTICE
+* @Mmoreram\Log::LVL_INFO
+* @Mmoreram\Log::LVL_DEBUG
+* @Mmoreram\Log::LVL_LOG
+
+
 
 # Contributing
 
@@ -215,3 +273,4 @@ If you'd like to contribute, please read the [Contributing Code][3] part of the 
 [3]: http://symfony.com/doc/current/contributing/code/index.html
 [4]: http://symfony.com/doc/current/contributing/code/patches.html#check-list
 [5]: http://symfony.com/doc/current/contributing/code/patches.html#make-a-pull-request
+[6]: https://github.com/php-fig/log/blob/master/Psr/Log/LoggerInterface.php

@@ -43,7 +43,7 @@ class ResolverEventListener
 
     /**
      * @var array
-     * 
+     *
      * Resolver stack
      */
     private $resolverStack = array();
@@ -86,7 +86,7 @@ class ResolverEventListener
 
     /**
      * Add resolver into stack
-     * 
+     *
      * @param AbstractAnnotationResolver $resolver Resolver
      *
      * @return AnnotationEventListener self Object
@@ -188,10 +188,7 @@ class ResolverEventListener
          */
         foreach ($resolverStack as $resolver) {
 
-            if ($resolver->isActive()) {
-
-                $resolver->evaluateAnnotation($controller, $request, $annotation, $parametersIndexed);
-            }
+            $resolver->evaluateAnnotation($controller, $request, $annotation, $parametersIndexed);
         }
     }
 }
