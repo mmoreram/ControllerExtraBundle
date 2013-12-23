@@ -70,6 +70,7 @@ controller_extra:
     log:
         active: true
         default_level: info
+        default_execute: pre
 ```
 
 # Annotations
@@ -183,7 +184,7 @@ use Symfony\Component\Form\FormView;
  * Simple controller method
  *
  * @Form(
-        name     = "user_type",
+ *      name     = "user_type",
  *      variable = "userFormView"
  * )
  */
@@ -200,7 +201,6 @@ Allow you to flush entityManager at the end of the request, using kernel.respons
 <?php
 
 use Mmoreram\ControllerExtraBundle\Annotation\Flush;
-use Symfony\Component\Form\FormView;
 
 /**
  * Simple controller method
@@ -227,7 +227,6 @@ You can also overwrite overwrite this value in every single Flush Annotation ins
 <?php
 
 use Mmoreram\ControllerExtraBundle\Annotation\Flush;
-use Symfony\Component\Form\FormView;
 
 /**
  * Simple controller method
@@ -251,7 +250,6 @@ Allow you to log any plain message before executing action
 <?php
 
 use Mmoreram\ControllerExtraBundle\Annotation\Log;
-use Symfony\Component\Form\FormView;
 
 /**
  * Simple controller method
@@ -265,7 +263,7 @@ public function indexAction()
 }
 ```
 
-You can also define the level of the log. You can define default one if none is specified by overwriting it in your `config.yml` file.
+You can define the level of the log. You can define default one if none is specified by overwriting it in your `config.yml` file.
 
 ``` yml
 controller_extra:
@@ -279,7 +277,6 @@ Every Annotation instance can overwrite this value by using `level` field.
 <?php
 
 use Mmoreram\ControllerExtraBundle\Annotation\Flush;
-use Symfony\Component\Form\FormView;
 
 /**
  * Simple controller method
@@ -305,6 +302,40 @@ Several levels can be used, as defined in [Psr\Log\LoggerInterface][6] interface
 * @Mmoreram\Log::LVL_DEBUG
 * @Mmoreram\Log::LVL_LOG
 
+
+You can also define the execution of the log. You can define default one if none is specified by overwriting it in your `config.yml` file.
+
+``` yml
+controller_extra:
+    log:
+        default_execute: pre
+```
+
+Every Annotation instance can overwrite this value by using `level` field.
+
+``` php
+<?php
+
+use Mmoreram\ControllerExtraBundle\Annotation\Flush;
+
+/**
+ * Simple controller method
+ *
+ * @Log(
+ *      message = "Executing index Action",
+ *      execute = @Log::EXEC_POST
+ * )
+ */
+public function indexAction()
+{
+}
+```
+
+Several executions can be used,
+
+* @Mmoreram\Log::EXEC_PRE - Logged before controller execution
+* @Mmoreram\Log::EXEC_POST - Logged after controller execution
+* @Mmoreram\Log::EXEC_BOTH - Logged both
 
 
 # Contributing
