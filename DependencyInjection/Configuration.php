@@ -66,6 +66,14 @@ class Configuration implements ConfigurationInterface
                             ))
                             ->defaultValue(AnnotationLog::LVL_INFO)
                         ->end()
+                        ->enumNode('default_execute')
+                            ->values(array(
+                                AnnotationLog::EXEC_PRE,
+                                AnnotationLog::EXEC_POST,
+                                AnnotationLog::EXEC_BOTH,
+                            ))
+                            ->defaultValue(AnnotationLog::EXEC_PRE)
+                        ->end()
                     ->end()
                 ->end()
                 ->arrayNode('paginator')

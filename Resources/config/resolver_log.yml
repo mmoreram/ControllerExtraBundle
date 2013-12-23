@@ -17,5 +17,6 @@ services:
             form_factory: @form.factory
         calls:
             - [setDefaultHandler, [%mmoreram.controllerextra.handler_default_handler%]]
+            - [setDefaultExecute, [%mmoreram.controllerextra.handler_default_execute%]]
         tags:
             - { name: controller_extra.annotation }

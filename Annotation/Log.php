@@ -86,6 +86,30 @@ class Log extends Annotation
     /**
      * @var string
      *
+     * Run before action execution
+     */
+    const EXEC_PRE = 'pre';
+
+
+    /**
+     * @var string
+     *
+     * Run after action execution
+     */
+    const EXEC_POST = 'post';
+
+
+    /**
+     * @var string
+     *
+     * Run after action execution
+     */
+    const EXEC_BOTH = 'both';
+
+
+    /**
+     * @var string
+     *
      * Level
      */
     public $level;
@@ -97,6 +121,14 @@ class Log extends Annotation
      * Meessage
      */
     public $message;
+
+
+    /**
+     * @var string
+     *
+     * Execute time
+     */
+    public $execute;
 
 
     /**
@@ -118,5 +150,16 @@ class Log extends Annotation
     public function getMessage()
     {
         return $this->message;
+    }
+
+
+    /**
+     * return execution
+     *
+     * @return string execution
+     */
+    public function getExecute()
+    {
+        return $this->execute;
     }
 }

@@ -33,36 +33,44 @@ Table of contents
 
 You have to add require line into you composer.json file
 
-    "require": {
-        "php": ">=5.3.3",
-        "symfony/symfony": "2.3.*",
-        ...
-        "mmoreram/controller-annotations-bundle": "1.0-dev"
-    },
+``` yml
+"require": {
+    "php": ">=5.3.3",
+    "symfony/symfony": "2.3.*",
+
+    "mmoreram/controller-annotations-bundle": "1.0-dev"
+}
+```
 
 Then you have to use composer to update your project dependencies
 
-    php composer.phar update
+```
+php composer.phar update
+```
 
 And register the bundle in your appkernel.php file
 
-    return array(
-        // ...
-        new Mmoreram\ControllerExtraBundle\ControllerExtraBundle(),
-        // ...
-    );
+``` php
+return array(
+    // ...
+    new Mmoreram\ControllerExtraBundle\ControllerExtraBundle(),
+    // ...
+);
+```
 
 # Configuration
 
-    controller_extra:
-        form:
-            active: true
-        flush:
-            active: true
-            default_manager: default
-        log:
-            active: true
-            default_level: info
+``` yml
+controller_extra:
+    form:
+        active: true
+    flush:
+        active: true
+        default_manager: default
+    log:
+        active: true
+        default_level: info
+```
 
 # Annotations
 
@@ -72,136 +80,166 @@ This bundle provide a reduced but useful set of annotations for your controller
 
 Provides form injection in your controller actions. This annotation only needs a name to be defined in, where you must define namespace where your form is placed.
 
-    use Mmoreram\ControllerExtraBundle\Annotation\Form;
-    use Symfony\Component\Form\AbstractType;
+``` php
+<?php
 
-    /**
-     * Simple controller method
-     *
-     * @Form(
-            name     = "\Mmoreram\CustomBundle\Form\Type\UserType",
-     *      variable = "userType"
-     * )
-     */
-    public function indexAction(AbstractType $userType)
-    {
-    }
+use Mmoreram\ControllerExtraBundle\Annotation\Form;
+use Symfony\Component\Form\AbstractType;
+
+/**
+ * Simple controller method
+ *
+ * @Form(
+ *      name     = "\Mmoreram\CustomBundle\Form\Type\UserType",
+ *      variable = "userType"
+ * )
+ */
+public function indexAction(AbstractType $userType)
+{
+}
+```
 
 > By default, if `variable` option is not set, generated object will be placed in a parameter named `$form`.
 
 You can not just define your Type location using the namespace, in which case a new AbstractType element will be created. but you can also define it using service alias, in which case this bundle will return instance, using dependency injection.
 
-    use Mmoreram\ControllerExtraBundle\Annotation\Form;
-    use Symfony\Component\Form\AbstractType;
+``` php
+<?php
 
-    /**
-     * Simple controller method
-     *
-     * @Form(
-            name     = "user_type",
-     *      variable = "userType"
-     * )
-     */
-    public function indexAction(AbstractType $userType)
-    {
-    }
+use Mmoreram\ControllerExtraBundle\Annotation\Form;
+use Symfony\Component\Form\AbstractType;
+
+/**
+ * Simple controller method
+ *
+ * @Form(
+ *      name     = "user_type",
+ *      variable = "userType"
+ * )
+ */
+public function indexAction(AbstractType $userType)
+{
+}
+```
 
 This annotation allows you to not only create an instance of FormType, but also allows you to inject Form object or FormView object rather simple FormType.
 
 To inject a Form object you only need to cast method variable as such.
 
-    use Mmoreram\ControllerExtraBundle\Annotation\Form as AnnotationForm;
-    use Symfony\Component\Form\Form;
+``` php
+<?php
 
-    /**
-     * Simple controller method
-     *
-     * @AnnotationForm(
-            name     = "user_type",
-     *      variable = "userForm"
-     * )
-     */
-    public function indexAction(Form $userForm)
-    {
-    }
+use Mmoreram\ControllerExtraBundle\Annotation\Form as AnnotationForm;
+use Symfony\Component\Form\Form;
+
+/**
+ * Simple controller method
+ *
+ * @AnnotationForm(
+ *      name     = "user_type",
+ *      variable = "userForm"
+ * )
+ */
+public function indexAction(Form $userForm)
+{
+}
+```
 
 You can also, using [SensioFrameworkExtraBundle][1]'s [ParamConverter][2], create a Form object with an previously created entity. you can define this entity by using `entity` parameter.
 
-    use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-    use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-    use Mmoreram\ControllerExtraBundle\Annotation\Form as AnnotationForm;
-    use Symfony\Component\Form\Form;
+``` php
+<?php
 
-    /**
-     * Simple controller method
-     *
-     * @Route("/user/{id}")
-     * @ParamConverter("user", class="MmoreramCustomBundle:User")
-     * @AnnotationForm(
-            name        = "user_type",
-     *      variable    = "userForm",
-     *      entity      = "user"
-     * )
-     */
-    public function indexAction(User $user, Form $userForm)
-    {
-    }
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Mmoreram\ControllerExtraBundle\Annotation\Form as AnnotationForm;
+use Symfony\Component\Form\Form;
+
+/**
+ * Simple controller method
+ *
+ * @Route("/user/{id}")
+ * @ParamConverter("user", class="MmoreramCustomBundle:User")
+ * @AnnotationForm(
+ *      name        = "user_type",
+ *      variable    = "userForm",
+ *      entity      = "user"
+ * )
+ */
+public function indexAction(User $user, Form $userForm)
+{
+}
+```
 
 To inject a FormView object you only need to cast method variable as such.
 
-    use Mmoreram\ControllerExtraBundle\Annotation\Form;
-    use Symfony\Component\Form\FormView;
+``` php
+<?php
 
-    /**
-     * Simple controller method
-     *
-     * @Form(
-            name     = "user_type",
-     *      variable = "userFormView"
-     * )
-     */
-    public function indexAction(FormView $userFormView)
-    {
-    }
+use Mmoreram\ControllerExtraBundle\Annotation\Form;
+use Symfony\Component\Form\FormView;
+
+/**
+ * Simple controller method
+ *
+ * @Form(
+        name     = "user_type",
+ *      variable = "userFormView"
+ * )
+ */
+public function indexAction(FormView $userFormView)
+{
+}
+```
 
 ## @Flush
 
 Allow you to flush entityManager at the end of the request, using kernel.response event
 
-    use Mmoreram\ControllerExtraBundle\Annotation\Flush;
-    use Symfony\Component\Form\FormView;
+``` php
+<?php
 
-    /**
-     * Simple controller method
-     *
-     * @Flush
-     */
-    public function indexAction()
-    {
-    }
+use Mmoreram\ControllerExtraBundle\Annotation\Flush;
+use Symfony\Component\Form\FormView;
+
+/**
+ * Simple controller method
+ *
+ * @Flush
+ */
+public function indexAction()
+{
+}
+```
 
 If not otherwise specified, default Doctrine Manager will be flushed with this annotation.
 You can overwrite default Mangager in your config.yml file
 
-    controller_extra:
-        flush:
-            default_manager: my_custom_manager
+``` yml
+controller_extra:
+    flush:
+        default_manager: my_custom_manager
+```
 
 You can also overwrite overwrite this value in every single Flush Annotation instance by defining `manager` value
 
-    use Mmoreram\ControllerExtraBundle\Annotation\Flush;
-    use Symfony\Component\Form\FormView;
+``` php
+<?php
 
-    /**
-     * Simple controller method
-     *
-     * @Flush(
-     *      manager = "my_customer_manager"
-     * )
-     */
-    public function indexAction()
-    {
-    }
+use Mmoreram\ControllerExtraBundle\Annotation\Flush;
+use Symfony\Component\Form\FormView;
+
+/**
+ * Simple controller method
+ *
+ * @Flush(
+ *      manager = "my_customer_manager"
+ * )
+ */
+public function indexAction()
+{
+}
+```
 
 > If multiple @Mmoreram\Flush are defined in same action, last instance will overwrite previous. Anyway just one instance should be defined.
 
@@ -209,42 +247,52 @@ You can also overwrite overwrite this value in every single Flush Annotation ins
 
 Allow you to log any plain message before executing action
 
-    use Mmoreram\ControllerExtraBundle\Annotation\Log;
-    use Symfony\Component\Form\FormView;
+``` php
+<?php
 
-    /**
-     * Simple controller method
-     *
-     * @Log(
-     *      message = "Executing index Action"
-     * )
-     */
-    public function indexAction()
-    {
-    }
+use Mmoreram\ControllerExtraBundle\Annotation\Log;
+use Symfony\Component\Form\FormView;
+
+/**
+ * Simple controller method
+ *
+ * @Log(
+ *      message = "Executing index Action"
+ * )
+ */
+public function indexAction()
+{
+}
+```
 
 You can also define the level of the log. You can define default one if none is specified by overwriting it in your `config.yml` file.
 
-    controller_extra:
-        log:
-            default_level: warning
+``` yml
+controller_extra:
+    log:
+        default_level: warning
+```
 
 Every Annotation instance can overwrite this value by using `level` field.
 
-    use Mmoreram\ControllerExtraBundle\Annotation\Flush;
-    use Symfony\Component\Form\FormView;
+``` php
+<?php
 
-    /**
-     * Simple controller method
-     *
-     * @Log(
-     *      message = "Executing index Action",
-     *      level = @Log::LVL_WARNING
-     * )
-     */
-    public function indexAction()
-    {
-    }
+use Mmoreram\ControllerExtraBundle\Annotation\Flush;
+use Symfony\Component\Form\FormView;
+
+/**
+ * Simple controller method
+ *
+ * @Log(
+ *      message = "Executing index Action",
+ *      level = @Log::LVL_WARNING
+ * )
+ */
+public function indexAction()
+{
+}
+```
 
 Several levels can be used, as defined in [Psr\Log\LoggerInterface][6] interface
 

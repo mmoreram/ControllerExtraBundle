@@ -43,6 +43,7 @@ class ControllerExtraExtension extends Extension
          */
         $container->setParameter('mmoreram.controllerextra.log_active', $config['log']['active']);
         $container->setParameter('mmoreram.controllerextra.log_default_handler', $config['log']['default_handler']);
+        $container->setParameter('mmoreram.controllerextra.log_default_execute', $config['log']['default_execute']);
 
         /**
          * Paginator parameters
