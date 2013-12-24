@@ -46,15 +46,6 @@ class ControllerExtraExtension extends Extension
         $container->setParameter('mmoreram.controllerextra.log_default_execute', $config['log']['default_execute']);
 
         /**
-         * Paginator parameters
-         */
-        $container->setParameter('mmoreram.controllerextra.paginator_active', $config['paginator']['active']);
-        $container->setParameter('mmoreram.controllerextra.paginator_number_default', $config['paginator']['number_default']);
-        $container->setParameter('mmoreram.controllerextra.paginator_page_default', $config['paginator']['page_default']);
-        $container->setParameter('mmoreram.controllerextra.paginator_orderby_field_default', $config['paginator']['orderby_field_default']);
-        $container->setParameter('mmoreram.controllerextra.paginator_orderby_mode_default', $config['paginator']['orderby_mode_default']);
-
-        /**
          * Load config files
          */
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
@@ -97,14 +88,6 @@ class ControllerExtraExtension extends Extension
         if ($config['log']['active']){
 
             $loader->load('resolver_log.yml');
-        }
-
-        /**
-         * Only load resolver paginator config definition if is active
-         */
-        if ($config['paginator']['active']) {
-
-            $loader->load('resolver_paginator.yml');
         }
 
         return $this;

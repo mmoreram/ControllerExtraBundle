@@ -9,6 +9,8 @@
 
 namespace Mmoreram\ControllerExtraBundle\Tests\Resolver;
 
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+
 use Mmoreram\ControllerExtraBundle\Annotation\Log as AnnotationLog;
 
 /**
@@ -31,6 +33,23 @@ class LogAnnotationResolverTest extends \PHPUnit_Framework_TestCase
         $defaultLevel = 'error';
         $this->assertInstanceOf('Mmoreram\ControllerExtraBundle\Resolver\LogAnnotationResolver', $logAnnotationResolver->setDefaultLevel($defaultLevel));
         $this->assertEquals($defaultLevel, $logAnnotationResolver->getDefaultLevel());
+    }
+
+
+    /**
+     * Tests DefaultManager name method
+     */
+    public function testDefaultExecute()
+    {
+        $logAnnotationResolver = $this
+            ->getMockBuilder('Mmoreram\ControllerExtraBundle\Resolver\LogAnnotationResolver')
+            ->disableOriginalConstructor()
+            ->setMethods(null)
+            ->getMock();
+
+        $defaultExecute = AnnotationLog::EXEC_POST;
+        $this->assertInstanceOf('Mmoreram\ControllerExtraBundle\Resolver\LogAnnotationResolver', $logAnnotationResolver->setDefaultExecute($defaultExecute));
+        $this->assertEquals($defaultExecute, $logAnnotationResolver->getDefaultExecute());
     }
 
 

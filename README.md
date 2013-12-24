@@ -146,7 +146,7 @@ public function indexAction(Form $userForm)
 }
 ```
 
-You can also, using [SensioFrameworkExtraBundle][1]'s [ParamConverter][2], create a Form object with an previously created entity. you can define this entity by using `entity` parameter.
+You can also, using [SensioFrameworkExtraBundle][1]'s [ParamConverter][2], create a Form object with an previously created entity. you can define this entity using `entity` parameter.
 
 ``` php
 <?php
@@ -221,7 +221,7 @@ controller_extra:
         default_manager: my_custom_manager
 ```
 
-You can also overwrite overwrite this value in every single Flush Annotation instance by defining `manager` value
+You can also overwrite overwrite this value in every single Flush Annotation instance defining `manager` value
 
 ``` php
 <?php
@@ -263,7 +263,7 @@ public function indexAction()
 }
 ```
 
-You can define the level of the log. You can define default one if none is specified by overwriting it in your `config.yml` file.
+You can define the level of the log. You can define default one if none is specified overwriting it in your `config.yml` file.
 
 ``` yml
 controller_extra:
@@ -271,7 +271,7 @@ controller_extra:
         default_level: warning
 ```
 
-Every Annotation instance can overwrite this value by using `level` field.
+Every Annotation instance can overwrite this value using `level` field.
 
 ``` php
 <?php
@@ -303,7 +303,7 @@ Several levels can be used, as defined in [Psr\Log\LoggerInterface][6] interface
 * @Mmoreram\Log::LVL_LOG
 
 
-You can also define the execution of the log. You can define default one if none is specified by overwriting it in your `config.yml` file.
+You can also define the execution of the log. You can define default one if none is specified overwriting it in your `config.yml` file.
 
 ``` yml
 controller_extra:
@@ -311,7 +311,7 @@ controller_extra:
         default_execute: pre
 ```
 
-Every Annotation instance can overwrite this value by using `level` field.
+Every Annotation instance can overwrite this value using `level` field.
 
 ``` php
 <?php
