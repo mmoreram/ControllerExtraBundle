@@ -100,9 +100,9 @@ public function indexAction(AbstractType $userType)
 }
 ```
 
-> By default, if `variable` option is not set, generated object will be placed in a parameter named `$form`.
+> By default, if `variable` option is not set, the generated object will be placed in a parameter named `$form`.
 
-You can not just define your Type location using the namespace, in which case a new AbstractType element will be created. but you can also define it using service alias, in which case this bundle will return instance, using dependency injection.
+You can not just define your Type location using the namespace, in which case a new AbstractType element will be created. but you can also define it using service alias, in which case this bundle will return an instance using Symfony DI.
 
 ``` php
 <?php
@@ -123,7 +123,7 @@ public function indexAction(AbstractType $userType)
 }
 ```
 
-This annotation allows you to not only create an instance of FormType, but also allows you to inject Form object or FormView object rather simple FormType.
+This annotation allows you to not only create an instance of FormType, but also allows you to inject a From object or a FormView object
 
 To inject a Form object you only need to cast method variable as such.
 
@@ -195,7 +195,7 @@ public function indexAction(FormView $userFormView)
 
 ## @Flush
 
-Allow you to flush entityManager at the end of the request, using kernel.response event
+Flush annotation allows you to flush entityManager at the end of request using kernel.response event
 
 ``` php
 <?php
@@ -212,8 +212,7 @@ public function indexAction()
 }
 ```
 
-If not otherwise specified, default Doctrine Manager will be flushed with this annotation.
-You can overwrite default Mangager in your config.yml file
+If not otherwise specified, default Doctrine Manager will be flushed with this annotation. You can overwrite default Mangager in your config.yml file
 
 ``` yml
 controller_extra:
@@ -244,7 +243,7 @@ public function indexAction()
 
 ## @Log
 
-Allow you to log any plain message before executing action
+Log annotation allows you to log any plain message before or after controller action execution
 
 ``` php
 <?php
@@ -263,7 +262,7 @@ public function indexAction()
 }
 ```
 
-You can define the level of the log. You can define default one if none is specified overwriting it in your `config.yml` file.
+You can define the level of the message. You can define default one if none is specified overwriting it in your `config.yml` file.
 
 ``` yml
 controller_extra:
