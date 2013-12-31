@@ -16,6 +16,8 @@ Table of contents
 1. [Installing/Configuring](#installingconfiguring)
     * [Tags](#tags)
     * [Installing ControllerExtraBundle](#installing-controllerextrabundle)
+    * [Configuration](#configuration)
+    * [Tests](#tests)
 2. [Annotations](#annotations)
     * [@Form](#form)
     * [@Flush](#flush)
@@ -44,8 +46,9 @@ You have to add require line into you composer.json file
 
 Then you have to use composer to update your project dependencies
 
-```
-php composer.phar update
+``` bash
+$ curl -sS https://getcomposer.org/installer | php
+$ php composer.phar update
 ```
 
 And register the bundle in your appkernel.php file
@@ -58,7 +61,14 @@ return array(
 );
 ```
 
-# Configuration
+## Tests
+You can test this bundle with this command
+
+``` bash
+$ php vendor/phpunit/phpunit/phpunit.php
+```
+
+## Configuration
 
 ``` yml
 controller_extra:
