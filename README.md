@@ -40,7 +40,7 @@ You have to add require line into you composer.json file
     "php": ">=5.3.3",
     "symfony/symfony": "2.3.*",
 
-    "mmoreram/controller-annotations-bundle": "1.0-dev"
+    "mmoreram/controller-extra-bundle": "1.0.*@dev",
 }
 ```
 
