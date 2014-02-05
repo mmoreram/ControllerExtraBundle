@@ -40,7 +40,7 @@ class ControllerExtraBundle extends Bundle
         );
 
         AnnotationRegistry::registerFile($kernel
-            ->locateResource("@ControllerExtraBundle/Annotation/Paginator.php")
+            ->locateResource("@ControllerExtraBundle/Annotation/Log.php")
         );
     }
 

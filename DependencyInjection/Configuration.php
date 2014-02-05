@@ -71,10 +71,10 @@ class Configuration implements ConfigurationInterface
                         ->enumNode('default_level')
                             ->values(array(
                                 AnnotationLog::LVL_EMERG,
+                                AnnotationLog::LVL_ALERT,
                                 AnnotationLog::LVL_CRIT,
                                 AnnotationLog::LVL_ERR,
-                                AnnotationLog::LVL_WARN,
-                                AnnotationLog::LVL_NOTICE,
+                                AnnotationLog::LVL_WARNING,
                                 AnnotationLog::LVL_INFO,
                                 AnnotationLog::LVL_DEBUG,
                                 AnnotationLog::LVL_LOG,

@@ -13,10 +13,9 @@ services:
     mmoreram.controllerextra.resolvers.log_annotation_resolver:
         class: %mmoreram.controllerextra.resolvers.log_annotation_resolver.class%
         arguments:
-            form_registry: @form.registry
-            form_factory: @form.factory
+            logger: @logger
         calls:
-            - [setDefaultHandler, [%mmoreram.controllerextra.handler_default_handler%]]
-            - [setDefaultExecute, [%mmoreram.controllerextra.handler_default_execute%]]
+            - [setDefaultLevel, [%mmoreram.controllerextra.log_default_level%]]
+            - [setDefaultExecute, [%mmoreram.controllerextra.log_default_execute%]]
         tags:
             - { name: controller_extra.annotation }

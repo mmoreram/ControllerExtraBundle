@@ -19,7 +19,7 @@ use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpFoundation\Request;
 
 use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
-use Mmoreram\ControllerExtraBundle\Resolver\Abstracts\AbstractAnnotationResolver;
+use Mmoreram\ControllerExtraBundle\Resolver\Interfaces\AnnotationResolverInterface;
 
 
 /**
@@ -90,11 +90,11 @@ class ResolverEventListener
     /**
      * Add resolver into stack
      *
-     * @param AbstractAnnotationResolver $resolver Resolver
+     * @param AnnotationResolverInterface $resolver Resolver
      *
      * @return AnnotationEventListener self Object
      */
-    public function addResolver(AbstractAnnotationResolver $resolver)
+    public function addResolver(AnnotationResolverInterface $resolver)
     {
         $this->resolverStack[] = $resolver;
 
