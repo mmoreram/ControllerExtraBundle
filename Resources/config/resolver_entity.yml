@@ -13,6 +13,6 @@ services:
     mmoreram.controllerextra.resolvers.entity_annotation_resolver:
         class: %mmoreram.controllerextra.resolvers.entity_annotation_resolver.class%
         arguments:
-            service("kernel").getBundles()
+            bundles: @=service("kernel").getBundles()
         tags:
             - { name: controller_extra.annotation }
