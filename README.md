@@ -29,8 +29,9 @@ Table of contents
 
 ## Tags
 
-* Use version `1.0-dev` for last updated. Alias of `dev-master`.
+* Use last unstable version ( alias of `dev-master` ) to stay always in last commit
 * Use last stable version tag to stay in a stable release.
+* [![Latest Unstable Version](https://poser.pugx.org/mmoreram/controller-extra-bundle/v/unstable.png)](https://packagist.org/packages/mmoreram/controller-extra-bundle)  [![Latest Stable Version](https://poser.pugx.org/mmoreram/controller-extra-bundle/v/stable.png)](https://packagist.org/packages/mmoreram/controller-extra-bundle)
 
 ## Installing [ControllerExtraBundle](https://github.com/mmoreram/controller-extra-bundle)
 
