@@ -25,7 +25,7 @@ class Form extends Annotation
     /**
      * @var string
      *
-     * Name of form. This value can refer to a namespace or a service alias
+     * Name of the parameter
      */
     public $name;
 
@@ -33,9 +33,9 @@ class Form extends Annotation
     /**
      * @var string
      *
-     * Variable where to put generated object
+     * Name of form. This value can refer to a namespace or a service alias
      */
-    public $variable;
+    public $class;
 
 
     /**
@@ -66,13 +66,13 @@ class Form extends Annotation
 
 
     /**
-     * return variable
+     * return class
      *
-     * @return string Variable
+     * @return string Class
      */
-    public function getVariable()
+    public function getClass()
     {
-        return $this->variable;
+        return $this->name;
     }
 
 

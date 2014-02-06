@@ -274,7 +274,7 @@ class LogAnnotationResolverTest extends \PHPUnit_Framework_TestCase
      *
      * @param string $execute Execution mode
      */
-    public function testEvaluateAnnotationFlushAnnotationDefaultManagerExecBoth($execute = AnnotationLog::EXEC_BOTH)
+    public function testEvaluateAnnotationDefaultManagerExecBoth($execute = AnnotationLog::EXEC_BOTH)
     {
         $message = 'My message';
         $level = 'error';
@@ -291,7 +291,7 @@ class LogAnnotationResolverTest extends \PHPUnit_Framework_TestCase
             ->setMethods(array(
                 'getLevel',
                 'getExecute',
-                'getMessage',
+                'getValue',
             ))
             ->getMock();
 
@@ -307,7 +307,7 @@ class LogAnnotationResolverTest extends \PHPUnit_Framework_TestCase
 
         $annotation
             ->expects($this->once())
-            ->method('getMessage')
+            ->method('getValue')
             ->will($this->returnValue($message));
 
         $logger = $this
@@ -323,7 +323,7 @@ class LogAnnotationResolverTest extends \PHPUnit_Framework_TestCase
                 'logMessage',
                 'getLevel',
                 'getExecute',
-                'getMessage',
+                'getValue',
             ))
             ->getMock();
 
@@ -344,7 +344,7 @@ class LogAnnotationResolverTest extends \PHPUnit_Framework_TestCase
 
         $logAnnotationResolver
             ->expects($this->once())
-            ->method('getMessage')
+            ->method('getValue')
             ->will($this->returnValue($message));
 
         $logAnnotationResolver
@@ -363,9 +363,9 @@ class LogAnnotationResolverTest extends \PHPUnit_Framework_TestCase
      *
      * @param string $execute Execution mode
      */
-    public function testEvaluateAnnotationFlushAnnotationDefaultManagerExecPre()
+    public function testEvaluateAnnotationDefaultManagerExecPre()
     {
-        $this->testEvaluateAnnotationFlushAnnotationDefaultManagerExecBoth(AnnotationLog::EXEC_PRE);
+        $this->testEvaluateAnnotationDefaultManagerExecBoth(AnnotationLog::EXEC_PRE);
     }
 
 
@@ -390,7 +390,7 @@ class LogAnnotationResolverTest extends \PHPUnit_Framework_TestCase
                 'logMessage',
                 'getLevel',
                 'getExecute',
-                'getMessage',
+                'getValue',
             ))
             ->getMock();
 
@@ -416,7 +416,7 @@ class LogAnnotationResolverTest extends \PHPUnit_Framework_TestCase
 
         $logAnnotationResolver
             ->expects($this->once())
-            ->method('getMessage')
+            ->method('getValue')
             ->will($this->returnValue($message));
 
         $logAnnotationResolver

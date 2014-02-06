@@ -22,4 +22,13 @@ use Doctrine\Common\Annotations\Annotation as DoctrineAnnotation;
 abstract class Annotation extends DoctrineAnnotation
 {
 
+    /**
+     * return value
+     *
+     * @return string Value
+     */
+    public function getValue()
+    {
+        return $this->value;
+    }
 }

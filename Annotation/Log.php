@@ -121,14 +121,6 @@ class Log extends Annotation
     /**
      * @var string
      *
-     * Meessage
-     */
-    public $message;
-
-
-    /**
-     * @var string
-     *
      * Execute time
      */
     public $execute;
@@ -142,17 +134,6 @@ class Log extends Annotation
     public function getLevel()
     {
         return $this->level;
-    }
-
-
-    /**
-     * return message
-     *
-     * @return string message
-     */
-    public function getMessage()
-    {
-        return $this->message;
     }
 
 

@@ -21,6 +21,7 @@ Table of contents
 2. [Annotations](#annotations)
     * [@Form](#form)
     * [@Flush](#flush)
+    * [@Entity](#entity)
     * [@Log](#log)
 3. [Contributing](#contribute)
 
@@ -77,6 +78,8 @@ controller_extra:
     flush:
         active: true
         default_manager: default
+    entity:
+        active: true
     log:
         active: true
         default_level: info
@@ -101,8 +104,8 @@ use Symfony\Component\Form\AbstractType;
  * Simple controller method
  *
  * @Form(
- *      name     = "\Mmoreram\CustomBundle\Form\Type\UserType",
- *      variable = "userType"
+ *      name    = "\Mmoreram\CustomBundle\Form\Type\UserType",
+ *      value   = "userType"
  * )
  */
 public function indexAction(AbstractType $userType)
@@ -110,7 +113,7 @@ public function indexAction(AbstractType $userType)
 }
 ```
 
-> By default, if `variable` option is not set, the generated object will be placed in a parameter named `$form`.
+> By default, if `value` option is not set, the generated object will be placed in a parameter named `$form`.
 
 You can not just define your Type location using the namespace, in which case a new AbstractType element will be created. but you can also define it using service alias, in which case this bundle will return an instance using Symfony DI.
 
@@ -124,8 +127,8 @@ use Symfony\Component\Form\AbstractType;
  * Simple controller method
  *
  * @Form(
- *      name     = "user_type",
- *      variable = "userType"
+ *      name    = "user_type",
+ *      value   = "userType"
  * )
  */
 public function indexAction(AbstractType $userType)
@@ -135,7 +138,7 @@ public function indexAction(AbstractType $userType)
 
 This annotation allows you to not only create an instance of FormType, but also allows you to inject a From object or a FormView object
 
-To inject a Form object you only need to cast method variable as such.
+To inject a Form object you only need to cast method value as such.
 
 ``` php
 <?php
@@ -147,8 +150,8 @@ use Symfony\Component\Form\Form;
  * Simple controller method
  *
  * @AnnotationForm(
- *      name     = "user_type",
- *      variable = "userForm"
+ *      name    = "user_type",
+ *      value   = "userForm"
  * )
  */
 public function indexAction(Form $userForm)
@@ -173,7 +176,7 @@ use Symfony\Component\Form\Form;
  * @ParamConverter("user", class="MmoreramCustomBundle:User")
  * @AnnotationForm(
  *      name        = "user_type",
- *      variable    = "userForm",
+ *      value       = "userForm",
  *      entity      = "user"
  * )
  */
@@ -195,7 +198,7 @@ use Symfony\Component\Form\FormView;
  *
  * @Form(
  *      name     = "user_type",
- *      variable = "userFormView"
+ *      value = "userFormView"
  * )
  */
 public function indexAction(FormView $userFormView)
@@ -263,9 +266,7 @@ use Mmoreram\ControllerExtraBundle\Annotation\Log;
 /**
  * Simple controller method
  *
- * @Log(
- *      message = "Executing index Action"
- * )
+ * @Log("Executing index Action")
  */
 public function indexAction()
 {
@@ -291,8 +292,8 @@ use Mmoreram\ControllerExtraBundle\Annotation\Flush;
  * Simple controller method
  *
  * @Log(
- *      message = "Executing index Action",
- *      level = @Log::LVL_WARNING
+ *      value   = "Executing index Action",
+ *      level   = @Log::LVL_WARNING
  * )
  */
 public function indexAction()
@@ -331,7 +332,7 @@ use Mmoreram\ControllerExtraBundle\Annotation\Flush;
  * Simple controller method
  *
  * @Log(
- *      message = "Executing index Action",
+ *      value   = "Executing index Action",
  *      execute = @Log::EXEC_POST
  * )
  */

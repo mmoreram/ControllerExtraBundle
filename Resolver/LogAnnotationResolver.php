@@ -78,9 +78,9 @@ class LogAnnotationResolver implements AnnotationResolverInterface
     /**
      * @var string
      *
-     * Message
+     * Value
      */
-    protected $message;
+    protected $value;
 
 
     /**
@@ -191,13 +191,13 @@ class LogAnnotationResolver implements AnnotationResolverInterface
 
 
     /**
-     * Get message
+     * Get value
      *
-     * @return string Message
+     * @return string Value
      */
-    public function getMessage()
+    public function getValue()
     {
-        return $this->message;
+        return $this->value;
     }
 
 
@@ -228,14 +228,14 @@ class LogAnnotationResolver implements AnnotationResolverInterface
                             : $this->getDefaultExecute();
 
             $this->mustLog = true;
-            $this->message = $annotation->getMessage();
+            $this->value = $annotation->getValue();
 
             /**
              * Only logs before controller execution if EXEC_PRE or EXEC_BOTH
              */
             if (in_array($this->getExecute(), array(AnnotationLog::EXEC_PRE, AnnotationLog::EXEC_BOTH))) {
 
-                $this->logMessage($this->getLogger(), $this->getLevel(), $this->getMessage());
+                $this->logMessage($this->getLogger(), $this->getLevel(), $this->getValue());
             }
         }
     }
@@ -256,27 +256,27 @@ class LogAnnotationResolver implements AnnotationResolverInterface
              */
             if (in_array($this->getExecute(), array(AnnotationLog::EXEC_POST, AnnotationLog::EXEC_BOTH))) {
 
-                $this->logMessage($this->getLogger(), $this->getLevel(), $this->getMessage());
+                $this->logMessage($this->getLogger(), $this->getLevel(), $this->getValue());
             }
         }
     }
 
 
     /**
-     * Send message to log
+     * Send value to log
      *
      * @param LoggerInterface $logger  Logger
      * @param string          $level   Level
-     * @param string          $message Message
+     * @param string          $value Value
      *
      * @return LogAnnotationResolver self Object
      */
-    public function logMessage(LoggerInterface $logger, $level, $message)
+    public function logMessage(LoggerInterface $logger, $level, $value)
     {
             /**
              * Logs content, using specified level
              */
-            $logger->$level($message);
+            $logger->$level($value);
 
             return $this;
     }

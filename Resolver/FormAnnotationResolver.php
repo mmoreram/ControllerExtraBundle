@@ -78,9 +78,7 @@ class FormAnnotationResolver implements AnnotationResolverInterface
             /**
              * Once loaded Annotation info, we just instanced Service name
              */
-            $annotationValue = !is_null($annotation->getName())
-                             ? $annotation->getName()
-                             : 'form';
+            $annotationValue = $annotation->getClass());
 
             /**
              * Get FormType object given a service name
@@ -100,10 +98,15 @@ class FormAnnotationResolver implements AnnotationResolverInterface
                 ->getName();
 
             /**
+             * Get the parameter name. If not defined, is set as $form
+             */
+            $parameterName = $annotation->getName() ?: 'form';
+
+            /**
              * Requiring result with calling getBuiltObject(), set as request attribute desired element
              */
             $request->attributes->set(
-                $annotation->getVariable(),
+                $parameterName,
                 $this->getBuiltObject($request, $this->formFactory, $annotation, $parameterClass, $type)
             );
         }

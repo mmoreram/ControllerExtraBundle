@@ -42,6 +42,11 @@ class ControllerExtraExtension extends Extension
         $container->setParameter('mmoreram.controllerextra.flush_default_manager', $config['flush']['default_manager']);
 
         /**
+         * Entity parameters
+         */
+        $container->setParameter('mmoreram.controllerextra.entity_active', $config['entity']['active']);
+
+        /**
          * Log parameters
          */
         $container->setParameter('mmoreram.controllerextra.log_active', $config['log']['active']);
@@ -70,7 +75,7 @@ class ControllerExtraExtension extends Extension
     public function loadResolverConfiguration(YamlFileLoader $loader, array $config)
     {
         /**
-         * Only load resolver form config definition if is active
+         * Only load form resolver config definition if is active
          */
         if ($config['form']['active']) {
 
@@ -78,7 +83,7 @@ class ControllerExtraExtension extends Extension
         }
 
         /**
-         * Only load resolver flush config definition if is active
+         * Only load flush resolver config definition if is active
          */
         if ($config['flush']['active']) {
 
@@ -86,7 +91,15 @@ class ControllerExtraExtension extends Extension
         }
 
         /**
-         * Only load resolver log config definition if is active
+         * Only load entity resolver config definition if is active
+         */
+        if ($config['entity']['active']) {
+
+            $loader->load('resolver_entity.yml');
+        }
+
+        /**
+         * Only load log resolver config definition if is active
          */
         if ($config['log']['active']){
 

@@ -60,6 +60,18 @@ class Configuration implements ConfigurationInterface
                 ->end()
 
                 /**
+                 * Entity config definition
+                 */
+                ->arrayNode('entity')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->scalarNode('active')
+                            ->defaultTrue()
+                        ->end()
+                    ->end()
+                ->end()
+
+                /**
                  * Log config definition
                  */
                 ->arrayNode('log')
