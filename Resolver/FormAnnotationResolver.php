@@ -78,7 +78,7 @@ class FormAnnotationResolver implements AnnotationResolverInterface
             /**
              * Once loaded Annotation info, we just instanced Service name
              */
-            $annotationValue = $annotation->getClass());
+            $annotationValue = $annotation->getClass();
 
             /**
              * Get FormType object given a service name
