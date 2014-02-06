@@ -18,12 +18,17 @@ Table of contents
     * [Installing ControllerExtraBundle](#installing-controllerextrabundle)
     * [Configuration](#configuration)
     * [Tests](#tests)
-2. [Annotations](#annotations)
+1. [Bundle Annotations](#bundle-annotations)
     * [@Form](#form)
     * [@Flush](#flush)
     * [@Entity](#entity)
     * [@Log](#log)
-3. [Contributing](#contribute)
+1. [Custom annotations](#custom-annotations)
+    * [Annotation](#annotation)
+    * [Resolver](#resolver)
+    * [Definition](#definition)
+    * [Registration](#registration)
+1. [Contributing](#contribute)
 
 # Installing/Configuring
 
@@ -87,7 +92,7 @@ controller_extra:
         default_execute: pre
 ```
 
-# Annotations
+# Bundle annotations
 
 This bundle provide a reduced but useful set of annotations for your controller
 
@@ -376,6 +381,167 @@ Several executions can be used,
 * @Mmoreram\Log::EXEC_POST - Logged after controller execution
 * @Mmoreram\Log::EXEC_BOTH - Logged both
 
+# Custom annotations
+
+Using this bundle you can now create, in a very easy way, your own controller annotation.
+
+## Annotation
+
+The annotation object. You need to define the fields your custom annotation will contain. Must extends `Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation` abstract class.
+
+``` php
+<?php
+
+namespace My\Bundle\Annotation;
+
+use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
+
+/**
+ * Entity annotation driver
+ *
+ * @Annotation
+ */
+class MyCustomAnnotation extends Annotation
+{
+
+    /**
+     * @var string
+     *
+     * Dummy field
+     */
+    private $field;
+    
+    
+    /**
+     * Get Dummy field
+     *
+     * @return string Dummy field
+     */
+    public function getField()
+    {
+        return $this->field;
+    }
+}
+```
+
+## Resolver
+
+Once you have defined your own annotation, you have to resolve how this annotation works in a controller. You can manage this using a Resolver. Must extend `Mmoreram\ControllerExtraBundle\Resolver\Interfaces\AnnotationResolverInterface;` abstract class.
+
+``` php
+<?php
+
+namespace My\Bundle\Resolver;
+
+use Symfony\Component\HttpFoundation\Request;
+use Mmoreram\ControllerExtraBundle\Resolver\Interfaces\AnnotationResolverInterface;
+use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
+
+/**
+ * MyCustomAnnotation Resolver
+ */
+class MyCustomAnnotationResolver extends AnnotationResolverInterface
+{
+
+    /**
+     * Specific annotation evaluation.
+     * This method MUST be implemented because is defined in the interface
+     *
+     * @param array      $controller        Returns the current controller 
+     * @param Request    $request           Request
+     * @param Annotation $annotation        Custom annotation
+     * @param array      $parametersIndexed Controller parameters indexed by name
+     *
+     * @return AbstractEventListener self Object
+     */
+    public function evaluateAnnotation( array $controller, 
+                                        Request $request, 
+                                        Annotation $annotation, 
+                                        array $parametersIndexed )
+    {
+        /**
+         * You can now manage your annotation.
+         * You can acced to its fields using public methods
+         */
+        $field = $annotation->getField();
+        
+        /**
+         * You can also get existant controller parameters
+         */
+        $entity = $parametersIndexed['entity'];
+        
+        /**
+         * And you can now place new elements in the controller action.
+         * In this example we are creating new method parameter called $myNewField
+         * with some value
+         */
+        $request->attributes->set(
+            'myNewField',
+            $field . '-annotation';
+        );
+        
+        return $this;
+    }
+
+}
+```
+
+This class will be defined as a service, so this method is computed just before executing current controller. You can also subscribe to some kernel events and do whatever you need to do ( You can check `Mmoreram\ControllerExtraBundle\Resolver\LogAnnotationResolver` for some examples.
+
+## Definition
+
+Once Resolver is done, we need to define our service as an Annotation Resolver. We will use a custom `tag`.
+
+``` yml
+parameters:
+    #
+    # Resolvers
+    #
+    my.bundle.resolvers.my_custom_annotation_resolver.class: My\Bundle\Resolver\MyCustomAnnotationResolver
+
+services:
+    #
+    # Resolvers
+    #
+    my.bundle.resolvers.my_custom_annotation_resolver:
+        class: %my.bundle.resolvers.my_custom_annotation_resolver.class%
+        tags:
+            - { name: controller_extra.annotation }
+```
+
+## Registration
+
+We need to register our annotation inside our application. We can just do it in the `boot()` method of `bundle.php` file.
+
+``` php
+<?php
+
+namespace My\Bundle;
+
+use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Doctrine\Common\Annotations\AnnotationRegistry;
+
+/**
+ * MyBundle
+ */
+class ControllerExtraBundle extends Bundle
+{
+
+    /**
+     * Boots the Bundle.
+     */
+    public function boot()
+    {
+        $kernel = $this->container->get('kernel');
+
+        AnnotationRegistry::registerFile($kernel
+            ->locateResource("@MyBundle/Annotation/MyCustomAnnotation.php")
+        );
+    }
+}
+```
+
+*Et voilà!*  We can now use our custom Annotation in our project controllers.
 
 # Contributing
 
