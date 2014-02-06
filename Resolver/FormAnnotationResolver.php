@@ -91,16 +91,16 @@ class FormAnnotationResolver implements AnnotationResolverInterface
                         ->getInnerType();
 
             /**
-             * Get parameter class for TypeHinting
-             */
-            $parameterClass = $parametersIndexed[$annotation->variable]
-                ->getClass()
-                ->getName();
-
-            /**
              * Get the parameter name. If not defined, is set as $form
              */
             $parameterName = $annotation->getName() ?: 'form';
+
+            /**
+             * Get parameter class for TypeHinting
+             */
+            $parameterClass = $parametersIndexed[$parameterName]
+                ->getClass()
+                ->getName();
 
             /**
              * Requiring result with calling getBuiltObject(), set as request attribute desired element

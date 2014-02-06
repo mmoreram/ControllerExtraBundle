@@ -72,7 +72,7 @@ class Form extends Annotation
      */
     public function getClass()
     {
-        return $this->name;
+        return $this->class;
     }
 
 
