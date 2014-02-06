@@ -104,8 +104,8 @@ use Symfony\Component\Form\AbstractType;
  * Simple controller method
  *
  * @Form(
- *      name    = "\Mmoreram\CustomBundle\Form\Type\UserType",
- *      value   = "userType"
+ *      class = "\Mmoreram\CustomBundle\Form\Type\UserType",
+ *      name  = "userType"
  * )
  */
 public function indexAction(AbstractType $userType)
@@ -113,7 +113,7 @@ public function indexAction(AbstractType $userType)
 }
 ```
 
-> By default, if `value` option is not set, the generated object will be placed in a parameter named `$form`.
+> By default, if `name` option is not set, the generated object will be placed in a parameter named `$form`.
 
 You can not just define your Type location using the namespace, in which case a new AbstractType element will be created. but you can also define it using service alias, in which case this bundle will return an instance using Symfony DI.
 
@@ -127,8 +127,8 @@ use Symfony\Component\Form\AbstractType;
  * Simple controller method
  *
  * @Form(
- *      name    = "user_type",
- *      value   = "userType"
+ *      class = "user_type",
+ *      name  = "userType"
  * )
  */
 public function indexAction(AbstractType $userType)
@@ -150,8 +150,8 @@ use Symfony\Component\Form\Form;
  * Simple controller method
  *
  * @AnnotationForm(
- *      name    = "user_type",
- *      value   = "userForm"
+ *      class = "user_type",
+ *      name  = "userForm"
  * )
  */
 public function indexAction(Form $userForm)
@@ -175,9 +175,37 @@ use Symfony\Component\Form\Form;
  * @Route("/user/{id}")
  * @ParamConverter("user", class="MmoreramCustomBundle:User")
  * @AnnotationForm(
- *      name        = "user_type",
- *      value       = "userForm",
- *      entity      = "user"
+ *      class  = "user_type",
+ *      entity = "user"
+ *      name   = "userForm",
+ * )
+ */
+public function indexAction(User $user, Form $userForm)
+{
+}
+```
+
+To handle current request, you can set `handleRequest` to true. By default this value is set to `false`
+
+
+``` php
+<?php
+
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Mmoreram\ControllerExtraBundle\Annotation\Form as AnnotationForm;
+use Symfony\Component\Form\Form;
+
+/**
+ * Simple controller method
+ *
+ * @Route("/user/{id}")
+ * @ParamConverter("user", class="MmoreramCustomBundle:User")
+ * @AnnotationForm(
+ *      class         = "user_type",
+ *      entity        = "user"
+ *      handleRequest = true,
+ *      name          = "userForm",
  * )
  */
 public function indexAction(User $user, Form $userForm)
@@ -197,8 +225,8 @@ use Symfony\Component\Form\FormView;
  * Simple controller method
  *
  * @Form(
- *      name     = "user_type",
- *      value = "userFormView"
+ *      class = "user_type",
+ *      name  = "userFormView"
  * )
  */
 public function indexAction(FormView $userFormView)
