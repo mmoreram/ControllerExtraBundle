@@ -440,7 +440,7 @@ use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
 /**
  * MyCustomAnnotation Resolver
  */
-class MyCustomAnnotationResolver extends AnnotationResolverInterface
+class MyCustomAnnotationResolver implements AnnotationResolverInterface
 {
 
     /**
