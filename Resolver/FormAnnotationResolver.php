@@ -16,6 +16,7 @@ use Symfony\Component\Form\FormRegistryInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\AbstractType;
+use ReflectionMethod;
 
 use Mmoreram\ControllerExtraBundle\Resolver\Interfaces\AnnotationResolverInterface;
 use Mmoreram\ControllerExtraBundle\Annotation\Form as AnnotationForm;
@@ -24,6 +25,8 @@ use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
 
 /**
  * FormAnnotationResolver, an implementation of  AnnotationResolverInterface
+ * 
+ * @todo Test this class
  */
 class FormAnnotationResolver implements AnnotationResolverInterface
 {
@@ -60,14 +63,13 @@ class FormAnnotationResolver implements AnnotationResolverInterface
     /**
      * Specific annotation evaluation.
      *
-     * @param array      $controller        Controller
-     * @param Request    $request           Request
-     * @param Annotation $annotation        Annotation
-     * @param array      $parametersIndexed Parameters indexed
+     * @param Request          $request    Request
+     * @param Annotation       $annotation Annotation
+     * @param ReflectionMethod $method     Method
      *
-     * @return AbstractEventListener self Object
+     * @return FormAnnotationResolver self Object
      */
-    public function evaluateAnnotation(array $controller, Request $request, Annotation $annotation, array $parametersIndexed)
+    public function evaluateAnnotation(Request $request, Annotation $annotation, ReflectionMethod $method)
     {
 
         /**
@@ -92,8 +94,22 @@ class FormAnnotationResolver implements AnnotationResolverInterface
 
             /**
              * Get the parameter name. If not defined, is set as $form
+             * 
+             * @todo Default value should be set as parameter, to make it more customizable
              */
             $parameterName = $annotation->getName() ?: 'form';
+
+            /**
+             * Method parameteres load.
+             * A hash is created to access to all needed parameters with cost O(1)
+             */
+            $parameters = $method->getParameters();
+            $parametersIndexed = array();
+
+            foreach ($parameters as $parameter) {
+
+                $parametersIndexed[$parameter->getName()] = $parameter;
+            }
 
             /**
              * Get parameter class for TypeHinting

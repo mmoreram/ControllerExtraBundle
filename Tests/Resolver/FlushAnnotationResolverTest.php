@@ -19,6 +19,39 @@ class FlushAnnotationResolverTest extends \PHPUnit_Framework_TestCase
 {
 
     /**
+     * @var Request
+     *
+     * Request
+     */
+    private $request;
+
+
+    /**
+     * @var ReflectionMethod
+     * 
+     * Reflection Method
+     */
+    private $reflectionMethod;
+
+
+    /**
+     * Setup method
+     */
+    public function setUp()
+    {
+        $this->request = $this
+            ->getMockBuilder('Symfony\Component\HttpFoundation\Request')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->reflectionMethod = $this
+            ->getMockBuilder('ReflectionMethod')
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
+
+    /**
      * Tests DefaultManager name method
      */
     public function testDefaultManager()
@@ -49,13 +82,6 @@ class FlushAnnotationResolverTest extends \PHPUnit_Framework_TestCase
                 'getDoctrine',
                 'getDefaultManager',
             ))
-            ->getMock();
-
-        $controller = array();
-        $parametersIndexed = array();
-        $request = $this
-            ->getMockBuilder('Symfony\Component\HttpFoundation\Request')
-            ->disableOriginalConstructor()
             ->getMock();
 
         $annotation = $this
@@ -99,7 +125,7 @@ class FlushAnnotationResolverTest extends \PHPUnit_Framework_TestCase
             ->method('getDefaultManager')
             ->will($this->returnValue('default'));
 
-        $flushAnnotationResolver->evaluateAnnotation($controller, $request, $annotation, $parametersIndexed);
+        $flushAnnotationResolver->evaluateAnnotation($this->request, $annotation, $this->reflectionMethod);
 
         $this->assertTrue($flushAnnotationResolver->getMustFlush());
         $this->assertEquals($flushAnnotationResolver->getManager(), $manager);
@@ -119,13 +145,6 @@ class FlushAnnotationResolverTest extends \PHPUnit_Framework_TestCase
             ->setMethods(array(
                 'getDoctrine',
             ))
-            ->getMock();
-
-        $controller = array();
-        $parametersIndexed = array();
-        $request = $this
-            ->getMockBuilder('Symfony\Component\HttpFoundation\Request')
-            ->disableOriginalConstructor()
             ->getMock();
 
         $annotation = $this
@@ -168,7 +187,7 @@ class FlushAnnotationResolverTest extends \PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('getDefaultManager');
 
-        $flushAnnotationResolver->evaluateAnnotation($controller, $request, $annotation, $parametersIndexed);
+        $flushAnnotationResolver->evaluateAnnotation($this->request, $annotation, $this->reflectionMethod);
 
         $this->assertTrue($flushAnnotationResolver->getMustFlush());
         $this->assertEquals($flushAnnotationResolver->getManager(), $manager);
@@ -190,13 +209,6 @@ class FlushAnnotationResolverTest extends \PHPUnit_Framework_TestCase
             ))
             ->getMock();
 
-        $controller = array();
-        $parametersIndexed = array();
-        $request = $this
-            ->getMockBuilder('Symfony\Component\HttpFoundation\Request')
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $annotation = $this
             ->getMockBuilder('Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation')
             ->disableOriginalConstructor()
@@ -206,7 +218,7 @@ class FlushAnnotationResolverTest extends \PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('getDoctrine');
 
-        $flushAnnotationResolver->evaluateAnnotation($controller, $request, $annotation, $parametersIndexed);
+        $flushAnnotationResolver->evaluateAnnotation($this->request, $annotation, $this->reflectionMethod);
 
         $this->assertFalse($flushAnnotationResolver->getMustFlush());
         $this->assertNull($flushAnnotationResolver->getManager());

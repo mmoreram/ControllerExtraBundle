@@ -9,4 +9,4 @@ services:
             kernel: @kernel
             annotations_reader: @annotation_reader
         tags:
-            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
+            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController, priority: %mmoreram.controllerextra.resolver_priority% }

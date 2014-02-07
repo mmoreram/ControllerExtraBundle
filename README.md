@@ -9,7 +9,9 @@ ControllerExtra for Symfony2
 [![Dependency Status](https://www.versioneye.com/user/projects/52b09eefec137588e200007e/badge.png)](https://www.versioneye.com/user/projects/52b09eefec137588e200007e)
 [![Total Downloads](https://poser.pugx.org/mmoreram/controller-extra-bundle/downloads.png)](https://packagist.org/packages/mmoreram/controller-extra-bundle)
 
-This bundle provides a collection of annotations for Symfony2 Controllers, designed to streamline the creation of certain objects and enable smaller and more concise actions.
+This bundle provides a collection of annotations for Symfony2 Controllers,
+designed to streamline the creation of certain objects and enable smaller and
+more concise actions.
 
 Table of contents
 -----
@@ -19,9 +21,9 @@ Table of contents
     * [Configuration](#configuration)
     * [Tests](#tests)
 1. [Bundle Annotations](#bundle-annotations)
+    * [@Entity](#entity)
     * [@Form](#form)
     * [@Flush](#flush)
-    * [@Entity](#entity)
     * [@Log](#log)
 1. [Custom annotations](#custom-annotations)
     * [Annotation](#annotation)
@@ -34,11 +36,12 @@ Table of contents
 
 ## Tags
 
-* Use last unstable version ( alias of `dev-master` ) to stay always in last commit
+* Use last unstable version ( alias of `dev-master` ) to stay in last commit
 * Use last stable version tag to stay in a stable release.
-* [![Latest Unstable Version](https://poser.pugx.org/mmoreram/controller-extra-bundle/v/unstable.png)](https://packagist.org/packages/mmoreram/controller-extra-bundle)  [![Latest Stable Version](https://poser.pugx.org/mmoreram/controller-extra-bundle/v/stable.png)](https://packagist.org/packages/mmoreram/controller-extra-bundle)
+* [![Latest Unstable Version](https://poser.pugx.org/mmoreram/controller-extra-bundle/v/unstable.png)](https://packagist.org/packages/mmoreram/controller-extra-bundle)
+[![Latest Stable Version](https://poser.pugx.org/mmoreram/controller-extra-bundle/v/stable.png)](https://packagist.org/packages/mmoreram/controller-extra-bundle)
 
-## Installing [ControllerExtraBundle](https://github.com/mmoreram/controller-extra-bundle)
+## Installing  [ControllerExtraBundle](https://github.com/mmoreram/controller-extra-bundle)
 
 You have to add require line into you composer.json file
 
@@ -77,8 +80,12 @@ $ php vendor/phpunit/phpunit/phpunit.php
 
 ## Configuration
 
+By default, all annotations are loaded, but any individual annotation can be
+completely disabled by setting to false `active` parameter.
+
 ``` yml
 controller_extra:
+    resolver_priority: 8
     form:
         active: true
     flush:
@@ -92,13 +99,48 @@ controller_extra:
         default_execute: pre
 ```
 
+> ResolverEventListener is subscribed to `kernel.controller` event with 
+> priority 8. This element can be configured and customized with 
+> `resolver_priority` config value. If you need to get ParamConverter entities,
+> make sure that this value is higher than 0.
+
 # Bundle annotations
 
 This bundle provide a reduced but useful set of annotations for your controller
 
+## @Entity
+
+Creates a simple empty entity, given a namespace, and places it as a method
+parameter.
+
+``` php
+<?php
+
+use Mmoreram\ControllerExtraBundle\Annotation\Entity;
+use Mmoreram\ControllerExtraBundle\Entity\User;
+
+/**
+ * Simple controller method
+ *
+ * @Entiy(
+ *      class = "MmoreramCustomBundle:User",
+ *      name  = "user"
+ * )
+ */
+public function indexAction(User $user)
+{
+}
+```
+
+> By default, if `name` option is not set, the generated object will be placed
+> in a parameter named `$entity`.
+
+
 ## @Form
 
-Provides form injection in your controller actions. This annotation only needs a name to be defined in, where you must define namespace where your form is placed.
+Provides form injection in your controller actions. This annotation only needs
+a name to be defined in, where you must define namespace where your form is
+placed.
 
 ``` php
 <?php
@@ -119,9 +161,13 @@ public function indexAction(AbstractType $userType)
 }
 ```
 
-> By default, if `name` option is not set, the generated object will be placed in a parameter named `$form`.
+> By default, if `name` option is not set, the generated object will be placed
+> in a parameter named `$form`.
 
-You can not just define your Type location using the namespace, in which case a new AbstractType element will be created. but you can also define it using service alias, in which case this bundle will return an instance using Symfony DI.
+You can not just define your Type location using the namespace, in which case
+a new AbstractType element will be created. but you can also define it using
+service alias, in which case this bundle will return an instance using Symfony
+DI.
 
 ``` php
 <?php
@@ -142,7 +188,8 @@ public function indexAction(AbstractType $userType)
 }
 ```
 
-This annotation allows you to not only create an instance of FormType, but also allows you to inject a From object or a FormView object
+This annotation allows you to not only create an instance of FormType, but
+also allows you to inject a From object or a FormView object
 
 To inject a Form object you only need to cast method value as such.
 
@@ -165,7 +212,9 @@ public function indexAction(Form $userForm)
 }
 ```
 
-You can also, using [SensioFrameworkExtraBundle][1]'s [ParamConverter][2], create a Form object with an previously created entity. you can define this entity using `entity` parameter.
+You can also, using [SensioFrameworkExtraBundle][1]'s [ParamConverter][2],
+create a Form object with an previously created entity. you can define this
+entity using `entity` parameter.
 
 ``` php
 <?php
@@ -191,7 +240,8 @@ public function indexAction(User $user, Form $userForm)
 }
 ```
 
-To handle current request, you can set `handleRequest` to true. By default this value is set to `false`
+To handle current request, you can set `handleRequest` to true. By default
+this value is set to `false`
 
 
 ``` php
@@ -242,7 +292,8 @@ public function indexAction(FormView $userFormView)
 
 ## @Flush
 
-Flush annotation allows you to flush entityManager at the end of request using kernel.response event
+Flush annotation allows you to flush entityManager at the end of request using
+kernel.response event
 
 ``` php
 <?php
@@ -259,7 +310,8 @@ public function indexAction()
 }
 ```
 
-If not otherwise specified, default Doctrine Manager will be flushed with this annotation. You can overwrite default Mangager in your config.yml file
+If not otherwise specified, default Doctrine Manager will be flushed with this
+annotation. You can overwrite default Mangager in your config.yml file
 
 ``` yml
 controller_extra:
@@ -267,7 +319,8 @@ controller_extra:
         default_manager: my_custom_manager
 ```
 
-You can also overwrite overwrite this value in every single Flush Annotation instance defining `manager` value
+You can also overwrite overwrite this value in every single Flush Annotation
+instance defining `manager` value
 
 ``` php
 <?php
@@ -286,11 +339,13 @@ public function indexAction()
 }
 ```
 
-> If multiple @Mmoreram\Flush are defined in same action, last instance will overwrite previous. Anyway just one instance should be defined.
+> If multiple @Mmoreram\Flush are defined in same action, last instance will
+> overwrite previous. Anyway just one instance should be defined.
 
 ## @Log
 
-Log annotation allows you to log any plain message before or after controller action execution
+Log annotation allows you to log any plain message before or after controller
+action execution
 
 ``` php
 <?php
@@ -307,7 +362,8 @@ public function indexAction()
 }
 ```
 
-You can define the level of the message. You can define default one if none is specified overwriting it in your `config.yml` file.
+You can define the level of the message. You can define default one if none is
+specified overwriting it in your `config.yml` file.
 
 ``` yml
 controller_extra:
@@ -335,7 +391,8 @@ public function indexAction()
 }
 ```
 
-Several levels can be used, as defined in [Psr\Log\LoggerInterface][6] interface
+Several levels can be used, as defined in [Psr\Log\LoggerInterface][6]
+interface
 
 * @Mmoreram\Log::LVL_EMERG
 * @Mmoreram\Log::LVL_CRIT
@@ -347,7 +404,8 @@ Several levels can be used, as defined in [Psr\Log\LoggerInterface][6] interface
 * @Mmoreram\Log::LVL_LOG
 
 
-You can also define the execution of the log. You can define default one if none is specified overwriting it in your `config.yml` file.
+You can also define the execution of the log. You can define default one if
+none is specified overwriting it in your `config.yml` file.
 
 ``` yml
 controller_extra:
@@ -383,11 +441,14 @@ Several executions can be used,
 
 # Custom annotations
 
-Using this bundle you can now create, in a very easy way, your own controller annotation.
+Using this bundle you can now create, in a very easy way, your own controller
+annotation.
 
 ## Annotation
 
-The annotation object. You need to define the fields your custom annotation will contain. Must extends `Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation` abstract class.
+The annotation object. You need to define the fields your custom annotation
+will contain. Must extends `Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation`
+abstract class.
 
 ``` php
 <?php
@@ -426,7 +487,10 @@ class MyCustomAnnotation extends Annotation
 
 ## Resolver
 
-Once you have defined your own annotation, you have to resolve how this annotation works in a controller. You can manage this using a Resolver. Must extend `Mmoreram\ControllerExtraBundle\Resolver\Interfaces\AnnotationResolverInterface;` abstract class.
+Once you have defined your own annotation, you have to resolve how this
+annotation works in a controller. You can manage this using a Resolver. Must
+extend `Mmoreram\ControllerExtraBundle\Resolver\Interfaces\AnnotationResolverInterface;`
+abstract class.
 
 ``` php
 <?php
@@ -447,37 +511,44 @@ class MyCustomAnnotationResolver implements AnnotationResolverInterface
      * Specific annotation evaluation.
      * This method MUST be implemented because is defined in the interface
      *
-     * @param array      $controller        Returns the current controller 
-     * @param Request    $request           Request
-     * @param Annotation $annotation        Custom annotation
-     * @param array      $parametersIndexed Controller parameters indexed by name
+     * @param Request          $request    Request
+     * @param Annotation       $annotation Annotation
+     * @param ReflectionMethod $method     Method
      *
-     * @return AbstractEventListener self Object
+     * @return MyCustomAnnotationResolver self Object
      */
-    public function evaluateAnnotation( array $controller, 
+    public function evaluateAnnotation(
                                         Request $request, 
                                         Annotation $annotation, 
-                                        array $parametersIndexed )
+                                        ReflectionMethod $method )
     {
         /**
          * You can now manage your annotation.
-         * You can acced to its fields using public methods
+         * You can acced to its fields using public methods.
+         * 
+         * Annotation fields can be public and can be acceded directly,
+         * but is better for testing to use getters; they can be mocked.
          */
         $field = $annotation->getField();
         
         /**
-         * You can also get existant controller parameters
+         * You can also access to existing method parameters.
+         * 
+         * Available parameters are:
+         * 
+         * # ParamConverter parameters ( See `resolver_priority` config value )
+         * # All method defined parameters, included Request object if is set.
          */
-        $entity = $parametersIndexed['entity'];
+        $entity = $request->attributes->get('entity');
         
         /**
          * And you can now place new elements in the controller action.
-         * In this example we are creating new method parameter called $myNewField
-         * with some value
+         * In this example we are creating new method parameter
+         * called $myNewField with some value
          */
         $request->attributes->set(
             'myNewField',
-            $field . '-annotation';
+            new $field()
         );
         
         return $this;
@@ -486,11 +557,16 @@ class MyCustomAnnotationResolver implements AnnotationResolverInterface
 }
 ```
 
-This class will be defined as a service, so this method is computed just before executing current controller. You can also subscribe to some kernel events and do whatever you need to do ( You can check `Mmoreram\ControllerExtraBundle\Resolver\LogAnnotationResolver` for some examples.
+This class will be defined as a service, so this method is computed just
+before executing current controller. You can also subscribe to some kernel
+events and do whatever you need to do ( You can check
+`Mmoreram\ControllerExtraBundle\Resolver\LogAnnotationResolver` for some
+examples.
 
 ## Definition
 
-Once Resolver is done, we need to define our service as an Annotation Resolver. We will use a custom `tag`.
+Once Resolver is done, we need to define our service as an Annotation
+Resolver. We will use a custom `tag`.
 
 ``` yml
 parameters:
@@ -511,7 +587,8 @@ services:
 
 ## Registration
 
-We need to register our annotation inside our application. We can just do it in the `boot()` method of `bundle.php` file.
+We need to register our annotation inside our application. We can just do it in
+the `boot()` method of `bundle.php` file.
 
 ``` php
 <?php
@@ -545,12 +622,19 @@ class ControllerExtraBundle extends Bundle
 
 # Contributing
 
-All code is Symfony2 Code formatted, so every pull request must validate phpcs standards.
-You should read [Symfony2 coding standards](http://symfony.com/doc/current/contributing/code/standards.html) and install [this](https://github.com/opensky/Symfony2-coding-standard) CodeSniffer to check all code is validated.
+All code is Symfony2 Code formatted, so every pull request must validate phpcs
+standards. You should read
+[Symfony2 coding standards](http://symfony.com/doc/current/contributing/code/standards.html)
+and install [this](https://github.com/opensky/Symfony2-coding-standard)
+CodeSniffer to check all code is validated.
 
-There is also a policy for contributing to this project. All pull request must be all explained step by step, to make us more understandable and easier to merge pull request. All new features must be tested with PHPUnit.
+There is also a policy for contributing to this project. All pull request must
+be all explained step by step, to make us more understandable and easier to
+merge pull request. All new features must be tested with PHPUnit.
 
-If you'd like to contribute, please read the [Contributing Code][3] part of the documentation. If you're submitting a pull request, please follow the guidelines in the [Submitting a Patch][4] section and use the [Pull Request Template][5].
+If you'd like to contribute, please read the [Contributing Code][3] part of the
+documentation. If you're submitting a pull request, please follow the guidelines
+in the [Submitting a Patch][4] section and use the [Pull Request Template][5].
 
 [1]: https://github.com/sensiolabs/SensioFrameworkExtraBundle
 [2]: http://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/annotations/converters.html

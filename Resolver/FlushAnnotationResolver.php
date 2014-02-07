@@ -12,10 +12,11 @@
 
 namespace Mmoreram\ControllerExtraBundle\Resolver;
 
-use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
-use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\AbstractManagerRegistry;
+use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\HttpFoundation\Request;
+use ReflectionMethod;
 
 use Mmoreram\ControllerExtraBundle\Resolver\Interfaces\AnnotationResolverInterface;
 use Mmoreram\ControllerExtraBundle\Annotation\Flush as AnnotationFlush;
@@ -133,14 +134,13 @@ class FlushAnnotationResolver implements AnnotationResolverInterface
     /**
      * Specific annotation evaluation.
      *
-     * @param array      $controller        Controller
-     * @param Request    $request           Request
-     * @param Annotation $annotation        Annotation
-     * @param array      $parametersIndexed Parameters indexed
+     * @param Request          $request    Request
+     * @param Annotation       $annotation Annotation
+     * @param ReflectionMethod $method     Method
      *
-     * @return AbstractEventListener self Object
+     * @return FlushAnnotationResolver self Object
      */
-    public function evaluateAnnotation(array $controller, Request $request, Annotation $annotation, array $parametersIndexed)
+    public function evaluateAnnotation(Request $request, Annotation $annotation, ReflectionMethod $method)
     {
 
         /**

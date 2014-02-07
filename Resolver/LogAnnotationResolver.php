@@ -14,6 +14,7 @@ namespace Mmoreram\ControllerExtraBundle\Resolver;
 
 use Symfony\Component\HttpFoundation\Request;
 use Psr\Log\LoggerInterface;
+use ReflectionMethod;
 
 use Mmoreram\ControllerExtraBundle\Resolver\Interfaces\AnnotationResolverInterface;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
@@ -204,14 +205,13 @@ class LogAnnotationResolver implements AnnotationResolverInterface
     /**
      * Specific annotation evaluation.
      *
-     * @param array      $controller        Controller
-     * @param Request    $request           Request
-     * @param Annotation $annotation        Annotation
-     * @param array      $parametersIndexed Parameters indexed
+     * @param Request          $request    Request
+     * @param Annotation       $annotation Annotation
+     * @param ReflectionMethod $method     Method
      *
-     * @return AbstractEventListener self Object
+     * @return LogAnnotationResolver self Object
      */
-    public function evaluateAnnotation(array $controller, Request $request, Annotation $annotation, array $parametersIndexed)
+    public function evaluateAnnotation(Request $request, Annotation $annotation, ReflectionMethod $method)
     {
 
         /**
@@ -219,11 +219,11 @@ class LogAnnotationResolver implements AnnotationResolverInterface
          */
         if ($annotation instanceof AnnotationLog) {
 
-            $this->level    = !is_null($annotation->getLevel())
+            $this->level    = $annotation->getLevel()
                             ? $annotation->getLevel()
                             : $this->getDefaultLevel();
 
-            $this->execute  = !is_null($annotation->getExecute())
+            $this->execute  = $annotation->getExecute()
                             ? $annotation->getExecute()
                             : $this->getDefaultExecute();
 

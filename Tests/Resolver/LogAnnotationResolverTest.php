@@ -23,6 +23,52 @@ class LogAnnotationResolverTest extends \PHPUnit_Framework_TestCase
 {
 
     /**
+     * @var Request
+     *
+     * Request
+     */
+    private $request;
+
+
+    /**
+     * @var ReflectionMethod
+     * 
+     * Reflection Method
+     */
+    private $reflectionMethod;
+
+
+    /**
+     * @var Annotation
+     * 
+     * Annotation
+     */
+    private $annotation;
+
+
+    /**
+     * Setup method
+     */
+    public function setUp()
+    {
+        $this->request = $this
+            ->getMockBuilder('Symfony\Component\HttpFoundation\Request')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->reflectionMethod = $this
+            ->getMockBuilder('ReflectionMethod')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->annotation = $this
+            ->getMockBuilder('Mmoreram\ControllerExtraBundle\Annotation\Log')
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
+
+    /**
      * Tests DefaultManager name method
      */
     public function testDefaultLevel()
@@ -86,32 +132,17 @@ class LogAnnotationResolverTest extends \PHPUnit_Framework_TestCase
 
 
     /**
-     * Tests level setting evaluateAnnotation method
-     *
-     * This case considers that Annotation level is not set, so takes config default
+     * Tests level setting in evaluateAnnotation method
+     * 
+     * @dataProvider dataEvaluateAnnotationLevel
      */
-    public function testEvaluateAnnotationDefaultLevel()
+    public function testEvaluateAnnotationLevel($defaultLevel, $level, $resultLevel)
     {
-        $level = 'error';
-        $controller = array();
-        $parametersIndexed = array();
-        $request = $this
-            ->getMockBuilder('Symfony\Component\HttpFoundation\Request')
-            ->disableOriginalConstructor()
-            ->getMock();
 
-        $annotation = $this
-            ->getMockBuilder('Mmoreram\ControllerExtraBundle\Annotation\Log')
-            ->disableOriginalConstructor()
-            ->setMethods(array(
-                'getLevel',
-            ))
-            ->getMock();
-
-        $annotation
-            ->expects($this->once())
+        $this->annotation
+            ->expects($this->any())
             ->method('getLevel')
-            ->will($this->returnValue(null));
+            ->will($this->returnValue($level));
 
         $logAnnotationResolver = $this
             ->getMockBuilder('Mmoreram\ControllerExtraBundle\Resolver\LogAnnotationResolver')
@@ -122,148 +153,87 @@ class LogAnnotationResolverTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $logAnnotationResolver
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('getDefaultLevel')
-            ->will($this->returnValue($level));
+            ->will($this->returnValue($defaultLevel));
 
-        $logAnnotationResolver->evaluateAnnotation($controller, $request, $annotation, $parametersIndexed);
-        $this->assertEquals($logAnnotationResolver->getLevel(), $level);
+        $logAnnotationResolver->evaluateAnnotation($this->request, $this->annotation, $this->reflectionMethod);
+        $this->assertEquals($logAnnotationResolver->getLevel(), $resultLevel);
     }
 
 
     /**
-     * Tests level setting evaluateAnnotation method
-     *
-     * This case considers that Annotation level is set, so takes that one
+     * testEvaluateAnnotationLevel data provider
+     * 
+     * @return array Data
      */
-    public function testEvaluateAnnotationAnnotationLevel()
+    public function dataEvaluateAnnotationLevel()
     {
-        $level = 'error';
-        $controller = array();
-        $parametersIndexed = array();
-        $request = $this
-            ->getMockBuilder('Symfony\Component\HttpFoundation\Request')
-            ->disableOriginalConstructor()
-            ->getMock();
+        return array(
+            array('info', null, 'info'),
+            array('info', false, 'info'),
+            array('info', 'info', 'info'),
+            array('info', 'error', 'error'),
+        );
+    }
 
-        $annotation = $this
-            ->getMockBuilder('Mmoreram\ControllerExtraBundle\Annotation\Log')
-            ->disableOriginalConstructor()
-            ->setMethods(array(
-                'getLevel',
-            ))
-            ->getMock();
 
-        $annotation
-            ->expects($this->exactly(2))
-            ->method('getLevel')
-            ->will($this->returnValue($level));
+    /**
+     * Tests execute setting in evaluateAnnotation method
+     * 
+     * @dataProvider dataEvaluateAnnotationExecute
+     */
+    public function testEvaluateAnnotationExecute($defaultExecute, $execute, $resultExecute)
+    {
 
-        $logAnnotationResolver = $this
-            ->getMockBuilder('Mmoreram\ControllerExtraBundle\Resolver\LogAnnotationResolver')
-            ->disableOriginalConstructor()
-            ->setMethods(array(
-                'getDefaultLevel',
-            ))
-            ->getMock();
-
-        $logAnnotationResolver
+        $this->annotation
             ->expects($this->any())
-            ->method('getDefaultLevel');
-
-        $logAnnotationResolver->evaluateAnnotation($controller, $request, $annotation, $parametersIndexed);
-        $this->assertEquals($logAnnotationResolver->getLevel(), $level);
-    }
-
-
-    /**
-     * Tests execute setting evaluateAnnotation method
-     *
-     * This case considers that Annotation execute is not set, so takes config default
-     */
-    public function testEvaluateAnnotationDefaultExecute()
-    {
-        $execute = AnnotationLog::EXEC_POST;
-        $controller = array();
-        $parametersIndexed = array();
-        $request = $this
-            ->getMockBuilder('Symfony\Component\HttpFoundation\Request')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $annotation = $this
-            ->getMockBuilder('Mmoreram\ControllerExtraBundle\Annotation\Log')
-            ->disableOriginalConstructor()
-            ->setMethods(array(
-                'getExecute',
-            ))
-            ->getMock();
-
-        $annotation
-            ->expects($this->once())
             ->method('getExecute')
-            ->will($this->returnValue(null));
+            ->will($this->returnValue($execute));
 
         $logAnnotationResolver = $this
             ->getMockBuilder('Mmoreram\ControllerExtraBundle\Resolver\LogAnnotationResolver')
             ->disableOriginalConstructor()
             ->setMethods(array(
                 'getDefaultExecute',
+                'logMessage',
+                'getLogger',
             ))
             ->getMock();
 
         $logAnnotationResolver
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('getDefaultExecute')
-            ->will($this->returnValue($execute));
+            ->will($this->returnValue($defaultExecute));
 
-        $logAnnotationResolver->evaluateAnnotation($controller, $request, $annotation, $parametersIndexed);
-        $this->assertEquals($logAnnotationResolver->getExecute(), $execute);
-    }
-
-
-    /**
-     * Tests execute setting evaluateAnnotation method
-     *
-     * This case considers that Annotation execute is set, so takes that one
-     */
-    public function testEvaluateAnnotationAnnotationExecute()
-    {
-        $execute = AnnotationLog::EXEC_POST;
-        $controller = array();
-        $parametersIndexed = array();
-        $request = $this
-            ->getMockBuilder('Symfony\Component\HttpFoundation\Request')
+        $logger = $this
+            ->getMockBuilder('Psr\Log\LoggerInterface')
             ->disableOriginalConstructor()
-            ->getMock();
-
-        $annotation = $this
-            ->getMockBuilder('Mmoreram\ControllerExtraBundle\Annotation\Log')
-            ->disableOriginalConstructor()
-            ->setMethods(array(
-                'getExecute',
-            ))
-            ->getMock();
-
-        $annotation
-            ->expects($this->exactly(2))
-            ->method('getExecute')
-            ->will($this->returnValue($execute));
-
-        $logAnnotationResolver = $this
-            ->getMockBuilder('Mmoreram\ControllerExtraBundle\Resolver\LogAnnotationResolver')
-            ->disableOriginalConstructor()
-            ->setMethods(array(
-                'getDefaultExecute',
-            ))
             ->getMock();
 
         $logAnnotationResolver
             ->expects($this->any())
-            ->method('getDefaultExecute');
+            ->method('getLogger')
+            ->will($this->returnValue($logger));
 
-        $logAnnotationResolver->evaluateAnnotation($controller, $request, $annotation, $parametersIndexed);
-        $this->assertEquals($logAnnotationResolver->getExecute(), $execute);
+        $logAnnotationResolver->evaluateAnnotation($this->request, $this->annotation, $this->reflectionMethod);
+        $this->assertEquals($logAnnotationResolver->getExecute(), $resultExecute);
+    }
+
+
+    /**
+     * testEvaluateAnnotationLevel data provider
+     * 
+     * @return array Data
+     */
+    public function dataEvaluateAnnotationExecute()
+    {
+        return array(
+            array(AnnotationLog::EXEC_POST, null, AnnotationLog::EXEC_POST),
+            array(AnnotationLog::EXEC_POST, false, AnnotationLog::EXEC_POST),
+            array(AnnotationLog::EXEC_POST, AnnotationLog::EXEC_POST, AnnotationLog::EXEC_POST),
+            array(AnnotationLog::EXEC_POST, AnnotationLog::EXEC_PRE, AnnotationLog::EXEC_PRE),
+        );
     }
 
 
@@ -271,44 +241,13 @@ class LogAnnotationResolverTest extends \PHPUnit_Framework_TestCase
      * Tests evaluateAnnotation method with a both execution
      *
      * This case considers that Annotation is a Flush annotation and no manager is defined in it
-     *
-     * @param string $execute Execution mode
+     * 
+     * @dataProvider dataEvaluateAnnotation
      */
-    public function testEvaluateAnnotationDefaultManagerExecBoth($execute = AnnotationLog::EXEC_BOTH)
+    public function testEvaluateAnnotation($execute, $logMessageIsCalled)
     {
         $message = 'My message';
         $level = 'error';
-        $controller = array();
-        $parametersIndexed = array();
-        $request = $this
-            ->getMockBuilder('Symfony\Component\HttpFoundation\Request')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $annotation = $this
-            ->getMockBuilder('Mmoreram\ControllerExtraBundle\Annotation\Log')
-            ->disableOriginalConstructor()
-            ->setMethods(array(
-                'getLevel',
-                'getExecute',
-                'getValue',
-            ))
-            ->getMock();
-
-        $annotation
-            ->expects($this->exactly(2))
-            ->method('getLevel')
-            ->will($this->returnValue($level));
-
-        $annotation
-            ->expects($this->exactly(2))
-            ->method('getExecute')
-            ->will($this->returnValue($execute));
-
-        $annotation
-            ->expects($this->once())
-            ->method('getValue')
-            ->will($this->returnValue($message));
 
         $logger = $this
             ->getMockBuilder('Psr\Log\LoggerInterface')
@@ -328,44 +267,56 @@ class LogAnnotationResolverTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $logAnnotationResolver
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('getLogger')
             ->will($this->returnValue($logger));
 
         $logAnnotationResolver
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('getLevel')
             ->will($this->returnValue($level));
 
         $logAnnotationResolver
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('getExecute')
             ->will($this->returnValue($execute));
 
         $logAnnotationResolver
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('getValue')
             ->will($this->returnValue($message));
 
-        $logAnnotationResolver
-            ->expects($this->once())
-            ->method('logMessage')
-            ->with($this->equalTo($logger), $this->equalTo($level), $this->equalTo($message));
+        if ($logMessageIsCalled) {
 
-        $logAnnotationResolver->evaluateAnnotation($controller, $request, $annotation, $parametersIndexed);
+            $logAnnotationResolver
+                ->expects($this->atLeastOnce())
+                ->method('logMessage')
+                ->with($this->equalTo($logger), $this->equalTo($level), $this->equalTo($message));
+        } else {
+
+            $logAnnotationResolver
+                ->expects($this->never())
+                ->method('logMessage');
+        }
+
+        
+
+        $logAnnotationResolver->evaluateAnnotation($this->request, $this->annotation, $this->reflectionMethod);
     }
 
 
     /**
-     * Tests evaluateAnnotation method with a pre execution
-     *
-     * This case considers that Annotation is a Flush annotation and no manager is defined in it
-     *
-     * @param string $execute Execution mode
+     * testEvaluateAnnotationLevel data provider
+     * 
+     * @return array Data
      */
-    public function testEvaluateAnnotationDefaultManagerExecPre()
+    public function dataEvaluateAnnotation()
     {
-        $this->testEvaluateAnnotationDefaultManagerExecBoth(AnnotationLog::EXEC_PRE);
+        return array(
+            array(AnnotationLog::EXEC_PRE, true),
+            array(AnnotationLog::EXEC_BOTH, true),
+            array(AnnotationLog::EXEC_POST, false),
+        );
     }
 
 
@@ -374,9 +325,9 @@ class LogAnnotationResolverTest extends \PHPUnit_Framework_TestCase
      *
      * This case is with mustLog true
      *
-     * @param string $execute Execution mode
+     * @dataProvider dataOnKernelResponse
      */
-    public function testOnKernelResponseMustLogExecBoth($execute = AnnotationLog::EXEC_BOTH)
+    public function testOnKernelResponse($execute, $mustLog, $logMessageIsCalled)
     {
         $message = 'My message';
         $level = 'error';
@@ -400,34 +351,42 @@ class LogAnnotationResolverTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $logAnnotationResolver
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('getLogger')
             ->will($this->returnValue($logger));
 
         $logAnnotationResolver
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('getMustLog')
-            ->will($this->returnValue(true));
+            ->will($this->returnValue($mustLog));
 
         $logAnnotationResolver
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('getLevel')
             ->will($this->returnValue($level));
 
         $logAnnotationResolver
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('getValue')
             ->will($this->returnValue($message));
 
         $logAnnotationResolver
-            ->expects($this->once())
-            ->method('logMessage')
-            ->with($this->equalTo($logger), $this->equalTo($level), $this->equalTo($message));
-
-        $logAnnotationResolver
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('getExecute')
             ->will($this->returnValue($execute));
+
+        if ($logMessageIsCalled) {
+
+            $logAnnotationResolver
+                ->expects($this->atLeastOnce())
+                ->method('logMessage')
+                ->with($this->equalTo($logger), $this->equalTo($level), $this->equalTo($message));
+        } else {
+
+            $logAnnotationResolver
+                ->expects($this->never())
+                ->method('logMessage');
+        }
 
         $event = $this
             ->getMockBuilder('Symfony\Component\HttpKernel\Event\FilterResponseEvent')
@@ -439,14 +398,19 @@ class LogAnnotationResolverTest extends \PHPUnit_Framework_TestCase
 
 
     /**
-     * Tests onKernelResponse with Exec post
-     *
-     * This case is with mustLog true
-     *
-     * @param string $execute Execution mode
+     * testEvaluateAnnotationLevel data provider
+     * 
+     * @return array Data
      */
-    public function testOnKernelResponseMustLogExecPost()
+    public function dataOnKernelResponse()
     {
-        $this->testOnKernelResponseMustLogExecBoth(AnnotationLog::EXEC_POST);
+        return array(
+            array(AnnotationLog::EXEC_PRE, true, false),
+            array(AnnotationLog::EXEC_PRE, false, false),
+            array(AnnotationLog::EXEC_BOTH, true, true),
+            array(AnnotationLog::EXEC_BOTH, false, false),
+            array(AnnotationLog::EXEC_POST, true, true),
+            array(AnnotationLog::EXEC_POST, false, false),
+        );
     }
 }

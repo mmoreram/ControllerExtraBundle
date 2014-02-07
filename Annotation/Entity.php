@@ -22,4 +22,40 @@ use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
 class Entity extends Annotation
 {
 
+    /**
+     * @var string
+     *
+     * Namespace of entity in a short namespace mode.
+     */
+    public $class;
+
+
+    /**
+     * @var string
+     *
+     * Name of the parameter
+     */
+    public $name;
+
+
+    /**
+     * return class
+     *
+     * @return string Class
+     */
+    public function getClass()
+    {
+        return $this->class;
+    }
+
+
+    /**
+     * return name
+     *
+     * @return string Name
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
 }

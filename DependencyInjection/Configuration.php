@@ -33,6 +33,13 @@ class Configuration implements ConfigurationInterface
             ->children()
 
                 /**
+                 * Bundle config definition
+                 */
+                ->scalarNode('resolver_priority')
+                    ->defaultValue(8)
+                ->end()
+
+                /**
                  * Form config definition
                  */
                 ->arrayNode('form')

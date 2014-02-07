@@ -14,6 +14,7 @@ namespace Mmoreram\ControllerExtraBundle\Resolver;
 
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpFoundation\Request;
+use ReflectionMethod;
 
 use Mmoreram\ControllerExtraBundle\Resolver\Interfaces\AnnotationResolverInterface;
 use Mmoreram\ControllerExtraBundle\Annotation\Entity as AnnotationEntity;
@@ -48,14 +49,13 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
     /**
      * Specific annotation evaluation.
      *
-     * @param array      $controller        Controller
-     * @param Request    $request           Request
-     * @param Annotation $annotation        Annotation
-     * @param array      $parametersIndexed Parameters indexed
+     * @param Request          $request    Request
+     * @param Annotation       $annotation Annotation
+     * @param ReflectionMethod $method     Method
      *
-     * @return AbstractEventListener self Object
+     * @return EntityAnnotationResolver self Object
      */
-    public function evaluateAnnotation(array $controller, Request $request, Annotation $annotation, array $parametersIndexed)
+    public function evaluateAnnotation(Request $request, Annotation $annotation, ReflectionMethod $method)
     {
 
         /**
@@ -63,7 +63,7 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
          */
         if ($annotation instanceof AnnotationEntity) {
 
-            $namespace = explode(':', $annotation->getNamespace(), 2);
+            $namespace = explode(':', $annotation->getClass(), 2);
 
             /**
              * If entity definition is wrong, throw exception
@@ -86,7 +86,22 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
                 throw new EntityNotFoundException;
             }
 
-            return new $entityNamespace;
+            /**
+             * Creating new instance of desired entity
+             */
+            $entity = new $entityNamespace();
+
+            /**
+             * Get the parameter name. If not defined, is set as $entity
+             * 
+             * @todo Default value should be set as parameter, to make it more customizable
+             */
+            $parameterName = $annotation->getName() ?: 'entity';
+
+            $request->attributes->set(
+                $parameterName,
+                $entity
+            );
         }
     }
 }

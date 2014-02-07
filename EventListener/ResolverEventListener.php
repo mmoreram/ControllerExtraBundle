@@ -12,11 +12,11 @@
 
 namespace Mmoreram\ControllerExtraBundle\EventListener;
 
-use ReflectionMethod;
 use Doctrine\Common\Annotations\Reader;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpFoundation\Request;
+use ReflectionMethod;
 
 use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
 use Mmoreram\ControllerExtraBundle\Resolver\Interfaces\AnnotationResolverInterface;
@@ -24,6 +24,8 @@ use Mmoreram\ControllerExtraBundle\Resolver\Interfaces\AnnotationResolverInterfa
 
 /**
  * Resolver Event Listener
+ * 
+ * @todo Test this class
  */
 class ResolverEventListener
 {
@@ -127,34 +129,20 @@ class ResolverEventListener
         $method = new ReflectionMethod($controller[0], $controller[1]);
 
         /**
-         * Method parameteres load.
-         * A hash is created to access to all needed parameters with cost O(1)
-         */
-        $parameters = $method->getParameters();
-        $parametersIndexed = array();
-
-        foreach ($parameters as $parameter) {
-
-            $parametersIndexed[$parameter->getName()] = $parameter;
-        }
-
-        /**
          * Given specific configuration, analyze full request
          */
-        $this->analyzeRequest($request, $this->getReader(), $controller, $method, $parametersIndexed);
+        $this->analyzeRequest($request, $this->getReader(), $method);
     }
 
 
     /**
      * Evaluate request
      *
-     * @param Request          $request           Request
-     * @param Reader           $reader            Reader
-     * @param array            $controller        Controller
-     * @param ReflectionMethod $method            Method
-     * @param array            $parametersIndexed Parameters indexed
+     * @param Request          $request Request
+     * @param Reader           $reader  Reader
+     * @param ReflectionMethod $method  Method
      */
-    public function analyzeRequest(Request $request, Reader $reader, array $controller, \ReflectionMethod $method, array $parametersIndexed)
+    public function analyzeRequest(Request $request, Reader $reader, ReflectionMethod $method)
     {
         /**
          * Annotations load
@@ -168,7 +156,7 @@ class ResolverEventListener
 
             if ($annotation instanceof Annotation) {
 
-                $this->analyzeAnnotation($request, $controller, $parametersIndexed, $annotation, $this->resolverStack);
+                $this->analyzeAnnotation($request, $method, $annotation, $this->resolverStack);
             }
         }
     }
@@ -177,13 +165,12 @@ class ResolverEventListener
     /**
      * Allow every available resolver to solve its own logic
      *
-     * @param Request    $request           Request
-     * @param array      $controller        Controller
-     * @param array      $parametersIndexed Parameters indexed
-     * @param Annotation $annotation        Annotation
-     * @param array      $resolverStack     Resolver stack
+     * @param Request          $request       Request
+     * @param ReflectionMethod $method        Method
+     * @param Annotation       $annotation    Annotation
+     * @param array            $resolverStack Resolver stack
      */
-    public function analyzeAnnotation(Request $request, array $controller, array $parametersIndexed, Annotation $annotation, array $resolverStack)
+    public function analyzeAnnotation(Request $request, ReflectionMethod $method, Annotation $annotation, array $resolverStack)
     {
 
         /**
@@ -191,7 +178,7 @@ class ResolverEventListener
          */
         foreach ($resolverStack as $resolver) {
 
-            $resolver->evaluateAnnotation($controller, $request, $annotation, $parametersIndexed);
+            $resolver->evaluateAnnotation($request, $annotation, $method);
         }
     }
 }

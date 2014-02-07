@@ -37,11 +37,27 @@ class EntityAnnotationResolverTest extends \PHPUnit_Framework_TestCase
 
 
     /**
+     * @var ParameterBag
+     * 
+     * Request Attributes
+     */
+    private $attributes;
+
+
+    /**
      * @var EntityAnnotation
      *
      * Entity Annotation
      */
     private $entityAnnotation;
+
+
+    /**
+     * @var ReflectionMethod
+     * 
+     * Reflection Method
+     */
+    private $reflectionMethod;
 
 
     /**
@@ -75,12 +91,28 @@ class EntityAnnotationResolverTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->attributes = $this
+            ->getMockBuilder('Symfony\Component\HttpFoundation\ParameterBag')
+            ->disableOriginalConstructor()
+            ->setMethods(array(
+                'set',
+            ))
+            ->getMock();
+
+        $this->request->attributes = $this->attributes;
+
         $this->annotation = $this
             ->getMockBuilder('Mmoreram\ControllerExtraBundle\Annotation\Entity')
             ->disableOriginalConstructor()
             ->setMethods(array(
-                'getNamespace',
+                'getClass',
+                'getName',
             ))
+            ->getMock();
+
+        $this->reflectionMethod = $this
+            ->getMockBuilder('ReflectionMethod')
+            ->disableOriginalConstructor()
             ->getMock();
     }
 
@@ -96,10 +128,24 @@ class EntityAnnotationResolverTest extends \PHPUnit_Framework_TestCase
         $this
             ->annotation
             ->expects($this->once())
-            ->method('getNamespace')
+            ->method('getClass')
             ->will($this->returnValue($entityNamespace));
 
-        $this->entityAnnotationResolver->evaluateAnnotation(array(), $this->request, $this->annotation, array());
+        $this
+            ->annotation
+            ->expects($this->once())
+            ->method('getName')
+            ->will($this->returnValue('entity'));
+
+        $this
+            ->attributes
+            ->expects($this->once())
+            ->method('set')
+            ->with($this->equalTo('entity'), $this->isInstanceOf('Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\FakeEntity'));
+
+        $this
+            ->entityAnnotationResolver
+            ->evaluateAnnotation($this->request, $this->annotation, $this->reflectionMethod);
     }
 
 
@@ -115,11 +161,17 @@ class EntityAnnotationResolverTest extends \PHPUnit_Framework_TestCase
         $this
             ->annotation
             ->expects($this->once())
-            ->method('getNamespace')
+            ->method('getClass')
             ->will($this->returnValue($entityNamespace));
 
-        $entity = $this->entityAnnotationResolver->evaluateAnnotation(array(), $this->request, $this->annotation, array());
-        $this->assertInstanceOf('Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\FakeEntity', $entity);
+        $this
+            ->annotation
+            ->expects($this->never())
+            ->method('getName');
+
+        $this
+            ->entityAnnotationResolver
+            ->evaluateAnnotation($this->request, $this->annotation, $this->reflectionMethod);
     }
 
 

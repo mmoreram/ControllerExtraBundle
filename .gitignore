@@ -1,8 +1,4 @@
-build
-phpunit.xml
-Resources/doc/_build/*
-coverage
 composer.lock
-vendor
 composer.phar
 phpcs.log
+vendor

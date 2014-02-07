@@ -31,6 +31,11 @@ class ControllerExtraExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
 
         /**
+         * Common parameters
+         */
+        $container->setParameter('mmoreram.controllerextra.resolver_priority', $config['resolver_priority']);
+
+        /**
          * Form parameters
          */
         $container->setParameter('mmoreram.controllerextra.form_active', $config['form']['active']);

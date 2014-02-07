@@ -13,6 +13,7 @@
 namespace Mmoreram\ControllerExtraBundle\Resolver\Interfaces;
 
 use Symfony\Component\HttpFoundation\Request;
+use ReflectionMethod;
 
 use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
 
@@ -30,12 +31,11 @@ interface AnnotationResolverInterface
      *
      * All method code will executed only if specific active flag is true
      *
-     * @param array      $controller        Controller
-     * @param Request    $request           Request
-     * @param Annotation $annotation        Annotation
-     * @param array      $parametersIndexed Parameters indexed
+     * @param Request          $request    Request
+     * @param Annotation       $annotation Annotation
+     * @param ReflectionMethod $method     Method
      *
      * @return AbstractEventListener self Object
      */
-    public function evaluateAnnotation(array $controller, Request $request, Annotation $annotation, array $parametersIndexed);
+    public function evaluateAnnotation(Request $request, Annotation $annotation, ReflectionMethod $method);
 }
