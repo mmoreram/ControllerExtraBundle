@@ -48,15 +48,25 @@ class FormAnnotationResolver implements AnnotationResolverInterface
 
 
     /**
+     * @var string
+     * 
+     * Default field name
+     */
+    protected $defaultName;
+
+
+    /**
      * Construct method
      *
      * @param FormRegistryInterface $formRegistry Form Registry
      * @param FormFactoryInterface  $formFactory  Form Factory
+     * @param string                $defaultName  Default name
      */
-    public function __construct(FormRegistryInterface $formRegistry, FormFactoryInterface $formFactory)
+    public function __construct(FormRegistryInterface $formRegistry, FormFactoryInterface $formFactory, $defaultName)
     {
         $this->formRegistry = $formRegistry;
         $this->formFactory = $formFactory;
+        $this->defaultName = $defaultName;
     }
 
 
@@ -94,10 +104,8 @@ class FormAnnotationResolver implements AnnotationResolverInterface
 
             /**
              * Get the parameter name. If not defined, is set as $form
-             * 
-             * @todo Default value should be set as parameter, to make it more customizable
              */
-            $parameterName = $annotation->getName() ?: 'form';
+            $parameterName = $annotation->getName() ?: $this->defaultName;
 
             /**
              * Method parameteres load.

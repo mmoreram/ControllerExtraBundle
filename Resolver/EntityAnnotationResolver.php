@@ -36,13 +36,23 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
 
 
     /**
+     * @var string
+     * 
+     * Default field name
+     */
+    protected $defaultName;
+
+
+    /**
      * Construct method
      *
-     * @param array $kernelBundles Kernel bundles list
+     * @param array  $kernelBundles Kernel bundles list
+     * @param string $defaultName   Default name
      */
-    public function __construct(array $kernelBundles)
+    public function __construct(array $kernelBundles, $defaultName)
     {
         $this->kernelBundles = $kernelBundles;
+        $this->defaultName = $defaultName;
     }
 
 
@@ -92,11 +102,9 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
             $entity = new $entityNamespace();
 
             /**
-             * Get the parameter name. If not defined, is set as $entity
-             * 
-             * @todo Default value should be set as parameter, to make it more customizable
+             * Get the parameter name. If not defined, is set as defined in parameters
              */
-            $parameterName = $annotation->getName() ?: 'entity';
+            $parameterName = $annotation->getName() ?: $this->defaultName;
 
             $request->attributes->set(
                 $parameterName,

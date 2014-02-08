@@ -82,7 +82,7 @@ class EntityAnnotationResolverTest extends \PHPUnit_Framework_TestCase
 
         $this->entityAnnotationResolver = $this
             ->getMockBuilder('Mmoreram\ControllerExtraBundle\Resolver\EntityAnnotationResolver')
-            ->setConstructorArgs(array($kernelBundles))
+            ->setConstructorArgs(array($kernelBundles, 'default'))
             ->setMethods(null)
             ->getMock();
 
@@ -120,7 +120,7 @@ class EntityAnnotationResolverTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests good entity definition
      *
-     * @dataProvider goodEntityDataProvider
+     * @dataProvider dataGoodEntityDefinition
      */
     public function testGoodEntityDefinition($entityNamespace)
     {
@@ -150,9 +150,22 @@ class EntityAnnotationResolverTest extends \PHPUnit_Framework_TestCase
 
 
     /**
+     * Good Entity definition data provider
+     *
+     * @return array Good entity definition array
+     */
+    public function dataGoodEntityDefinition()
+    {
+        return array(
+            array('FakeBundle:FakeEntity'),
+        );
+    }
+
+
+    /**
      * Tests wrong entity definition
      *
-     * @dataProvider badEntityDataProvider
+     * @dataProvider dataWrongEntityDefinition
      * @expectedException Mmoreram\ControllerExtraBundle\Exceptions\EntityNotFoundException
      */
     public function testWrongEntityDefinition($entityNamespace)
@@ -180,20 +193,7 @@ class EntityAnnotationResolverTest extends \PHPUnit_Framework_TestCase
      *
      * @return array Good entity definition array
      */
-    public function goodEntityDataProvider()
-    {
-        return array(
-            array('FakeBundle:FakeEntity'),
-        );
-    }
-
-
-    /**
-     * Good Entity definition data provider
-     *
-     * @return array Good entity definition array
-     */
-    public function badEntityDataProvider()
+    public function dataWrongEntityDefinition()
     {
         return array(
             array(null),
@@ -203,6 +203,54 @@ class EntityAnnotationResolverTest extends \PHPUnit_Framework_TestCase
             array('FakeBundle:AnotherEntity'),
             array(':FakeEntity'),
             array('AnotherBundle:FakeEntity'),
+        );
+    }
+
+
+    /**
+     * Tests field name
+     * 
+     * @dataProvider dataName
+     */
+    public function testName($name, $resultName)
+    {
+        $this
+            ->annotation
+            ->expects($this->any())
+            ->method('getClass')
+            ->will($this->returnValue('FakeBundle:FakeEntity'));
+
+        $this
+            ->annotation
+            ->expects($this->any())
+            ->method('getName')
+            ->will($this->returnValue($name));
+
+        $this
+            ->attributes
+            ->expects($this->once())
+            ->method('set')
+            ->with($this->equalTo($resultName), $this->isInstanceOf('Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\FakeEntity'));
+
+        $this
+            ->entityAnnotationResolver
+            ->evaluateAnnotation($this->request, $this->annotation, $this->reflectionMethod);
+    }
+
+
+    /**
+     * Data name data provider
+     *
+     * @return array Data name array
+     */
+    public function dataName()
+    {
+        return array(
+            array(null, 'default'),
+            array(false, 'default'),
+            array('', 'default'),
+            array('default', 'default'),
+            array('myEntity', 'myEntity'),
         );
     }
 }

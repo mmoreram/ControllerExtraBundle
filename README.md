@@ -88,11 +88,13 @@ controller_extra:
     resolver_priority: 8
     form:
         active: true
+        default_name: form
     flush:
         active: true
         default_manager: default
     entity:
         active: true
+        default_form: entity
     log:
         active: true
         default_level: info
@@ -133,7 +135,8 @@ public function indexAction(User $user)
 ```
 
 > By default, if `name` option is not set, the generated object will be placed
-> in a parameter named `$entity`.
+> in a parameter named `$entity`. This behaviour can be configured using
+> `default_name` in configuration.
 
 
 ## @Form
@@ -162,7 +165,8 @@ public function indexAction(AbstractType $userType)
 ```
 
 > By default, if `name` option is not set, the generated object will be placed
-> in a parameter named `$form`.
+> in a parameter named `$form`. This behaviour can be configured using
+> `default_name` in configuration.
 
 You can not just define your Type location using the namespace, in which case
 a new AbstractType element will be created. but you can also define it using

@@ -39,6 +39,7 @@ class ControllerExtraExtension extends Extension
          * Form parameters
          */
         $container->setParameter('mmoreram.controllerextra.form_active', $config['form']['active']);
+        $container->setParameter('mmoreram.controllerextra.form_default_name', $config['form']['default_name']);
 
         /**
          * Flush parameters
@@ -50,6 +51,7 @@ class ControllerExtraExtension extends Extension
          * Entity parameters
          */
         $container->setParameter('mmoreram.controllerextra.entity_active', $config['entity']['active']);
+        $container->setParameter('mmoreram.controllerextra.entity_default_name', $config['entity']['default_name']);
 
         /**
          * Log parameters
