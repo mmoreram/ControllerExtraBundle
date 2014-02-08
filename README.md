@@ -30,7 +30,7 @@ Table of contents
     * [Resolver](#resolver)
     * [Definition](#definition)
     * [Registration](#registration)
-1. [Contributing](#contribute)
+1. [Contributing](#contributing)
 
 # Installing/Configuring
 
