@@ -12,7 +12,6 @@
 
 namespace Mmoreram\ControllerExtraBundle\Resolver;
 
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpFoundation\Request;
 use ReflectionMethod;
 
