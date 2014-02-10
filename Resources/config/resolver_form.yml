@@ -15,5 +15,6 @@ services:
         arguments:
             form_registry: @form.registry
             form_factory: @form.factory
+            default_name: %mmoreram.controllerextra.form_default_name%
         tags:
             - { name: controller_extra.annotation }

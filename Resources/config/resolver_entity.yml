@@ -14,5 +14,6 @@ services:
         class: %mmoreram.controllerextra.resolvers.entity_annotation_resolver.class%
         arguments:
             bundles: @=service("kernel").getBundles()
+            default_name: %mmoreram.controllerextra.form_default_name%
         tags:
             - { name: controller_extra.annotation }
