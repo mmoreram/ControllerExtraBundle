@@ -85,7 +85,7 @@ completely disabled by setting to false `active` parameter.
 
 ``` yml
 controller_extra:
-    resolver_priority: 8
+    resolver_priority: -8
     form:
         active: true
         default_name: form
@@ -102,9 +102,10 @@ controller_extra:
 ```
 
 > ResolverEventListener is subscribed to `kernel.controller` event with 
-> priority 8. This element can be configured and customized with 
+> priority -8. This element can be configured and customized with 
 > `resolver_priority` config value. If you need to get ParamConverter entities,
-> make sure that this value is higher than 0.
+> make sure that this value is lower than 0. The reason is that this listener
+> must be executed always after ParamConverter one.
 
 # Bundle annotations
 

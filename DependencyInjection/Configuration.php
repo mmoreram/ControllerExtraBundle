@@ -36,7 +36,7 @@ class Configuration implements ConfigurationInterface
                  * Bundle config definition
                  */
                 ->scalarNode('resolver_priority')
-                    ->defaultValue(8)
+                    ->defaultValue(-8)
                 ->end()
 
                 /**
