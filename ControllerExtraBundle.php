@@ -44,7 +44,6 @@ class ControllerExtraBundle extends Bundle
         );
     }
 
-
     /**
      * Builds bundle
      *

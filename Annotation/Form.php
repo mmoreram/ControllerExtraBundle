@@ -29,14 +29,12 @@ class Form extends Annotation
      */
     public $name;
 
-
     /**
      * @var string
      *
      * Name of form. This value can refer to a namespace or a service alias
      */
     public $class;
-
 
     /**
      * @var entity
@@ -45,14 +43,12 @@ class Form extends Annotation
      */
     public $entity;
 
-
     /**
      * @var boolean
      *
      * Handle request
      */
     public $handleRequest = false;
-
 
     /**
      * return name
@@ -64,7 +60,6 @@ class Form extends Annotation
         return $this->name;
     }
 
-
     /**
      * return class
      *
@@ -75,7 +70,6 @@ class Form extends Annotation
         return $this->class;
     }
 
-
     /**
      * return entity
      *
@@ -85,7 +79,6 @@ class Form extends Annotation
     {
         return $this->entity;
     }
-
 
     /**
      * return handle request

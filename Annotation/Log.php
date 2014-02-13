@@ -29,14 +29,12 @@ class Log extends Annotation
      */
     const LVL_EMERG = 'emergency';
 
-
     /**
      * @var string
      *
      * Alert level
      */
     const LVL_ALERT = 'alert';
-
 
     /**
      * @var string
@@ -45,14 +43,12 @@ class Log extends Annotation
      */
     const LVL_CRIT = 'critical';
 
-
     /**
      * @var string
      *
      * Error level
      */
     const LVL_ERR = 'error';
-
 
     /**
      * @var string
@@ -61,14 +57,12 @@ class Log extends Annotation
      */
     const LVL_WARNING = 'warning';
 
-
     /**
      * @var string
      *
      * Info level
      */
     const LVL_INFO = 'info';
-
 
     /**
      * @var string
@@ -77,14 +71,12 @@ class Log extends Annotation
      */
     const LVL_DEBUG = 'debug';
 
-
     /**
      * @var string
      *
      * Log level
      */
     const LVL_LOG = 'log';
-
 
     /**
      * @var string
@@ -93,14 +85,12 @@ class Log extends Annotation
      */
     const EXEC_PRE = 'pre';
 
-
     /**
      * @var string
      *
      * Run after action execution
      */
     const EXEC_POST = 'post';
-
 
     /**
      * @var string
@@ -109,7 +99,6 @@ class Log extends Annotation
      */
     const EXEC_BOTH = 'both';
 
-
     /**
      * @var string
      *
@@ -117,14 +106,12 @@ class Log extends Annotation
      */
     public $level;
 
-
     /**
      * @var string
      *
      * Execute time
      */
     public $execute;
-
 
     /**
      * return manager
@@ -135,7 +122,6 @@ class Log extends Annotation
     {
         return $this->level;
     }
-
 
     /**
      * return execution

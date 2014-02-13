@@ -33,14 +33,12 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
      */
     protected $kernelBundles;
 
-
     /**
      * @var string
-     * 
+     *
      * Default field name
      */
     protected $defaultName;
-
 
     /**
      * Construct method
@@ -53,7 +51,6 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
         $this->kernelBundles = $kernelBundles;
         $this->defaultName = $defaultName;
     }
-
 
     /**
      * Specific annotation evaluation.

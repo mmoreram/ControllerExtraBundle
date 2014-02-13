@@ -70,7 +70,6 @@ class ControllerExtraExtension extends Extension
         $this->loadResolverConfiguration($loader, $config);
     }
 
-
     /**
      * Load resolver config files
      *
@@ -108,7 +107,7 @@ class ControllerExtraExtension extends Extension
         /**
          * Only load log resolver config definition if is active
          */
-        if ($config['log']['active']){
+        if ($config['log']['active']) {
 
             $loader->load('resolver_log.yml');
         }

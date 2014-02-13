@@ -21,10 +21,9 @@ use ReflectionMethod;
 use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
 use Mmoreram\ControllerExtraBundle\Resolver\Interfaces\AnnotationResolverInterface;
 
-
 /**
  * Resolver Event Listener
- * 
+ *
  * @todo Test this class
  */
 class ResolverEventListener
@@ -37,7 +36,6 @@ class ResolverEventListener
      */
     protected $kernel;
 
-
     /**
      * @var Reader
      *
@@ -45,14 +43,12 @@ class ResolverEventListener
      */
     protected $reader;
 
-
     /**
      * @var array
      *
      * Resolver stack
      */
     private $resolverStack = array();
-
 
     /**
      * Construct method
@@ -66,7 +62,6 @@ class ResolverEventListener
         $this->reader = $reader;
     }
 
-
     /**
      * Return kernel object
      *
@@ -76,7 +71,6 @@ class ResolverEventListener
     {
         return $this->kernel;
     }
-
 
     /**
      * Return reader
@@ -88,6 +82,15 @@ class ResolverEventListener
         return $this->reader;
     }
 
+    /**
+     * Return resolver stack
+     * 
+     * @return array Resolver stack
+     */
+    public function getResolverStack()
+    {
+        return $this->resolverStack;
+    }
 
     /**
      * Add resolver into stack
@@ -102,7 +105,6 @@ class ResolverEventListener
 
         return $this;
     }
-
 
     /**
      * Method executed while loading Controller
@@ -121,7 +123,6 @@ class ResolverEventListener
          * If is not a valid controller structure, return
          */
         if (!is_array($controller)) {
-
             return;
         }
 
@@ -133,7 +134,6 @@ class ResolverEventListener
          */
         $this->analyzeRequest($request, $this->getReader(), $method);
     }
-
 
     /**
      * Evaluate request
@@ -160,7 +160,6 @@ class ResolverEventListener
             }
         }
     }
-
 
     /**
      * Allow every available resolver to solve its own logic

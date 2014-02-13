@@ -22,7 +22,6 @@ use Mmoreram\ControllerExtraBundle\Resolver\Interfaces\AnnotationResolverInterfa
 use Mmoreram\ControllerExtraBundle\Annotation\Flush as AnnotationFlush;
 use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
 
-
 /**
  * FormAnnotationResolver, an implementation of  AnnotationResolverInterface
  */
@@ -36,14 +35,12 @@ class FlushAnnotationResolver implements AnnotationResolverInterface
      */
     protected $doctrine;
 
-
     /**
      * @var ObjectManager
      *
      * Manager
      */
     protected $manager;
-
 
     /**
      * @var string
@@ -52,14 +49,12 @@ class FlushAnnotationResolver implements AnnotationResolverInterface
      */
     protected $defaultManager;
 
-
     /**
      * @var boolean
      *
      * Must flush boolean
      */
     protected $mustFlush = false;
-
 
     /**
      * Construct method
@@ -71,7 +66,6 @@ class FlushAnnotationResolver implements AnnotationResolverInterface
         $this->doctrine = $doctrine;
     }
 
-
     /**
      * Get Doctrine object
      *
@@ -81,7 +75,6 @@ class FlushAnnotationResolver implements AnnotationResolverInterface
     {
         return $this->doctrine;
     }
-
 
     /**
      * Get Manager object
@@ -93,7 +86,6 @@ class FlushAnnotationResolver implements AnnotationResolverInterface
         return $this->manager;
     }
 
-
     /**
      * Return if manager must be flushed
      *
@@ -103,7 +95,6 @@ class FlushAnnotationResolver implements AnnotationResolverInterface
     {
         return $this->mustFlush;
     }
-
 
     /**
      * Set default manager name
@@ -119,7 +110,6 @@ class FlushAnnotationResolver implements AnnotationResolverInterface
         return $this;
     }
 
-
     /**
      * Get default manager name
      *
@@ -129,7 +119,6 @@ class FlushAnnotationResolver implements AnnotationResolverInterface
     {
         return $this->defaultManager;
     }
-
 
     /**
      * Specific annotation evaluation.
@@ -165,7 +154,6 @@ class FlushAnnotationResolver implements AnnotationResolverInterface
             $this->mustFlush = true;
         }
     }
-
 
     /**
      * Method executed while loading Controller

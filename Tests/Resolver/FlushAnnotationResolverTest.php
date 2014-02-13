@@ -25,14 +25,12 @@ class FlushAnnotationResolverTest extends \PHPUnit_Framework_TestCase
      */
     private $request;
 
-
     /**
      * @var ReflectionMethod
-     * 
+     *
      * Reflection Method
      */
     private $reflectionMethod;
-
 
     /**
      * Setup method
@@ -50,7 +48,6 @@ class FlushAnnotationResolverTest extends \PHPUnit_Framework_TestCase
             ->getMock();
     }
 
-
     /**
      * Tests DefaultManager name method
      */
@@ -66,7 +63,6 @@ class FlushAnnotationResolverTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Mmoreram\ControllerExtraBundle\Resolver\FlushAnnotationResolver', $flushAnnotationResolver->setDefaultManager($defaultManager));
         $this->assertEquals($defaultManager, $flushAnnotationResolver->getDefaultManager());
     }
-
 
     /**
      * Tests evaluateAnnotation method
@@ -131,7 +127,6 @@ class FlushAnnotationResolverTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($flushAnnotationResolver->getManager(), $manager);
     }
 
-
     /**
      * Tests evaluateAnnotation method
      *
@@ -193,7 +188,6 @@ class FlushAnnotationResolverTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($flushAnnotationResolver->getManager(), $manager);
     }
 
-
     /**
      * Tests evaluateAnnotation method
      *
@@ -223,7 +217,6 @@ class FlushAnnotationResolverTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($flushAnnotationResolver->getMustFlush());
         $this->assertNull($flushAnnotationResolver->getManager());
     }
-
 
     /**
      * Tests onKernelResponse method
@@ -264,7 +257,6 @@ class FlushAnnotationResolverTest extends \PHPUnit_Framework_TestCase
 
         $flushAnnotationResolver->onKernelResponse($event);
     }
-
 
     /**
      * Tests onKernelResponse method

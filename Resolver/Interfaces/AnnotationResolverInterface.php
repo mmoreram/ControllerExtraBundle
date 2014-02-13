@@ -17,7 +17,6 @@ use ReflectionMethod;
 
 use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
 
-
 /**
  * Abstract Annotation resolver
  */

@@ -22,10 +22,9 @@ use Mmoreram\ControllerExtraBundle\Resolver\Interfaces\AnnotationResolverInterfa
 use Mmoreram\ControllerExtraBundle\Annotation\Form as AnnotationForm;
 use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
 
-
 /**
  * FormAnnotationResolver, an implementation of  AnnotationResolverInterface
- * 
+ *
  * @todo Test this class
  */
 class FormAnnotationResolver implements AnnotationResolverInterface
@@ -38,7 +37,6 @@ class FormAnnotationResolver implements AnnotationResolverInterface
      */
     protected $formRegistry;
 
-
     /**
      * @var FormRegistryInterface
      *
@@ -46,14 +44,12 @@ class FormAnnotationResolver implements AnnotationResolverInterface
      */
     protected $formFactory;
 
-
     /**
      * @var string
-     * 
+     *
      * Default field name
      */
     protected $defaultName;
-
 
     /**
      * Construct method
@@ -68,7 +64,6 @@ class FormAnnotationResolver implements AnnotationResolverInterface
         $this->formFactory = $formFactory;
         $this->defaultName = $defaultName;
     }
-
 
     /**
      * Specific annotation evaluation.
@@ -136,7 +131,6 @@ class FormAnnotationResolver implements AnnotationResolverInterface
         }
     }
 
-
     /**
      * Built desired object.
      *
@@ -155,7 +149,6 @@ class FormAnnotationResolver implements AnnotationResolverInterface
          * In this case, form type as defined method parameter
          */
         if ('Symfony\\Component\\Form\\AbstractType' == $parameterClass) {
-
             return $type;
         }
 
@@ -179,7 +172,6 @@ class FormAnnotationResolver implements AnnotationResolverInterface
          * In this case, inject form as defined method parameter
          */
         if ('Symfony\\Component\\Form\\Form' == $parameterClass) {
-
             return $form;
         }
 
@@ -188,7 +180,6 @@ class FormAnnotationResolver implements AnnotationResolverInterface
          * In this case, inject form's view as defined method parameter
          */
         if ('Symfony\\Component\\Form\\FormView' == $parameterClass) {
-
             return $form->createView();
         }
     }

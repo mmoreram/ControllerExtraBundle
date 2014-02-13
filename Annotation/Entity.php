@@ -29,14 +29,12 @@ class Entity extends Annotation
      */
     public $class;
 
-
     /**
      * @var string
      *
      * Name of the parameter
      */
     public $name;
-
 
     /**
      * return class
@@ -47,7 +45,6 @@ class Entity extends Annotation
     {
         return $this->class;
     }
-
 
     /**
      * return name

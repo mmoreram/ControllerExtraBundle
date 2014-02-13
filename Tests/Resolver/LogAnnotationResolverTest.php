@@ -12,8 +12,6 @@
 
 namespace Mmoreram\ControllerExtraBundle\Tests\Resolver;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-
 use Mmoreram\ControllerExtraBundle\Annotation\Log as AnnotationLog;
 
 /**
@@ -29,22 +27,19 @@ class LogAnnotationResolverTest extends \PHPUnit_Framework_TestCase
      */
     private $request;
 
-
     /**
      * @var ReflectionMethod
-     * 
+     *
      * Reflection Method
      */
     private $reflectionMethod;
 
-
     /**
      * @var Annotation
-     * 
+     *
      * Annotation
      */
     private $annotation;
-
 
     /**
      * Setup method
@@ -67,7 +62,6 @@ class LogAnnotationResolverTest extends \PHPUnit_Framework_TestCase
             ->getMock();
     }
 
-
     /**
      * Tests DefaultManager name method
      */
@@ -84,7 +78,6 @@ class LogAnnotationResolverTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($defaultLevel, $logAnnotationResolver->getDefaultLevel());
     }
 
-
     /**
      * Tests DefaultManager name method
      */
@@ -100,7 +93,6 @@ class LogAnnotationResolverTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Mmoreram\ControllerExtraBundle\Resolver\LogAnnotationResolver', $logAnnotationResolver->setDefaultExecute($defaultExecute));
         $this->assertEquals($defaultExecute, $logAnnotationResolver->getDefaultExecute());
     }
-
 
     /**
      * Tests log message method
@@ -130,10 +122,9 @@ class LogAnnotationResolverTest extends \PHPUnit_Framework_TestCase
 
     }
 
-
     /**
      * Tests level setting in evaluateAnnotation method
-     * 
+     *
      * @dataProvider dataEvaluateAnnotationLevel
      */
     public function testEvaluateAnnotationLevel($defaultLevel, $level, $resultLevel)
@@ -161,10 +152,9 @@ class LogAnnotationResolverTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($logAnnotationResolver->getLevel(), $resultLevel);
     }
 
-
     /**
      * testEvaluateAnnotationLevel data provider
-     * 
+     *
      * @return array Data
      */
     public function dataEvaluateAnnotationLevel()
@@ -177,10 +167,9 @@ class LogAnnotationResolverTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-
     /**
      * Tests execute setting in evaluateAnnotation method
-     * 
+     *
      * @dataProvider dataEvaluateAnnotationExecute
      */
     public function testEvaluateAnnotationExecute($defaultExecute, $execute, $resultExecute)
@@ -220,10 +209,9 @@ class LogAnnotationResolverTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($logAnnotationResolver->getExecute(), $resultExecute);
     }
 
-
     /**
      * testEvaluateAnnotationLevel data provider
-     * 
+     *
      * @return array Data
      */
     public function dataEvaluateAnnotationExecute()
@@ -236,12 +224,11 @@ class LogAnnotationResolverTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-
     /**
      * Tests evaluateAnnotation method with a both execution
      *
      * This case considers that Annotation is a Flush annotation and no manager is defined in it
-     * 
+     *
      * @dataProvider dataEvaluateAnnotation
      */
     public function testEvaluateAnnotation($execute, $logMessageIsCalled)
@@ -299,15 +286,12 @@ class LogAnnotationResolverTest extends \PHPUnit_Framework_TestCase
                 ->method('logMessage');
         }
 
-        
-
         $logAnnotationResolver->evaluateAnnotation($this->request, $this->annotation, $this->reflectionMethod);
     }
 
-
     /**
      * testEvaluateAnnotationLevel data provider
-     * 
+     *
      * @return array Data
      */
     public function dataEvaluateAnnotation()
@@ -318,7 +302,6 @@ class LogAnnotationResolverTest extends \PHPUnit_Framework_TestCase
             array(AnnotationLog::EXEC_POST, false),
         );
     }
-
 
     /**
      * Tests onKernelResponse with Exec both
@@ -396,10 +379,9 @@ class LogAnnotationResolverTest extends \PHPUnit_Framework_TestCase
         $logAnnotationResolver->onKernelResponse($event);
     }
 
-
     /**
      * testEvaluateAnnotationLevel data provider
-     * 
+     *
      * @return array Data
      */
     public function dataOnKernelResponse()

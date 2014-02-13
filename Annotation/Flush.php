@@ -29,7 +29,6 @@ class Flush extends Annotation
      */
     public $manager;
 
-
     /**
      * return manager
      *

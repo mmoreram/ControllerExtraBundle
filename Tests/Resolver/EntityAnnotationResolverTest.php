@@ -27,7 +27,6 @@ class EntityAnnotationResolverTest extends \PHPUnit_Framework_TestCase
      */
     private $entityAnnotationResolver;
 
-
     /**
      * @var Request
      *
@@ -35,14 +34,12 @@ class EntityAnnotationResolverTest extends \PHPUnit_Framework_TestCase
      */
     private $request;
 
-
     /**
      * @var ParameterBag
-     * 
+     *
      * Request Attributes
      */
     private $attributes;
-
 
     /**
      * @var EntityAnnotation
@@ -51,14 +48,12 @@ class EntityAnnotationResolverTest extends \PHPUnit_Framework_TestCase
      */
     private $entityAnnotation;
 
-
     /**
      * @var ReflectionMethod
-     * 
+     *
      * Reflection Method
      */
     private $reflectionMethod;
-
 
     /**
      * Setup method
@@ -116,7 +111,6 @@ class EntityAnnotationResolverTest extends \PHPUnit_Framework_TestCase
             ->getMock();
     }
 
-
     /**
      * Tests good entity definition
      *
@@ -148,7 +142,6 @@ class EntityAnnotationResolverTest extends \PHPUnit_Framework_TestCase
             ->evaluateAnnotation($this->request, $this->annotation, $this->reflectionMethod);
     }
 
-
     /**
      * Good Entity definition data provider
      *
@@ -160,7 +153,6 @@ class EntityAnnotationResolverTest extends \PHPUnit_Framework_TestCase
             array('FakeBundle:FakeEntity'),
         );
     }
-
 
     /**
      * Tests wrong entity definition
@@ -187,7 +179,6 @@ class EntityAnnotationResolverTest extends \PHPUnit_Framework_TestCase
             ->evaluateAnnotation($this->request, $this->annotation, $this->reflectionMethod);
     }
 
-
     /**
      * Good Entity definition data provider
      *
@@ -206,10 +197,9 @@ class EntityAnnotationResolverTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-
     /**
      * Tests field name
-     * 
+     *
      * @dataProvider dataName
      */
     public function testName($name, $resultName)
@@ -236,7 +226,6 @@ class EntityAnnotationResolverTest extends \PHPUnit_Framework_TestCase
             ->entityAnnotationResolver
             ->evaluateAnnotation($this->request, $this->annotation, $this->reflectionMethod);
     }
-
 
     /**
      * Data name data provider

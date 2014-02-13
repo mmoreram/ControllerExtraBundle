@@ -21,7 +21,6 @@ use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Mmoreram\ControllerExtraBundle\Annotation\Log as AnnotationLog;
 use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
 
-
 /**
  * LogAnnotationResolver, an implementation of  AnnotationResolverInterface
  */
@@ -35,14 +34,12 @@ class LogAnnotationResolver implements AnnotationResolverInterface
      */
     protected $logger;
 
-
     /**
      * @var string
      *
      * default level
      */
     protected $defaultLevel;
-
 
     /**
      * @var string
@@ -51,14 +48,12 @@ class LogAnnotationResolver implements AnnotationResolverInterface
      */
     protected $defaultExecute;
 
-
     /**
      * @var boolean
      *
      * Must log
      */
     protected $mustLog = false;
-
 
     /**
      * @var string
@@ -67,7 +62,6 @@ class LogAnnotationResolver implements AnnotationResolverInterface
      */
     protected $level;
 
-
     /**
      * @var string
      *
@@ -75,14 +69,12 @@ class LogAnnotationResolver implements AnnotationResolverInterface
      */
     protected $execute;
 
-
     /**
      * @var string
      *
      * Value
      */
     protected $value;
-
 
     /**
      * Construct method
@@ -94,7 +86,6 @@ class LogAnnotationResolver implements AnnotationResolverInterface
         $this->logger = $logger;
     }
 
-
     /**
      * Return container
      *
@@ -104,7 +95,6 @@ class LogAnnotationResolver implements AnnotationResolverInterface
     {
         return $this->logger;
     }
-
 
     /**
      * Set default level name
@@ -120,7 +110,6 @@ class LogAnnotationResolver implements AnnotationResolverInterface
         return $this;
     }
 
-
     /**
      * Get default level name
      *
@@ -130,7 +119,6 @@ class LogAnnotationResolver implements AnnotationResolverInterface
     {
         return $this->defaultLevel;
     }
-
 
     /**
      * Set default execute name
@@ -146,7 +134,6 @@ class LogAnnotationResolver implements AnnotationResolverInterface
         return $this;
     }
 
-
     /**
      * Get default execute value
      *
@@ -156,7 +143,6 @@ class LogAnnotationResolver implements AnnotationResolverInterface
     {
         return $this->defaultExecute;
     }
-
 
     /**
      * Get must log
@@ -168,7 +154,6 @@ class LogAnnotationResolver implements AnnotationResolverInterface
         return $this->mustLog;
     }
 
-
     /**
      * Get level
      *
@@ -178,7 +163,6 @@ class LogAnnotationResolver implements AnnotationResolverInterface
     {
         return $this->level;
     }
-
 
     /**
      * Get execute
@@ -190,7 +174,6 @@ class LogAnnotationResolver implements AnnotationResolverInterface
         return $this->execute;
     }
 
-
     /**
      * Get value
      *
@@ -200,7 +183,6 @@ class LogAnnotationResolver implements AnnotationResolverInterface
     {
         return $this->value;
     }
-
 
     /**
      * Specific annotation evaluation.
@@ -240,7 +222,6 @@ class LogAnnotationResolver implements AnnotationResolverInterface
         }
     }
 
-
     /**
      * Method executed while loading Controller
      *
@@ -261,13 +242,12 @@ class LogAnnotationResolver implements AnnotationResolverInterface
         }
     }
 
-
     /**
      * Send value to log
      *
-     * @param LoggerInterface $logger  Logger
-     * @param string          $level   Level
-     * @param string          $value Value
+     * @param LoggerInterface $logger Logger
+     * @param string          $level  Level
+     * @param string          $value  Value
      *
      * @return LogAnnotationResolver self Object
      */
