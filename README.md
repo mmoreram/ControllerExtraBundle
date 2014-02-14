@@ -139,6 +139,39 @@ public function indexAction(User $user)
 > in a parameter named `$entity`. This behaviour can be configured using
 > `default_name` in configuration.
 
+You can also use setters in Entity annotation. It means that you can simply call
+entity setters using Request attributes.
+
+``` php
+<?php
+
+use Mmoreram\ControllerExtraBundle\Annotation\Entity;
+use Mmoreram\ControllerExtraBundle\Entity\Address;
+use Mmoreram\ControllerExtraBundle\Entity\User;
+
+/**
+ * Simple controller method
+ *
+ * @Entiy(
+ *      class = "MmoreramCustomBundle:Address",
+ *      name  = "address"
+ * )
+ * @Entiy(
+ *      class = "MmoreramCustomBundle:User",
+ *      name  = "user",
+ *      setters = {
+ *          "setAddress": "address"
+ *      }
+ * )
+ */
+public function indexAction(Address $address, User $user)
+{
+}
+```
+
+When `User` instance is built, method `setAddress` is called using as parameter
+the new `Address` instance.
+
 
 ## @Form
 
@@ -232,7 +265,10 @@ use Symfony\Component\Form\Form;
 /**
  * Simple controller method
  *
- * @Route("/user/{id}")
+ * @Route(
+ *      path = "/user/{id}",
+ *      name = "view_user"
+ * )
  * @ParamConverter("user", class="MmoreramCustomBundle:User")
  * @AnnotationForm(
  *      class  = "user_type",
@@ -260,7 +296,10 @@ use Symfony\Component\Form\Form;
 /**
  * Simple controller method
  *
- * @Route("/user/{id}")
+ * @Route(
+ *      path = "/user/{id}",
+ *      name = "view_user"
+ * )
  * @ParamConverter("user", class="MmoreramCustomBundle:User")
  * @AnnotationForm(
  *      class         = "user_type",
@@ -270,6 +309,39 @@ use Symfony\Component\Form\Form;
  * )
  */
 public function indexAction(User $user, Form $userForm)
+{
+}
+```
+
+You can also add as a method parameter if the form is valid, using `validate`
+setting. Annotation will place result of `$form->isValid()` in specified method
+argument.
+
+``` php
+<?php
+
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Mmoreram\ControllerExtraBundle\Annotation\Form as AnnotationForm;
+use Symfony\Component\Form\Form;
+
+/**
+ * Simple controller method
+ *
+ * @Route(
+ *      path = "/user/{id}",
+ *      name = "view_user"
+ * )
+ * @ParamConverter("user", class="MmoreramCustomBundle:User")
+ * @AnnotationForm(
+ *      class         = "user_type",
+ *      entity        = "user"
+ *      handleRequest = true,
+ *      name          = "userForm",
+ *      validate      = "isValid",
+ * )
+ */
+public function indexAction(User $user, Form $userForm, $isValid)
 {
 }
 ```

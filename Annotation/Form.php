@@ -51,6 +51,14 @@ class Form extends Annotation
     public $handleRequest = false;
 
     /**
+     * @var validate
+     *
+     * Validates submited form if Request is handled.
+     * Name of field to set result.
+     */
+    public $validate = false;
+
+    /**
      * return name
      *
      * @return string Name
@@ -88,5 +96,15 @@ class Form extends Annotation
     public function getHandleRequest()
     {
         return $this->handleRequest;
+    }
+
+    /**
+     * return validate value
+     *
+     * @return string Validate param name
+     */
+    public function getValidate()
+    {
+        return $this->validate;
     }
 }

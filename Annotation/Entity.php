@@ -37,6 +37,13 @@ class Entity extends Annotation
     public $name;
 
     /**
+     * @var array
+     *
+     * Setters
+     */
+    public $setters = array();
+
+    /**
      * return class
      *
      * @return string Class
@@ -54,5 +61,15 @@ class Entity extends Annotation
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * return setters
+     *
+     * @return array Setters
+     */
+    public function getSetters()
+    {
+        return $this->setters;
     }
 }

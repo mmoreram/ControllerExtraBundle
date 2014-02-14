@@ -84,7 +84,7 @@ class ResolverEventListener
 
     /**
      * Return resolver stack
-     * 
+     *
      * @return array Resolver stack
      */
     public function getResolverStack()

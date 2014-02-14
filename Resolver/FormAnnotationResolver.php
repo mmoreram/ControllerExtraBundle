@@ -71,8 +71,6 @@ class FormAnnotationResolver implements AnnotationResolverInterface
      * @param Request          $request    Request
      * @param Annotation       $annotation Annotation
      * @param ReflectionMethod $method     Method
-     *
-     * @return FormAnnotationResolver self Object
      */
     public function evaluateAnnotation(Request $request, Annotation $annotation, ReflectionMethod $method)
     {
@@ -165,6 +163,13 @@ class FormAnnotationResolver implements AnnotationResolverInterface
         if ($annotation->getHandleRequest()) {
 
             $form->handleRequest($request);
+
+            if ($annotation->getValidate()) {
+                $request->attributes->set(
+                    $annotation->getValidate(),
+                    $form->isValid()
+                );
+            }
         }
 
         /**

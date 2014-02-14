@@ -126,8 +126,6 @@ class FlushAnnotationResolver implements AnnotationResolverInterface
      * @param Request          $request    Request
      * @param Annotation       $annotation Annotation
      * @param ReflectionMethod $method     Method
-     *
-     * @return FlushAnnotationResolver self Object
      */
     public function evaluateAnnotation(Request $request, Annotation $annotation, ReflectionMethod $method)
     {

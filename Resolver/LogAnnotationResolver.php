@@ -190,8 +190,6 @@ class LogAnnotationResolver implements AnnotationResolverInterface
      * @param Request          $request    Request
      * @param Annotation       $annotation Annotation
      * @param ReflectionMethod $method     Method
-     *
-     * @return LogAnnotationResolver self Object
      */
     public function evaluateAnnotation(Request $request, Annotation $annotation, ReflectionMethod $method)
     {

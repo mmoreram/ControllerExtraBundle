@@ -12,6 +12,7 @@
 
 namespace Mmoreram\ControllerExtraBundle\Resolver;
 
+use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use ReflectionMethod;
 
@@ -58,8 +59,6 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
      * @param Request          $request    Request
      * @param Annotation       $annotation Annotation
      * @param ReflectionMethod $method     Method
-     *
-     * @return EntityAnnotationResolver self Object
      */
     public function evaluateAnnotation(Request $request, Annotation $annotation, ReflectionMethod $method)
     {
@@ -97,6 +96,12 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
              */
             $entity = new $entityNamespace();
 
+            $this->evaluateSetters(
+                $request->attributes,
+                $entity,
+                $annotation->getSetters()
+            );
+
             /**
              * Get the parameter name. If not defined, is set as defined in parameters
              */
@@ -107,5 +112,24 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
                 $entity
             );
         }
+    }
+
+    /**
+     * Evaluate setters
+     *
+     * @param ParameterBag $attributes Request attributes
+     * @param Object       $entity     Entity
+     * @param array        $setters    Array of setters
+     *
+     * @return EntityAnnotationResolver self Object
+     */
+    public function evaluateSetters(ParameterBag $attributes, $entity, array $setters)
+    {
+        foreach ($setters as $method => $value) {
+
+            $entity->$method($attributes->get($value));
+        }
+
+        return $this;
     }
 }
