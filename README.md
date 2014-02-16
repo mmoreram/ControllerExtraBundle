@@ -7,7 +7,6 @@ ControllerExtra for Symfony2
 [![Latest Stable Version](https://poser.pugx.org/mmoreram/controller-extra-bundle/v/stable.png)](https://packagist.org/packages/mmoreram/controller-extra-bundle)
 [![Latest Unstable Version](https://poser.pugx.org/mmoreram/controller-extra-bundle/v/unstable.png)](https://packagist.org/packages/mmoreram/controller-extra-bundle)
 [![Dependency Status](https://www.versioneye.com/user/projects/52b09eefec137588e200007e/badge.png)](https://www.versioneye.com/user/projects/52b09eefec137588e200007e)
-[![Total Downloads](https://poser.pugx.org/mmoreram/controller-extra-bundle/downloads.png)](https://packagist.org/packages/mmoreram/controller-extra-bundle)
 
 This bundle provides a collection of annotations for Symfony2 Controllers,
 designed to streamline the creation of certain objects and enable smaller and
