@@ -94,7 +94,7 @@ controller_extra:
         default_manager: default
     entity:
         active: true
-        default_form: entity
+        default_name: entity
     log:
         active: true
         default_level: info
