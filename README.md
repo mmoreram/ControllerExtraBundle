@@ -125,7 +125,7 @@ use Mmoreram\ControllerExtraBundle\Entity\User;
 /**
  * Simple controller method
  *
- * @Entiy(
+ * @Entity(
  *      class = "MmoreramCustomBundle:User",
  *      name  = "user"
  * )
@@ -601,7 +601,7 @@ class MyCustomAnnotationResolver implements AnnotationResolverInterface
     {
         /**
          * You can now manage your annotation.
-         * You can acced to its fields using public methods.
+         * You can access to its fields using public methods.
          * 
          * Annotation fields can be public and can be acceded directly,
          * but is better for testing to use getters; they can be mocked.
