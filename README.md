@@ -823,3 +823,7 @@ in the [Submitting a Patch][4] section and use the [Pull Request Template][5].
 [4]: http://symfony.com/doc/current/contributing/code/patches.html#check-list
 [5]: http://symfony.com/doc/current/contributing/code/patches.html#make-a-pull-request
 [6]: https://github.com/php-fig/log/blob/master/Psr/Log/LoggerInterface.php
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/mmoreram/controllerextrabundle/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
