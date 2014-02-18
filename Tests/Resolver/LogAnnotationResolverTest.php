@@ -74,7 +74,10 @@ class LogAnnotationResolverTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $defaultLevel = 'error';
-        $this->assertInstanceOf('Mmoreram\ControllerExtraBundle\Resolver\LogAnnotationResolver', $logAnnotationResolver->setDefaultLevel($defaultLevel));
+        $this->assertInstanceOf(
+            'Mmoreram\ControllerExtraBundle\Resolver\LogAnnotationResolver',
+            $logAnnotationResolver->setDefaultLevel($defaultLevel)
+        );
         $this->assertEquals($defaultLevel, $logAnnotationResolver->getDefaultLevel());
     }
 
@@ -90,7 +93,10 @@ class LogAnnotationResolverTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $defaultExecute = AnnotationLog::EXEC_POST;
-        $this->assertInstanceOf('Mmoreram\ControllerExtraBundle\Resolver\LogAnnotationResolver', $logAnnotationResolver->setDefaultExecute($defaultExecute));
+        $this->assertInstanceOf(
+            'Mmoreram\ControllerExtraBundle\Resolver\LogAnnotationResolver',
+            $logAnnotationResolver->setDefaultExecute($defaultExecute)
+        );
         $this->assertEquals($defaultExecute, $logAnnotationResolver->getDefaultExecute());
     }
 
@@ -124,6 +130,10 @@ class LogAnnotationResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Tests level setting in evaluateAnnotation method
+     *
+     * @param string $defaultLevel Default level
+     * @param string $level        Level
+     * @param string $resultLevel  Result level
      *
      * @dataProvider dataEvaluateAnnotationLevel
      */
@@ -169,6 +179,10 @@ class LogAnnotationResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Tests execute setting in evaluateAnnotation method
+     *
+     * @param string $defaultExecute Default execute
+     * @param string $execute        Execute
+     * @param string $resultExecute  Result execute
      *
      * @dataProvider dataEvaluateAnnotationExecute
      */
@@ -227,7 +241,11 @@ class LogAnnotationResolverTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests evaluateAnnotation method with a both execution
      *
-     * This case considers that Annotation is a Flush annotation and no manager is defined in it
+     * This case considers that Annotation is a Flush annotation and no manager
+     * is defined in it
+     *
+     * @param string  $execute            Execute
+     * @param boolean $logMessageIsCalled Log message is called
      *
      * @dataProvider dataEvaluateAnnotation
      */
@@ -307,6 +325,10 @@ class LogAnnotationResolverTest extends \PHPUnit_Framework_TestCase
      * Tests onKernelResponse with Exec both
      *
      * This case is with mustLog true
+     *
+     * @param string  $execute            Execute
+     * @param boolean $mustLog            Must log
+     * @param boolean $logMessageIsCalled Log message is called
      *
      * @dataProvider dataOnKernelResponse
      */
@@ -393,6 +415,51 @@ class LogAnnotationResolverTest extends \PHPUnit_Framework_TestCase
             array(AnnotationLog::EXEC_BOTH, false, false),
             array(AnnotationLog::EXEC_POST, true, true),
             array(AnnotationLog::EXEC_POST, false, false),
+        );
+    }
+
+    /**
+     * Tests Annotation type
+     *
+     * @param string  $annotationNamespace Annotation namespace
+     * @param integer $times               Times getClass will be called
+     *
+     * @dataProvider dataAnnotationNamespace
+     */
+    public function testAnnotationNamespace($annotationNamespace, $times)
+    {
+        $logAnnotationResolver = $this
+            ->getMockBuilder('Mmoreram\ControllerExtraBundle\Resolver\LogAnnotationResolver')
+            ->disableOriginalConstructor()
+            ->setMethods(null)
+            ->getMock();
+
+        $annotation = $this
+            ->getMockBuilder($annotationNamespace)
+            ->disableOriginalConstructor()
+            ->setMethods(array('getLevel'))
+            ->getMock();
+
+        $annotation
+            ->expects($this->exactly($times))
+            ->method('getLevel');
+
+        $logAnnotationResolver->evaluateAnnotation($this->request, $annotation, $this->reflectionMethod);
+    }
+
+    /**
+     * Data for testAnnotationNamespace
+     *
+     * @return array data
+     */
+    public function dataAnnotationNamespace()
+    {
+        return array(
+
+            array('Mmoreram\ControllerExtraBundle\Annotation\Log', 1),
+            array('Mmoreram\ControllerExtraBundle\Annotation\Entity', 0),
+            array('Mmoreram\ControllerExtraBundle\Annotation\Flush', 0),
+            array('Mmoreram\ControllerExtraBundle\Annotation\Form', 0),
         );
     }
 }

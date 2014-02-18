@@ -13,7 +13,9 @@ services:
     mmoreram.controllerextra.resolvers.entity_annotation_resolver:
         class: %mmoreram.controllerextra.resolvers.entity_annotation_resolver.class%
         arguments:
+            doctrine: @doctrine
             bundles: @=service("kernel").getBundles()
             default_name: %mmoreram.controllerextra.form_default_name%
+            default_persist: %mmoreram.controllerextra.entity_default_persist%
         tags:
             - { name: controller_extra.annotation }

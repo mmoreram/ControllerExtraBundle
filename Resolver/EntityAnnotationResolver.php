@@ -12,6 +12,7 @@
 
 namespace Mmoreram\ControllerExtraBundle\Resolver;
 
+use Doctrine\Common\Persistence\AbstractManagerRegistry;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use ReflectionMethod;
@@ -28,6 +29,13 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
 {
 
     /**
+     * @var Doctrine
+     *
+     * Doctrine object
+     */
+    protected $doctrine;
+
+    /**
      * @var array
      *
      * Kernel bundles list
@@ -42,15 +50,85 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
     protected $defaultName;
 
     /**
+     * @var string
+     *
+     * default manager
+     */
+    protected $defaultManager;
+
+    /**
+     * @var boolean
+     *
+     * Default persist value
+     */
+    protected $defaultPersist;
+
+    /**
      * Construct method
      *
-     * @param array  $kernelBundles Kernel bundles list
-     * @param string $defaultName   Default name
+     * @param AbstractManagerRegistry $doctrine       Doctrine
+     * @param array                   $kernelBundles  Kernel bundles list
+     * @param string                  $defaultName    Default name
+     * @param string                  $defaultManager Default manager
+     * @param boolean                 $defaultPersist Default persist
      */
-    public function __construct(array $kernelBundles, $defaultName)
+    public function __construct(AbstractManagerRegistry $doctrine, array $kernelBundles, $defaultName, $defaultManager, $defaultPersist)
     {
+        $this->doctrine = $doctrine;
         $this->kernelBundles = $kernelBundles;
         $this->defaultName = $defaultName;
+        $this->defaultManager = $defaultManager;
+        $this->defaultPersist = $defaultPersist;
+    }
+
+    /**
+     * Get doctrine
+     *
+     * @return AbstractManagerRegistry Doctrine
+     */
+    public function getDoctrine()
+    {
+        return $this->doctrine;
+    }
+
+    /**
+     * Get default manager name
+     *
+     * @return array Kernel bundles
+     */
+    public function getKernelBundles()
+    {
+        return $this->kernelBundles;
+    }
+
+    /**
+     * Get default name
+     *
+     * @return string Default name
+     */
+    public function getDefaultName()
+    {
+        return $this->defaultName;
+    }
+
+    /**
+     * Get default manager
+     *
+     * @return string Default manager
+     */
+    public function getDefaultManager()
+    {
+        return $this->defaultManager;
+    }
+
+    /**
+     * Get default persist value
+     *
+     * @return boolean Default persist
+     */
+    public function getDefaultPersist()
+    {
+        return $this->defaultPersist;
     }
 
     /**
@@ -69,6 +147,7 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
         if ($annotation instanceof AnnotationEntity) {
 
             $namespace = explode(':', $annotation->getClass(), 2);
+            $kernelBundles = $this->getKernelBundles();
 
             /**
              * If entity definition is wrong, throw exception
@@ -76,13 +155,13 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
              */
             if (
                     !isset($namespace[0]) ||
-                    !isset($this->kernelBundles[$namespace[0]])||
+                    !isset($kernelBundles[$namespace[0]])||
                     !isset($namespace[1])) {
 
                 throw new EntityNotFoundException;
             }
 
-            $bundle = $this->kernelBundles[$namespace[0]];
+            $bundle = $kernelBundles[$namespace[0]];
             $bundleNamespace = $bundle->getNamespace();
             $entityNamespace = $bundleNamespace . '\\Entity\\' . $namespace[1];
 
@@ -96,6 +175,43 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
              */
             $entity = new $entityNamespace();
 
+            /**
+             * Persist block
+             *
+             * This block defines if entity must be persisted using desired
+             * manager.
+             *
+             * This manager is defined as default in bundle parameters, but can
+             * be overwritten in each annotation
+             *
+             * Same logic in perisist option. This variable is defined in bundle
+             * parameters and can be overwritten there. Can also be defined in
+             * every single annotation
+             */
+
+            /**
+             * Get the persist variable. If not defined, is set as defined in
+             * parameters
+             */
+            $persist = $annotation->getPersist() ?: $this->getDefaultPersist();
+
+            if ($persist) {
+
+                $managerName = $annotation->getManager() ?: $this->getDefaultManager();
+
+                /**
+                 * Loading locally desired Doctrine manager
+                 */
+                $this
+                    ->getDoctrine()
+                    ->getManager($managerName)
+                    ->persist($entity);
+            }
+
+            /**
+             * If is decided this entity has to be persisted into manager
+             */
+
             $this->evaluateSetters(
                 $request->attributes,
                 $entity,
@@ -103,9 +219,10 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
             );
 
             /**
-             * Get the parameter name. If not defined, is set as defined in parameters
+             * Get the parameter name. If not defined, is set as defined in
+             * parameters
              */
-            $parameterName = $annotation->getName() ?: $this->defaultName;
+            $parameterName = $annotation->getName() ?: $this->getDefaultName();
 
             $request->attributes->set(
                 $parameterName,

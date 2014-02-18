@@ -81,6 +81,12 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('default_name')
                             ->defaultValue('entity')
                         ->end()
+                        ->scalarNode('default_manager')
+                            ->defaultValue('default')
+                        ->end()
+                        ->scalarNode('default_persist')
+                            ->defaultTrue()
+                        ->end()
                     ->end()
                 ->end()
 

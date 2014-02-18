@@ -44,6 +44,20 @@ class Entity extends Annotation
     public $setters = array();
 
     /**
+     * @var string
+     *
+     * Manager to use when persisting
+     */
+    public $manager;
+
+    /**
+     * @var boolean
+     *
+     * Persist entity
+     */
+    public $persist;
+
+    /**
      * return class
      *
      * @return string Class
@@ -71,5 +85,25 @@ class Entity extends Annotation
     public function getSetters()
     {
         return $this->setters;
+    }
+
+    /**
+     * return manager
+     *
+     * @return string Manager
+     */
+    public function getManager()
+    {
+        return $this->manager;
+    }
+
+    /**
+     * return persist
+     *
+     * @return boolean persist
+     */
+    public function getPersist()
+    {
+        return $this->persist;
     }
 }
