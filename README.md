@@ -94,6 +94,8 @@ controller_extra:
     entity:
         active: true
         default_name: entity
+        default_manager: default
+        default_persist: true
     log:
         active: true
         default_level: info
@@ -170,6 +172,42 @@ public function indexAction(Address $address, User $user)
 
 When `User` instance is built, method `setAddress` is called using as parameter
 the new `Address` instance.
+
+New entities are just created with a simple `new()`, so they are not persisted.
+By default, they will be persisted using `default` manager, but you can disable
+this feature using `persist` option.
+
+You can also change manager using `manager` option.
+
+``` php
+<?php
+
+use Mmoreram\ControllerExtraBundle\Annotation\Entity;
+use Mmoreram\ControllerExtraBundle\Entity\User;
+
+/**
+ * Simple controller method
+ *
+ * @Entiy(
+ *      class = "MmoreramCustomBundle:User",
+ *      name  = "user",
+ *      persist = false,
+ *      manager = 'my_own_manager'
+ * )
+ */
+public function indexAction(User $user)
+{
+}
+```
+
+If you want to change default manager in all annotation instances, you should
+overwrite bundle parameter.
+
+``` yml
+controller_extra:
+    entity:
+        default_manager: my_own_manager
+```
 
 
 ## @Form
@@ -258,8 +296,10 @@ entity using `entity` parameter.
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Mmoreram\ControllerExtraBundle\Annotation\Form as AnnotationForm;
 use Symfony\Component\Form\Form;
+
+use Mmoreram\ControllerExtraBundle\Annotation\Form as AnnotationForm;
+use Mmoreram\ControllerExtraBundle\Entity\User;
 
 /**
  * Simple controller method
@@ -289,8 +329,10 @@ this value is set to `false`
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Mmoreram\ControllerExtraBundle\Annotation\Form as AnnotationForm;
 use Symfony\Component\Form\Form;
+
+use Mmoreram\ControllerExtraBundle\Annotation\Form as AnnotationForm;
+use Mmoreram\ControllerExtraBundle\Entity\User;
 
 /**
  * Simple controller method
@@ -321,8 +363,10 @@ argument.
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Mmoreram\ControllerExtraBundle\Annotation\Form as AnnotationForm;
 use Symfony\Component\Form\Form;
+
+use Mmoreram\ControllerExtraBundle\Annotation\Form as AnnotationForm;
+use Mmoreram\ControllerExtraBundle\Entity\User;
 
 /**
  * Simple controller method
@@ -350,8 +394,9 @@ To inject a FormView object you only need to cast method variable as such.
 ``` php
 <?php
 
-use Mmoreram\ControllerExtraBundle\Annotation\Form;
 use Symfony\Component\Form\FormView;
+
+use Mmoreram\ControllerExtraBundle\Annotation\Form;
 
 /**
  * Simple controller method
@@ -407,10 +452,70 @@ use Mmoreram\ControllerExtraBundle\Annotation\Flush;
  * Simple controller method
  *
  * @Flush(
- *      manager = "my_customer_manager"
+ *      manager = "my_own_manager"
  * )
  */
 public function indexAction()
+{
+}
+```
+
+If you want to change default manager in all annotation instances, you should
+overwrite bundle parameter.
+
+``` yml
+controller_extra:
+    flush:
+        default_manager: my_own_manager
+
+If any parameter is set, annotation will flush all. If you only need to flush
+one or many entities, you can define explicitly which entity must be flushed.
+
+``` php
+<?php
+
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+
+use Mmoreram\ControllerExtraBundle\Annotation\Flush;
+use Mmoreram\ControllerExtraBundle\Entity\User;
+
+/**
+ * Simple controller method
+ *
+ * @ParamConverter("user", class="MmoreramCustomBundle:User")
+ * @Flush(
+ *      entity = "user"
+ * )
+ */
+public function indexAction(User $user)
+{
+}
+```
+
+You can also define a set of entities to flush
+
+``` php
+<?php
+
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+
+use Mmoreram\ControllerExtraBundle\Annotation\Flush;
+use Mmoreram\ControllerExtraBundle\Entity\Address;
+use Mmoreram\ControllerExtraBundle\Entity\User;
+
+/**
+ * Simple controller method
+ *
+ * @ParamConverter("user", class="MmoreramCustomBundle:User")
+ * @ParamConverter("address", class="MmoreramCustomBundle:Address")
+ * @Flush(
+ *      entity = {
+ *          "user", 
+ *          "address"
+ *      }
+ * )
+ */
+public function indexAction(User $user, Address $address)
 {
 }
 ```

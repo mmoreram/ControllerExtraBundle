@@ -12,6 +12,7 @@
 
 namespace Mmoreram\ControllerExtraBundle\Resolver;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Doctrine\Common\Persistence\AbstractManagerRegistry;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -50,6 +51,13 @@ class FlushAnnotationResolver implements AnnotationResolverInterface
     protected $defaultManager;
 
     /**
+     * @var entity
+     *
+     * Set of entities from Request ParameterBag to flush
+     */
+    public $entities;
+
+    /**
      * @var boolean
      *
      * Must flush boolean
@@ -59,11 +67,13 @@ class FlushAnnotationResolver implements AnnotationResolverInterface
     /**
      * Construct method
      *
-     * @param AbstractManagerRegistry $doctrine Doctrine
+     * @param AbstractManagerRegistry $doctrine       Doctrine
+     * @param string                  $defaultManager Default manager
      */
-    public function __construct(AbstractManagerRegistry $doctrine)
+    public function __construct(AbstractManagerRegistry $doctrine, $defaultManager)
     {
         $this->doctrine = $doctrine;
+        $this->defaultManager = $defaultManager;
     }
 
     /**
@@ -77,6 +87,16 @@ class FlushAnnotationResolver implements AnnotationResolverInterface
     }
 
     /**
+     * Get default manager name
+     *
+     * @return string Default manager
+     */
+    public function getDefaultManager()
+    {
+        return $this->defaultManager;
+    }
+
+    /**
      * Get Manager object
      *
      * @return ObjectManager Manager
@@ -87,6 +107,16 @@ class FlushAnnotationResolver implements AnnotationResolverInterface
     }
 
     /**
+     * Get entities
+     *
+     * @return ArrayCollection Entities to flush
+     */
+    public function getEntities()
+    {
+        return $this->entities;
+    }
+
+    /**
      * Return if manager must be flushed
      *
      * @return boolean Manager must be flushed
@@ -94,30 +124,6 @@ class FlushAnnotationResolver implements AnnotationResolverInterface
     public function getMustFlush()
     {
         return $this->mustFlush;
-    }
-
-    /**
-     * Set default manager name
-     *
-     * @param string $defaultManager Default manager name
-     *
-     * @return FlushAnnotationEventListener self Object
-     */
-    public function setDefaultManager($defaultManager)
-    {
-        $this->defaultManager = $defaultManager;
-
-        return $this;
-    }
-
-    /**
-     * Get default manager name
-     *
-     * @return string Default manager
-     */
-    public function getDefaultManager()
-    {
-        return $this->defaultManager;
     }
 
     /**
@@ -135,9 +141,7 @@ class FlushAnnotationResolver implements AnnotationResolverInterface
          */
         if ($annotation instanceof AnnotationFlush) {
 
-            $managerName = !is_null($annotation->getManager())
-                         ? $annotation->getManager()
-                         : $this->getDefaultManager();
+            $managerName = $annotation->getManager() ?: $this->getDefaultManager();
 
             /**
              * Loading locally desired Doctrine manager
@@ -145,6 +149,35 @@ class FlushAnnotationResolver implements AnnotationResolverInterface
             $this->manager = $this
                 ->getDoctrine()
                 ->getManager($managerName);
+
+            /**
+             * Set locally entities to flush. If null, flush all
+             */
+            $this->entities = new ArrayCollection;
+            $entity = $annotation->getEntity();
+            $entities   = is_array($entity)
+                        ? $entity
+                        : array($entity);
+
+            /**
+             * For every entity defined, we try to get it from Request Attributes
+             */
+            foreach ($entities as $entityName) {
+
+                if ($request->attributes->has($entityName)) {
+
+                    $this->entities[] = $request->attributes->get($entityName);
+                }
+            }
+
+            /**
+             * If we have not found any entity to flush, or any has been defined.
+             * In this case, flush all
+             */
+            if ($this->entities->isEmpty()) {
+
+                $this->entities = null;
+            }
 
             /**
              * In this case, manager must be flushed after controller logic
@@ -171,7 +204,7 @@ class FlushAnnotationResolver implements AnnotationResolverInterface
              */
             $this
                 ->getManager()
-                ->flush();
+                ->flush($this->getEntities());
         }
     }
 }

@@ -60,6 +60,45 @@ class EntityAnnotationResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
+
+        $this->entityAnnotationResolver = $this
+            ->getMockBuilder('Mmoreram\ControllerExtraBundle\Resolver\EntityAnnotationResolver')
+            ->disableOriginalConstructor()
+            ->setMethods(array(
+                'getDoctrine',
+                'getKernelBundles',
+                'getDefaultName',
+                'getDefaultPersist'
+            ))
+            ->getMock();
+
+        $manager = $this
+            ->getMockBuilder('Doctrine\ORM\EntityManager')
+            ->disableOriginalConstructor()
+            ->setMethods(array(
+                'persist',
+            ))
+            ->getMock();
+
+        $doctrine = $this
+            ->getMockBuilder('Symfony\Bridge\Doctrine\ManagerRegistry')
+            ->disableOriginalConstructor()
+            ->setMethods(array(
+                'getManager',
+            ))
+            ->getMock();
+
+        $doctrine
+            ->expects($this->any())
+            ->method('getManager')
+            ->will($this->returnValue($manager));
+
+        $this
+            ->entityAnnotationResolver
+            ->expects($this->any())
+            ->method('getDoctrine')
+            ->will($this->returnValue($doctrine));
+
         $bundle = $this
             ->getMockBuilder('Symfony\Component\HttpKernel\Bundle\Bundle')
             ->disableOriginalConstructor()
@@ -75,11 +114,23 @@ class EntityAnnotationResolverTest extends \PHPUnit_Framework_TestCase
             'FakeBundle'    =>  $bundle
         );
 
-        $this->entityAnnotationResolver = $this
-            ->getMockBuilder('Mmoreram\ControllerExtraBundle\Resolver\EntityAnnotationResolver')
-            ->setConstructorArgs(array($kernelBundles, 'default'))
-            ->setMethods(null)
-            ->getMock();
+        $this
+            ->entityAnnotationResolver
+            ->expects($this->any())
+            ->method('getKernelBundles')
+            ->will($this->returnValue($kernelBundles));
+
+        $this
+            ->entityAnnotationResolver
+            ->expects($this->any())
+            ->method('getDefaultName')
+            ->will($this->returnValue('default'));
+
+        $this
+            ->entityAnnotationResolver
+            ->expects($this->any())
+            ->method('getDefaultPersist')
+            ->will($this->returnValue(true));
 
         $this->request = $this
             ->getMockBuilder('Symfony\Component\HttpFoundation\Request')
@@ -113,6 +164,8 @@ class EntityAnnotationResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Tests good entity definition
+     *
+     * @param string $entityNamespace Entity namespace
      *
      * @dataProvider dataGoodEntityDefinition
      */
@@ -157,6 +210,8 @@ class EntityAnnotationResolverTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests wrong entity definition
      *
+     * @param string $entityNamespace Entity namespace
+     *
      * @dataProvider dataWrongEntityDefinition
      * @expectedException Mmoreram\ControllerExtraBundle\Exceptions\EntityNotFoundException
      */
@@ -200,6 +255,9 @@ class EntityAnnotationResolverTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests field name
      *
+     * @param string $name       Name
+     * @param string $resultName Result name
+     *
      * @dataProvider dataName
      */
     public function testName($name, $resultName)
@@ -240,6 +298,46 @@ class EntityAnnotationResolverTest extends \PHPUnit_Framework_TestCase
             array('', 'default'),
             array('default', 'default'),
             array('myEntity', 'myEntity'),
+        );
+    }
+
+    /**
+     * Tests Annotation type
+     *
+     * @param string  $annotationNamespace Annotation namespace
+     * @param integer $times               Times getClass will be called
+     *
+     * @dataProvider dataAnnotationNamespace
+     */
+    public function testAnnotationNamespace($annotationNamespace, $times)
+    {
+        $annotation = $this
+            ->getMockBuilder($annotationNamespace)
+            ->disableOriginalConstructor()
+            ->setMethods(array('getClass'))
+            ->getMock();
+
+        $annotation
+            ->expects($this->exactly($times))
+            ->method('getClass')
+            ->will($this->returnValue('FakeBundle:FakeEntity'));
+
+        $this->entityAnnotationResolver->evaluateAnnotation($this->request, $annotation, $this->reflectionMethod);
+    }
+
+    /**
+     * Data for testAnnotationNamespace
+     *
+     * @return array data
+     */
+    public function dataAnnotationNamespace()
+    {
+        return array(
+
+            array('Mmoreram\ControllerExtraBundle\Annotation\Entity', 1),
+            array('Mmoreram\ControllerExtraBundle\Annotation\Flush', 0),
+            array('Mmoreram\ControllerExtraBundle\Annotation\Log', 0),
+            array('Mmoreram\ControllerExtraBundle\Annotation\Form', 0),
         );
     }
 }

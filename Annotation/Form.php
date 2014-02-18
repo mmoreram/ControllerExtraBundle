@@ -39,7 +39,7 @@ class Form extends Annotation
     /**
      * @var entity
      *
-     * Entity from paramconverter process to use where building form
+     * Entity from Request ParameterBag to use where building form
      */
     public $entity;
 

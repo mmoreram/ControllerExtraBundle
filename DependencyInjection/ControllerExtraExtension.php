@@ -52,6 +52,8 @@ class ControllerExtraExtension extends Extension
          */
         $container->setParameter('mmoreram.controllerextra.entity_active', $config['entity']['active']);
         $container->setParameter('mmoreram.controllerextra.entity_default_name', $config['entity']['default_name']);
+        $container->setParameter('mmoreram.controllerextra.entity_default_manager', $config['entity']['default_manager']);
+        $container->setParameter('mmoreram.controllerextra.entity_default_persist', $config['entity']['default_persist']);
 
         /**
          * Log parameters

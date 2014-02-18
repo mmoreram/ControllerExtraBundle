@@ -30,6 +30,13 @@ class Flush extends Annotation
     public $manager;
 
     /**
+     * @var entity
+     *
+     * Entity from Request ParameterBag to flush
+     */
+    public $entity;
+
+    /**
      * return manager
      *
      * @return string Manager
@@ -37,5 +44,15 @@ class Flush extends Annotation
     public function getManager()
     {
         return $this->manager;
+    }
+
+    /**
+     * return entity
+     *
+     * @return string Entity
+     */
+    public function getEntity()
+    {
+        return $this->entity;
     }
 }
