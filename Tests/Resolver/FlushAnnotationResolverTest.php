@@ -202,27 +202,27 @@ class FlushAnnotationResolverTest extends \PHPUnit_Framework_TestCase
         return array(
 
             array(
-                null, [], null,
+                null, array(), null,
             ),
             array(
                 'entity',
-                ['entity' => 'entity_value'],
-                new ArrayCollection(['entity_value']),
+                array('entity' => 'entity_value'),
+                new ArrayCollection(array('entity_value')),
             ),
             array(
-                ['entity'],
-                ['entity' => 'entity_value'],
-                new ArrayCollection(['entity_value']),
+                array('entity'),
+                array('entity' => 'entity_value'),
+                new ArrayCollection(array('entity_value')),
             ),
             array(
-                ['entity'],
-                [],
+                array('entity'),
+                array(),
                 null,
             ),
             array(
-                ['entity', 'entity2'],
-                ['entity2' => 'entity2_value'],
-                new ArrayCollection(['entity2_value']),
+                array('entity', 'entity2'),
+                array('entity2' => 'entity2_value'),
+                new ArrayCollection(array('entity2_value')),
             ),
         );
     }
