@@ -175,38 +175,7 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
              */
             $entity = new $entityNamespace();
 
-            /**
-             * Persist block
-             *
-             * This block defines if entity must be persisted using desired
-             * manager.
-             *
-             * This manager is defined as default in bundle parameters, but can
-             * be overwritten in each annotation
-             *
-             * Same logic in perisist option. This variable is defined in bundle
-             * parameters and can be overwritten there. Can also be defined in
-             * every single annotation
-             */
-
-            /**
-             * Get the persist variable. If not defined, is set as defined in
-             * parameters
-             */
-            $persist = $annotation->getPersist() ?: $this->getDefaultPersist();
-
-            if ($persist) {
-
-                $managerName = $annotation->getManager() ?: $this->getDefaultManager();
-
-                /**
-                 * Loading locally desired Doctrine manager
-                 */
-                $this
-                    ->getDoctrine()
-                    ->getManager($managerName)
-                    ->persist($entity);
-            }
+            $this->resolvePersist($annotation, $entity);
 
             /**
              * If is decided this entity has to be persisted into manager
@@ -245,6 +214,62 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
         foreach ($setters as $method => $value) {
 
             $entity->$method($attributes->get($value));
+        }
+
+        return $this;
+    }
+
+    /**
+     * Persist block
+     *
+     * This block defines if entity must be persisted using desired
+     * manager.
+     *
+     * This manager is defined as default in bundle parameters, but can
+     * be overwritten in each annotation
+     *
+     * Same logic in perisist option. This variable is defined in bundle
+     * parameters and can be overwritten there. Can also be defined in
+     * every single annotation
+     *
+     * @param AnnotationEntity $annotation Annotation
+     * @param Object           $entity     Entity
+     *
+     * @return EntityAnnotationResolver self Object
+     */
+    protected function resolvePersist(AnnotationEntity $annotation, $entity)
+    {
+        /**
+         * Persist block
+         *
+         * This block defines if entity must be persisted using desired
+         * manager.
+         *
+         * This manager is defined as default in bundle parameters, but can
+         * be overwritten in each annotation
+         *
+         * Same logic in perisist option. This variable is defined in bundle
+         * parameters and can be overwritten there. Can also be defined in
+         * every single annotation
+         */
+
+        /**
+         * Get the persist variable. If not defined, is set as defined in
+         * parameters
+         */
+        $persist = $annotation->getPersist() ?: $this->getDefaultPersist();
+
+        if ($persist) {
+
+            $managerName = $annotation->getManager() ?: $this->getDefaultManager();
+
+            /**
+             * Loading locally desired Doctrine manager
+             */
+            $this
+                ->getDoctrine()
+                ->getManager($managerName)
+                ->persist($entity);
         }
 
         return $this;
