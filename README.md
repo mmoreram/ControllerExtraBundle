@@ -472,6 +472,7 @@ overwrite bundle parameter.
 controller_extra:
     flush:
         default_manager: my_own_manager
+```
 
 If any parameter is set, annotation will flush all. If you only need to flush
 one or many entities, you can define explicitly which entity must be flushed.
@@ -541,7 +542,7 @@ use Mmoreram\ControllerExtraBundle\Annotation\JsonResponse;
 
 /**
  * Simple controller method
-
+ *
  * @JsonResponse
  */
 public function indexAction(User $user, Address $address)
@@ -572,7 +573,7 @@ use Mmoreram\ControllerExtraBundle\Annotation\JsonResponse;
 
 /**
  * Simple controller method
-
+ *
  * @JsonResponse(
  *      status = 403,
  *      headers = {
