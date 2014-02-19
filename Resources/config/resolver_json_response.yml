@@ -1,0 +1,20 @@
+parameters:
+
+    #
+    # Resolvers
+    #
+    mmoreram.controllerextra.resolvers.json_resolver_annotation_resolver.class: Mmoreram\ControllerExtraBundle\Resolver\FormAnnotationResolver
+
+services:
+
+    #
+    # Resolvers
+    #
+    mmoreram.controllerextra.resolvers.json_resolver_annotation_resolver:
+        class: %mmoreram.controllerextra.resolvers.json_resolver_annotation_resolver.class%
+        arguments:
+            default_status: %mmoreram.controllerextra.json_resolver_default_status%
+            default_headers: %mmoreram.controllerextra.json_resolver_default_headers%
+        tags:
+            - { name: controller_extra.annotation }
+            - { name: kernel.event_listener, event: kernel.view, method: onKernelView, priority: -128 }

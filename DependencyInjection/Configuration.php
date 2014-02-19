@@ -35,7 +35,7 @@ class Configuration implements ConfigurationInterface
                 /**
                  * Bundle config definition
                  */
-                ->scalarNode('resolver_priority')
+                ->integerNode('resolver_priority')
                     ->defaultValue(-8)
                 ->end()
 
@@ -45,7 +45,7 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('form')
                     ->addDefaultsIfNotSet()
                     ->children()
-                        ->scalarNode('active')
+                        ->booleanNode('active')
                             ->defaultTrue()
                         ->end()
                         ->scalarNode('default_name')
@@ -60,7 +60,7 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('flush')
                     ->addDefaultsIfNotSet()
                     ->children()
-                        ->scalarNode('active')
+                        ->booleanNode('active')
                             ->defaultTrue()
                         ->end()
                         ->scalarNode('default_manager')
@@ -75,7 +75,7 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('entity')
                     ->addDefaultsIfNotSet()
                     ->children()
-                        ->scalarNode('active')
+                        ->booleanNode('active')
                             ->defaultTrue()
                         ->end()
                         ->scalarNode('default_name')
@@ -91,12 +91,31 @@ class Configuration implements ConfigurationInterface
                 ->end()
 
                 /**
+                 * Bundle config definition
+                 */
+                ->arrayNode('json_response')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->booleanNode('active')
+                            ->defaultTrue()
+                        ->end()
+                        ->integerNode('default_status')
+                            ->defaultValue(200)
+                        ->end()
+                        ->arrayNode('default_headers')
+                            ->addDefaultsIfNotSet()
+                            ->defaultValue(array())
+                        ->end()
+                    ->end()
+                ->end()
+
+                /**
                  * Log config definition
                  */
                 ->arrayNode('log')
                     ->addDefaultsIfNotSet()
                     ->children()
-                        ->scalarNode('active')
+                        ->booleanNode('active')
                             ->defaultTrue()
                         ->end()
                         ->enumNode('default_level')
