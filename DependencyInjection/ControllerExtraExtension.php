@@ -56,6 +56,13 @@ class ControllerExtraExtension extends Extension
         $container->setParameter('mmoreram.controllerextra.entity_default_persist', $config['entity']['default_persist']);
 
         /**
+         * JsonResponse parameters
+         */
+        $container->setParameter('mmoreram.controllerextra.json_response_active', $config['json_response']['active']);
+        $container->setParameter('mmoreram.controllerextra.json_response_default_level', $config['json_response']['default_status']);
+        $container->setParameter('mmoreram.controllerextra.json_response_default_execute', $config['json_response']['default_headers']);
+
+        /**
          * Log parameters
          */
         $container->setParameter('mmoreram.controllerextra.log_active', $config['log']['active']);
@@ -112,6 +119,14 @@ class ControllerExtraExtension extends Extension
         if ($config['log']['active']) {
 
             $loader->load('resolver_log.yml');
+        }
+
+        /**
+         * Only load json resolver config definition if is active
+         */
+        if ($config['json_response']['active']) {
+
+            $loader->load('resolver_json_response.yml');
         }
 
         return $this;

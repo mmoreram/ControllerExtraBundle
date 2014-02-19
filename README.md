@@ -23,6 +23,7 @@ Table of contents
     * [@Entity](#entity)
     * [@Form](#form)
     * [@Flush](#flush)
+    * [@JsonResponse](#jsonresponse)
     * [@Log](#log)
 1. [Custom annotations](#custom-annotations)
     * [Annotation](#annotation)
@@ -85,17 +86,21 @@ completely disabled by setting to false `active` parameter.
 ``` yml
 controller_extra:
     resolver_priority: -8
+    entity:
+        active: true
+        default_name: entity
+        default_manager: default
+        default_persist: true
     form:
         active: true
         default_name: form
     flush:
         active: true
         default_manager: default
-    entity:
+    json_response:
         active: true
-        default_name: entity
-        default_manager: default
-        default_persist: true
+        default_status: 200
+        default_headers: []
     log:
         active: true
         default_level: info
@@ -522,6 +527,69 @@ public function indexAction(User $user, Address $address)
 
 > If multiple @Mmoreram\Flush are defined in same action, last instance will
 > overwrite previous. Anyway just one instance should be defined.
+
+## @JsonResponse
+
+JsonResponse annotation allows you to create a 
+`Symfony\Component\HttpFoundation\JsonResponse` object, given a simple
+controller return value. 
+
+``` php
+<?php
+
+use Mmoreram\ControllerExtraBundle\Annotation\JsonResponse;
+
+/**
+ * Simple controller method
+
+ * @JsonResponse
+ */
+public function indexAction(User $user, Address $address)
+{
+    return array(
+        'This is my response'
+    );
+}
+```
+
+By default, JsonResponse is created using default `status` and `headers` defined
+in bundle parameters. You can overwrite them.
+
+``` yml
+controller_extra:
+    json_response:
+        default_status: 403
+        default_headers:
+            "User-Agent": "Googlebot/2.1"
+```
+
+You can also overwrite these values in each `@JsonResponse` annotation.
+
+``` php
+<?php
+
+use Mmoreram\ControllerExtraBundle\Annotation\JsonResponse;
+
+/**
+ * Simple controller method
+
+ * @JsonResponse(
+ *      status = 403,
+ *      headers = {
+ *          "User-Agent": "Googlebot/2.1"
+ *      }
+ * )
+ */
+public function indexAction(User $user, Address $address)
+{
+    return array(
+        'This is my response'
+    );
+}
+```
+
+> If multiple @Mmoreram\JsonResponse are defined in same action, last instance 
+> will overwrite previous. Anyway just one instance should be defined.
 
 ## @Log
 
