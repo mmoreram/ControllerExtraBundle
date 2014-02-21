@@ -59,9 +59,9 @@ class ControllerExtraExtension extends Extension
          * JsonResponse parameters
          */
         $container->setParameter('mmoreram.controllerextra.json_response_active', $config['json_response']['active']);
-        $container->setParameter('mmoreram.controllerextra.json_response_default_level', $config['json_response']['default_status']);
-        $container->setParameter('mmoreram.controllerextra.json_response_default_execute', $config['json_response']['default_headers']);
-
+        $container->setParameter('mmoreram.controllerextra.json_response_default_status', $config['json_response']['default_status']);
+        $container->setParameter('mmoreram.controllerextra.json_response_default_headers', $config['json_response']['default_headers']);
+var_dump($config['json_response']['default_headers']);die();
         /**
          * Log parameters
          */
