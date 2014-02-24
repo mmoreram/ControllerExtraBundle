@@ -720,7 +720,7 @@ class MyCustomAnnotation extends Annotation
      *
      * Dummy field
      */
-    private $field;
+    public $field;
     
     
     /**
