@@ -3,7 +3,7 @@ parameters:
     #
     # Resolvers
     #
-    mmoreram.controllerextra.resolvers.json_resolver_annotation_resolver.class: Mmoreram\ControllerExtraBundle\Resolver\FormAnnotationResolver
+    mmoreram.controllerextra.resolvers.json_resolver_annotation_resolver.class: Mmoreram\ControllerExtraBundle\Resolver\JsonResponseAnnotationResolver
 
 services:
 
