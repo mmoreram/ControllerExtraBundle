@@ -255,7 +255,7 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
             : $this
                 ->container
                 ->get($factoryClass);
-        
+
         return $annotation->getFactoryStatic()
             ? $factory::$factoryMethod()
             : $factory->$factoryMethod();

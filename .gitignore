@@ -2,4 +2,6 @@ composer.lock
 composer.phar
 phpcs.log
 vendor
+Tests/Functional/cache
+Tests/Functional/logs
 .idea
