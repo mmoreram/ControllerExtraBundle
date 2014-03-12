@@ -21,6 +21,7 @@ Table of contents
     * [Tests](#tests)
 1. [Bundle Annotations](#bundle-annotations)
     * [@Entity](#entity)
+        * [@Factory](#factory)
     * [@Form](#form)
     * [@Flush](#flush)
     * [@JsonResponse](#jsonresponse)
@@ -158,11 +159,11 @@ use Mmoreram\ControllerExtraBundle\Entity\User;
 /**
  * Simple controller method
  *
- * @Entiy(
+ * @Entity(
  *      class = "MmoreramCustomBundle:Address",
  *      name  = "address"
  * )
- * @Entiy(
+ * @Entity(
  *      class = "MmoreramCustomBundle:User",
  *      name  = "user",
  *      setters = {
@@ -193,7 +194,7 @@ use Mmoreram\ControllerExtraBundle\Entity\User;
 /**
  * Simple controller method
  *
- * @Entiy(
+ * @Entity(
  *      class = "MmoreramCustomBundle:User",
  *      name  = "user",
  *      persist = false,
@@ -214,6 +215,79 @@ controller_extra:
         default_manager: my_own_manager
 ```
 
+### Factory
+
+Following some Domain Driven Development (DDD) principles, an entity should be
+always created using Factories. This is because, when working with interfaces,
+just replacing the factory namespace, desired Entity is created.
+
+ControllerExtraBundle Entity annotation enables you to create entities using a
+factory class.
+
+``` php
+<?php
+
+use Mmoreram\ControllerExtraBundle\Annotation\Entity;
+
+/**
+ * Simple controller method
+ *
+ * @Entity(
+ *      factoryClass = "Mmoreram\ControllerExtraBundle\Factory\EntityFactory",
+ *      factoryMethod = "create"
+ * )
+ */
+public function indexAction(User $user)
+{
+}
+```
+
+In this case, `EntityFactory` will be instanced and `create` will be called to
+retrieve entity instance.
+
+You can also call your method as an static method, so Factory will not be
+instanced.
+
+``` php
+<?php
+
+use Mmoreram\ControllerExtraBundle\Annotation\Entity;
+
+/**
+ * Simple controller method
+ *
+ * @Entity(
+ *      factoryClass = "Mmoreram\ControllerExtraBundle\Factory\EntityFactory",
+ *      factoryMethod = "create",
+ *      factoryStatic = true
+ * )
+ */
+public function indexAction(User $user)
+{
+}
+```
+
+If you want to define your Factory as a service, with the possibility of
+overriding namespace, you can simply define service name. All other options have
+the same behaviour.
+
+``` php
+<?php
+
+use Mmoreram\ControllerExtraBundle\Annotation\Entity;
+
+/**
+ * Simple controller method
+ *
+ * @Entity(
+ *      factoryClass = "my_factory_service",
+ *      factoryMethod = "create",
+ * )
+ */
+public function indexAction(User $user)
+{
+}
+```
 
 ## @Form
 

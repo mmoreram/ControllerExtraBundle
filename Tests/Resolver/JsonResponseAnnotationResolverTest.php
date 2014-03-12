@@ -217,9 +217,9 @@ class JsonResponseAnnotationResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test onKernelResponse with right value
+     * Test onKernelView with right value
      */
-    public function testOnKernelResponseRight()
+    public function testOnKernelViewRight()
     {
         $jsonResponseAnnotationResolver = $this
             ->getMockBuilder('Mmoreram\ControllerExtraBundle\Resolver\JsonResponseAnnotationResolver')
@@ -264,7 +264,7 @@ class JsonResponseAnnotationResolverTest extends \PHPUnit_Framework_TestCase
             ->method('setResponse')
             ->with($this->isInstanceOf('Symfony\Component\HttpFoundation\JsonResponse'));
 
-        $jsonResponseAnnotationResolver->onKernelResponse($event);
+        $jsonResponseAnnotationResolver->onKernelView($event);
     }
 
     /**
@@ -302,6 +302,6 @@ class JsonResponseAnnotationResolverTest extends \PHPUnit_Framework_TestCase
             ->expects($this->never())
             ->method('setResponse');
 
-        $jsonResponseAnnotationResolver->onKernelResponse($event);
+        $jsonResponseAnnotationResolver->onKernelView($event);
     }
 }

@@ -29,4 +29,8 @@
         </whitelist>
     </filter>
 
+    <php>
+        <server name="KERNEL_DIR" value="./Tests/Functional/" />
+    </php>
+
 </phpunit>

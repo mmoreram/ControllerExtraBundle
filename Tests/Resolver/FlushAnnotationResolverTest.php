@@ -12,8 +12,11 @@
 
 namespace Mmoreram\ControllerExtraBundle\Tests\Resolver;
 
+use ReflectionMethod;
+use Mmoreram\ControllerExtraBundle\Resolver\FlushAnnotationResolver;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Tests FlushAnnotationResolver class
@@ -66,6 +69,7 @@ class FlushAnnotationResolverTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(array(
                 'getManager',
+                'getAliasNamespace',
             ))
             ->getMock();
 
@@ -112,6 +116,7 @@ class FlushAnnotationResolverTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(array(
                 'getManager',
+                'getAliasNamespace',
             ))
             ->getMock();
 

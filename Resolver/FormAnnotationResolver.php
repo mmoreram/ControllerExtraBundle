@@ -4,7 +4,7 @@
  * This file is part of the Controller Extra Bundle
  *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @since 2013
+ * @since  2013
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,6 +17,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\AbstractType;
 use ReflectionMethod;
+use ReflectionParameter;
 
 use Mmoreram\ControllerExtraBundle\Resolver\Interfaces\AnnotationResolverInterface;
 use Mmoreram\ControllerExtraBundle\Annotation\Form as AnnotationForm;
@@ -71,6 +72,8 @@ class FormAnnotationResolver implements AnnotationResolverInterface
      * @param Request          $request    Request
      * @param Annotation       $annotation Annotation
      * @param ReflectionMethod $method     Method
+     *
+     * @return FormAnnotationResolver self Object
      */
     public function evaluateAnnotation(Request $request, Annotation $annotation, ReflectionMethod $method)
     {
@@ -88,20 +91,20 @@ class FormAnnotationResolver implements AnnotationResolverInterface
             /**
              * Get FormType object given a service name
              */
-            $type   = class_exists($annotationValue)
-                    ? new $annotationValue
-                    : $this
-                        ->formRegistry
-                        ->getType($annotationValue)
-                        ->getInnerType();
+            $type = class_exists($annotationValue)
+                ? new $annotationValue
+                : $this
+                    ->formRegistry
+                    ->getType($annotationValue)
+                    ->getInnerType();
 
             /**
              * Get the parameter name. If not defined, is set as $form
              */
-            $parameterName = $annotation->getName() ?: $this->defaultName;
+            $parameterName = $annotation->getName() ? : $this->defaultName;
 
             /**
-             * Method parameteres load.
+             * Method parameters load.
              * A hash is created to access to all needed parameters with cost O(1)
              */
             $parameters = $method->getParameters();
@@ -114,8 +117,11 @@ class FormAnnotationResolver implements AnnotationResolverInterface
 
             /**
              * Get parameter class for TypeHinting
+             *
+             * @var ReflectionParameter $parameter
              */
-            $parameterClass = $parametersIndexed[$parameterName]
+            $parameter = $parametersIndexed[$parameterName];
+            $parameterClass = $parameter
                 ->getClass()
                 ->getName();
 
@@ -127,6 +133,8 @@ class FormAnnotationResolver implements AnnotationResolverInterface
                 $this->getBuiltObject($request, $this->formFactory, $annotation, $parameterClass, $type)
             );
         }
+
+        return $this;
     }
 
     /**
@@ -134,13 +142,13 @@ class FormAnnotationResolver implements AnnotationResolverInterface
      *
      * @param Request              $request        Request
      * @param FormFactoryInterface $formFactory    Form Factory
-     * @param Annotation           $annotation     Annotation
+     * @param AnnotationForm       $annotation     Annotation
      * @param string               $parameterClass Class type of  method parameter
      * @param AbstractType         $type           Built Type object
      *
      * @return Mixed object to inject as a method parameter
      */
-    private function getBuiltObject(Request $request, FormFactoryInterface $formFactory, Annotation $annotation, $parameterClass, AbstractType $type)
+    private function getBuiltObject(Request $request, FormFactoryInterface $formFactory, AnnotationForm $annotation, $parameterClass, AbstractType $type)
     {
         /**
          * Checks if parameter typehinting is AbstractType

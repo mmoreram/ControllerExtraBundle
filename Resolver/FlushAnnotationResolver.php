@@ -4,7 +4,7 @@
  * This file is part of the Controller Extra Bundle
  *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @since 2013
+ * @since  2013
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -30,7 +30,7 @@ class FlushAnnotationResolver implements AnnotationResolverInterface
 {
 
     /**
-     * @var Doctrine
+     * @var AbstractManagerRegistry
      *
      * Doctrine object
      */
@@ -51,7 +51,7 @@ class FlushAnnotationResolver implements AnnotationResolverInterface
     protected $defaultManager;
 
     /**
-     * @var entity
+     * @var array
      *
      * Set of entities from Request ParameterBag to flush
      */
@@ -132,6 +132,8 @@ class FlushAnnotationResolver implements AnnotationResolverInterface
      * @param Request          $request    Request
      * @param Annotation       $annotation Annotation
      * @param ReflectionMethod $method     Method
+     *
+     * @return FlushAnnotationResolver self Object
      */
     public function evaluateAnnotation(Request $request, Annotation $annotation, ReflectionMethod $method)
     {
@@ -141,7 +143,7 @@ class FlushAnnotationResolver implements AnnotationResolverInterface
          */
         if ($annotation instanceof AnnotationFlush) {
 
-            $managerName = $annotation->getManager() ?: $this->getDefaultManager();
+            $managerName = $annotation->getManager() ? : $this->getDefaultManager();
 
             /**
              * Loading locally desired Doctrine manager
@@ -155,9 +157,9 @@ class FlushAnnotationResolver implements AnnotationResolverInterface
              */
             $this->entities = new ArrayCollection;
             $entity = $annotation->getEntity();
-            $entities   = is_array($entity)
-                        ? $entity
-                        : array($entity);
+            $entities = is_array($entity)
+                ? $entity
+                : array($entity);
 
             /**
              * For every entity defined, we try to get it from Request Attributes
@@ -184,6 +186,8 @@ class FlushAnnotationResolver implements AnnotationResolverInterface
              */
             $this->mustFlush = true;
         }
+
+        return $this;
     }
 
     /**

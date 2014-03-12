@@ -1,0 +1,1 @@
+<?php return unserialize('a:1:{i:0;O:54:"Mmoreram\\ControllerExtraBundle\\Annotation\\JsonResponse":3:{s:9:"' . "\0" . '*' . "\0" . 'status";i:200;s:10:"' . "\0" . '*' . "\0" . 'headers";a:0:{}s:5:"value";N;}}');

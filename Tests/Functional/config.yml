@@ -1,0 +1,23 @@
+framework:
+    test: true
+    secret: "shdhkajshdjhsjdjsahdkjas"
+    router: { resource: "%kernel.root_dir%/routing.yml" }
+    form: true
+
+doctrine:
+    orm:
+        auto_generate_proxy_classes: true
+        auto_mapping: true
+    dbal:
+        driver:   pdo_sqlite
+        dbname:   test
+        path:     /tmp/test
+        memory:   true
+        charset:  UTF8
+
+monolog:
+    handlers:
+        main:
+            type: stream
+            level: debug
+            handler: null

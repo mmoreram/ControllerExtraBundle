@@ -28,7 +28,6 @@ use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
  */
 class JsonResponseAnnotationResolver implements AnnotationResolverInterface
 {
-
     /**
      * @var integer
      *
@@ -132,6 +131,8 @@ class JsonResponseAnnotationResolver implements AnnotationResolverInterface
      * @param Request          $request    Request
      * @param Annotation       $annotation Annotation
      * @param ReflectionMethod $method     Method
+     *
+     * @return JsonResponseAnnotationResolver self Object
      */
     public function evaluateAnnotation(Request $request, Annotation $annotation, ReflectionMethod $method)
     {
@@ -150,6 +151,8 @@ class JsonResponseAnnotationResolver implements AnnotationResolverInterface
             $this->status = $annotation->getStatus() ?: $this->getDefaultStatus();
             $this->headers = $annotation->getHeaders() ?: $this->getDefaultHeaders();
         }
+
+        return $this;
     }
 
     /**
@@ -157,9 +160,8 @@ class JsonResponseAnnotationResolver implements AnnotationResolverInterface
      *
      * @param GetResponseForControllerResultEvent $event Event
      */
-    public function onKernelResponse(GetResponseForControllerResultEvent $event)
+    public function onKernelView(GetResponseForControllerResultEvent $event)
     {
-
         /**
          * Only flushes if exists AnnotationFlush as a controller annotations
          */

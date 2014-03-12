@@ -101,7 +101,7 @@ class LogAnnotationResolver implements AnnotationResolverInterface
      *
      * @param string $defaultLevel Default level name
      *
-     * @return FlushAnnotationEventListener self Object
+     * @return LogAnnotationResolver self Object
      */
     public function setDefaultLevel($defaultLevel)
     {
@@ -125,7 +125,7 @@ class LogAnnotationResolver implements AnnotationResolverInterface
      *
      * @param string $defaultExecute Default execute value
      *
-     * @return FlushAnnotationEventListener self Object
+     * @return LogAnnotationResolver self Object
      */
     public function setDefaultExecute($defaultExecute)
     {
@@ -190,6 +190,8 @@ class LogAnnotationResolver implements AnnotationResolverInterface
      * @param Request          $request    Request
      * @param Annotation       $annotation Annotation
      * @param ReflectionMethod $method     Method
+     *
+     * @return LogAnnotationResolver self Object
      */
     public function evaluateAnnotation(Request $request, Annotation $annotation, ReflectionMethod $method)
     {
@@ -218,6 +220,8 @@ class LogAnnotationResolver implements AnnotationResolverInterface
                 $this->logMessage($this->getLogger(), $this->getLevel(), $this->getValue());
             }
         }
+
+        return $this;
     }
 
     /**
@@ -251,11 +255,11 @@ class LogAnnotationResolver implements AnnotationResolverInterface
      */
     public function logMessage(LoggerInterface $logger, $level, $value)
     {
-            /**
-             * Logs content, using specified level
-             */
-            $logger->$level($value);
+        /**
+         * Logs content, using specified level
+         */
+        $logger->$level($value);
 
-            return $this;
+        return $this;
     }
 }

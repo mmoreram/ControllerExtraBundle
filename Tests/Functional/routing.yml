@@ -1,0 +1,7 @@
+FakeBundleControllerEntity:
+    path: /fake/entity
+    defaults: { _controller: FakeBundle:Fake:entityFunctional }
+
+FakeBundleControllerJsonResponse:
+    path: /fake/jsonresponse
+    defaults: { _controller: FakeBundle:Fake:jsonResponseFunctional }

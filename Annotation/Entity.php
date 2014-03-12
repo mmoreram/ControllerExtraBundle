@@ -58,6 +58,27 @@ class Entity extends Annotation
     public $persist;
 
     /**
+     * @var string
+     *
+     * Factory class
+     */
+    public $factoryClass;
+
+    /**
+     * @var string
+     *
+     * Factory method
+     */
+    public $factoryMethod;
+
+    /**
+     * @var boolean
+     *
+     * Factory static
+     */
+    public $factoryStatic = false;
+
+    /**
      * return class
      *
      * @return string Class
@@ -105,5 +126,35 @@ class Entity extends Annotation
     public function getPersist()
     {
         return $this->persist;
+    }
+
+    /**
+     * return factory class
+     *
+     * @return string factory class
+     */
+    public function getFactoryClass()
+    {
+        return $this->factoryClass;
+    }
+
+    /**
+     * return factory method
+     *
+     * @return string factory method
+     */
+    public function getFactoryMethod()
+    {
+        return $this->factoryMethod;
+    }
+
+    /**
+     * return if factory is static
+     *
+     * @return boolean factory is static
+     */
+    public function getFactoryStatic()
+    {
+        return $this->factoryStatic;
     }
 }

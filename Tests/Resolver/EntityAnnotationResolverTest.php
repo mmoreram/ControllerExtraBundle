@@ -12,7 +12,17 @@
 
 namespace Mmoreram\ControllerExtraBundle\Tests\Resolver;
 
-use Mmoreram\ControllerExtraBundle\Tests\Fixtures\FakeEntity;
+use Doctrine\Common\Annotations\AnnotationReader;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
+use Doctrine\Common\Annotations\AnnotationRegistry;
+use ReflectionMethod;
+
+use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
+use Mmoreram\ControllerExtraBundle\EventListener\ResolverEventListener;
+use Mmoreram\ControllerExtraBundle\Resolver\EntityAnnotationResolver;
+use Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Controller\FakeController;
 
 /**
  * Tests FlushAnnotationResolver class
@@ -42,13 +52,6 @@ class EntityAnnotationResolverTest extends \PHPUnit_Framework_TestCase
     private $attributes;
 
     /**
-     * @var EntityAnnotation
-     *
-     * Entity Annotation
-     */
-    private $entityAnnotation;
-
-    /**
      * @var ReflectionMethod
      *
      * Reflection Method
@@ -56,11 +59,17 @@ class EntityAnnotationResolverTest extends \PHPUnit_Framework_TestCase
     private $reflectionMethod;
 
     /**
+     * @var Annotation
+     *
+     * Annotation
+     */
+    private $annotation;
+
+    /**
      * Setup method
      */
     public function setUp()
     {
-
         $this->entityAnnotationResolver = $this
             ->getMockBuilder('Mmoreram\ControllerExtraBundle\Resolver\EntityAnnotationResolver')
             ->disableOriginalConstructor()
@@ -68,7 +77,8 @@ class EntityAnnotationResolverTest extends \PHPUnit_Framework_TestCase
                 'getDoctrine',
                 'getKernelBundles',
                 'getDefaultName',
-                'getDefaultPersist'
+                'getDefaultPersist',
+                'getContainer',
             ))
             ->getMock();
 
@@ -80,11 +90,14 @@ class EntityAnnotationResolverTest extends \PHPUnit_Framework_TestCase
             ))
             ->getMock();
 
+        $container = $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface');
+
         $doctrine = $this
             ->getMockBuilder('Symfony\Bridge\Doctrine\ManagerRegistry')
             ->disableOriginalConstructor()
             ->setMethods(array(
                 'getManager',
+                'getAliasNamespace',
             ))
             ->getMock();
 
@@ -98,6 +111,12 @@ class EntityAnnotationResolverTest extends \PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('getDoctrine')
             ->will($this->returnValue($doctrine));
+
+        $this
+            ->entityAnnotationResolver
+            ->expects($this->any())
+            ->method('getContainer')
+            ->will($this->returnValue($container));
 
         $bundle = $this
             ->getMockBuilder('Symfony\Component\HttpKernel\Bundle\Bundle')
@@ -192,7 +211,11 @@ class EntityAnnotationResolverTest extends \PHPUnit_Framework_TestCase
 
         $this
             ->entityAnnotationResolver
-            ->evaluateAnnotation($this->request, $this->annotation, $this->reflectionMethod);
+            ->evaluateAnnotation(
+                $this->request,
+                $this->annotation,
+                $this->reflectionMethod
+            );
     }
 
     /**
@@ -213,7 +236,8 @@ class EntityAnnotationResolverTest extends \PHPUnit_Framework_TestCase
      * @param string $entityNamespace Entity namespace
      *
      * @dataProvider dataWrongEntityDefinition
-     * @expectedException Mmoreram\ControllerExtraBundle\Exceptions\EntityNotFoundException
+     *
+     * @expectedException \Mmoreram\ControllerExtraBundle\Exceptions\EntityNotFoundException
      */
     public function testWrongEntityDefinition($entityNamespace)
     {
@@ -231,7 +255,11 @@ class EntityAnnotationResolverTest extends \PHPUnit_Framework_TestCase
 
         $this
             ->entityAnnotationResolver
-            ->evaluateAnnotation($this->request, $this->annotation, $this->reflectionMethod);
+            ->evaluateAnnotation(
+                $this->request,
+                $this->annotation,
+                $this->reflectionMethod
+            );
     }
 
     /**
@@ -282,7 +310,11 @@ class EntityAnnotationResolverTest extends \PHPUnit_Framework_TestCase
 
         $this
             ->entityAnnotationResolver
-            ->evaluateAnnotation($this->request, $this->annotation, $this->reflectionMethod);
+            ->evaluateAnnotation(
+                $this->request,
+                $this->annotation,
+                $this->reflectionMethod
+            );
     }
 
     /**
@@ -322,7 +354,11 @@ class EntityAnnotationResolverTest extends \PHPUnit_Framework_TestCase
             ->method('getClass')
             ->will($this->returnValue('FakeBundle:FakeEntity'));
 
-        $this->entityAnnotationResolver->evaluateAnnotation($this->request, $annotation, $this->reflectionMethod);
+        $this->entityAnnotationResolver->evaluateAnnotation(
+            $this->request,
+            $annotation,
+            $this->reflectionMethod
+        );
     }
 
     /**
@@ -338,6 +374,77 @@ class EntityAnnotationResolverTest extends \PHPUnit_Framework_TestCase
             array('Mmoreram\ControllerExtraBundle\Annotation\Flush', 0),
             array('Mmoreram\ControllerExtraBundle\Annotation\Log', 0),
             array('Mmoreram\ControllerExtraBundle\Annotation\Form', 0),
+        );
+    }
+
+    /**
+     * Trying entity annotation
+     */
+    public function testEntityAnnotationWithAnnotationsReader()
+    {
+
+        AnnotationRegistry::registerFile(dirname(__FILE__) . '/../../Annotation/Entity.php');
+
+        $bundle = $this
+            ->getMockBuilder('Symfony\Component\HttpKernel\Bundle\Bundle')
+            ->disableOriginalConstructor()
+            ->setMethods(array('getNamespace'))
+            ->getMock();
+
+        $bundle
+            ->expects($this->any())
+            ->method('getNamespace')
+            ->will($this->returnValue('Mmoreram\ControllerExtraBundle\Tests\FakeBundle'));
+
+        $kernelBundles = array(
+            'FakeBundle' => $bundle
+        );
+
+        $doctrine = $this
+            ->getMockBuilder('Doctrine\Common\Persistence\AbstractManagerRegistry')
+            ->disableOriginalConstructor()
+            ->setMethods(array(
+                'getService',
+                'resetService',
+                'getContainer',
+                'getAliasNamespace',
+            ))
+            ->getMock();
+
+        $container = $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface');
+
+        $entityAnnotationResolver = new EntityAnnotationResolver($container, $doctrine, $kernelBundles, 'entity', 'default', false);
+        $kernel = $this->getMock('Symfony\Component\HttpKernel\KernelInterface');
+        $request = new Request();
+        $reader = new AnnotationReader();
+        $event = new FilterControllerEvent($kernel, array(new FakeController(), 'entityAction'), $request, null);
+        $resolverEventListener = new ResolverEventListener($kernel, $reader);
+        $resolverEventListener->addResolver($entityAnnotationResolver);
+        $resolverEventListener->onKernelController($event);
+
+        $this->assertInstanceOf(
+            'Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\FakeEntity',
+            $request->attributes->get('entityName')
+        );
+
+        $this->assertInstanceOf(
+            'Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\FakeEntity',
+            $request->attributes->get('entity')
+        );
+
+        $this->assertInstanceOf(
+            'Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\FakeEntity',
+            $request->attributes->get('entityFactoryClass')
+        );
+
+        $this->assertInstanceOf(
+            'Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\FakeEntity',
+            $request->attributes->get('entityFactoryClassNoStatic')
+        );
+
+        $this->assertInstanceOf(
+            'Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\FakeEntity',
+            $request->attributes->get('entityFactoryClassStatic')
         );
     }
 }
