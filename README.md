@@ -21,7 +21,7 @@ Table of contents
     * [Tests](#tests)
 1. [Bundle Annotations](#bundle-annotations)
     * [@Entity](#entity)
-        * [@Factory](#factory)
+        * [Factory](#factory)
     * [@Form](#form)
     * [@Flush](#flush)
     * [@JsonResponse](#jsonresponse)
