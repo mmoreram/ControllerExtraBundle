@@ -12,46 +12,14 @@
 
 namespace Mmoreram\ControllerExtraBundle\Annotation;
 
-use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
+use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\AbstractResponse;
 
 /**
  * JsonResponse annotation driver
  *
  * @Annotation
  */
-class JsonResponse extends Annotation
+class JsonResponse extends AbstractResponse
 {
-    /**
-     * @var integer
-     *
-     * Status
-     */
-    protected $status = 200;
 
-    /**
-     * @var array
-     *
-     * Headers
-     */
-    protected $headers = array();
-
-    /**
-     * Get response status
-     *
-     * @return integer Response status
-     */
-    public function getStatus()
-    {
-        return $this->status;
-    }
-
-    /**
-     * Get response headers
-     *
-     * @return integer Response headers
-     */
-    public function getHeaders()
-    {
-        return $this->headers;
-    }
 }

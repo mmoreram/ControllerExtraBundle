@@ -12,6 +12,10 @@
 
 namespace Mmoreram\ControllerExtraBundle\Tests\Resolver;
 
+use Symfony\Component\HttpFoundation\Request;
+use ReflectionMethod;
+
+use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
 use Mmoreram\ControllerExtraBundle\Annotation\Log as AnnotationLog;
 
 /**

@@ -12,6 +12,11 @@
 
 namespace Mmoreram\ControllerExtraBundle\Tests\Resolver;
 
+use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
+use Mmoreram\ControllerExtraBundle\Resolver\JsonResponseAnnotationResolver;
+use Symfony\Component\HttpFoundation\Request;
+use ReflectionMethod;
+
 /**
  * Tests JsonResponseAnnotationResolver class
  */
@@ -19,11 +24,11 @@ class JsonResponseAnnotationResolverTest extends \PHPUnit_Framework_TestCase
 {
 
     /**
-     * @var FlushAnnotationResolver
+     * @var JsonResponseAnnotationResolver
      *
      * Flush Annotation Resolver
      */
-    private $flushAnnotationResolver;
+    private $jsonResponseAnnotationResolver;
 
     /**
      * @var Request
@@ -69,11 +74,6 @@ class JsonResponseAnnotationResolverTest extends \PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('getDefaultHeaders')
             ->will($this->returnValue(array()));
-
-        $manager = $this
-            ->getMockBuilder('Doctrine\ORM\EntityManager')
-            ->disableOriginalConstructor()
-            ->getMock();
 
         $this->request = $this
             ->getMockBuilder('Symfony\Component\HttpFoundation\Request')
@@ -272,6 +272,9 @@ class JsonResponseAnnotationResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function testOnKernelResponseWrong()
     {
+        /**
+         * @var JsonResponseAnnotationResolver $jsonResponseAnnotationResolver
+         */
         $jsonResponseAnnotationResolver = $this
             ->getMockBuilder('Mmoreram\ControllerExtraBundle\Resolver\JsonResponseAnnotationResolver')
             ->disableOriginalConstructor()
