@@ -23,8 +23,6 @@ use Mmoreram\ControllerExtraBundle\Resolver\Interfaces\AnnotationResolverInterfa
 
 /**
  * Resolver Event Listener
- *
- * @todo Test this class
  */
 class ResolverEventListener
 {

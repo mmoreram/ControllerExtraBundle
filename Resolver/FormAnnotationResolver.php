@@ -25,8 +25,6 @@ use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
 
 /**
  * FormAnnotationResolver, an implementation of  AnnotationResolverInterface
- *
- * @todo Test this class
  */
 class FormAnnotationResolver implements AnnotationResolverInterface
 {
