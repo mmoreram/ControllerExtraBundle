@@ -822,6 +822,7 @@ abstract class.
 namespace My\Bundle\Resolver;
 
 use Symfony\Component\HttpFoundation\Request;
+
 use Mmoreram\ControllerExtraBundle\Resolver\Interfaces\AnnotationResolverInterface;
 use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
 
@@ -842,9 +843,10 @@ class MyCustomAnnotationResolver implements AnnotationResolverInterface
      * @return MyCustomAnnotationResolver self Object
      */
     public function evaluateAnnotation(
-                                        Request $request, 
-                                        Annotation $annotation, 
-                                        ReflectionMethod $method )
+        Request $request, 
+        Annotation $annotation, 
+        ReflectionMethod $method 
+    )
     {
         /**
          * You can now manage your annotation.
