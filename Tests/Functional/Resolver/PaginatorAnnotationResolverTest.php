@@ -28,7 +28,7 @@ class PaginatorAnnotationResolverTest extends AbstractWebTestCase
         $this->client->request('GET', '/fake/paginator/updatedAt/2/5/10');
 
         $this->assertEquals(
-            '{"dql":"SELECT x, r4, r5 FROM Mmoreram\\\\ControllerExtraBundle\\\\Tests\\\\FakeBundle\\\\Entity\\\\Fake x LEFT JOIN x.relation3 r3 LEFT JOIN x.relation4 r4 LEFT JOIN x.relation r LEFT JOIN x.relation2 r2 LEFT JOIN x.relation5 r5 WHERE enabled = ?where0 AND x.address1 IS NOT NULL AND x.address2 IS NOT NULL ORDER BY updatedAt DESC, createdAt ASC, id ASC"}',
+            '{"dql":"SELECT x, r4, r5 FROM Mmoreram\\\\ControllerExtraBundle\\\\Tests\\\\FakeBundle\\\\Entity\\\\Fake x INNER JOIN x.relation3 r3 INNER JOIN x.relation4 r4 LEFT JOIN x.relation r LEFT JOIN x.relation2 r2 LEFT JOIN x.relation5 r5 WHERE enabled = ?where0 AND x.address1 IS NOT NULL AND x.address2 IS NOT NULL ORDER BY createdAt ASC, id ASC"}',
             $this
                 ->client
                 ->getResponse()

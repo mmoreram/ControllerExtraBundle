@@ -113,13 +113,9 @@ class FakeController extends Controller
      *          "method" = "create",
      *          "static" = false
      *      },
-     *      page = "%page%",
-     *      limit = "%limit%",
+     *      page = 1,
+     *      limit = 10,
      *      orderBy = {
-     *          { "%field%", "%dir%", {
-     *              "1" = "ASC",
-     *              "2" = "DESC",
-     *          }},
      *          { "createdAt", "ASC" },
      *          { "id", "ASC" }
      *      },
