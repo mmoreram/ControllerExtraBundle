@@ -34,6 +34,7 @@ Table of contents
         * [Paginator Left Joins](#paginator-left-joins)
         * [Paginator Inner Joins](#paginator-inner-joins)
         * [Paginator Not Nulls](#paginator-not-nulls)
+        * [Paginator Example](#paginator-example)
     * [@Entity](#entity)
         * [Factory](#factory)
     * [@Form](#form)
@@ -339,7 +340,7 @@ You can refer to an existing Request attribute using `%value%` format
 /**
  * Simple controller method
  *
- * This Controller responds to /myroute/paginate/{pag}
+ * This Controller matches pattern /myroute/paginate/{pag}
  *
  * @Paginator(
  *      class = "MmoreramCustomBundle:User",
@@ -357,7 +358,7 @@ or you can hardcode the page to use.
 /**
  * Simple controller method
  *
- * This Controller responds to /myroute/paginate/
+ * This Controller matches pattern /myroute/paginate/
  *
  * @Paginator(
  *      class = "MmoreramCustomBundle:User",
@@ -387,7 +388,7 @@ You can refer to an existing Request attribute using `%value%` format
 /**
  * Simple controller method
  *
- * This Controller responds to /myroute/paginate/{pag}/{limit}
+ * This Controller matches pattern /myroute/paginate/{pag}/{limit}
  *
  * @Paginator(
  *      class = "MmoreramCustomBundle:User",
@@ -406,7 +407,7 @@ or you can hardcode the page to use.
 /**
  * Simple controller method
  *
- * This Controller responds to /myroute/paginate/
+ * This Controller matches pattern /myroute/paginate/
  *
  * @Paginator(
  *      class = "MmoreramCustomBundle:User",
@@ -461,7 +462,7 @@ can refer to an existing Request attribute using `%value%` format
 /**
  * Simple controller method
  *
- * This Controller responds to /myroute/paginate/order/{field}/{direction}
+ * This Controller matches pattern /myroute/paginate/order/{field}/{direction}
  *
  * For example, some matchings...
  *
@@ -590,6 +591,56 @@ public function indexAction(Pagination $pagination)
 {
 }
 ```
+
+### Paginator Example
+
+This is a completed example and its DQL resolution
+
+``` php
+/**
+ * Simple controller method
+ *
+ * This Controller matches pattern /myroute/paginate/order/{field}/{direction}
+ *
+ * @Paginator(
+ *      class = {
+ *          "factory" = "Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory",
+ *          "method" = "create",
+ *          "static" = false
+ *      },
+ *      page = "%page%",
+ *      limit = "%limit%",
+ *      orderBy = {
+ *          { "%field%", "%dir%", {
+ *              "1" = "ASC",
+ *              "2" = "DESC",
+ *          }},
+ *          { "createdAt", "ASC" },
+ *          { "id", "ASC" }
+ *      },
+ *      wheres = {
+ *          { "enabled" , "=", true }
+ *      },
+ *      leftJoins = {
+ *          { "x.relation", "r" },
+ *          { "x.relation2", "r2" },
+ *          { "x.relation5", "r5", true },
+ *      },
+ *      innerJoins = {
+ *          { "x.relation3", "r3" },
+ *          { "x.relation4", "r4", true },
+ *      },
+ *      notNulls = {
+ *          "address1",
+ *          "address2",
+ *      }
+ * )
+ */
+public function indexAction(Pagination $pagination)
+{
+}
+```
+
 
 ## @Entity
 
