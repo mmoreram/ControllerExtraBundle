@@ -4,46 +4,47 @@
  * This file is part of the Controller Extra Bundle
  *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @since 2013
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * Feel free to edit as you please, and have fun.
  */
 
-namespace Mmoreram\ControllerExtraBundle\Tests\Resolver;
+namespace Mmoreram\ControllerExtraBundle\Tests\UnitTest\Resolver;
 
-use ReflectionMethod;
-use Mmoreram\ControllerExtraBundle\Resolver\FlushAnnotationResolver;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpFoundation\Request;
+use ReflectionMethod;
+
+use Mmoreram\ControllerExtraBundle\Resolver\FlushAnnotationResolver;
 
 /**
  * Tests FlushAnnotationResolver class
  */
 class FlushAnnotationResolverTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @var FlushAnnotationResolver
      *
      * Flush Annotation Resolver
      */
-    private $flushAnnotationResolver;
+    protected $flushAnnotationResolver;
 
     /**
      * @var Request
      *
      * Request
      */
-    private $request;
+    protected $request;
 
     /**
      * @var ReflectionMethod
      *
      * Reflection Method
      */
-    private $reflectionMethod;
+    protected $reflectionMethod;
 
     /**
      * Setup method
@@ -177,7 +178,6 @@ class FlushAnnotationResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function testEntities($entities, $requestAttributes, $flushedEntities)
     {
-
         $annotation = $this
             ->getMockBuilder('Mmoreram\ControllerExtraBundle\Annotation\Flush')
             ->disableOriginalConstructor()
@@ -193,8 +193,16 @@ class FlushAnnotationResolverTest extends \PHPUnit_Framework_TestCase
 
         $this->request->attributes = new ParameterBag($requestAttributes);
 
-        $this->flushAnnotationResolver->evaluateAnnotation($this->request, $annotation, $this->reflectionMethod);
-        $this->assertEquals($flushedEntities, $this->flushAnnotationResolver->getEntities());
+        $this->flushAnnotationResolver->evaluateAnnotation(
+            $this->request,
+            $annotation,
+            $this->reflectionMethod
+        );
+
+        $this->assertEquals(
+            $flushedEntities,
+            $this->flushAnnotationResolver->getEntities()
+        );
     }
 
     /**
@@ -248,8 +256,16 @@ class FlushAnnotationResolverTest extends \PHPUnit_Framework_TestCase
             ->setMethods(null)
             ->getMock();
 
-        $this->flushAnnotationResolver->evaluateAnnotation($this->request, $annotation, $this->reflectionMethod);
-        $this->assertEquals($mustFlush, $this->flushAnnotationResolver->getMustFlush());
+        $this->flushAnnotationResolver->evaluateAnnotation(
+            $this->request,
+            $annotation,
+            $this->reflectionMethod
+        );
+
+        $this->assertEquals(
+            $mustFlush,
+            $this->flushAnnotationResolver->getMustFlush()
+        );
     }
 
     /**

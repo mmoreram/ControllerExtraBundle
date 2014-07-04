@@ -4,14 +4,16 @@
  * This file is part of the Controller Extra Bundle
  *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @since 2013
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * Feel free to edit as you please, and have fun.
  */
 
 namespace Mmoreram\ControllerExtraBundle;
 
+use Mmoreram\ControllerExtraBundle\CompilerPass\PaginatorCompilerPass;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -23,7 +25,6 @@ use Mmoreram\ControllerExtraBundle\CompilerPass\ResolverCompilerPass;
  */
 class ControllerExtraBundle extends Bundle
 {
-
     /**
      * Boots the Bundle.
      */
@@ -42,6 +43,18 @@ class ControllerExtraBundle extends Bundle
         AnnotationRegistry::registerFile($kernel
             ->locateResource("@ControllerExtraBundle/Annotation/Log.php")
         );
+
+        AnnotationRegistry::registerFile($kernel
+            ->locateResource("@ControllerExtraBundle/Annotation/JsonResponse.php")
+        );
+
+        AnnotationRegistry::registerFile($kernel
+            ->locateResource("@ControllerExtraBundle/Annotation/Paginator.php")
+        );
+
+        AnnotationRegistry::registerFile($kernel
+            ->locateResource("@ControllerExtraBundle/Annotation/Entity.php")
+        );
     }
 
     /**
@@ -51,10 +64,10 @@ class ControllerExtraBundle extends Bundle
      */
     public function build(ContainerBuilder $container)
     {
-
         /**
-         * Adds compiler pass
+         * Adds compiler passes
          */
         $container->addCompilerPass(new ResolverCompilerPass);
+        $container->addCompilerPass(new PaginatorCompilerPass);
     }
 }

@@ -4,10 +4,11 @@
  * This file is part of the Controller Extra Bundle
  *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @since 2013
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * Feel free to edit as you please, and have fun.
  */
 
 namespace Mmoreram\ControllerExtraBundle\Resolver;
@@ -134,9 +135,12 @@ class JsonResponseAnnotationResolver implements AnnotationResolverInterface
      *
      * @return JsonResponseAnnotationResolver self Object
      */
-    public function evaluateAnnotation(Request $request, Annotation $annotation, ReflectionMethod $method)
+    public function evaluateAnnotation(
+        Request $request,
+        Annotation $annotation,
+        ReflectionMethod $method
+    )
     {
-
         /**
          * Annotation is only laoded if is typeof WorkAnnotation
          */

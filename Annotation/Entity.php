@@ -4,10 +4,11 @@
  * This file is part of the Controller Extra Bundle
  *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @since 2013
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * Feel free to edit as you please, and have fun.
  */
 
 namespace Mmoreram\ControllerExtraBundle\Annotation;
@@ -21,7 +22,6 @@ use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
  */
 class Entity extends Annotation
 {
-
     /**
      * @var string
      *
@@ -56,27 +56,6 @@ class Entity extends Annotation
      * Persist entity
      */
     public $persist;
-
-    /**
-     * @var string
-     *
-     * Factory class
-     */
-    public $factoryClass;
-
-    /**
-     * @var string
-     *
-     * Factory method
-     */
-    public $factoryMethod;
-
-    /**
-     * @var boolean
-     *
-     * Factory static
-     */
-    public $factoryStatic = false;
 
     /**
      * return class
@@ -126,35 +105,5 @@ class Entity extends Annotation
     public function getPersist()
     {
         return $this->persist;
-    }
-
-    /**
-     * return factory class
-     *
-     * @return string factory class
-     */
-    public function getFactoryClass()
-    {
-        return $this->factoryClass;
-    }
-
-    /**
-     * return factory method
-     *
-     * @return string factory method
-     */
-    public function getFactoryMethod()
-    {
-        return $this->factoryMethod;
-    }
-
-    /**
-     * return if factory is static
-     *
-     * @return boolean factory is static
-     */
-    public function getFactoryStatic()
-    {
-        return $this->factoryStatic;
     }
 }

@@ -4,10 +4,11 @@
  * This file is part of the Controller Extra Bundle
  *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @since 2013
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * Feel free to edit as you please, and have fun.
  */
 
 namespace Mmoreram\ControllerExtraBundle\Resolver;
@@ -26,7 +27,6 @@ use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
  */
 class LogAnnotationResolver implements AnnotationResolverInterface
 {
-
     /**
      * @var LoggerInterface
      *
@@ -193,21 +193,24 @@ class LogAnnotationResolver implements AnnotationResolverInterface
      *
      * @return LogAnnotationResolver self Object
      */
-    public function evaluateAnnotation(Request $request, Annotation $annotation, ReflectionMethod $method)
+    public function evaluateAnnotation(
+        Request $request,
+        Annotation $annotation,
+        ReflectionMethod $method
+    )
     {
-
         /**
          * Annotation is only laoded if is typeof AnnotationLog
          */
         if ($annotation instanceof AnnotationLog) {
 
-            $this->level    = $annotation->getLevel()
-                            ? $annotation->getLevel()
-                            : $this->getDefaultLevel();
+            $this->level = $annotation->getLevel()
+                ? $annotation->getLevel()
+                : $this->getDefaultLevel();
 
-            $this->execute  = $annotation->getExecute()
-                            ? $annotation->getExecute()
-                            : $this->getDefaultExecute();
+            $this->execute = $annotation->getExecute()
+                ? $annotation->getExecute()
+                : $this->getDefaultExecute();
 
             $this->mustLog = true;
             $this->value = $annotation->getValue();
@@ -231,7 +234,6 @@ class LogAnnotationResolver implements AnnotationResolverInterface
      */
     public function onKernelResponse(FilterResponseEvent $event)
     {
-
         if ($this->getMustLog()) {
 
             /**

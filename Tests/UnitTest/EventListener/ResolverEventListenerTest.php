@@ -4,33 +4,38 @@
  * This file is part of the Controller Extra Bundle
  *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @since 2013
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * Feel free to edit as you please, and have fun.
  */
 
-namespace Mmoreram\ControllerExtraBundle\Tests\EventListener;
+namespace Mmoreram\ControllerExtraBundle\Tests\UnitTest\EventListener;
+
+use Mmoreram\ControllerExtraBundle\EventListener\ResolverEventListener;
+use Symfony\Component\HttpKernel\KernelInterface;
+use Doctrine\Common\Annotations\Reader;
+use PHPUnit_Framework_TestCase;
 
 /**
  * Tests ResolverEventListener class
  */
-class ResolverEventListenerTest extends \PHPUnit_Framework_TestCase
+class ResolverEventListenerTest extends PHPUnit_Framework_TestCase
 {
-
     /**
      * @var KernelInterface
      *
      * Kernel
      */
-    private $kernel;
+    protected $kernel;
 
     /**
      * @var Reader
      *
      * Annotation Reader
      */
-    private $reader;
+    protected $reader;
 
     /**
      * Set up
@@ -53,6 +58,9 @@ class ResolverEventListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddResolver()
     {
+        /**
+         * @var ResolverEventListener $resolverEventListener
+         */
         $resolverEventListener = $this
             ->getMockBuilder('Mmoreram\ControllerExtraBundle\EventListener\ResolverEventListener')
             ->setConstructorArgs(array($this->kernel, $this->reader))

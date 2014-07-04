@@ -1,10 +1,14 @@
 <?php
 
 /**
- * This file is part of BeEcommerce.
+ * This file is part of the Controller Extra Bundle
  *
- * @author Befactory Team
- * @since  2013
+ * @author Marc Morera <yuhu@mmoreram.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * Feel free to edit as you please, and have fun.
  */
 
 namespace Mmoreram\ControllerExtraBundle\Tests\FakeBundle;
@@ -18,4 +22,3 @@ class FakeBundle extends Bundle
 {
 
 }
- 

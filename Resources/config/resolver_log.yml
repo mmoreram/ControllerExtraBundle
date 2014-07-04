@@ -3,15 +3,15 @@ parameters:
     #
     # Resolvers
     #
-    mmoreram.controllerextra.resolvers.log_annotation_resolver.class: Mmoreram\ControllerExtraBundle\Resolver\LogAnnotationResolver
+    mmoreram.controllerextra.resolver.log_annotation_resolver.class: Mmoreram\ControllerExtraBundle\Resolver\LogAnnotationResolver
 
 services:
 
     #
     # Resolvers
     #
-    mmoreram.controllerextra.resolvers.log_annotation_resolver:
-        class: %mmoreram.controllerextra.resolvers.log_annotation_resolver.class%
+    mmoreram.controllerextra.resolver.log_annotation_resolver:
+        class: %mmoreram.controllerextra.resolver.log_annotation_resolver.class%
         arguments:
             logger: @logger
         calls:

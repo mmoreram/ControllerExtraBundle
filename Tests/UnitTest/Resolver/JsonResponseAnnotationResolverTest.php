@@ -4,47 +4,54 @@
  * This file is part of the Controller Extra Bundle
  *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @since 2013
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * Feel free to edit as you please, and have fun.
  */
 
-namespace Mmoreram\ControllerExtraBundle\Tests\Resolver;
+namespace Mmoreram\ControllerExtraBundle\Tests\UnitTest\Resolver;
+
+use Symfony\Component\HttpFoundation\Request;
+use PHPUnit_Framework_TestCase;
+use ReflectionMethod;
+
+use Mmoreram\ControllerExtraBundle\Resolver\JsonResponseAnnotationResolver;
+use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
 
 /**
  * Tests JsonResponseAnnotationResolver class
  */
 class JsonResponseAnnotationResolverTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
-     * @var FlushAnnotationResolver
+     * @var JsonResponseAnnotationResolver
      *
      * Flush Annotation Resolver
      */
-    private $flushAnnotationResolver;
+    protected $jsonResponseAnnotationResolver;
 
     /**
      * @var Request
      *
      * Request
      */
-    private $request;
+    protected $request;
 
     /**
      * @var ReflectionMethod
      *
      * Reflection Method
      */
-    private $reflectionMethod;
+    protected $reflectionMethod;
 
     /**
      * @var Annotation
      *
      * Annotation
      */
-    private $annotation;
+    protected $annotation;
 
     /**
      * Setup method
@@ -118,8 +125,16 @@ class JsonResponseAnnotationResolverTest extends \PHPUnit_Framework_TestCase
             ->method('getStatus')
             ->will($this->returnValue($annotationStatus));
 
-        $this->jsonResponseAnnotationResolver->evaluateAnnotation($this->request, $annotation, $this->reflectionMethod);
-        $this->assertEquals($resultStatus, $this->jsonResponseAnnotationResolver->getStatus());
+        $this->jsonResponseAnnotationResolver->evaluateAnnotation(
+            $this->request,
+            $annotation,
+            $this->reflectionMethod
+        );
+
+        $this->assertEquals(
+            $resultStatus,
+            $this->jsonResponseAnnotationResolver->getStatus()
+        );
     }
 
     /**
@@ -162,8 +177,16 @@ class JsonResponseAnnotationResolverTest extends \PHPUnit_Framework_TestCase
             ->method('getHeaders')
             ->will($this->returnValue($annotationHeaders));
 
-        $this->jsonResponseAnnotationResolver->evaluateAnnotation($this->request, $annotation, $this->reflectionMethod);
-        $this->assertEquals($resultHeaders, $this->jsonResponseAnnotationResolver->getHeaders());
+        $this->jsonResponseAnnotationResolver->evaluateAnnotation(
+            $this->request,
+            $annotation,
+            $this->reflectionMethod
+        );
+
+        $this->assertEquals(
+            $resultHeaders,
+            $this->jsonResponseAnnotationResolver->getHeaders()
+        );
     }
 
     /**
@@ -221,6 +244,9 @@ class JsonResponseAnnotationResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function testOnKernelViewRight()
     {
+        /**
+         * @var JsonResponseAnnotationResolver $jsonResponseAnnotationResolver
+         */
         $jsonResponseAnnotationResolver = $this
             ->getMockBuilder('Mmoreram\ControllerExtraBundle\Resolver\JsonResponseAnnotationResolver')
             ->disableOriginalConstructor()
@@ -272,6 +298,9 @@ class JsonResponseAnnotationResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function testOnKernelResponseWrong()
     {
+        /**
+         * @var JsonResponseAnnotationResolver $jsonResponseAnnotationResolver
+         */
         $jsonResponseAnnotationResolver = $this
             ->getMockBuilder('Mmoreram\ControllerExtraBundle\Resolver\JsonResponseAnnotationResolver')
             ->disableOriginalConstructor()

@@ -1,0 +1,3 @@
+FakeBundle\Entity\Fake:
+    type: entity
+    table: fake
