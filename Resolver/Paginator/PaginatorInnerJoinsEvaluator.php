@@ -40,7 +40,7 @@ class PaginatorInnerJoinsEvaluator implements PaginatorEvaluatorInterface
 
             foreach ($annotation->getInnerJoins() as $innerJoin) {
 
-                $queryBuilder->leftJoin(
+                $queryBuilder->innerJoin(
                     $innerJoin[0],
                     $innerJoin[1]
                 );
