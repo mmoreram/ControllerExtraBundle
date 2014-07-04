@@ -1,0 +1,11 @@
+parameters:
+
+    #
+    # Entities
+    #
+    controller_extra_bundle.entity.fake.class: Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\Fake
+
+    #
+    # Factories
+    #
+    controller_extra_bundle.factory.fake.class: Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory

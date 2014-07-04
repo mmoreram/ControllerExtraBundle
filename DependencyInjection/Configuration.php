@@ -4,10 +4,11 @@
  * This file is part of the Controller Extra Bundle
  *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @since 2013
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * Feel free to edit as you please, and have fun.
  */
 
 namespace Mmoreram\ControllerExtraBundle\DependencyInjection;
@@ -37,6 +38,21 @@ class Configuration implements ConfigurationInterface
                  */
                 ->integerNode('resolver_priority')
                     ->defaultValue(-8)
+                ->end()
+
+                /**
+                 * Default factory definition
+                 */
+                ->arrayNode('factory')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->scalarNode('default_method')
+                            ->defaultValue('create')
+                        ->end()
+                        ->booleanNode('default_static')
+                            ->defaultValue(true)
+                        ->end()
+                    ->end()
                 ->end()
 
                 /**
@@ -140,6 +156,24 @@ class Configuration implements ConfigurationInterface
                                 AnnotationLog::EXEC_BOTH,
                             ))
                             ->defaultValue(AnnotationLog::EXEC_PRE)
+                        ->end()
+                    ->end()
+                ->end()
+
+                ->arrayNode('paginator')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->booleanNode('active')
+                            ->defaultTrue()
+                        ->end()
+                        ->scalarNode('default_name')
+                            ->defaultValue('paginator')
+                        ->end()
+                        ->integerNode('default_page')
+                            ->defaultValue(1)
+                        ->end()
+                        ->integerNode('default_limit_per_page')
+                            ->defaultValue(10)
                         ->end()
                     ->end()
                 ->end()

@@ -3,15 +3,15 @@ parameters:
     #
     # Resolvers
     #
-    mmoreram.controllerextra.resolvers.flush_annotation_resolver.class: Mmoreram\ControllerExtraBundle\Resolver\FlushAnnotationResolver
+    mmoreram.controllerextra.resolver.flush_annotation_resolver.class: Mmoreram\ControllerExtraBundle\Resolver\FlushAnnotationResolver
 
 services:
 
     #
     # Resolvers
     #
-    mmoreram.controllerextra.resolvers.flush_annotation_resolver:
-        class: %mmoreram.controllerextra.resolvers.flush_annotation_resolver.class%
+    mmoreram.controllerextra.resolver.flush_annotation_resolver:
+        class: %mmoreram.controllerextra.resolver.flush_annotation_resolver.class%
         arguments:
             doctrine: @doctrine
             default_manager: %mmoreram.controllerextra.flush_default_manager%

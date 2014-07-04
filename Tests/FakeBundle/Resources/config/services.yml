@@ -4,4 +4,4 @@ services:
     # Factories
     #
     controller_extra_bundle.factory.fake:
-        class: Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory
+        class: %controller_extra_bundle.factory.fake.class%

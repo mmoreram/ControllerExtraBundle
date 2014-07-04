@@ -4,15 +4,16 @@
  * This file is part of the Controller Extra Bundle
  *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @since 2013
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * Feel free to edit as you please, and have fun.
  */
 
 namespace Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory;
 
-use Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\FakeEntity;
+use Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\Fake;
 
 /**
  * Class FakeFactory
@@ -20,23 +21,42 @@ use Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\FakeEntity;
 class FakeFactory
 {
     /**
-     * Returns a new FakeEntity instance
+     * Returns a new Fake instance
      *
-     * @return FakeEntity Fake entity
+     * @return Fake Fake entity
      */
     public function create()
     {
-        return new FakeEntity();
+        return FakeFactory::createStatic();
     }
 
     /**
-     * Returns a new FakeEntity instance
+     * Returns a new Fake instance
      *
-     * @return FakeEntity Fake entity
+     * @return Fake Fake entity
      */
-    static public function createStatic()
+    public static function createStatic()
     {
-        return new FakeEntity();
+        return new Fake();
+    }
+
+    /**
+     * Returns a new Fake instance
+     *
+     * @return Fake Fake entity
+     */
+    public function generate()
+    {
+        return FakeFactory::createStatic();
+    }
+
+    /**
+     * Returns a new Fake instance
+     *
+     * @return Fake Fake entity
+     */
+    public static function generateStatic()
+    {
+        return FakeFactory::createStatic();
     }
 }
- 

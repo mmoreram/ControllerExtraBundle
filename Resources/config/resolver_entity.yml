@@ -3,19 +3,18 @@ parameters:
     #
     # Resolvers
     #
-    mmoreram.controllerextra.resolvers.entity_annotation_resolver.class: Mmoreram\ControllerExtraBundle\Resolver\EntityAnnotationResolver
+    mmoreram.controllerextra.resolver.entity_annotation_resolver.class: Mmoreram\ControllerExtraBundle\Resolver\EntityAnnotationResolver
 
 services:
 
     #
     # Resolvers
     #
-    mmoreram.controllerextra.resolvers.entity_annotation_resolver:
-        class: %mmoreram.controllerextra.resolvers.entity_annotation_resolver.class%
+    mmoreram.controllerextra.resolver.entity_annotation_resolver:
+        class: %mmoreram.controllerextra.resolver.entity_annotation_resolver.class%
         arguments:
-            container: @service_container
             doctrine: @doctrine
-            bundles: @=service("kernel").getBundles()
+            entity_provider: @mmoreram.controllerextra.provider.entity_provider
             default_name: %mmoreram.controllerextra.form_default_name%
             default_manager: %mmoreram.controllerextra.entity_default_manager%
             default_persist: %mmoreram.controllerextra.entity_default_persist%

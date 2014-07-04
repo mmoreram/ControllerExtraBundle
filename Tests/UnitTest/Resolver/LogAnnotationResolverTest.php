@@ -4,46 +4,48 @@
  * This file is part of the Controller Extra Bundle
  *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @since 2013
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * Feel free to edit as you please, and have fun.
  */
 
-namespace Mmoreram\ControllerExtraBundle\Tests\Resolver;
+namespace Mmoreram\ControllerExtraBundle\Tests\UnitTest\Resolver;
 
 use Symfony\Component\HttpFoundation\Request;
+use PHPUnit_Framework_TestCase;
 use ReflectionMethod;
 
 use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
 use Mmoreram\ControllerExtraBundle\Annotation\Log as AnnotationLog;
+use Mmoreram\ControllerExtraBundle\Resolver\LogAnnotationResolver;
 
 /**
  * Tests FlushAnnotationResolver class
  */
-class LogAnnotationResolverTest extends \PHPUnit_Framework_TestCase
+class LogAnnotationResolverTest extends PHPUnit_Framework_TestCase
 {
-
     /**
      * @var Request
      *
      * Request
      */
-    private $request;
+    protected $request;
 
     /**
      * @var ReflectionMethod
      *
      * Reflection Method
      */
-    private $reflectionMethod;
+    protected $reflectionMethod;
 
     /**
      * @var Annotation
      *
      * Annotation
      */
-    private $annotation;
+    protected $annotation;
 
     /**
      * Setup method
@@ -128,7 +130,11 @@ class LogAnnotationResolverTest extends \PHPUnit_Framework_TestCase
             ->method($loggerMethod)
             ->with($this->equalTo($loggerMessage));
 
-        $logAnnotationResolver->logMessage($logger, $loggerMethod, $loggerMessage);
+        $logAnnotationResolver->logMessage(
+            $logger,
+            $loggerMethod,
+            $loggerMessage
+        );
 
     }
 
@@ -143,12 +149,14 @@ class LogAnnotationResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function testEvaluateAnnotationLevel($defaultLevel, $level, $resultLevel)
     {
-
         $this->annotation
             ->expects($this->any())
             ->method('getLevel')
             ->will($this->returnValue($level));
 
+        /**
+         * @var LogAnnotationResolver $logAnnotationResolver
+         */
         $logAnnotationResolver = $this
             ->getMockBuilder('Mmoreram\ControllerExtraBundle\Resolver\LogAnnotationResolver')
             ->disableOriginalConstructor()
@@ -162,8 +170,16 @@ class LogAnnotationResolverTest extends \PHPUnit_Framework_TestCase
             ->method('getDefaultLevel')
             ->will($this->returnValue($defaultLevel));
 
-        $logAnnotationResolver->evaluateAnnotation($this->request, $this->annotation, $this->reflectionMethod);
-        $this->assertEquals($logAnnotationResolver->getLevel(), $resultLevel);
+        $logAnnotationResolver->evaluateAnnotation(
+            $this->request,
+            $this->annotation,
+            $this->reflectionMethod
+        );
+
+        $this->assertEquals(
+            $logAnnotationResolver->getLevel(),
+            $resultLevel
+        );
     }
 
     /**
@@ -192,12 +208,14 @@ class LogAnnotationResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function testEvaluateAnnotationExecute($defaultExecute, $execute, $resultExecute)
     {
-
         $this->annotation
             ->expects($this->any())
             ->method('getExecute')
             ->will($this->returnValue($execute));
 
+        /**
+         * @var LogAnnotationResolver $logAnnotationResolver
+         */
         $logAnnotationResolver = $this
             ->getMockBuilder('Mmoreram\ControllerExtraBundle\Resolver\LogAnnotationResolver')
             ->disableOriginalConstructor()
@@ -223,8 +241,16 @@ class LogAnnotationResolverTest extends \PHPUnit_Framework_TestCase
             ->method('getLogger')
             ->will($this->returnValue($logger));
 
-        $logAnnotationResolver->evaluateAnnotation($this->request, $this->annotation, $this->reflectionMethod);
-        $this->assertEquals($logAnnotationResolver->getExecute(), $resultExecute);
+        $logAnnotationResolver->evaluateAnnotation(
+            $this->request,
+            $this->annotation,
+            $this->reflectionMethod
+        );
+
+        $this->assertEquals(
+            $logAnnotationResolver->getExecute(),
+            $resultExecute
+        );
     }
 
     /**
@@ -308,7 +334,11 @@ class LogAnnotationResolverTest extends \PHPUnit_Framework_TestCase
                 ->method('logMessage');
         }
 
-        $logAnnotationResolver->evaluateAnnotation($this->request, $this->annotation, $this->reflectionMethod);
+        $logAnnotationResolver->evaluateAnnotation(
+            $this->request,
+            $this->annotation,
+            $this->reflectionMethod
+        );
     }
 
     /**
@@ -341,6 +371,9 @@ class LogAnnotationResolverTest extends \PHPUnit_Framework_TestCase
         $message = 'My message';
         $level = 'error';
 
+        /**
+         * @var LogAnnotationResolver $logAnnotationResolver
+         */
         $logAnnotationResolver = $this
             ->getMockBuilder('Mmoreram\ControllerExtraBundle\Resolver\LogAnnotationResolver')
             ->disableOriginalConstructor()
@@ -432,6 +465,9 @@ class LogAnnotationResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function testAnnotationNamespace($annotationNamespace, $times)
     {
+        /**
+         * @var LogAnnotationResolver $logAnnotationResolver
+         */
         $logAnnotationResolver = $this
             ->getMockBuilder('Mmoreram\ControllerExtraBundle\Resolver\LogAnnotationResolver')
             ->disableOriginalConstructor()
@@ -448,7 +484,11 @@ class LogAnnotationResolverTest extends \PHPUnit_Framework_TestCase
             ->expects($this->exactly($times))
             ->method('getLevel');
 
-        $logAnnotationResolver->evaluateAnnotation($this->request, $annotation, $this->reflectionMethod);
+        $logAnnotationResolver->evaluateAnnotation(
+            $this->request,
+            $annotation,
+            $this->reflectionMethod
+        );
     }
 
     /**

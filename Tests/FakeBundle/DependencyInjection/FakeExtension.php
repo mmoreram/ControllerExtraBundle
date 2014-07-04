@@ -4,10 +4,11 @@
  * This file is part of the Controller Extra Bundle
  *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @since 2013
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * Feel free to edit as you please, and have fun.
  */
 
 namespace Mmoreram\ControllerExtraBundle\Tests\FakeBundle\DependencyInjection;
@@ -34,6 +35,7 @@ class FakeExtension extends Extension
          * Load config files
          */
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('classes.yml');
         $loader->load('services.yml');
     }
 }

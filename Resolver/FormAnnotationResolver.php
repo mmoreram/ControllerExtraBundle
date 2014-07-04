@@ -4,10 +4,11 @@
  * This file is part of the Controller Extra Bundle
  *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @since  2013
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * Feel free to edit as you please, and have fun.
  */
 
 namespace Mmoreram\ControllerExtraBundle\Resolver;
@@ -28,7 +29,6 @@ use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
  */
 class FormAnnotationResolver implements AnnotationResolverInterface
 {
-
     /**
      * @var FormRegistryInterface
      *
@@ -57,7 +57,11 @@ class FormAnnotationResolver implements AnnotationResolverInterface
      * @param FormFactoryInterface  $formFactory  Form Factory
      * @param string                $defaultName  Default name
      */
-    public function __construct(FormRegistryInterface $formRegistry, FormFactoryInterface $formFactory, $defaultName)
+    public function __construct(
+        FormRegistryInterface $formRegistry,
+        FormFactoryInterface $formFactory,
+        $defaultName
+    )
     {
         $this->formRegistry = $formRegistry;
         $this->formFactory = $formFactory;
@@ -73,9 +77,12 @@ class FormAnnotationResolver implements AnnotationResolverInterface
      *
      * @return FormAnnotationResolver self Object
      */
-    public function evaluateAnnotation(Request $request, Annotation $annotation, ReflectionMethod $method)
+    public function evaluateAnnotation(
+        Request $request,
+        Annotation $annotation,
+        ReflectionMethod $method
+    )
     {
-
         /**
          * Annotation is only laoded if is typeof WorkAnnotation
          */
@@ -103,7 +110,9 @@ class FormAnnotationResolver implements AnnotationResolverInterface
 
             /**
              * Method parameters load.
-             * A hash is created to access to all needed parameters with cost O(1)
+             *
+             * A hash is created to access to all needed parameters
+             * with cost O(1)
              */
             $parameters = $method->getParameters();
             $parametersIndexed = array();
@@ -124,11 +133,18 @@ class FormAnnotationResolver implements AnnotationResolverInterface
                 ->getName();
 
             /**
-             * Requiring result with calling getBuiltObject(), set as request attribute desired element
+             * Requiring result with calling getBuiltObject(), set as request
+             * attribute desired element
              */
             $request->attributes->set(
                 $parameterName,
-                $this->getBuiltObject($request, $this->formFactory, $annotation, $parameterClass, $type)
+                $this->getBuiltObject(
+                    $request,
+                    $this->formFactory,
+                    $annotation,
+                    $parameterClass,
+                    $type
+                )
             );
         }
 
@@ -146,7 +162,13 @@ class FormAnnotationResolver implements AnnotationResolverInterface
      *
      * @return Mixed object to inject as a method parameter
      */
-    private function getBuiltObject(Request $request, FormFactoryInterface $formFactory, AnnotationForm $annotation, $parameterClass, AbstractType $type)
+    protected function getBuiltObject(
+        Request $request,
+        FormFactoryInterface $formFactory,
+        AnnotationForm $annotation,
+        $parameterClass,
+        AbstractType $type
+    )
     {
         /**
          * Checks if parameter typehinting is AbstractType

@@ -4,10 +4,11 @@
  * This file is part of the Controller Extra Bundle
  *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @since  2013
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * Feel free to edit as you please, and have fun.
  */
 
 namespace Mmoreram\ControllerExtraBundle\Resolver;
@@ -28,7 +29,6 @@ use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
  */
 class FlushAnnotationResolver implements AnnotationResolverInterface
 {
-
     /**
      * @var AbstractManagerRegistry
      *
@@ -135,15 +135,19 @@ class FlushAnnotationResolver implements AnnotationResolverInterface
      *
      * @return FlushAnnotationResolver self Object
      */
-    public function evaluateAnnotation(Request $request, Annotation $annotation, ReflectionMethod $method)
+    public function evaluateAnnotation(
+        Request $request,
+        Annotation $annotation,
+        ReflectionMethod $method
+    )
     {
-
         /**
          * Annotation is only laoded if is typeof AnnotationFlush
          */
         if ($annotation instanceof AnnotationFlush) {
 
-            $managerName = $annotation->getManager() ? : $this->getDefaultManager();
+            $managerName = $annotation->getManager()
+                ? : $this->getDefaultManager();
 
             /**
              * Loading locally desired Doctrine manager
@@ -197,7 +201,6 @@ class FlushAnnotationResolver implements AnnotationResolverInterface
      */
     public function onKernelResponse(FilterResponseEvent $event)
     {
-
         /**
          * Only flushes if exists AnnotationFlush as a controller annotations
          */

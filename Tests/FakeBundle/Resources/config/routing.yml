@@ -1,0 +1,11 @@
+FakeBundleControllerEntity:
+    pattern: /fake/entity
+    defaults: { _controller: FakeBundle:Fake:entity }
+
+FakeBundleControllerJsonResponse:
+    pattern: /fake/jsonresponse
+    defaults: { _controller: FakeBundle:Fake:jsonResponse }
+
+FakeBundleControllerPaginator:
+    pattern: /fake/paginator/{field}/{dir}/{page}/{limit}
+    defaults: { _controller: FakeBundle:Fake:paginator }

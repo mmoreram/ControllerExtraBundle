@@ -4,28 +4,25 @@
  * This file is part of the Controller Extra Bundle
  *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @since  2013
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * Feel free to edit as you please, and have fun.
  */
 
 namespace Mmoreram\ControllerExtraBundle\Resolver;
 
 use Doctrine\Common\Persistence\AbstractManagerRegistry;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
-use Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException;
-use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Bundle\Bundle;
 use ReflectionMethod;
 
 use Mmoreram\ControllerExtraBundle\Resolver\Interfaces\AnnotationResolverInterface;
 use Mmoreram\ControllerExtraBundle\Annotation\Entity as AnnotationEntity;
 use Mmoreram\ControllerExtraBundle\Exceptions\EntityNotFoundException;
 use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
+use Mmoreram\ControllerExtraBundle\Provider\EntityProvider;
 
 /**
  * EntityAnnotationResolver, an implementation of AnnotationResolverInterface
@@ -33,25 +30,11 @@ use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
 class EntityAnnotationResolver implements AnnotationResolverInterface
 {
     /**
-     * @var ContainerInterface
-     *
-     * Container interface
-     */
-    protected $container;
-
-    /**
      * @var AbstractManagerRegistry
      *
      * Doctrine object
      */
     protected $doctrine;
-
-    /**
-     * @var array
-     *
-     * Kernel bundles list
-     */
-    protected $kernelBundles;
 
     /**
      * @var string
@@ -75,90 +58,34 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
     protected $defaultPersist;
 
     /**
+     * @var EntityProvider
+     *
+     * Entity provider
+     */
+    protected $entityProvider;
+
+    /**
      * Construct method
      *
-     * @param ContainerInterface      $container      Container
      * @param AbstractManagerRegistry $doctrine       Doctrine
-     * @param array                   $kernelBundles  Kernel bundles list
+     * @param EntityProvider          $entityProvider Entity provider
      * @param string                  $defaultName    Default name
      * @param string                  $defaultManager Default manager
      * @param boolean                 $defaultPersist Default persist
      */
     public function __construct(
-        ContainerInterface $container,
         AbstractManagerRegistry $doctrine,
-        array $kernelBundles,
+        EntityProvider $entityProvider,
         $defaultName,
         $defaultManager,
         $defaultPersist
     )
     {
-        $this->container = $container;
         $this->doctrine = $doctrine;
-        $this->kernelBundles = $kernelBundles;
+        $this->entityProvider = $entityProvider;
         $this->defaultName = $defaultName;
         $this->defaultManager = $defaultManager;
         $this->defaultPersist = $defaultPersist;
-    }
-
-    /**
-     * Get container
-     *
-     * @return ContainerInterface container
-     */
-    public function getContainer()
-    {
-        return $this->container;
-    }
-
-    /**
-     * Get doctrine
-     *
-     * @return AbstractManagerRegistry Doctrine
-     */
-    public function getDoctrine()
-    {
-        return $this->doctrine;
-    }
-
-    /**
-     * Get default manager name
-     *
-     * @return array Kernel bundles
-     */
-    public function getKernelBundles()
-    {
-        return $this->kernelBundles;
-    }
-
-    /**
-     * Get default name
-     *
-     * @return string Default name
-     */
-    public function getDefaultName()
-    {
-        return $this->defaultName;
-    }
-
-    /**
-     * Get default manager
-     *
-     * @return string Default manager
-     */
-    public function getDefaultManager()
-    {
-        return $this->defaultManager;
-    }
-
-    /**
-     * Get default persist value
-     *
-     * @return boolean Default persist
-     */
-    public function getDefaultPersist()
-    {
-        return $this->defaultPersist;
     }
 
     /**
@@ -172,9 +99,12 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
      *
      * @throws EntityNotFoundException
      */
-    public function evaluateAnnotation(Request $request, Annotation $annotation, ReflectionMethod $method)
+    public function evaluateAnnotation(
+        Request $request,
+        Annotation $annotation,
+        ReflectionMethod $method
+    )
     {
-
         /**
          * Annotation is only laoded if is typeof AnnotationEntity
          */
@@ -183,7 +113,9 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
             /**
              * Creating new instance of desired entity
              */
-            $entity = $this->evaluateEntityInstance($annotation);
+            $entity = $this
+                ->entityProvider
+                ->provide($annotation->getClass());
 
             $this->resolvePersist($annotation, $entity);
 
@@ -201,7 +133,7 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
              * Get the parameter name. If not defined, is set as defined in
              * parameters
              */
-            $parameterName = $annotation->getName() ? : $this->getDefaultName();
+            $parameterName = $annotation->getName() ? : $this->defaultName;
 
             $request->attributes->set(
                 $parameterName,
@@ -210,101 +142,6 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
         }
 
         return $this;
-    }
-
-    /**
-     * Evaluate entity instance creation
-     *
-     * @param AnnotationEntity $annotation Annotation
-     *
-     * @return Object Entity instance
-     *
-     * @throws EntityNotFoundException if entity is not found
-     * @throws InvalidArgumentException if the service is not defined
-     * @throws ServiceCircularReferenceException When a circular reference is detected
-     * @throws ServiceNotFoundException When the service is not defined
-     */
-    public function evaluateEntityInstance(AnnotationEntity $annotation)
-    {
-        return $annotation->getFactoryClass()
-            ? $this->evaluateEntityInstanceFactory($annotation)
-            : $this->evaluateEntityInstanceNamespace($annotation);
-    }
-
-    /**
-     * Evaluates entity instance using a factory
-     *
-     * @param AnnotationEntity $annotation Annotation
-     *
-     * @return Object Entity instance
-     *
-     * @throws InvalidArgumentException if the service is not defined
-     * @throws ServiceCircularReferenceException When a circular reference is detected
-     * @throws ServiceNotFoundException When the service is not defined
-     */
-    public function evaluateEntityInstanceFactory(AnnotationEntity $annotation)
-    {
-        $factoryMethod = $annotation->getFactoryMethod();
-        $factoryClass = $annotation->getFactoryClass();
-        $factory = class_exists($factoryClass)
-            ? (
-            $annotation->getFactoryStatic()
-                ? $factoryClass
-                : new $factoryClass
-            )
-            : $this
-                ->container
-                ->get($factoryClass);
-
-        return $annotation->getFactoryStatic()
-            ? $factory::$factoryMethod()
-            : $factory->$factoryMethod();
-    }
-
-    /**
-     * Evaluates entity instance using the namespace
-     *
-     * @param AnnotationEntity $annotation Annotation
-     *
-     * @return Object Entity instance
-     *
-     * @throws EntityNotFoundException if entity is not found
-     */
-    public function evaluateEntityInstanceNamespace(AnnotationEntity $annotation)
-    {
-        $namespace = explode(':', $annotation->getClass(), 2);
-        $kernelBundles = $this->getKernelBundles();
-
-        /**
-         * If entity definition is wrong, throw exception
-         * If bundle not exists or is not actived, throw Exception
-         */
-        if (
-            !isset($namespace[0]) ||
-            !isset($kernelBundles[$namespace[0]]) ||
-            !isset($namespace[1])
-        ) {
-
-            throw new EntityNotFoundException;
-        }
-
-        /**
-         * @var Bundle $bundle
-         */
-        $bundle = $kernelBundles[$namespace[0]];
-        $bundleNamespace = $bundle->getNamespace();
-        $entityNamespace = $bundleNamespace . '\\Entity\\' . $namespace[1];
-
-        if (!class_exists($entityNamespace)) {
-
-            throw new EntityNotFoundException;
-        }
-
-        /**
-         * Creating new instance of desired entity
-         */
-
-        return new $entityNamespace();
     }
 
     /**
@@ -366,17 +203,18 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
          */
         $persist = !is_null($annotation->getPersist())
             ? $annotation->getPersist()
-            : $this->getDefaultPersist();
+            : $this->defaultPersist;
 
         if ($persist) {
 
-            $managerName = $annotation->getManager() ? : $this->getDefaultManager();
+            $managerName = $annotation->getManager()
+                ? : $this->defaultManager;
 
             /**
              * Loading locally desired Doctrine manager
              */
             $this
-                ->getDoctrine()
+                ->doctrine
                 ->getManager($managerName)
                 ->persist($entity);
         }

@@ -19,7 +19,21 @@ Table of contents
     * [Installing ControllerExtraBundle](#installing-controllerextrabundle)
     * [Configuration](#configuration)
     * [Tests](#tests)
+1. [Entity Provider](#entity-provider)
+    * [By namespace](#by-namespace)
+    * [By doctrine shortcut](#by-doctrine-shortcut)
+    * [By parameter](#by-parameter)
+    * [By factory](#by-factory)
 1. [Bundle Annotations](#bundle-annotations)
+    * [@Paginator](#paginator)
+        * [Paginator Entity](#paginator-entity)
+        * [Paginator Page](#paginator-page)
+        * [Paginator Limit](#paginator-limit)
+        * [Paginator OrderBy](#paginator-orderby)
+        * [Paginator Wheres](#paginator-wheres)
+        * [Paginator Left Joins](#paginator-left-joins)
+        * [Paginator Inner Joins](#paginator-inner-joins)
+        * [Paginator Not Nulls](#paginator-not-nulls)
     * [@Entity](#entity)
         * [Factory](#factory)
     * [@Form](#form)
@@ -87,6 +101,14 @@ completely disabled by setting to false `active` parameter.
 ``` yml
 controller_extra:
     resolver_priority: -8
+    factory:
+        default_method: create
+        default_static: true
+    pagination:
+        active: true
+        default_name: paginator
+        default_page: 1
+        default_limit_per_page: 10
     entity:
         active: true
         default_name: entity
@@ -114,9 +136,460 @@ controller_extra:
 > make sure that this value is lower than 0. The reason is that this listener
 > must be executed always after ParamConverter one.
 
+# Entity provider
+
+In some annotations, you can define an entity by several ways. This chapter is
+about how you can define them.
+
+## By namespace
+
+You can define an entity using its namespace. A simple new `new()` be performed.
+
+``` php
+/**
+ * Simple controller method
+ *
+ * @SomeAnnotation(
+ *      class = "Mmoreram\CustomBundle\Entity\MyEntity",
+ * )
+ */
+public function indexAction()
+{
+}
+```
+
+## By doctrine shortcut
+
+You can define an entity using Doctrine shortcut notations. With this format
+you should ensure that your Entities follow Symfony Bundle standards and your
+entities are placed under `Entity/` folder.
+
+``` php
+/**
+ * Simple controller method
+ *
+ * @SomeAnnotation(
+ *      class = "MmoreramCustomBundle:MyEntity",
+ * )
+ */
+public function indexAction()
+{
+}
+```
+
+## By parameter
+
+You can define an entity using a simple config parameter. Some projects
+use parameters to define all entity namespaces (To allow overriding). If you
+define the entity with a parameter, this bundle will try to instance it
+with a simple `new()` accessing directly to the container ParametersBag.
+
+``` yml
+parameters:
+
+    #
+    # Entities
+    #
+    my.bundle.entity.myentity: Mmoreram\CustomBundle\Entity\MyEntity
+```
+
+``` php
+/**
+ * Simple controller method
+ *
+ * @SomeAnnotation(
+ *      class = "my.bundle.entity.myentity",
+ * )
+ */
+public function indexAction()
+{
+}
+```
+
+## By factory
+
+You can an entity using a factory class. This configuration have three values.
+
+* factory - factory class
+* method - Method to use when retrieving the object
+* static - Method is static
+
+You can define the factory with a simple namespace
+
+``` php
+/**
+ * Simple controller method
+ *
+ * @SomeAnnotation(
+ *      class = {
+ *          "factory" = "Mmoreram\CustomBundle\Factory\MyEntityFactory",
+ *          "method" = "create",
+ *          "static" = true,
+ *      },
+ * )
+ */
+public function indexAction()
+{
+}
+```
+
+or with a service name
+
+``` yml
+parameters:
+
+    #
+    # Factories
+    #
+    my.bundle.factory.myentity_factory: Mmoreram\CustomBundle\Factory\MyEntityFactory
+```
+
+``` php
+/**
+ * Simple controller method
+ *
+ * @SomeAnnotation(
+ *      class = {
+ *          "factory" = my.bundle.factory.myentity_factory,
+ *          "method" = "create",
+ *          "static" = true,
+ *      },
+ * )
+ */
+public function indexAction()
+{
+}
+```
+
+If you do not define the `method`, default one will be used. You can
+override this default value by defining new one in your config.yml. Same with
+`static` value
+
+``` yml
+controller_extra:
+    factory:
+        default_method: create
+        default_static: true
+```
+
+
 # Bundle annotations
 
 This bundle provide a reduced but useful set of annotations for your controller
+
+## @Paginator
+
+Creates a Doctrine Paginator object, given a request and a configuration. This
+annotation just injects into de controller a new
+`Doctrine\ORM\Tools\Pagination\Pagination` instance ready to be iterated.
+
+You can enable/disable this bundle by overriding `active` flag in configuration
+
+``` yml
+controller_extra:
+    pagination:
+        active: true
+```
+
+> By default, if `name` option is not set, the generated object will be placed
+> in a parameter named `$paginator`. This behaviour can be configured using
+> `default_name` in configuration.
+
+This annotation can be configurated with these sections
+
+### Paginator Entity
+
+To create a new Pagination object you need to refer to an existing Entity. You
+can check all available formats you can define it just reading the
+[Entity Provider](#entity-provider) section.
+
+``` php
+<?php
+
+use Doctrine\ORM\Tools\Pagination\Pagination;
+use Mmoreram\ControllerExtraBundle\Annotation\Paginator;
+
+/**
+ * Simple controller method
+ *
+ * @Paginator(
+ *      class = "MmoreramCustomBundle:User",
+ * )
+ */
+public function indexAction(Pagination $pagination)
+{
+}
+```
+
+### Paginator page
+
+You need to specify Paginator annotation the page to fetch. By default, if none
+is specified, this bundle will use the default one defined in configuration. You
+can override in `config.yml`
+
+``` yml
+controller_extra:
+    pagination:
+        default_page: 1
+```
+
+You can refer to an existing Request attribute using `%value%` format
+
+``` php
+/**
+ * Simple controller method
+ *
+ * This Controller responds to /myroute/paginate/{pag}
+ *
+ * @Paginator(
+ *      class = "MmoreramCustomBundle:User",
+ *      page = "%pag%"
+ * )
+ */
+public function indexAction(Pagination $pagination)
+{
+}
+```
+
+or you can hardcode the page to use.
+
+``` php
+/**
+ * Simple controller method
+ *
+ * This Controller responds to /myroute/paginate/
+ *
+ * @Paginator(
+ *      class = "MmoreramCustomBundle:User",
+ *      page = 1
+ * )
+ */
+public function indexAction(Pagination $pagination)
+{
+}
+```
+
+### Paginator limit
+
+You need to specify Paginator annotation the limit to fetch. By default, if none
+is specified, this bundle will use the default one defined in configuration. You
+can override in `config.yml`
+
+``` yml
+controller_extra:
+    pagination:
+        default_limit_per_page: 10
+```
+
+You can refer to an existing Request attribute using `%value%` format
+
+``` php
+/**
+ * Simple controller method
+ *
+ * This Controller responds to /myroute/paginate/{pag}/{limit}
+ *
+ * @Paginator(
+ *      class = "MmoreramCustomBundle:User",
+ *      page = "%pag%",
+ *      limit = "%limit%"
+ * )
+ */
+public function indexAction(Pagination $pagination)
+{
+}
+```
+
+or you can hardcode the page to use.
+
+``` php
+/**
+ * Simple controller method
+ *
+ * This Controller responds to /myroute/paginate/
+ *
+ * @Paginator(
+ *      class = "MmoreramCustomBundle:User",
+ *      page = 1,
+ *      limit = 10
+ * )
+ */
+public function indexAction(Pagination $pagination)
+{
+}
+```
+
+### Paginator OrderBy
+
+You can order your Pagination just defining the fields you want to orderBy and
+the desired direction. The `orderBy` section must be defined as an array of
+arrays, and each array should contain these positions:
+
+* First position: Field
+* Second position: Direction
+* Third position: Custom direction map ***(optional)***
+
+``` php
+/**
+ * Simple controller method
+ *
+ * @Paginator(
+ *      class = "MmoreramCustomBundle:User",
+ *      orderBy = {
+ *          {"createdAt", "ASC"},
+ *          {"updatedAt", "DESC"},
+ *          {"id", 1, {
+ *              0 => "ASC",
+ *              1 => "DESC",
+ *          }},
+ *      }
+ * )
+ */
+public function indexAction(Pagination $pagination)
+{
+}
+```
+
+With the third value you can define a map where to match your own direction
+nomenclature with DQL one. DQL nomenclature just accept ASC for Ascendant and
+DESC for Descendant.
+
+This is very useful when you need to match a url format with the DQL one. You
+can refer to an existing Request attribute using `%value%` format
+
+``` php
+/**
+ * Simple controller method
+ *
+ * This Controller responds to /myroute/paginate/order/{field}/{direction}
+ *
+ * For example, some matchings...
+ *
+ * /myroute/paginate/order/id/1 -> ORDER BY id DESC
+ * /myroute/paginate/order/enabled/0 - ORDER BY enabled ASC
+ *
+ * @Paginator(
+ *      class = "MmoreramCustomBundle:User",
+ *      orderBy = {
+ *          {"createdAt", "ASC"},
+ *          {"updatedAt", "DESC"},
+ *          {"%field%", %direction%, {
+ *              0 => "ASC",
+ *              1 => "DESC",
+ *          }},
+ *      }
+ * )
+ */
+public function indexAction(Pagination $pagination)
+{
+}
+```
+
+The order of the definitions will alter the order of the DQL query.
+
+### Paginator Wheres
+
+You can define some where statements in your Paginator. The `wheres` section
+must be defined as an array of arrays, and each array should contain these
+positions:
+
+* First position: Field
+* Second position: Operator ***=, <=, >...***
+* Third position: Value to compare with
+
+``` php
+/**
+ * Simple controller method
+ *
+ * @Paginator(
+ *      class = "MmoreramCustomBundle:User",
+ *      wheres = {
+ *          {"enabled", "=", true},
+ *          {"disabled", "=", false},
+ *      }
+ * )
+ */
+public function indexAction(Pagination $pagination)
+{
+}
+```
+
+### Paginator Not Nulls
+
+You can also define some fields to not null. Is same as `wheres` section, but
+specific for NULL assignments. The `noNulls` section must be defined as an array
+of fields.
+
+``` php
+/**
+ * Simple controller method
+ *
+ * @Paginator(
+ *      class = "MmoreramCustomBundle:User",
+ *      notNulls = {"enabled", "deleted"}
+ * )
+ */
+public function indexAction(Pagination $pagination)
+{
+}
+```
+
+
+### Paginator Left Join
+
+You can do some left joins in this section. The `leftJoins` section must be
+defined as an array of array, where each array can have these fields:
+
+* First field: Entity relation (x.Address)
+* Second field: Relation identifier (a)
+* Third field: If true, this relation is added in select group. Otherwise, wont
+be loaded until its request ***(optional)***
+
+``` php
+/**
+ * Simple controller method
+ *
+ * @Paginator(
+ *      class = "MmoreramCustomBundle:User",
+ *      leftJoins = {
+ *          {"x User", "u", true},
+ *          {"u Address", "a", true},
+ *          {"x.Cart", "c"},
+ *      }
+ * )
+ */
+public function indexAction(Pagination $pagination)
+{
+}
+```
+
+### Paginator Inner Join
+
+You can do some left joins in this section. The `innerJoins` section must be
+defined as an array of array, where each array can have these fields:
+
+* First field: Entity relation (x.Address)
+* Second field: Relation identifier (a)
+* Third field: If true, this relation is added in select group. Otherwise, wont
+be loaded until its request ***(optional)***
+
+``` php
+/**
+ * Simple controller method
+ *
+ * @Paginator(
+ *      class = "MmoreramCustomBundle:User",
+ *      innerJoins = {
+ *          {"x User", "u", true},
+ *          {"u Address", "a", true},
+ *          {"x.Cart", "c"},
+ *      }
+ * )
+ */
+public function indexAction(Pagination $pagination)
+{
+}
+```
 
 ## @Entity
 
@@ -742,7 +1215,7 @@ Every Annotation instance can overwrite this value using `level` field.
 ``` php
 <?php
 
-use Mmoreram\ControllerExtraBundle\Annotation\Flush;
+use Mmoreram\ControllerExtraBundle\Annotation\Log;
 
 /**
  * Simple controller method
@@ -788,14 +1261,12 @@ use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
  */
 class MyCustomAnnotation extends Annotation
 {
-
     /**
      * @var string
      *
      * Dummy field
      */
     public $field;
-    
     
     /**
      * Get Dummy field
@@ -843,9 +1314,9 @@ class MyCustomAnnotationResolver implements AnnotationResolverInterface
      * @return MyCustomAnnotationResolver self Object
      */
     public function evaluateAnnotation(
-        Request $request, 
-        Annotation $annotation, 
-        ReflectionMethod $method 
+        Request $request,
+        Annotation $annotation,
+        ReflectionMethod $method
     )
     {
         /**
@@ -899,14 +1370,14 @@ parameters:
     #
     # Resolvers
     #
-    my.bundle.resolvers.my_custom_annotation_resolver.class: My\Bundle\Resolver\MyCustomAnnotationResolver
+    my.bundle.resolver.my_custom_annotation_resolver.class: My\Bundle\Resolver\MyCustomAnnotationResolver
 
 services:
     #
     # Resolvers
     #
-    my.bundle.resolvers.my_custom_annotation_resolver:
-        class: %my.bundle.resolvers.my_custom_annotation_resolver.class%
+    my.bundle.resolver.my_custom_annotation_resolver:
+        class: %my.bundle.resolver.my_custom_annotation_resolver.class%
         tags:
             - { name: controller_extra.annotation }
 ```

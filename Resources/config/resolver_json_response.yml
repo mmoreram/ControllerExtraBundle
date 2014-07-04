@@ -3,15 +3,15 @@ parameters:
     #
     # Resolvers
     #
-    mmoreram.controllerextra.resolvers.json_resolver_annotation_resolver.class: Mmoreram\ControllerExtraBundle\Resolver\JsonResponseAnnotationResolver
+    mmoreram.controllerextra.resolver.json_resolver_annotation_resolver.class: Mmoreram\ControllerExtraBundle\Resolver\JsonResponseAnnotationResolver
 
 services:
 
     #
     # Resolvers
     #
-    mmoreram.controllerextra.resolvers.json_resolver_annotation_resolver:
-        class: %mmoreram.controllerextra.resolvers.json_resolver_annotation_resolver.class%
+    mmoreram.controllerextra.resolver.json_resolver_annotation_resolver:
+        class: %mmoreram.controllerextra.resolver.json_resolver_annotation_resolver.class%
         arguments:
             default_status: %mmoreram.controllerextra.json_response_default_status%
             default_headers: %mmoreram.controllerextra.json_response_default_headers%
