@@ -15,8 +15,8 @@ services:
         arguments:
             doctrine: @doctrine
             entity_provider: @mmoreram.controllerextra.provider.entity_provider
-            default_name: %mmoreram.controllerextra.form_default_name%
-            default_manager: %mmoreram.controllerextra.entity_default_manager%
+            request_parameters_provider: @mmoreram.controllerextra.provider.request_parameter_provider
+            default_name: %mmoreram.controllerextra.entity_default_name%
             default_persist: %mmoreram.controllerextra.entity_default_persist%
         tags:
             - { name: controller_extra.annotation }

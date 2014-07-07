@@ -172,7 +172,6 @@ class EntityProvider
             $classParameter = $this
                 ->container
                 ->getParameter($class);
-
             if ($classParameter && class_exists($classParameter)) {
                 return new $classParameter;
             }

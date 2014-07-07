@@ -62,10 +62,10 @@ class RequestParameterProvider
 
             $bag = $this->request->attributes;
 
-            $trimedValue = trim($value, '%');
+            $trimedValue = trim($value, '~');
 
             if (
-                ('%' . $trimedValue . '%' === $value) &&
+                ('~' . $trimedValue . '~' === $value) &&
                 $bag->has($trimedValue)
             ) {
                 $value = $bag->get($trimedValue);

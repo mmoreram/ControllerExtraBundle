@@ -1,6 +1,4 @@
-composer.lock
-composer.phar
-phpcs.log
 vendor
-Tests/Functional/cache
-Tests/Functional/logs
+composer.phar
+composer.lock
+phpunit.xml

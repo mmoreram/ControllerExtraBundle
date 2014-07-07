@@ -2,6 +2,14 @@ FakeBundleControllerEntity:
     pattern: /fake/entity
     defaults: { _controller: FakeBundle:Fake:entity }
 
+FakeBundleControllerEntityMapped:
+    pattern: /fake/entity/mapped/{id}
+    defaults: { _controller: FakeBundle:Fake:entityMapped }
+
+FakeBundleControllerEntityMappedMany:
+    pattern: /fake/entity/mapped/many/{id}
+    defaults: { _controller: FakeBundle:Fake:entityMappedMany }
+
 FakeBundleControllerJsonResponse:
     pattern: /fake/jsonresponse
     defaults: { _controller: FakeBundle:Fake:jsonResponse }

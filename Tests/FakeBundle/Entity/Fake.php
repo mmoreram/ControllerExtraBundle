@@ -26,6 +26,13 @@ class Fake
     protected $id;
 
     /**
+     * @var string
+     *
+     * Field
+     */
+    protected $field;
+
+    /**
      * Get id
      *
      * @return integer $id Id
@@ -35,4 +42,27 @@ class Fake
         return $this->id;
     }
 
+    /**
+     * Sets Field
+     *
+     * @param string $field Field
+     *
+     * @return Fake Self object
+     */
+    public function setField($field)
+    {
+        $this->field = $field;
+
+        return $this;
+    }
+
+    /**
+     * Get Field
+     *
+     * @return string Field
+     */
+    public function getField()
+    {
+        return $this->field;
+    }
 }

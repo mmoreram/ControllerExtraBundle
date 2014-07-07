@@ -1,3 +1,13 @@
-FakeBundle\Entity\Fake:
+Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\Fake:
     type: entity
     table: fake
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        field:
+            column: field
+            type: string
+            length: 255

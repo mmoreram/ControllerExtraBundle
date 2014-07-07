@@ -7,8 +7,14 @@
  * @since 2013
  */
 
-use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
+use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
+use Symfony\Bundle\MonologBundle\MonologBundle;
+use Symfony\Component\HttpKernel\Kernel;
+
+use Mmoreram\ControllerExtraBundle\ControllerExtraBundle;
+use Mmoreram\ControllerExtraBundle\Tests\FakeBundle\FakeBundle;
 
 /**
  * AppKernel for testing
@@ -21,11 +27,11 @@ class AppKernel extends Kernel
     public function registerBundles()
     {
         return array(
-            new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
-            new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
-            new Symfony\Bundle\MonologBundle\MonologBundle(),
-            new Mmoreram\ControllerExtraBundle\ControllerExtraBundle(),
-            new Mmoreram\ControllerExtraBundle\Tests\FakeBundle\FakeBundle(),
+            new FrameworkBundle(),
+            new DoctrineBundle(),
+            new MonologBundle(),
+            new ControllerExtraBundle(),
+            new FakeBundle(),
         );
     }
 
@@ -35,5 +41,34 @@ class AppKernel extends Kernel
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
         $loader->load(dirname(__FILE__) . '/config.yml');
+    }
+
+    /**
+     * Return Cache dir
+     *
+     * @return string
+     */
+    public function getCacheDir()
+    {
+        return  sys_get_temp_dir() .
+        DIRECTORY_SEPARATOR .
+        'ControllerExtraBundle' .
+        DIRECTORY_SEPARATOR .
+        '/Cache/';
+
+    }
+
+    /**
+     * Return log dir
+     *
+     * @return string
+     */
+    public function getLogDir()
+    {
+        return  sys_get_temp_dir() .
+        DIRECTORY_SEPARATOR .
+        'ControllerExtraBundle' .
+        DIRECTORY_SEPARATOR .
+        '/Log/';
     }
 }
