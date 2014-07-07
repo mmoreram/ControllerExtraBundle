@@ -754,6 +754,10 @@ When you define a new Entity annotation, you can also request the mapped entity
 given a map. It means that if a map is defined, this bundle will try to request
 the mapped instance satisfying it.
 
+The keys of the map represent the names of the mapped fields and the values
+represent their desired values. Remember than you can refer to any Request
+attribute by using format `~field~`.
+
 ``` php
 <?php
 
@@ -763,13 +767,14 @@ use Mmoreram\ControllerExtraBundle\Entity\User;
 /**
  * Simple controller method
  *
- * This Controller matches pattern /user/edit/{id}
+ * This Controller matches pattern /user/edit/{id}/{username}
  *
  * @Entity(
  *      class = "MmoreramCustomBundle:User",
  *      name  = "user",
  *      mapping = {
- *          "id": "~id~"
+ *          "id": "~id~",
+ *          "username": "~username~"
  *      }
  * )
  */
