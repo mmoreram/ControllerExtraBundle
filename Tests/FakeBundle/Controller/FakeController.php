@@ -17,6 +17,8 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
+use Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\Fake;
+
 /**
  * Fake Controller object
  */
@@ -90,6 +92,47 @@ class FakeController extends Controller
     public function entityAction()
     {
         return new Response();
+    }
+
+    /**
+     * Public method
+     *
+     * @\Mmoreram\ControllerExtraBundle\Annotation\Entity(
+     *      name = "entity",
+     *      class = "FakeBundle:Fake",
+     *      mapping = {
+     *          "id" = "~id~"
+     *      }
+     * )
+     *
+     * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
+     */
+    public function entityMappedAction(Fake $entity)
+    {
+        return array(
+            'id' => $entity->getId()
+        );
+    }
+
+    /**
+     * Public method
+     *
+     * @\Mmoreram\ControllerExtraBundle\Annotation\Entity(
+     *      name = "entity",
+     *      class = "FakeBundle:Fake",
+     *      mapping = {
+     *          "id" = "~id~",
+     *          "field" = "value",
+     *      }
+     * )
+     *
+     * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
+     */
+    public function entityMappedManyAction(Fake $entity)
+    {
+        return array(
+            'id' => $entity->getId()
+        );
     }
 
     /**

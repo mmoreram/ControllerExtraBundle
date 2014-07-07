@@ -92,14 +92,25 @@ class EntityAnnotationResolverTest extends PHPUnit_Framework_TestCase
 
         $doctrine
             ->expects($this->any())
-            ->method('getManager')
+            ->method('getManagerForClass')
             ->will($this->returnValue($manager));
+
+        $requestParameterProvider = $this
+            ->getMockBuilder('Mmoreram\ControllerExtraBundle\Provider\RequestParameterProvider')
+            ->disableOriginalConstructor()
+            ->setMethods(array())
+            ->getMock();
+
+        $requestParameterProvider
+            ->expects($this->any())
+            ->method('getParameterValue')
+            ->will($this->returnValue(''));
 
         $this->entityAnnotationResolver = new EntityAnnotationResolver(
             $doctrine,
             $entityProvider,
+            $requestParameterProvider,
             'default',
-            '',
             true
         );
 

@@ -36,7 +36,7 @@ Table of contents
         * [Paginator Not Nulls](#paginator-not-nulls)
         * [Paginator Example](#paginator-example)
     * [@Entity](#entity)
-        * [Factory](#factory)
+        * [Entity Mapping](#entity-mapping)
     * [@Form](#form)
     * [@Flush](#flush)
     * [@JsonResponse](#jsonresponse)
@@ -113,7 +113,6 @@ controller_extra:
     entity:
         active: true
         default_name: entity
-        default_manager: default
         default_persist: true
     form:
         active: true
@@ -234,7 +233,9 @@ public function indexAction()
 }
 ```
 
-or with a service name
+If you want to define your Factory as a service, with the possibility of
+overriding namespace, you can simply define service name. All other options have
+the same behaviour.
 
 ``` yml
 parameters:
@@ -334,7 +335,7 @@ controller_extra:
         default_page: 1
 ```
 
-You can refer to an existing Request attribute using `%value%` format
+You can refer to an existing Request attribute using `~value~` format
 
 ``` php
 /**
@@ -344,7 +345,7 @@ You can refer to an existing Request attribute using `%value%` format
  *
  * @Paginator(
  *      class = "MmoreramCustomBundle:User",
- *      page = "%pag%"
+ *      page = "~pag~"
  * )
  */
 public function indexAction(Pagination $pagination)
@@ -382,7 +383,7 @@ controller_extra:
         default_limit_per_page: 10
 ```
 
-You can refer to an existing Request attribute using `%value%` format
+You can refer to an existing Request attribute using `~value~` format
 
 ``` php
 /**
@@ -392,8 +393,8 @@ You can refer to an existing Request attribute using `%value%` format
  *
  * @Paginator(
  *      class = "MmoreramCustomBundle:User",
- *      page = "%pag%",
- *      limit = "%limit%"
+ *      page = "~pag~",
+ *      limit = "~limit~"
  * )
  */
 public function indexAction(Pagination $pagination)
@@ -456,7 +457,7 @@ nomenclature with DQL one. DQL nomenclature just accept ASC for Ascendant and
 DESC for Descendant.
 
 This is very useful when you need to match a url format with the DQL one. You
-can refer to an existing Request attribute using `%value%` format
+can refer to an existing Request attribute using `~value~` format
 
 ``` php
 /**
@@ -474,7 +475,7 @@ can refer to an existing Request attribute using `%value%` format
  *      orderBy = {
  *          {"createdAt", "ASC"},
  *          {"updatedAt", "DESC"},
- *          {"%field%", %direction%, {
+ *          {"~field~", ~direction~, {
  *              0 => "ASC",
  *              1 => "DESC",
  *          }},
@@ -613,8 +614,8 @@ This is a completed example and its DQL resolution
  *          factoryMethod = "create",
  *          factoryStatic = true
  *      ),
- *      page = "%page%",
- *      limit = "%limit%",
+ *      page = "~page~",
+ *      limit = "~limit~",
  *      orderBy = {
  *          { "createdAt", "ASC" },
  *          { "id", "ASC" }
@@ -724,10 +725,8 @@ When `User` instance is built, method `setAddress` is called using as parameter
 the new `Address` instance.
 
 New entities are just created with a simple `new()`, so they are not persisted.
-By default, they will be persisted using `default` manager, but you can disable
+By default, they will be persisted using configured manager, but you can disable
 this feature using `persist` option.
-
-You can also change manager using `manager` option.
 
 ``` php
 <?php
@@ -741,8 +740,7 @@ use Mmoreram\ControllerExtraBundle\Entity\User;
  * @Entity(
  *      class = "MmoreramCustomBundle:User",
  *      name  = "user",
- *      persist = false,
- *      manager = 'my_own_manager'
+ *      persist = false
  * )
  */
 public function indexAction(User $user)
@@ -750,35 +748,29 @@ public function indexAction(User $user)
 }
 ```
 
-If you want to change default manager in all annotation instances, you should
-overwrite bundle parameter.
+### Entity Mapping
 
-``` yml
-controller_extra:
-    entity:
-        default_manager: my_own_manager
-```
-
-### Factory
-
-Following some Domain Driven Development (DDD) principles, an entity should be
-always created using Factories. This is because, when working with interfaces,
-just replacing the factory namespace, desired Entity is created.
-
-ControllerExtraBundle Entity annotation enables you to create entities using a
-factory class.
+When you define a new Entity annotation, you can also request the mapped entity
+given a map. It means that if a map is defined, this bundle will try to request
+the mapped instance satisfying it.
 
 ``` php
 <?php
 
 use Mmoreram\ControllerExtraBundle\Annotation\Entity;
+use Mmoreram\ControllerExtraBundle\Entity\User;
 
 /**
  * Simple controller method
  *
+ * This Controller matches pattern /user/edit/{id}
+ *
  * @Entity(
- *      factoryClass = "Mmoreram\ControllerExtraBundle\Factory\EntityFactory",
- *      factoryMethod = "create"
+ *      class = "MmoreramCustomBundle:User",
+ *      name  = "user",
+ *      mapping = {
+ *          "id": "~id~"
+ *      }
  * )
  */
 public function indexAction(User $user)
@@ -786,52 +778,9 @@ public function indexAction(User $user)
 }
 ```
 
-In this case, `EntityFactory` will be instanced and `create` will be called to
-retrieve entity instance.
-
-You can also call your method as an static method, so Factory will not be
-instanced.
-
-``` php
-<?php
-
-use Mmoreram\ControllerExtraBundle\Annotation\Entity;
-
-/**
- * Simple controller method
- *
- * @Entity(
- *      factoryClass = "Mmoreram\ControllerExtraBundle\Factory\EntityFactory",
- *      factoryMethod = "create",
- *      factoryStatic = true
- * )
- */
-public function indexAction(User $user)
-{
-}
-```
-
-If you want to define your Factory as a service, with the possibility of
-overriding namespace, you can simply define service name. All other options have
-the same behaviour.
-
-``` php
-<?php
-
-use Mmoreram\ControllerExtraBundle\Annotation\Entity;
-
-/**
- * Simple controller method
- *
- * @Entity(
- *      factoryClass = "my_factory_service",
- *      factoryMethod = "create",
- * )
- */
-public function indexAction(User $user)
-{
-}
-```
+In this case, you will try to get the mapped instance of User with passed id. If
+some mapping is defined and any entity is found, a new EntityNotFoundException`
+is thrown.
 
 ## @Form
 

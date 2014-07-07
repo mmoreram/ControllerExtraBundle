@@ -39,16 +39,16 @@ class Entity extends Annotation
     /**
      * @var array
      *
+     * Mapping
+     */
+    public $mapping;
+
+    /**
+     * @var array
+     *
      * Setters
      */
     public $setters = array();
-
-    /**
-     * @var string
-     *
-     * Manager to use when persisting
-     */
-    public $manager;
 
     /**
      * @var boolean
@@ -78,6 +78,16 @@ class Entity extends Annotation
     }
 
     /**
+     * return mapping
+     *
+     * @return array Mapping
+     */
+    public function getMapping()
+    {
+        return $this->mapping;
+    }
+
+    /**
      * return setters
      *
      * @return array Setters
@@ -85,16 +95,6 @@ class Entity extends Annotation
     public function getSetters()
     {
         return $this->setters;
-    }
-
-    /**
-     * return manager
-     *
-     * @return string Manager
-     */
-    public function getManager()
-    {
-        return $this->manager;
     }
 
     /**

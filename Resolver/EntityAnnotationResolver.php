@@ -21,6 +21,7 @@ use ReflectionMethod;
 use Mmoreram\ControllerExtraBundle\Resolver\Interfaces\AnnotationResolverInterface;
 use Mmoreram\ControllerExtraBundle\Annotation\Entity as AnnotationEntity;
 use Mmoreram\ControllerExtraBundle\Exceptions\EntityNotFoundException;
+use Mmoreram\ControllerExtraBundle\Provider\RequestParameterProvider;
 use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
 use Mmoreram\ControllerExtraBundle\Provider\EntityProvider;
 
@@ -37,18 +38,25 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
     protected $doctrine;
 
     /**
+     * @var EntityProvider
+     *
+     * Entity provider
+     */
+    protected $entityProvider;
+
+    /**
+     * @var RequestParameterProvider
+     *
+     * Request parameter provider
+     */
+    protected $requestParameterProvider;
+
+    /**
      * @var string
      *
      * Default field name
      */
     protected $defaultName;
-
-    /**
-     * @var string
-     *
-     * default manager
-     */
-    protected $defaultManager;
 
     /**
      * @var boolean
@@ -58,33 +66,26 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
     protected $defaultPersist;
 
     /**
-     * @var EntityProvider
-     *
-     * Entity provider
-     */
-    protected $entityProvider;
-
-    /**
      * Construct method
      *
-     * @param AbstractManagerRegistry $doctrine       Doctrine
-     * @param EntityProvider          $entityProvider Entity provider
-     * @param string                  $defaultName    Default name
-     * @param string                  $defaultManager Default manager
-     * @param boolean                 $defaultPersist Default persist
+     * @param AbstractManagerRegistry  $doctrine                  Doctrine
+     * @param EntityProvider           $entityProvider            Entity provider
+     * @param RequestParameterProvider $requestParametersProvider Request parameter provider
+     * @param string                   $defaultName               Default name
+     * @param boolean                  $defaultPersist            Default persist
      */
     public function __construct(
         AbstractManagerRegistry $doctrine,
         EntityProvider $entityProvider,
+        RequestParameterProvider $requestParametersProvider,
         $defaultName,
-        $defaultManager,
         $defaultPersist
     )
     {
         $this->doctrine = $doctrine;
         $this->entityProvider = $entityProvider;
+        $this->requestParametersProvider = $requestParametersProvider;
         $this->defaultName = $defaultName;
-        $this->defaultManager = $defaultManager;
         $this->defaultPersist = $defaultPersist;
     }
 
@@ -117,12 +118,20 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
                 ->entityProvider
                 ->provide($annotation->getClass());
 
+            /**
+             * Tries to get a mapped instance of this entity.
+             * If not mapped, just return old new created
+             */
+            $entity = $this->evaluateMapping($annotation, $entity);
+
+            /**
+             * Persists entity if defined
+             */
             $this->resolvePersist($annotation, $entity);
 
             /**
              * If is decided this entity has to be persisted into manager
              */
-
             $this->evaluateSetters(
                 $request->attributes,
                 $entity,
@@ -133,7 +142,8 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
              * Get the parameter name. If not defined, is set as defined in
              * parameters
              */
-            $parameterName = $annotation->getName() ? : $this->defaultName;
+            $parameterName = $annotation->getName()
+                ? : $this->defaultName;
 
             $request->attributes->set(
                 $parameterName,
@@ -142,6 +152,55 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
         }
 
         return $this;
+    }
+
+    /**
+     * Resolve doctrine mapping
+     *
+     * @param AnnotationEntity $annotation Annotation
+     * @param Object           $entity     Entity
+     *
+     * @return Object Entity given or mapped instance
+     *
+     * @throws EntityNotFoundException Entity was intended to be mapped but not
+     *                                 exists
+     */
+    public function evaluateMapping(AnnotationEntity $annotation, $entity)
+    {
+        if (is_array($annotation->getMapping())) {
+
+            $mapping = $annotation->getMapping();
+            $requestParametersProvider = $this->requestParametersProvider;
+
+            /**
+             * Each value of the mapping array is computed and analyzed
+             *
+             * If the format is something like %value%, this service will
+             * look for the real request attribute value
+             */
+            $mapping = array_map(function ($value) use ($requestParametersProvider) {
+                return $requestParametersProvider->getParameterValue($value);
+            }, $mapping);
+
+            $entityClass = get_class($entity);
+            $instance = $this
+                ->doctrine
+                ->getManagerForClass($entityClass)
+                ->getRepository($entityClass)
+                ->findOneBy($mapping);
+
+            if (!($instance instanceof $entityClass)) {
+
+                throw new EntityNotFoundException(
+                    'Entity of type ' . $entityClass . ' with mapping ' .
+                    json_encode($mapping) . ' was not found.'
+                );
+            }
+
+            return $instance;
+        }
+
+        return $entity;
     }
 
     /**
@@ -189,8 +248,7 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
          * This block defines if entity must be persisted using desired
          * manager.
          *
-         * This manager is defined as default in bundle parameters, but can
-         * be overwritten in each annotation
+         * Given the entity we can find which manager manages it
          *
          * Same logic in perisist option. This variable is defined in bundle
          * parameters and can be overwritten there. Can also be defined in
@@ -207,15 +265,12 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
 
         if ($persist) {
 
-            $managerName = $annotation->getManager()
-                ? : $this->defaultManager;
-
             /**
              * Loading locally desired Doctrine manager
              */
             $this
                 ->doctrine
-                ->getManager($managerName)
+                ->getManagerForClass(get_class($entity))
                 ->persist($entity);
         }
 
