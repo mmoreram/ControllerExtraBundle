@@ -427,9 +427,10 @@ You can order your Pagination just defining the fields you want to orderBy and
 the desired direction. The `orderBy` section must be defined as an array of
 arrays, and each array should contain these positions:
 
-* First position: Field
-* Second position: Direction
-* Third position: Custom direction map ***(optional)***
+* First position: Entity alias (Principal object is set as `x`)
+* Second position: Entity field
+* Third position: Direction
+* Fourth position: Custom direction map ***(optional)***
 
 ``` php
 /**
@@ -438,9 +439,9 @@ arrays, and each array should contain these positions:
  * @Paginator(
  *      class = "MmoreramCustomBundle:User",
  *      orderBy = {
- *          {"createdAt", "ASC"},
- *          {"updatedAt", "DESC"},
- *          {"id", 1, {
+ *          {"x", "createdAt", "ASC"},
+ *          {"x", "updatedAt", "DESC"},
+ *          {"x", "id", 1, {
  *              0 => "ASC",
  *              1 => "DESC",
  *          }},
@@ -473,9 +474,9 @@ can refer to an existing Request attribute using `~value~` format
  * @Paginator(
  *      class = "MmoreramCustomBundle:User",
  *      orderBy = {
- *          {"createdAt", "ASC"},
- *          {"updatedAt", "DESC"},
- *          {"~field~", ~direction~, {
+ *          {"x", "createdAt", "ASC"},
+ *          {"x", "updatedAt", "DESC"},
+ *          {"x", "~field~", ~direction~, {
  *              0 => "ASC",
  *              1 => "DESC",
  *          }},
@@ -495,9 +496,10 @@ You can define some where statements in your Paginator. The `wheres` section
 must be defined as an array of arrays, and each array should contain these
 positions:
 
-* First position: Field
-* Second position: Operator ***=, <=, >...***
-* Third position: Value to compare with
+* First position: Entity alias (Principal object is set as `x`)
+* Second position: Entity field
+* Third position: Operator ***=, <=, >...***
+* Fourth position: Value to compare with
 
 ``` php
 /**
@@ -506,8 +508,8 @@ positions:
  * @Paginator(
  *      class = "MmoreramCustomBundle:User",
  *      wheres = {
- *          {"enabled", "=", true},
- *          {"disabled", "=", false},
+ *          {"x", "enabled", "=", true},
+ *          {"x", "disabled", "=", false},
  *      }
  * )
  */
@@ -520,7 +522,10 @@ public function indexAction(Pagination $pagination)
 
 You can also define some fields to not null. Is same as `wheres` section, but
 specific for NULL assignments. The `noNulls` section must be defined as an array
-of fields.
+of arrays, and each array should contain these positions:
+
+* First position: Object (Principal object is set as `x`)
+* Second position: Field
 
 ``` php
 /**
@@ -528,7 +533,10 @@ of fields.
  *
  * @Paginator(
  *      class = "MmoreramCustomBundle:User",
- *      notNulls = {"enabled", "deleted"}
+ *      notNulls = {
+ *          {"x", "enabled"},
+ *          {"x", "deleted"},
+ *      }
  * )
  */
 public function indexAction(Pagination $pagination)
@@ -536,15 +544,15 @@ public function indexAction(Pagination $pagination)
 }
 ```
 
-
 ### Paginator Left Join
 
 You can do some left joins in this section. The `leftJoins` section must be
 defined as an array of array, where each array can have these fields:
 
-* First field: Entity relation (x.Address)
-* Second field: Relation identifier (a)
-* Third field: If true, this relation is added in select group. Otherwise, wont
+* First position: Entity alias (Principal object is set as `x`)
+* Second position: Entity relation (Address)
+* Third position: Relation identifier (a)
+* Fourth position: If true, this relation is added in select group. Otherwise, wont
 be loaded until its request ***(optional)***
 
 ``` php
@@ -554,9 +562,9 @@ be loaded until its request ***(optional)***
  * @Paginator(
  *      class = "MmoreramCustomBundle:User",
  *      leftJoins = {
- *          {"x User", "u", true},
- *          {"u Address", "a", true},
- *          {"x.Cart", "c"},
+ *          {"x", "User", "u", true},
+ *          {"x", "Address", "a", true},
+ *          {"x", "Cart", "c"},
  *      }
  * )
  */
@@ -570,7 +578,7 @@ public function indexAction(Pagination $pagination)
 You can do some left joins in this section. The `innerJoins` section must be
 defined as an array of array, where each array can have these fields:
 
-* First field: Entity relation (x.Address)
+* First field: Entity alias (x.Address)
 * Second field: Relation identifier (a)
 * Third field: If true, this relation is added in select group. Otherwise, wont
 be loaded until its request ***(optional)***
@@ -582,9 +590,9 @@ be loaded until its request ***(optional)***
  * @Paginator(
  *      class = "MmoreramCustomBundle:User",
  *      innerJoins = {
- *          {"x User", "u", true},
- *          {"u Address", "a", true},
- *          {"x.Cart", "c"},
+ *          {"x", "User", "u", true},
+ *          {"x", "Address", "a", true},
+ *          {"x", "Cart", "c"},
  *      }
  * )
  */
@@ -617,24 +625,28 @@ This is a completed example and its DQL resolution
  *      page = "~page~",
  *      limit = "~limit~",
  *      orderBy = {
- *          { "createdAt", "ASC" },
- *          { "id", "ASC" }
+ *          { "x", "createdAt", "ASC" },
+ *          { "x", "updatedAt", "DESC" },
+ *          { "x", "id", "0", {
+ *              "1" = "ASC",
+ *              "2" = "DESC",
+ *          }}
  *      },
  *      wheres = {
- *          { "enabled" , "=", true }
+ *          { "x", "enabled" , "=", true }
  *      },
  *      leftJoins = {
- *          { "x.relation", "r" },
- *          { "x.relation2", "r2" },
- *          { "x.relation5", "r5", true },
+ *          { "x", "relation", "r" },
+ *          { "x", "relation2", "r2" },
+ *          { "x", "relation5", "r5", true },
  *      },
  *      innerJoins = {
- *          { "x.relation3", "r3" },
- *          { "x.relation4", "r4", true },
+ *          { "x", "relation3", "r3" },
+ *          { "x", "relation4", "r4", true },
  *      },
  *      notNulls = {
- *          "address1",
- *          "address2",
+ *          {"x", "address1"},
+ *          {"x", "address2"},
  *      }
  * )
  */

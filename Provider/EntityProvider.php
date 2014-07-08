@@ -1,14 +1,14 @@
 <?php
 
 /**
- * This file is part of the Controller Extra Bundle
- *
- * @author Marc Morera <yuhu@mmoreram.com>
+ * This file is part of the ControllerExtraBundle for Symfony2.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
  * Feel free to edit as you please, and have fun.
+ *
+ * @author Marc Morera <yuhu@mmoreram.com>
  */
 
 namespace Mmoreram\ControllerExtraBundle\Provider;
@@ -197,10 +197,12 @@ class EntityProvider
          * If bundle not exists or is not actived, throw Exception
          */
         if (
-            !isset($namespace[0]) ||
-            !isset($bundles[$namespace[0]]) ||
-            !($bundles[$namespace[0]] instanceof Bundle) ||
-            !isset($namespace[1])
+        !(
+            isset($namespace[0]) &&
+            isset($bundles[$namespace[0]]) &&
+            $bundles[$namespace[0]] instanceof Bundle &&
+            isset($namespace[1])
+        )
         ) {
 
             throw new ClassNotFoundException(

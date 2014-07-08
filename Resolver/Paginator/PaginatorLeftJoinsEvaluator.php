@@ -1,14 +1,14 @@
 <?php
 
 /**
- * This file is part of the Controller Extra Bundle
- *
- * @author Marc Morera <yuhu@mmoreram.com>
+ * This file is part of the ControllerExtraBundle for Symfony2.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
  * Feel free to edit as you please, and have fun.
+ *
+ * @author Marc Morera <yuhu@mmoreram.com>
  */
 
 namespace Mmoreram\ControllerExtraBundle\Resolver\Paginator;
@@ -41,13 +41,13 @@ class PaginatorLeftJoinsEvaluator implements PaginatorEvaluatorInterface
             foreach ($annotation->getLeftJoins() as $leftJoin) {
 
                 $queryBuilder->leftJoin(
-                    $leftJoin[0],
-                    $leftJoin[1]
+                    trim($leftJoin[0]) . '.' . trim($leftJoin[1]),
+                    trim($leftJoin[2])
                 );
 
-                if (isset($leftJoin[2]) && $leftJoin[2]) {
+                if (isset($leftJoin[3]) && $leftJoin[3]) {
 
-                    $queryBuilder->addSelect($leftJoin[1]);
+                    $queryBuilder->addSelect(trim($leftJoin[2]));
                 }
             }
         }

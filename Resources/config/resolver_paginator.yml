@@ -49,6 +49,8 @@ services:
 
     mmoreram.controllerextra.evaluator.paginator_wheres_evaluator:
         class: %mmoreram.controllerextra.evaluator.paginator_wheres_evaluator.class%
+        arguments:
+            request_parameter_provider: @mmoreram.controllerextra.provider.request_parameter_provider
         tags:
             - { name: controller_extra.paginator_evaluator }
 

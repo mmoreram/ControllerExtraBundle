@@ -1,14 +1,14 @@
 <?php
 
 /**
- * This file is part of the Controller Extra Bundle
- *
- * @author Marc Morera <yuhu@mmoreram.com>
+ * This file is part of the ControllerExtraBundle for Symfony2.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
  * Feel free to edit as you please, and have fun.
+ *
+ * @author Marc Morera <yuhu@mmoreram.com>
  */
 
 namespace Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Controller;
@@ -159,24 +159,24 @@ class FakeController extends Controller
      *      page = 1,
      *      limit = 10,
      *      orderBy = {
-     *          { "createdAt", "ASC" },
-     *          { "id", "ASC" }
+     *          { "x", "createdAt", "ASC" },
+     *          { "x", "id", "ASC" }
      *      },
      *      wheres = {
-     *          { "enabled" , "=", true }
+     *          { "x", "enabled" , "=", true }
      *      },
      *      leftJoins = {
-     *          { "x.relation", "r" },
-     *          { "x.relation2", "r2" },
-     *          { "x.relation5", "r5", true },
+     *          { "x", "relation", "r" },
+     *          { "x", "relation2", "r2" },
+     *          { "x", "relation5", "r5", true },
      *      },
      *      innerJoins = {
-     *          { "x.relation3", "r3" },
-     *          { "x.relation4", "r4", true },
+     *          { "x", "relation3", "r3" },
+     *          { "x", "relation4", "r4", true },
      *      },
      *      notNulls = {
-     *          "address1",
-     *          "address2",
+     *          {"x", "address1"},
+     *          {"x", "address2"},
      *      }
      * )
      *
@@ -190,6 +190,76 @@ class FakeController extends Controller
 
         return array(
             'dql' => $dql,
+        );
+    }
+
+    /**
+     * Public pagination method
+     *
+     * @\Mmoreram\ControllerExtraBundle\Annotation\Paginator(
+     *      class = {
+     *          "factory" = "Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory",
+     *          "method" = "create",
+     *          "static" = false
+     *      },
+     *      page = "~page~",
+     *      limit = "~limit~",
+     *      orderBy = {
+     *          { "x", "~field~", "~dir~", {
+     *              "1" = "ASC",
+     *              "2" = "DESC",
+     *          }}
+     *      },
+     *      wheres = {
+     *          { "x", "id" , ">=", 1 }
+     *      },
+     *      notNulls = {
+     *          {"x", "id"},
+     *          {"x", "field"},
+     *      }
+     * )
+     *
+     * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
+     */
+    public function paginatorSimpleAction(Paginator $paginator)
+    {
+        return array(
+            'count' => count($paginator)
+        );
+    }
+
+    /**
+     * Public pagination method
+     *
+     * @\Mmoreram\ControllerExtraBundle\Annotation\Paginator(
+     *      class = {
+     *          "factory" = "Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory",
+     *          "method" = "create",
+     *          "static" = false
+     *      },
+     *      page = "~page~",
+     *      limit = "~limit~",
+     *      orderBy = {
+     *          { "x", "~field~", "~dir~", {
+     *              "1" = "ASC",
+     *              "2" = "DESC",
+     *          }}
+     *      },
+     *      wheres = {
+     *          { "x", "id" , ">=", 2 }
+     *      },
+     *      notNulls = {
+     *          {"x", "id"},
+     *          {"x", "field"},
+     *      }
+     * )
+     *
+     * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
+     */
+    public function paginatorNotMatchingAction(Paginator $paginator)
+    {
+        return array(
+            'count' => count($paginator)
         );
     }
 }

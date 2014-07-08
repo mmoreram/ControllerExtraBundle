@@ -1,14 +1,14 @@
 <?php
 
 /**
- * This file is part of the Controller Extra Bundle
- *
- * @author Marc Morera <yuhu@mmoreram.com>
+ * This file is part of the ControllerExtraBundle for Symfony2.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
  * Feel free to edit as you please, and have fun.
+ *
+ * @author Marc Morera <yuhu@mmoreram.com>
  */
 
 namespace Mmoreram\ControllerExtraBundle\Resolver\Paginator;
@@ -62,19 +62,19 @@ class PaginatorOrderByEvaluator implements PaginatorEvaluatorInterface
 
                     $field = $this
                         ->requestParameterProvider
-                        ->getParameterValue($orderBy[0]);
+                        ->getParameterValue(trim($orderBy[1]));
 
                     $direction = $this
                         ->requestParameterProvider
                         ->getParameterValue(
-                            $orderBy[1],
-                            isset($orderBy[2])
-                                ? $orderBy[2]
+                            trim($orderBy[2]),
+                            isset($orderBy[3]) && is_array($orderBy[3])
+                                ? $orderBy[3]
                                 : null
                         );
 
                     $queryBuilder->addOrderBy(
-                        $field,
+                        trim($orderBy[0]) . '.' . $field,
                         $direction
                     );
                 }
