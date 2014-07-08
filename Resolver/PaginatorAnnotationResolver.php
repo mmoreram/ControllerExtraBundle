@@ -1,14 +1,14 @@
 <?php
 
 /**
- * This file is part of the Controller Extra Bundle
- *
- * @author Marc Morera <yuhu@mmoreram.com>
+ * This file is part of the ControllerExtraBundle for Symfony2.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
  * Feel free to edit as you please, and have fun.
+ *
+ * @author Marc Morera <yuhu@mmoreram.com>
  */
 
 namespace Mmoreram\ControllerExtraBundle\Resolver;
@@ -100,38 +100,7 @@ class PaginatorAnnotationResolver implements AnnotationResolverInterface
     }
 
     /**
-     * Specific annotation evaluation.
-     *
-     * This is an example of a complete Pagination definition
-     *
-     * @Mmoreram\Pagination(
-     *      class = {
-     *          "factory" = "Mmoreram\ControllerExtraBundle\Factory\EntityFactory",
-     *          "method" = "create",
-     *          "static" = false
-     *      },
-     *      page = "3",
-     *      limit = "20",
-     *      orderBy = {
-     *          "createdAt" = "asc",
-     *          "id"        = "asc",
-     *      },
-     *      wheres = {
-     *          { "enabled =" , true }
-     *      },
-     *      leftJoins = {
-     *          { "x.relation", "r" },
-     *          { "x.relation2", "r2" },
-     *      },
-     *      innerJoins = {
-     *          { "x.relation3", "r3" },
-     *          { "x.relation4", "r4" },
-     *      },
-     *      notNulls = {
-     *          "address1",
-     *          "address2",
-     *      },
-     * )
+     * Specific annotation evaluation
      *
      * All method code will executed only if specific active flag is true
      *

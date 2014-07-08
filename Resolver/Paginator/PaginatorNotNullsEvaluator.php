@@ -1,14 +1,14 @@
 <?php
 
 /**
- * This file is part of the Controller Extra Bundle
- *
- * @author Marc Morera <yuhu@mmoreram.com>
+ * This file is part of the ControllerExtraBundle for Symfony2.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
  * Feel free to edit as you please, and have fun.
+ *
+ * @author Marc Morera <yuhu@mmoreram.com>
  */
 
 namespace Mmoreram\ControllerExtraBundle\Resolver\Paginator;
@@ -40,7 +40,7 @@ class PaginatorNotNullsEvaluator implements PaginatorEvaluatorInterface
 
             foreach ($annotation->getNotNulls() as $notNull) {
 
-                $queryBuilder->andWhere('x.' . $notNull . ' IS NOT NULL');
+                $queryBuilder->andWhere(trim($notNull[0]) . '.' . trim($notNull[1]) . ' IS NOT NULL');
             }
         }
 

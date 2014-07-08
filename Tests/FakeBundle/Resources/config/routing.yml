@@ -17,3 +17,11 @@ FakeBundleControllerJsonResponse:
 FakeBundleControllerPaginator:
     pattern: /fake/paginator/{field}/{dir}/{page}/{limit}
     defaults: { _controller: FakeBundle:Fake:paginator }
+
+FakeBundleControllerPaginatorSimple:
+    pattern: /fake/paginator/simple/{field}/{dir}/{page}/{limit}
+    defaults: { _controller: FakeBundle:Fake:paginatorSimple }
+
+FakeBundleControllerPaginatorNotMatching:
+    pattern: /fake/paginator/notmatching/{field}/{dir}/{page}/{limit}
+    defaults: { _controller: FakeBundle:Fake:paginatorNotMatching }
