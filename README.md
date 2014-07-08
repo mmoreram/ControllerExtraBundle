@@ -308,16 +308,16 @@ can check all available formats you can define it just reading the
 <?php
 
 use Doctrine\ORM\Tools\Pagination\Pagination;
-use Mmoreram\ControllerExtraBundle\Annotation\Paginator;
+use Mmoreram\ControllerExtraBundle\Annotation\Paginator as PaginatorAnnotation;
 
 /**
  * Simple controller method
  *
- * @Paginator(
+ * @PaginatorAnnotation(
  *      class = "MmoreramCustomBundle:User",
  * )
  */
-public function indexAction(Pagination $pagination)
+public function indexAction(Paginator $paginator)
 {
 }
 ```
@@ -342,12 +342,12 @@ You can refer to an existing Request attribute using `~value~` format
  *
  * This Controller matches pattern /myroute/paginate/{pag}
  *
- * @Paginator(
+ * @PaginatorAnnotation(
  *      class = "MmoreramCustomBundle:User",
  *      page = "~pag~"
  * )
  */
-public function indexAction(Pagination $pagination)
+public function indexAction(Paginator $paginator)
 {
 }
 ```
@@ -360,12 +360,12 @@ or you can hardcode the page to use.
  *
  * This Controller matches pattern /myroute/paginate/
  *
- * @Paginator(
+ * @PaginatorAnnotation(
  *      class = "MmoreramCustomBundle:User",
  *      page = 1
  * )
  */
-public function indexAction(Pagination $pagination)
+public function indexAction(Paginator $paginator)
 {
 }
 ```
@@ -390,13 +390,13 @@ You can refer to an existing Request attribute using `~value~` format
  *
  * This Controller matches pattern /myroute/paginate/{pag}/{limit}
  *
- * @Paginator(
+ * @PaginatorAnnotation(
  *      class = "MmoreramCustomBundle:User",
  *      page = "~pag~",
  *      limit = "~limit~"
  * )
  */
-public function indexAction(Pagination $pagination)
+public function indexAction(Paginator $paginator)
 {
 }
 ```
@@ -409,13 +409,13 @@ or you can hardcode the page to use.
  *
  * This Controller matches pattern /myroute/paginate/
  *
- * @Paginator(
+ * @PaginatorAnnotation(
  *      class = "MmoreramCustomBundle:User",
  *      page = 1,
  *      limit = 10
  * )
  */
-public function indexAction(Pagination $pagination)
+public function indexAction(Paginator $paginator)
 {
 }
 ```
@@ -435,7 +435,7 @@ arrays, and each array should contain these positions:
 /**
  * Simple controller method
  *
- * @Paginator(
+ * @PaginatorAnnotation(
  *      class = "MmoreramCustomBundle:User",
  *      orderBy = {
  *          {"x", "createdAt", "ASC"},
@@ -447,7 +447,7 @@ arrays, and each array should contain these positions:
  *      }
  * )
  */
-public function indexAction(Pagination $pagination)
+public function indexAction(Paginator $paginator)
 {
 }
 ```
@@ -470,7 +470,7 @@ can refer to an existing Request attribute using `~value~` format
  * /myroute/paginate/order/id/1 -> ORDER BY id DESC
  * /myroute/paginate/order/enabled/0 - ORDER BY enabled ASC
  *
- * @Paginator(
+ * @PaginatorAnnotation(
  *      class = "MmoreramCustomBundle:User",
  *      orderBy = {
  *          {"x", "createdAt", "ASC"},
@@ -482,7 +482,7 @@ can refer to an existing Request attribute using `~value~` format
  *      }
  * )
  */
-public function indexAction(Pagination $pagination)
+public function indexAction(Paginator $paginator)
 {
 }
 ```
@@ -504,7 +504,7 @@ positions:
 /**
  * Simple controller method
  *
- * @Paginator(
+ * @PaginatorAnnotation(
  *      class = "MmoreramCustomBundle:User",
  *      wheres = {
  *          {"x", "enabled", "=", true},
@@ -512,7 +512,7 @@ positions:
  *      }
  * )
  */
-public function indexAction(Pagination $pagination)
+public function indexAction(Paginator $paginator)
 {
 }
 ```
@@ -530,7 +530,7 @@ of arrays, and each array should contain these positions:
 /**
  * Simple controller method
  *
- * @Paginator(
+ * @PaginatorAnnotation(
  *      class = "MmoreramCustomBundle:User",
  *      notNulls = {
  *          {"x", "enabled"},
@@ -538,7 +538,7 @@ of arrays, and each array should contain these positions:
  *      }
  * )
  */
-public function indexAction(Pagination $pagination)
+public function indexAction(Paginator $paginator)
 {
 }
 ```
@@ -558,7 +558,7 @@ be loaded until its request ***(optional)***
 /**
  * Simple controller method
  *
- * @Paginator(
+ * @PaginatorAnnotation(
  *      class = "MmoreramCustomBundle:User",
  *      leftJoins = {
  *          {"x", "User", "u", true},
@@ -567,7 +567,7 @@ be loaded until its request ***(optional)***
  *      }
  * )
  */
-public function indexAction(Pagination $pagination)
+public function indexAction(Paginator $paginator)
 {
 }
 ```
@@ -586,7 +586,7 @@ be loaded until its request ***(optional)***
 /**
  * Simple controller method
  *
- * @Paginator(
+ * @PaginatorAnnotation(
  *      class = "MmoreramCustomBundle:User",
  *      innerJoins = {
  *          {"x", "User", "u", true},
@@ -595,7 +595,7 @@ be loaded until its request ***(optional)***
  *      }
  * )
  */
-public function indexAction(Pagination $pagination)
+public function indexAction(Paginator $paginator)
 {
 }
 ```
@@ -615,7 +615,7 @@ This is a completed example and its DQL resolution
  * * limit = 10
  * * page = 1
  *
- * @Paginator(
+ * @PaginatorAnnotation(
  *      class = (
  *          factoryClass = "Mmoreram\ControllerExtraBundle\Factory\EntityFactory",
  *          factoryMethod = "create",
@@ -649,7 +649,7 @@ This is a completed example and its DQL resolution
  *      }
  * )
  */
-public function indexAction(Pagination $pagination)
+public function indexAction(Paginator $paginator)
 {
 }
 ```
