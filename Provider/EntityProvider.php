@@ -128,7 +128,7 @@ class EntityProvider
 
         $factoryStatic = isset($class['static'])
             ? (boolean) $class['static']
-            : (boolean) $this->defaultFactoryMethod;
+            : (boolean) $this->defaultFactoryStatic;
 
         $factory = class_exists($factoryClass)
             ? (
