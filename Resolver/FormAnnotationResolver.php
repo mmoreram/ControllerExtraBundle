@@ -204,7 +204,12 @@ class FormAnnotationResolver implements AnnotationResolverInterface
          * Checks if parameter typehinting is Form
          * In this case, inject form as defined method parameter
          */
-        if ('Symfony\\Component\\Form\\Form' == $parameterClass) {
+        if (in_array(
+            $parameterClass, array(
+                'Symfony\\Component\\Form\\Form', 
+                'Symfony\\Component\\Form\\FormInterface'
+            )
+        )) {
             return $form;
         }
 
