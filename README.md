@@ -497,7 +497,7 @@ positions:
 
 * First position: Entity alias (Principal object is set as `x`)
 * Second position: Entity field
-* Third position: Operator ***=, <=, >...***
+* Third position: Operator *=, <=, >, LIKE...*
 * Fourth position: Value to compare with
 
 ``` php
@@ -508,7 +508,28 @@ positions:
  *      class = "MmoreramCustomBundle:User",
  *      wheres = {
  *          {"x", "enabled", "=", true},
- *          {"x", "disabled", "=", false},
+ *          {"x", "age", ">", 18},
+ *          {"x", "name", "LIKE", "Efervescencio"},
+ *      }
+ * )
+ */
+public function indexAction(Paginator $paginator)
+{
+}
+```
+
+You can refer to an existing Request attribute using `~value~` format
+
+``` php
+/**
+ * Simple controller method
+ *
+ * This Controller matches pattern /myroute/{field}
+ *
+ * @PaginatorAnnotation(
+ *      class = "MmoreramCustomBundle:User",
+ *      wheres = {
+ *          {"x", "name", "LIKE", "~field~"},
  *      }
  * )
  */
