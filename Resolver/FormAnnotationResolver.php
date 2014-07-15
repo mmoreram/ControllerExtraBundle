@@ -206,7 +206,7 @@ class FormAnnotationResolver implements AnnotationResolverInterface
          */
         if (in_array(
             $parameterClass, array(
-                'Symfony\\Component\\Form\\Form', 
+                'Symfony\\Component\\Form\\Form',
                 'Symfony\\Component\\Form\\FormInterface'
             )
         )) {

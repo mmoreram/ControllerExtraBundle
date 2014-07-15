@@ -33,6 +33,7 @@ Table of contents
         * [Paginator Left Joins](#paginator-left-joins)
         * [Paginator Inner Joins](#paginator-inner-joins)
         * [Paginator Not Nulls](#paginator-not-nulls)
+        * [Paginator Attributes](#paginator-attributes)
         * [Paginator Example](#paginator-example)
     * [@Entity](#entity)
         * [Entity Mapping](#entity-mapping)
@@ -618,6 +619,45 @@ be loaded until its request ***(optional)***
  */
 public function indexAction(Paginator $paginator)
 {
+}
+```
+
+### Paginator Attributes
+
+A nice feature of this annotation is that you can also inject into your
+controller a `Mmoreram\ControllerExtraBundle\ValueObject\PaginatorAttributes`
+instance with some interesting information about your pagination.
+
+* currentPage : Current page fetched
+* totalElements : Total elements given your criteria. If none criteria is
+defined in your configuration, this value will all elements of a certain entity.
+* totalPages : Total pages you can fetch given a criteria.
+
+To inject this object you need to define the "attributes" annotation field with
+the method parameter name.
+
+``` php
+/**
+ * Simple controller method
+ *
+ * This Controller matches pattern /myroute/paginate/
+ *
+ * @PaginatorAnnotation(
+ *      attributes = "paginatorAttributes",
+ *      class = "MmoreramCustomBundle:User",
+ *      page = 1,
+ *      limit = 10
+ * )
+ */
+public function indexAction(
+    Paginator $paginator,
+    PaginatorAttributes $paginatorAttributes
+)
+{
+    $currentPage = $paginatorAttributes->getCurrentPage();
+    $totalElements = $paginatorAttributes->getTotalElements();
+    $totalPages = $paginatorAttributes->getTotalPages();
+
 }
 ```
 

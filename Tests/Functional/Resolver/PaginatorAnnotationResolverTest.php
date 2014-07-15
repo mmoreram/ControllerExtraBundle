@@ -98,4 +98,39 @@ class PaginatorAnnotationResolverTest extends AbstractWebTestCase
                 ->getContent()
         );
     }
+
+    /**
+     * Test paginator with attributes
+     */
+    public function testPaginatorAnnotationAttributes()
+    {
+        $entityManager = static::$kernel
+            ->getContainer()
+            ->get('doctrine')
+            ->getManagerForClass('Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\Fake');
+
+        for ($i = 0; $i < 30; $i++) {
+
+            $fake = FakeFactory::createStatic();
+            $fake->setField('');
+            $entityManager->persist($fake);
+        }
+        $entityManager->flush();
+
+        $this
+            ->client
+            ->request(
+                'GET',
+                '/fake/paginator/attributes/id/2/1/5'
+            );
+
+        $response = json_decode($this
+            ->client
+            ->getResponse()
+            ->getContent(), true);
+
+        $this->assertEquals(6, $response['totalPages']);
+        $this->assertEquals(29, $response['totalElements']);
+        $this->assertEquals(1, $response['currentPage']);
+    }
 }

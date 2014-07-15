@@ -25,3 +25,7 @@ FakeBundleControllerPaginatorSimple:
 FakeBundleControllerPaginatorNotMatching:
     pattern: /fake/paginator/notmatching/{field}/{dir}/{page}/{limit}
     defaults: { _controller: FakeBundle:Fake:paginatorNotMatching }
+
+FakeBundleControllerPaginatorAttributes:
+    pattern: /fake/paginator/attributes/{field}/{dir}/{page}/{limit}
+    defaults: { _controller: FakeBundle:Fake:paginatorAttributes }
