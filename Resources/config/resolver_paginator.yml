@@ -21,6 +21,7 @@ services:
         arguments:
             doctrine: @doctrine
             entity_provider: @mmoreram.controllerextra.provider.entity_provider
+            request_parameter_provider: @mmoreram.controllerextra.provider.request_parameter_provider
             paginator_evaluator_collector: @mmoreram.controllerextra.collector.paginator_evaluator_collector
             default_name: %mmoreram.controllerextra.paginator_default_name%
             default_page: %mmoreram.controllerextra.paginator_default_page%

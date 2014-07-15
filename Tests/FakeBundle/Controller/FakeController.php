@@ -14,6 +14,7 @@
 namespace Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Controller;
 
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use Mmoreram\ControllerExtraBundle\ValueObject\PaginatorAttributes;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -260,6 +261,48 @@ class FakeController extends Controller
     {
         return array(
             'count' => count($paginator)
+        );
+    }
+
+    /**
+     * Public pagination method
+     *
+     * @\Mmoreram\ControllerExtraBundle\Annotation\Paginator(
+     *      attributes = "paginatorAttributes",
+     *      class = {
+     *          "factory" = "Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory",
+     *          "method" = "create",
+     *          "static" = false
+     *      },
+     *      page = "~page~",
+     *      limit = "~limit~",
+     *      orderBy = {
+     *          { "x", "~field~", "~dir~", {
+     *              "1" = "ASC",
+     *              "2" = "DESC",
+     *          }}
+     *      },
+     *      wheres = {
+     *          { "x", "id" , ">=", 2 }
+     *      },
+     *      notNulls = {
+     *          {"x", "id"},
+     *          {"x", "field"},
+     *      }
+     * )
+     *
+     * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
+     */
+    public function paginatorAttributesAction(
+        Paginator $paginator,
+        PaginatorAttributes $paginatorAttributes
+    )
+    {
+        return array(
+            'count' => count($paginator),
+            'totalPages' => $paginatorAttributes->getTotalPages(),
+            'totalElements' => $paginatorAttributes->getTotalElements(),
+            'currentPage' => $paginatorAttributes->getCurrentPage(),
         );
     }
 }

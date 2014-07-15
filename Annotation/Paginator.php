@@ -86,6 +86,13 @@ class Paginator extends Annotation
     protected $notNulls;
 
     /**
+     * @var string
+     *
+     * Attributes
+     */
+    protected $attributes;
+
+    /**
      * Get Class
      *
      * @return string Class
@@ -173,5 +180,15 @@ class Paginator extends Annotation
     public function getNotNulls()
     {
         return $this->notNulls;
+    }
+
+    /**
+     * Get Attributes
+     *
+     * @return string Attributes
+     */
+    public function getAttributes()
+    {
+        return $this->attributes;
     }
 }
