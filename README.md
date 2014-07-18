@@ -879,6 +879,7 @@ controller_extra:
 ``` php
 <?php
 
+use Doctrine\Common\Persistence\ObjectManager;
 use Mmoreram\ControllerExtraBundle\Annotation\ObjectManager as ObjectManagerAnnotation;
 
 /**
