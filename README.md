@@ -118,6 +118,9 @@ controller_extra:
     form:
         active: true
         default_name: form
+    object_manager:
+        active: true
+        default_name: form
     flush:
         active: true
         default_manager: default
