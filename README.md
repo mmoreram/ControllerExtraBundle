@@ -37,6 +37,7 @@ Table of contents
         * [Paginator Example](#paginator-example)
     * [@Entity](#entity)
         * [Entity Mapping](#entity-mapping)
+    * [@ObjectManager](#object-manager)
     * [@Form](#form)
     * [@Flush](#flush)
     * [@JsonResponse](#jsonresponse)
@@ -858,6 +859,40 @@ public function indexAction(User $user)
 In this case, you will try to get the mapped instance of User with passed id. If
 some mapping is defined and any entity is found, a new EntityNotFoundException`
 is thrown.
+
+## @ObjectManager
+
+Given an entity, return the ObjectManager that manages it.
+
+You can enable/disable this bundle by overriding `active` flag in configuration
+
+``` yml
+controller_extra:
+    object_manager:
+        active: true
+```
+
+> By default, if `name` option is not set, the generated object will be placed
+> in a parameter named `$objectManager`. This behaviour can be configured using
+> `default_name` in configuration.
+
+``` php
+<?php
+
+use Mmoreram\ControllerExtraBundle\Annotation\ObjectManager as ObjectManagerAnnotation;
+
+/**
+ * Simple controller method
+ *
+ * @ObjectManagerAnnotation(
+ *      class = "\Mmoreram\CustomBundle\Entity\User",
+ *      name  = "objectManager"
+ * )
+ */
+public function indexAction(ObjectManager $objectManager)
+{
+}
+```
 
 ## @Form
 

@@ -174,6 +174,21 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->end()
+
+                /**
+                 * Object manager config definition
+                 */
+                ->arrayNode('object_manager')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->booleanNode('active')
+                            ->defaultTrue()
+                        ->end()
+                        ->scalarNode('default_name')
+                            ->defaultValue('objectManager')
+                        ->end()
+                    ->end()
+                ->end()
             ->end();
 
         return $treeBuilder;
