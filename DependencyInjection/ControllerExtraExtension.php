@@ -163,6 +163,19 @@ class ControllerExtraExtension extends Extension
         );
 
         /**
+         * Object manager parameters
+         */
+        $container->setParameter(
+            'mmoreram.controllerextra.object_manager_active',
+            $config['object_manager']['active']
+        );
+
+        $container->setParameter(
+            'mmoreram.controllerextra.object_manager_default_name',
+            $config['object_manager']['default_name']
+        );
+
+        /**
          * Load config files
          */
         $loader = new YamlFileLoader(
@@ -232,11 +245,19 @@ class ControllerExtraExtension extends Extension
         }
 
         /**
-         * Only load json resolver config definition if is active
+         * Only load paginator resolver config definition if is active
          */
         if ($config['paginator']['active']) {
 
             $loader->load('resolver_paginator.yml');
+        }
+
+        /**
+         * Only load object manager resolver config definition if is active
+         */
+        if ($config['object_manager']['active']) {
+
+            $loader->load('resolver_object_manager.yml');
         }
 
         return $this;

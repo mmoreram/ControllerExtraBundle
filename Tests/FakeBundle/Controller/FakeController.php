@@ -13,12 +13,13 @@
 
 namespace Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Controller;
 
+use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\Tools\Pagination\Paginator;
-use Mmoreram\ControllerExtraBundle\ValueObject\PaginatorAttributes;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
 use Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\Fake;
+use Mmoreram\ControllerExtraBundle\ValueObject\PaginatorAttributes;
 
 /**
  * Fake Controller object
@@ -304,5 +305,36 @@ class FakeController extends Controller
             'totalElements' => $paginatorAttributes->getTotalElements(),
             'currentPage' => $paginatorAttributes->getCurrentPage(),
         );
+    }
+
+    /**
+     * Public objectManager method
+     *
+     * @\Mmoreram\ControllerExtraBundle\Annotation\ObjectManager(
+     *      name = "objectManager1",
+     *      class = {
+     *          "factory" = "Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory",
+     *          "method" = "create",
+     *          "static" = false
+     *      }
+     * )
+     * @\Mmoreram\ControllerExtraBundle\Annotation\ObjectManager(
+     *      name = "objectManager2",
+     *      class = "Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\Fake"
+     * )
+     * @\Mmoreram\ControllerExtraBundle\Annotation\ObjectManager(
+     *      name = "objectManager3",
+     *      class = "FakeBundle:Fake"
+     * )
+     *
+     * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
+     */
+    public function objectManagerAction(
+        ObjectManager $objectManager1,
+        ObjectManager $objectManager2,
+        ObjectManager $objectManager3
+    )
+    {
+        return array();
     }
 }

@@ -55,6 +55,10 @@ class ControllerExtraBundle extends Bundle
         AnnotationRegistry::registerFile($kernel
             ->locateResource("@ControllerExtraBundle/Annotation/Entity.php")
         );
+
+        AnnotationRegistry::registerFile($kernel
+            ->locateResource("@ControllerExtraBundle/Annotation/ObjectManager.php")
+        );
     }
 
     /**

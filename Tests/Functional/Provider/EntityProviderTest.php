@@ -75,23 +75,6 @@ class EntityProviderTest extends WebTestCase
             array(
                 array(
                     'factory' => 'Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory',
-                )
-            ),
-            array(
-                array(
-                    'factory' => 'Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory',
-                    'method' => 'generate',
-                )
-            ),
-            array(
-                array(
-                    'factory' => 'Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory',
-                    'method' => 'create',
-                )
-            ),
-            array(
-                array(
-                    'factory' => 'Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory',
                     'static' => false,
                 )
             ),
@@ -105,45 +88,14 @@ class EntityProviderTest extends WebTestCase
             array(
                 array(
                     'factory' => 'Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory',
-                    'method' => 'create',
-                    'static' => false,
-                )
-            ),
-            array(
-                array(
-                    'factory' => 'Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory',
+                    'method' => 'generateStatic',
                     'static' => true,
                 )
             ),
             array(
                 array(
                     'factory' => 'Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory',
-                    'method' => 'generate',
-                    'static' => true,
-                )
-            ),
-            array(
-                array(
-                    'factory' => 'Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory',
-                    'method' => 'create',
-                    'static' => true,
-                )
-            ),
-            array(
-                array(
-                    'factory' => 'controller_extra_bundle.factory.fake',
-                )
-            ),
-            array(
-                array(
-                    'factory' => 'controller_extra_bundle.factory.fake',
-                    'method' => 'generate',
-                )
-            ),
-            array(
-                array(
-                    'factory' => 'controller_extra_bundle.factory.fake',
-                    'method' => 'create',
+                    'method' => 'generateStatic',
                 )
             ),
             array(
@@ -162,28 +114,14 @@ class EntityProviderTest extends WebTestCase
             array(
                 array(
                     'factory' => 'controller_extra_bundle.factory.fake',
-                    'method' => 'create',
-                    'static' => false,
-                )
-            ),
-            array(
-                array(
-                    'factory' => 'controller_extra_bundle.factory.fake',
+                    'method' => 'generateStatic',
                     'static' => true,
                 )
             ),
             array(
                 array(
                     'factory' => 'controller_extra_bundle.factory.fake',
-                    'method' => 'generate',
-                    'static' => true,
-                )
-            ),
-            array(
-                array(
-                    'factory' => 'controller_extra_bundle.factory.fake',
-                    'method' => 'create',
-                    'static' => true,
+                    'method' => 'generateStatic',
                 )
             ),
         );
