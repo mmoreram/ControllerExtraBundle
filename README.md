@@ -37,7 +37,7 @@ Table of contents
         * [Paginator Example](#paginator-example)
     * [@Entity](#entity)
         * [Entity Mapping](#entity-mapping)
-    * [@ObjectManager](#object-manager)
+    * [@ObjectManager](#objectmanager)
     * [@Form](#form)
     * [@Flush](#flush)
     * [@JsonResponse](#jsonresponse)
