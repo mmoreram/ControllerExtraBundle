@@ -35,7 +35,7 @@ class RequestParameterProvider
      */
     public function __construct(RequestStack $requestStack)
     {
-        $this->request = $requestStack->getMasterRequest();
+        $this->request = $requestStack->getCurrentRequest();
     }
 
     /**
