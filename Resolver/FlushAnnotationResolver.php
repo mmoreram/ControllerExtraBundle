@@ -14,15 +14,15 @@
 namespace Mmoreram\ControllerExtraBundle\Resolver;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Doctrine\Common\Persistence\AbstractManagerRegistry;
 use Doctrine\Common\Persistence\ObjectManager;
-use Symfony\Component\HttpFoundation\Request;
 use ReflectionMethod;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 
-use Mmoreram\ControllerExtraBundle\Resolver\Interfaces\AnnotationResolverInterface;
-use Mmoreram\ControllerExtraBundle\Annotation\Flush as AnnotationFlush;
 use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
+use Mmoreram\ControllerExtraBundle\Annotation\Flush as AnnotationFlush;
+use Mmoreram\ControllerExtraBundle\Resolver\Interfaces\AnnotationResolverInterface;
 
 /**
  * FormAnnotationResolver, an implementation of  AnnotationResolverInterface

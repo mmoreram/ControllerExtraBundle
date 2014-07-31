@@ -13,11 +13,11 @@
 
 namespace Mmoreram\ControllerExtraBundle;
 
-use Mmoreram\ControllerExtraBundle\CompilerPass\PaginatorCompilerPass;
-use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\HttpKernel\Bundle\Bundle;
 
+use Mmoreram\ControllerExtraBundle\CompilerPass\PaginatorCompilerPass;
 use Mmoreram\ControllerExtraBundle\CompilerPass\ResolverCompilerPass;
 
 /**

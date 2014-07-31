@@ -13,10 +13,11 @@
 
 namespace Mmoreram\ControllerExtraBundle\Tests\UnitTest\EventListener;
 
-use Mmoreram\ControllerExtraBundle\EventListener\ResolverEventListener;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Doctrine\Common\Annotations\Reader;
 use PHPUnit_Framework_TestCase;
+use Symfony\Component\HttpKernel\KernelInterface;
+
+use Mmoreram\ControllerExtraBundle\EventListener\ResolverEventListener;
 
 /**
  * Tests ResolverEventListener class

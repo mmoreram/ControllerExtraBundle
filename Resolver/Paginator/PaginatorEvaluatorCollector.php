@@ -14,6 +14,7 @@
 namespace Mmoreram\ControllerExtraBundle\Resolver\Paginator;
 
 use Doctrine\ORM\QueryBuilder;
+
 use Mmoreram\ControllerExtraBundle\Annotation\Paginator as AnnotationPaginator;
 use Mmoreram\ControllerExtraBundle\Resolver\Paginator\Interfaces\PaginatorEvaluatorInterface;
 

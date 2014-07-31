@@ -13,10 +13,10 @@
 
 namespace Mmoreram\ControllerExtraBundle\Tests\UnitTest\Resolver;
 
-use Symfony\Component\HttpFoundation\ParameterBag;
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\HttpFoundation\Request;
 use ReflectionMethod;
+use Symfony\Component\HttpFoundation\ParameterBag;
+use Symfony\Component\HttpFoundation\Request;
 
 use Mmoreram\ControllerExtraBundle\Resolver\FlushAnnotationResolver;
 

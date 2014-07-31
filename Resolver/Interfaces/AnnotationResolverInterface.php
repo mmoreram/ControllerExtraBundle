@@ -13,8 +13,8 @@
 
 namespace Mmoreram\ControllerExtraBundle\Resolver\Interfaces;
 
-use Symfony\Component\HttpFoundation\Request;
 use ReflectionMethod;
+use Symfony\Component\HttpFoundation\Request;
 
 use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
 

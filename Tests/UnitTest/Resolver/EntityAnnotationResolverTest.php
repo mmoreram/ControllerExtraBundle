@@ -13,15 +13,15 @@
 
 namespace Mmoreram\ControllerExtraBundle\Tests\UnitTest\Resolver;
 
+use PHPUnit_Framework_TestCase;
+use ReflectionMethod;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
-use PHPUnit_Framework_TestCase;
-use ReflectionMethod;
 
-use Mmoreram\ControllerExtraBundle\Resolver\EntityAnnotationResolver;
 use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
 use Mmoreram\ControllerExtraBundle\Provider\EntityProvider;
+use Mmoreram\ControllerExtraBundle\Resolver\EntityAnnotationResolver;
 
 /**
  * Tests FlushAnnotationResolver class

@@ -13,12 +13,12 @@
 
 namespace Mmoreram\ControllerExtraBundle\Tests\UnitTest\Resolver;
 
-use Symfony\Component\HttpFoundation\Request;
 use PHPUnit_Framework_TestCase;
 use ReflectionMethod;
+use Symfony\Component\HttpFoundation\Request;
 
-use Mmoreram\ControllerExtraBundle\Resolver\JsonResponseAnnotationResolver;
 use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
+use Mmoreram\ControllerExtraBundle\Resolver\JsonResponseAnnotationResolver;
 
 /**
  * Tests JsonResponseAnnotationResolver class

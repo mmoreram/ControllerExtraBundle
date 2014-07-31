@@ -14,18 +14,18 @@
 namespace Mmoreram\ControllerExtraBundle\Resolver;
 
 use Doctrine\Common\Persistence\AbstractManagerRegistry;
-use Symfony\Component\HttpFoundation\Request;
-use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use ReflectionMethod;
+use Symfony\Component\HttpFoundation\Request;
 
+use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
+use Mmoreram\ControllerExtraBundle\Annotation\Paginator as AnnotationPaginator;
+use Mmoreram\ControllerExtraBundle\Provider\EntityProvider;
+use Mmoreram\ControllerExtraBundle\Provider\RequestParameterProvider;
 use Mmoreram\ControllerExtraBundle\Resolver\Interfaces\AnnotationResolverInterface;
 use Mmoreram\ControllerExtraBundle\Resolver\Paginator\PaginatorEvaluatorCollector;
-use Mmoreram\ControllerExtraBundle\Annotation\Paginator as AnnotationPaginator;
-use Mmoreram\ControllerExtraBundle\Provider\RequestParameterProvider;
 use Mmoreram\ControllerExtraBundle\ValueObject\PaginatorAttributes;
-use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
-use Mmoreram\ControllerExtraBundle\Provider\EntityProvider;
 
 /**
  * Class PaginatorAnnotationResolver

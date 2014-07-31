@@ -13,14 +13,14 @@
 
 namespace Mmoreram\ControllerExtraBundle\Resolver;
 
-use Symfony\Component\HttpFoundation\Request;
 use Psr\Log\LoggerInterface;
 use ReflectionMethod;
-
-use Mmoreram\ControllerExtraBundle\Resolver\Interfaces\AnnotationResolverInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
-use Mmoreram\ControllerExtraBundle\Annotation\Log as AnnotationLog;
+
 use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
+use Mmoreram\ControllerExtraBundle\Annotation\Log as AnnotationLog;
+use Mmoreram\ControllerExtraBundle\Resolver\Interfaces\AnnotationResolverInterface;
 
 /**
  * LogAnnotationResolver, an implementation of  AnnotationResolverInterface

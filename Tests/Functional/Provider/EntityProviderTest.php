@@ -13,8 +13,9 @@
 
 namespace Mmoreram\ControllerExtraBundle\Tests\Functional\Provider;
 
-use Mmoreram\ControllerExtraBundle\Provider\EntityProvider;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+
+use Mmoreram\ControllerExtraBundle\Provider\EntityProvider;
 
 /**
  * Class EntityProviderTest

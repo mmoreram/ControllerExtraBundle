@@ -13,14 +13,14 @@
 
 namespace Mmoreram\ControllerExtraBundle\Resolver;
 
-use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
+use ReflectionMethod;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use ReflectionMethod;
+use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
 
-use Mmoreram\ControllerExtraBundle\Resolver\Interfaces\AnnotationResolverInterface;
-use Mmoreram\ControllerExtraBundle\Annotation\JsonResponse as AnnotationJsonResponse;
 use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
+use Mmoreram\ControllerExtraBundle\Annotation\JsonResponse as AnnotationJsonResponse;
+use Mmoreram\ControllerExtraBundle\Resolver\Interfaces\AnnotationResolverInterface;
 
 /**
  * FormAnnotationResolver, an implementation of  AnnotationResolverInterface

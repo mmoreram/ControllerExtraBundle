@@ -13,16 +13,16 @@
 
 namespace Mmoreram\ControllerExtraBundle\Resolver;
 
-use Symfony\Component\Form\FormRegistryInterface;
-use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Form\AbstractType;
 use ReflectionMethod;
 use ReflectionParameter;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormRegistryInterface;
+use Symfony\Component\HttpFoundation\Request;
 
-use Mmoreram\ControllerExtraBundle\Resolver\Interfaces\AnnotationResolverInterface;
-use Mmoreram\ControllerExtraBundle\Annotation\Form as AnnotationForm;
 use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
+use Mmoreram\ControllerExtraBundle\Annotation\Form as AnnotationForm;
+use Mmoreram\ControllerExtraBundle\Resolver\Interfaces\AnnotationResolverInterface;
 
 /**
  * FormAnnotationResolver, an implementation of  AnnotationResolverInterface

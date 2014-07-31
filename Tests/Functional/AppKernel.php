@@ -7,10 +7,10 @@
  * @since 2013
  */
 
-use Symfony\Component\Config\Loader\LoaderInterface;
-use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
+use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\MonologBundle\MonologBundle;
+use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\HttpKernel\Kernel;
 
 use Mmoreram\ControllerExtraBundle\ControllerExtraBundle;

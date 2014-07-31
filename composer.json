@@ -27,8 +27,9 @@
         "symfony/finder": ">=2.3",
         "symfony/browser-kit": ">=2.3",
         "doctrine/doctrine-bundle": ">=1.2.0",
-        "phpunit/phpunit": "4.*",
-        "doctrine/orm": ">=2.3"
+        "phpunit/phpunit": ">=3.7",
+        "doctrine/orm": ">=2.3",
+        "mmoreram/php-formatter": "~1.0"
     },
     "target-dir": "Mmoreram/ControllerExtraBundle",
     "autoload": {

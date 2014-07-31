@@ -13,6 +13,7 @@
 
 namespace Mmoreram\ControllerExtraBundle\Provider;
 
+use ErrorException;
 use Symfony\Component\Debug\Exception\ClassNotFoundException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
@@ -20,7 +21,6 @@ use Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceExce
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\HttpKernel\KernelInterface;
-use ErrorException;
 
 /**
  * Class EntityProvider

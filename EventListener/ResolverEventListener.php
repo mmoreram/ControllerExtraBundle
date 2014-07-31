@@ -14,10 +14,10 @@
 namespace Mmoreram\ControllerExtraBundle\EventListener;
 
 use Doctrine\Common\Annotations\Reader;
-use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
-use Symfony\Component\HttpFoundation\Request;
 use ReflectionMethod;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
 use Mmoreram\ControllerExtraBundle\Resolver\Interfaces\AnnotationResolverInterface;
