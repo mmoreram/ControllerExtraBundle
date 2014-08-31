@@ -17,8 +17,6 @@ use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
 
 /**
  * Flush annotation driver
- *
- * @Annotation
  */
 class Flush extends Annotation
 {

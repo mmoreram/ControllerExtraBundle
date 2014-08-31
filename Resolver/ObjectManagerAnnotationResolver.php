@@ -14,14 +14,14 @@
 namespace Mmoreram\ControllerExtraBundle\Resolver;
 
 use Doctrine\Common\Persistence\AbstractManagerRegistry;
-use Symfony\Component\HttpFoundation\Request;
 use ReflectionMethod;
+use Symfony\Component\HttpFoundation\Request;
 
-use Mmoreram\ControllerExtraBundle\Annotation\ObjectManager as AnnotationObjectManager;
-use Mmoreram\ControllerExtraBundle\Resolver\Interfaces\AnnotationResolverInterface;
-use Mmoreram\ControllerExtraBundle\Exceptions\EntityNotFoundException;
 use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
+use Mmoreram\ControllerExtraBundle\Annotation\ObjectManager as AnnotationObjectManager;
+use Mmoreram\ControllerExtraBundle\Exceptions\EntityNotFoundException;
 use Mmoreram\ControllerExtraBundle\Provider\EntityProvider;
+use Mmoreram\ControllerExtraBundle\Resolver\Interfaces\AnnotationResolverInterface;
 
 /**
  * Class ObjectManagerAnnotationResolver

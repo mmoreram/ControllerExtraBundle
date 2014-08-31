@@ -17,8 +17,6 @@ use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
 
 /**
  * Class ObjectManager
- *
- * @Annotation
  */
 class ObjectManager extends Annotation
 {

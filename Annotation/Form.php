@@ -17,8 +17,6 @@ use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
 
 /**
  * Form annotation driver
- *
- * @Annotation
  */
 class Form extends Annotation
 {

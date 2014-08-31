@@ -17,8 +17,6 @@ use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
 
 /**
  * Entity annotation driver
- *
- * @Annotation
  */
 class Entity extends Annotation
 {
