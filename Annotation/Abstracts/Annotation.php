@@ -22,7 +22,6 @@ use Doctrine\Common\Annotations\Annotation as DoctrineAnnotation;
  */
 abstract class Annotation extends DoctrineAnnotation
 {
-
     /**
      * return value
      *
