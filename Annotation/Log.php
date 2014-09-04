@@ -17,6 +17,8 @@ use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
 
 /**
  * Log annotation driver
+ *
+ * @Annotation
  */
 class Log extends Annotation
 {

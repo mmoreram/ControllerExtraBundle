@@ -17,6 +17,8 @@ use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
 
 /**
  * Class Paginator
+ *
+ * @Annotation
  */
 class Paginator extends Annotation
 {

@@ -17,6 +17,8 @@ use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\AbstractResponse;
 
 /**
  * JsonResponse annotation driver
+ *
+ * @Annotation
  */
 class JsonResponse extends AbstractResponse
 {
