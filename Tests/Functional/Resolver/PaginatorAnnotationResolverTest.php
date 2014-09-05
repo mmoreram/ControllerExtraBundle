@@ -133,4 +133,35 @@ class PaginatorAnnotationResolverTest extends AbstractWebTestCase
         $this->assertEquals(29, $response['totalElements']);
         $this->assertEquals(1, $response['currentPage']);
     }
+
+    /**
+     * Test paginator with pagerfanta
+     */
+    public function testPaginatorAnnotationPagerfanta()
+    {
+        $fake = FakeFactory::createStatic();
+        $fake->setField('');
+        $entityManager = static::$kernel
+            ->getContainer()
+            ->get('doctrine')
+            ->getManagerForClass('Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\Fake');
+
+        $entityManager->persist($fake);
+        $entityManager->flush();
+
+        $this
+            ->client
+            ->request(
+                'GET',
+                '/fake/paginator/pagerfanta/id/2/1/5'
+            );
+
+        $this->assertEquals(
+            '{"count":1}',
+            $this
+                ->client
+                ->getResponse()
+                ->getContent()
+        );
+    }
 }

@@ -11,9 +11,20 @@ matrix:
     allow_failures:
         - php: hhvm-nightly
 
-install: composer install --prefer-source --no-interaction
+env:
+    - SYMFONY_VERSION="~2.3"
 
-script: phpunit -c phpunit.xml.dist --coverage-text
+before_install:
+    - composer require --no-update symfony/monolog-bundle:~2.3
+    - composer require --no-update symfony/form:~2.3
+    - composer require --no-update doctrine/orm:~2.3
+    - composer require --no-update white-october/pagerfanta-bundle:~1.0
+
+install:
+    - composer install --prefer-source --no-interaction
+
+script:
+    - phpunit -c phpunit.xml.dist
 
 notifications:
     email: false
