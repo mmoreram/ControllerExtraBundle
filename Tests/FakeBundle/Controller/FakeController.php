@@ -15,6 +15,7 @@ namespace Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Controller;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -304,6 +305,36 @@ class FakeController extends Controller
             'totalPages' => $paginatorAttributes->getTotalPages(),
             'totalElements' => $paginatorAttributes->getTotalElements(),
             'currentPage' => $paginatorAttributes->getCurrentPage(),
+        );
+    }
+
+    /**
+     * Public pagination method with pagerfanta instance
+     *
+     * @\Mmoreram\ControllerExtraBundle\Annotation\Paginator(
+     *      class = {
+     *          "factory" = "Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory",
+     *          "method" = "create",
+     *          "static" = false
+     *      },
+     *      page = "~page~",
+     *      limit = "~limit~",
+     *      orderBy = {
+     *          { "x", "~field~", "~dir~", {
+     *              "1" = "ASC",
+     *              "2" = "DESC",
+     *          }}
+     *      }
+     * )
+     *
+     * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
+     */
+    public function paginatorPagerFantaAction(
+        Pagerfanta $paginator
+    )
+    {
+        return array(
+            'count' => $paginator->count(),
         );
     }
 

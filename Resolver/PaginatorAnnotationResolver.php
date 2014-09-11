@@ -16,6 +16,8 @@ namespace Mmoreram\ControllerExtraBundle\Resolver;
 use Doctrine\Common\Persistence\AbstractManagerRegistry;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use Pagerfanta\Adapter\DoctrineORMAdapter;
+use Pagerfanta\Pagerfanta;
 use ReflectionMethod;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -23,6 +25,7 @@ use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
 use Mmoreram\ControllerExtraBundle\Annotation\Paginator as AnnotationPaginator;
 use Mmoreram\ControllerExtraBundle\Provider\EntityProvider;
 use Mmoreram\ControllerExtraBundle\Provider\RequestParameterProvider;
+use Mmoreram\ControllerExtraBundle\Resolver\Abstracts\AbstractAnnotationResolver;
 use Mmoreram\ControllerExtraBundle\Resolver\Interfaces\AnnotationResolverInterface;
 use Mmoreram\ControllerExtraBundle\Resolver\Paginator\PaginatorEvaluatorCollector;
 use Mmoreram\ControllerExtraBundle\ValueObject\PaginatorAttributes;
@@ -30,7 +33,7 @@ use Mmoreram\ControllerExtraBundle\ValueObject\PaginatorAttributes;
 /**
  * Class PaginatorAnnotationResolver
  */
-class PaginatorAnnotationResolver implements AnnotationResolverInterface
+class PaginatorAnnotationResolver extends AbstractAnnotationResolver implements AnnotationResolverInterface
 {
     /**
      * @var AbstractManagerRegistry
@@ -211,15 +214,25 @@ class PaginatorAnnotationResolver implements AnnotationResolverInterface
              * Get the parameter name. If not defined, is set as defined in
              * parameters
              */
-            $parameterName = $annotation->getName()
-                ? : $this->defaultName;
+            $parameterName = $annotation->getName() ? : $this->defaultName;
+            $parameterType = $this->getParameterType(
+                $method,
+                $parameterName
+            );
+
+            $dql = $paginator->getQuery()->getDQL();
+            $paginator = $this
+                ->decidePaginatorFormat(
+                    $paginator,
+                    $parameterType
+                );
 
             $request->attributes->set(
                 $parameterName,
                 $paginator
             );
 
-            return $paginator->getQuery()->getDQL();
+            return $dql;
         }
 
         return $this;
@@ -276,5 +289,23 @@ class PaginatorAnnotationResolver implements AnnotationResolverInterface
                 $paginatorAttributes
             );
         }
+    }
+
+    /**
+     * Return real usable Paginator instance given the definition type
+     *
+     * @param Paginator $paginator     Paginator
+     * @param string    $parameterType Parameter type
+     *
+     * @return mixed Paginator instance
+     */
+    public function decidePaginatorFormat(Paginator $paginator, $parameterType)
+    {
+        if ('Pagerfanta\Pagerfanta' === $parameterType) {
+
+            $paginator = new Pagerfanta(new DoctrineORMAdapter($paginator->getQuery()));
+        }
+
+        return $paginator;
     }
 }

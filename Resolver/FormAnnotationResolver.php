@@ -14,7 +14,6 @@
 namespace Mmoreram\ControllerExtraBundle\Resolver;
 
 use ReflectionMethod;
-use ReflectionParameter;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormRegistryInterface;
@@ -22,12 +21,13 @@ use Symfony\Component\HttpFoundation\Request;
 
 use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
 use Mmoreram\ControllerExtraBundle\Annotation\Form as AnnotationForm;
+use Mmoreram\ControllerExtraBundle\Resolver\Abstracts\AbstractAnnotationResolver;
 use Mmoreram\ControllerExtraBundle\Resolver\Interfaces\AnnotationResolverInterface;
 
 /**
  * FormAnnotationResolver, an implementation of  AnnotationResolverInterface
  */
-class FormAnnotationResolver implements AnnotationResolverInterface
+class FormAnnotationResolver extends AbstractAnnotationResolver implements AnnotationResolverInterface
 {
     /**
      * @var FormRegistryInterface
@@ -107,30 +107,10 @@ class FormAnnotationResolver implements AnnotationResolverInterface
              * Get the parameter name. If not defined, is set as $form
              */
             $parameterName = $annotation->getName() ? : $this->defaultName;
-
-            /**
-             * Method parameters load.
-             *
-             * A hash is created to access to all needed parameters
-             * with cost O(1)
-             */
-            $parameters = $method->getParameters();
-            $parametersIndexed = array();
-
-            foreach ($parameters as $parameter) {
-
-                $parametersIndexed[$parameter->getName()] = $parameter;
-            }
-
-            /**
-             * Get parameter class for TypeHinting
-             *
-             * @var ReflectionParameter $parameter
-             */
-            $parameter = $parametersIndexed[$parameterName];
-            $parameterClass = $parameter
-                ->getClass()
-                ->getName();
+            $parameterClass = $this->getParameterType(
+                $method,
+                $parameterName
+            );
 
             /**
              * Requiring result with calling getBuiltObject(), set as request
