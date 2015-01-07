@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the ControllerExtraBundle for Symfony2.
  *
  * For the full copyright and license information, please view the LICENSE
@@ -147,7 +147,7 @@ class FlushAnnotationResolver implements AnnotationResolverInterface
         if ($annotation instanceof AnnotationFlush) {
 
             $managerName = $annotation->getManager()
-                ? : $this->getDefaultManager();
+                ?: $this->getDefaultManager();
 
             /**
              * Loading locally desired Doctrine manager
@@ -159,7 +159,7 @@ class FlushAnnotationResolver implements AnnotationResolverInterface
             /**
              * Set locally entities to flush. If null, flush all
              */
-            $this->entities = new ArrayCollection;
+            $this->entities = new ArrayCollection();
             $entity = $annotation->getEntity();
             $entities = is_array($entity)
                 ? $entity

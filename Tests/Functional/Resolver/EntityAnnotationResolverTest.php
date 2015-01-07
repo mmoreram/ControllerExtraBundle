@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the ControllerExtraBundle for Symfony2.
  *
  * For the full copyright and license information, please view the LICENSE
@@ -39,7 +39,7 @@ class EntityAnnotationResolverTest extends AbstractWebTestCase
      */
     public function testMappingAnnotation()
     {
-        $fake = FakeFactory::createStatic();
+        $fake = FakeFactory::create();
         $fake->setField('');
         $entityManager = static::$kernel
             ->getContainer()
@@ -70,8 +70,41 @@ class EntityAnnotationResolverTest extends AbstractWebTestCase
      */
     public function testMappingManyAnnotation()
     {
-        $fake = FakeFactory::createStatic();
+        $fake = FakeFactory::create();
         $fake->setField('value');
+        $entityManager = static::$kernel
+            ->getContainer()
+            ->get('doctrine')
+            ->getManagerForClass('Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\Fake');
+
+        $entityManager->persist($fake);
+        $entityManager->flush();
+
+        $this
+            ->client
+            ->request(
+                'GET',
+                '/fake/entity/mapped/many/1'
+            );
+
+        $this->assertEquals(
+            '{"id":1,"null":null}',
+            $this
+                ->client
+                ->getResponse()
+                ->getContent()
+        );
+    }
+
+    /**
+     * Test fake mapping
+     *
+     * @expectedException \Mmoreram\ControllerExtraBundle\Exceptions\EntityNotFoundException
+     */
+    public function testMappingManyFailAnnotation()
+    {
+        $fake = FakeFactory::create();
+        $fake->setField('value2');
         $entityManager = static::$kernel
             ->getContainer()
             ->get('doctrine')
@@ -97,35 +130,15 @@ class EntityAnnotationResolverTest extends AbstractWebTestCase
     }
 
     /**
-     * Test fake mapping
-     *
-     * @expectedException \Mmoreram\ControllerExtraBundle\Exceptions\EntityNotFoundException
+     * Test entity annotation with mapping fallback
      */
-    public function testMappingManyFailAnnotation()
+    public function testMappingFallback()
     {
-        $fake = FakeFactory::createStatic();
-        $fake->setField('value2');
-        $entityManager = static::$kernel
-            ->getContainer()
-            ->get('doctrine')
-            ->getManagerForClass('Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\Fake');
-
-        $entityManager->persist($fake);
-        $entityManager->flush();
-
         $this
             ->client
             ->request(
                 'GET',
-                '/fake/entity/mapped/many/1'
+                '/fake/entity/mapped/fallback/1'
             );
-
-        $this->assertEquals(
-            '{"id":1}',
-            $this
-                ->client
-                ->getResponse()
-                ->getContent()
-        );
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the ControllerExtraBundle for Symfony2.
  *
  * For the full copyright and license information, please view the LICENSE
@@ -25,17 +25,7 @@ class FakeFactory
      *
      * @return Fake Fake entity
      */
-    public function create()
-    {
-        return FakeFactory::createStatic();
-    }
-
-    /**
-     * Returns a new Fake instance
-     *
-     * @return Fake Fake entity
-     */
-    public static function createStatic()
+    public static function create()
     {
         return new Fake();
     }
@@ -45,9 +35,9 @@ class FakeFactory
      *
      * @return Fake Fake entity
      */
-    public function generate()
+    public function createNonStatic()
     {
-        return FakeFactory::createStatic();
+        return FakeFactory::create();
     }
 
     /**
@@ -55,8 +45,18 @@ class FakeFactory
      *
      * @return Fake Fake entity
      */
-    public static function generateStatic()
+    public static function generate()
     {
-        return FakeFactory::createStatic();
+        return FakeFactory::create();
+    }
+
+    /**
+     * Returns a new Fake instance
+     *
+     * @return Fake Fake entity
+     */
+    public function generateNonStatic()
+    {
+        return FakeFactory::create();
     }
 }

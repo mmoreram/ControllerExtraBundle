@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the ControllerExtraBundle for Symfony2.
  *
  * For the full copyright and license information, please view the LICENSE
@@ -82,26 +82,33 @@ class EntityProviderTest extends WebTestCase
             array(
                 array(
                     'factory' => 'Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory',
-                    'method' => 'generate',
+                    'method' => 'generateNonStatic',
                     'static' => false,
                 )
             ),
             array(
                 array(
                     'factory' => 'Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory',
-                    'method' => 'generateStatic',
+                    'method' => 'generate',
                     'static' => true,
                 )
             ),
             array(
                 array(
                     'factory' => 'Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory',
-                    'method' => 'generateStatic',
+                    'method' => 'generate',
                 )
             ),
             array(
                 array(
                     'factory' => 'controller_extra_bundle.factory.fake',
+                    'static' => false,
+                )
+            ),
+            array(
+                array(
+                    'factory' => 'controller_extra_bundle.factory.fake',
+                    'method' => 'generateNonStatic',
                     'static' => false,
                 )
             ),
@@ -109,20 +116,13 @@ class EntityProviderTest extends WebTestCase
                 array(
                     'factory' => 'controller_extra_bundle.factory.fake',
                     'method' => 'generate',
-                    'static' => false,
-                )
-            ),
-            array(
-                array(
-                    'factory' => 'controller_extra_bundle.factory.fake',
-                    'method' => 'generateStatic',
                     'static' => true,
                 )
             ),
             array(
                 array(
                     'factory' => 'controller_extra_bundle.factory.fake',
-                    'method' => 'generateStatic',
+                    'method' => 'generate',
                 )
             ),
         );

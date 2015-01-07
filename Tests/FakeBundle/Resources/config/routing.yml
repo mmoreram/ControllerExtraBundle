@@ -10,6 +10,10 @@ FakeBundleControllerEntityMappedMany:
     pattern: /fake/entity/mapped/many/{id}
     defaults: { _controller: FakeBundle:Fake:entityMappedMany }
 
+FakeBundleControllerEntityMappingFallback:
+    pattern: /fake/entity/mapped/fallback/{id}
+    defaults: { _controller: FakeBundle:Fake:entityMappingFallback }
+
 FakeBundleControllerJsonResponse:
     pattern: /fake/jsonresponse
     defaults: { _controller: FakeBundle:Fake:jsonResponse }

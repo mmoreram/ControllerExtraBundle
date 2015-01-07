@@ -38,6 +38,7 @@ Table of contents
         * [Pagerfanta Add-on](#pagerfanta-add-on)
     * [@Entity](#entity)
         * [Entity Mapping](#entity-mapping)
+        * [Entity Mapping fallback](#entity-mapping-fallback)
     * [@ObjectManager](#objectmanager)
     * [@Form](#form)
     * [@Flush](#flush)
@@ -116,6 +117,7 @@ controller_extra:
         active: true
         default_name: entity
         default_persist: true
+        default_mapping_fallback: false
     form:
         active: true
         default_name: form
@@ -888,6 +890,47 @@ public function indexAction(User $user)
 In this case, you will try to get the mapped instance of User with passed id. If
 some mapping is defined and any entity is found, a new EntityNotFoundException`
 is thrown.
+
+### Entity Mapping Fallback
+
+So what if your mapping definition fails? This bundle gives this situation
+another chance when it happens. You can enable the `mappingFallback` flag to
+ensure that if the mapping fails, a new empty entity will be returned.
+
+> By default, if `mapping_fallback` option is not set, the used value will be
+> the parameter `default_mapping_fallback` defined in configuration. By default
+> this value is `false`
+
+Lets see an example. Because we have enabled the mappingFallback, and because
+the mapping definition not maches with the assigned route, we will return a new
+empty User entity.
+
+``` php
+<?php
+
+use Mmoreram\ControllerExtraBundle\Annotation\Entity;
+use Mmoreram\ControllerExtraBundle\Entity\User;
+
+/**
+ * Simple controller method
+ *
+ * This Controller matches pattern /user/edit/{id}
+ *
+ * @Entity(
+ *      class = "MmoreramCustomBundle:User",
+ *      name  = "user",
+ *      mapping = {
+ *          "id": "~id~",
+ *          "username": "~nonexisting~"
+ *      },
+ *      mappingFallback = true
+ * )
+ */
+public function indexAction(User $user)
+{
+    // $user->getId() === null
+}
+```
 
 ## @ObjectManager
 

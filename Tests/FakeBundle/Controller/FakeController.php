@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the ControllerExtraBundle for Symfony2.
  *
  * For the full copyright and license information, please view the LICENSE
@@ -51,7 +51,7 @@ class FakeController extends Controller
      *      name = "entityFactoryClassNoStatic",
      *      class = {
      *          "factory" = "Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory",
-     *          "method" = "create",
+     *          "method" = "createNonStatic",
      *          "static" = false,
      *      },
      *      persist = false
@@ -60,7 +60,7 @@ class FakeController extends Controller
      *      name = "entityFactoryClassStatic",
      *      class = {
      *          "factory" = "Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory",
-     *          "method" = "createStatic",
+     *          "method" = "create",
      *          "static" = true,
      *      },
      *      persist = false
@@ -77,7 +77,7 @@ class FakeController extends Controller
      *      name = "entityFactoryClassNoStatic",
      *      class = {
      *          "factory" = "controller_extra_bundle.factory.fake",
-     *          "method" = "create",
+     *          "method" = "createNonStatic",
      *          "static" = false,
      *      },
      *      persist = false
@@ -86,13 +86,13 @@ class FakeController extends Controller
      *      name = "entityFactoryClassStatic",
      *      class = {
      *          "factory" = "controller_extra_bundle.factory.fake",
-     *          "method" = "createStatic",
+     *          "method" = "create",
      *          "static" = true,
      *      },
      *      persist = false
      * )
      */
-    public function entityAction()
+    public function entityAction(Fake $entity)
     {
         return new Response();
     }
@@ -126,15 +126,27 @@ class FakeController extends Controller
      *      mapping = {
      *          "id" = "~id~",
      *          "field" = "value",
-     *      }
+     *      },
+     *      mappingFallback = false
+     * )
+     *
+     * @\Mmoreram\ControllerExtraBundle\Annotation\Entity(
+     *      name = "entityFallback",
+     *      class = "FakeBundle:Fake",
+     *      mapping = {
+     *          "id" = "~id~",
+     *          "field" = "value",
+     *      },
+     *      mappingFallback = true
      * )
      *
      * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
      */
-    public function entityMappedManyAction(Fake $entity)
+    public function entityMappedManyAction(Fake $entity, Fake $entityFallback)
     {
         return array(
-            'id' => $entity->getId()
+            'id' => $entity->getId(),
+            'null' => $entityFallback->getId(),
         );
     }
 
@@ -156,7 +168,7 @@ class FakeController extends Controller
      * @\Mmoreram\ControllerExtraBundle\Annotation\Paginator(
      *      class = {
      *          "factory" = "Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory",
-     *          "method" = "create",
+     *          "method" = "createNonStatic",
      *          "static" = false
      *      },
      *      page = 1,
@@ -202,7 +214,7 @@ class FakeController extends Controller
      * @\Mmoreram\ControllerExtraBundle\Annotation\Paginator(
      *      class = {
      *          "factory" = "Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory",
-     *          "method" = "create",
+     *          "method" = "createNonStatic",
      *          "static" = false
      *      },
      *      page = "~page~",
@@ -237,7 +249,7 @@ class FakeController extends Controller
      * @\Mmoreram\ControllerExtraBundle\Annotation\Paginator(
      *      class = {
      *          "factory" = "Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory",
-     *          "method" = "create",
+     *          "method" = "createNonStatic",
      *          "static" = false
      *      },
      *      page = "~page~",
@@ -273,7 +285,7 @@ class FakeController extends Controller
      *      attributes = "paginatorAttributes",
      *      class = {
      *          "factory" = "Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory",
-     *          "method" = "create",
+     *          "method" = "createNonStatic",
      *          "static" = false
      *      },
      *      page = "~page~",
@@ -314,7 +326,7 @@ class FakeController extends Controller
      * @\Mmoreram\ControllerExtraBundle\Annotation\Paginator(
      *      class = {
      *          "factory" = "Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory",
-     *          "method" = "create",
+     *          "method" = "createNonStatic",
      *          "static" = false
      *      },
      *      page = "~page~",
@@ -345,7 +357,7 @@ class FakeController extends Controller
      *      name = "objectManager1",
      *      class = {
      *          "factory" = "Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory",
-     *          "method" = "create",
+     *          "method" = "createNonStatic",
      *          "static" = false
      *      }
      * )
@@ -367,5 +379,22 @@ class FakeController extends Controller
     )
     {
         return array();
+    }
+
+    /**
+     * Tested that works mapping fallback. Mapping fallback disabled and failing
+     *
+     * @\Mmoreram\ControllerExtraBundle\Annotation\Entity(
+     *      name = "entity",
+     *      class = "FakeBundle:Fake",
+     *      mapping = {
+     *          "id" = "~non-existing~",
+     *      },
+     *      mappingFallback = true
+     * )
+     */
+    public function entityMappingFallbackAction(Fake $entity)
+    {
+        return new Response();
     }
 }
