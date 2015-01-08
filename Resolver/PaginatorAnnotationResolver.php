@@ -224,7 +224,9 @@ class PaginatorAnnotationResolver extends AbstractAnnotationResolver implements 
             $paginator = $this
                 ->decidePaginatorFormat(
                     $paginator,
-                    $parameterType
+                    $parameterType,
+                    $limitPerPage,
+                    $page
                 );
 
             $request->attributes->set(
@@ -296,14 +298,18 @@ class PaginatorAnnotationResolver extends AbstractAnnotationResolver implements 
      *
      * @param Paginator $paginator     Paginator
      * @param string    $parameterType Parameter type
-     *
+     * @param int       $limitPerPage
+     * @param int       $page
+     * 
      * @return mixed Paginator instance
      */
-    public function decidePaginatorFormat(Paginator $paginator, $parameterType)
+    public function decidePaginatorFormat(Paginator $paginator, $parameterType, $limitPerPage, $page)
     {
         if ('Pagerfanta\Pagerfanta' === $parameterType) {
 
             $paginator = new Pagerfanta(new DoctrineORMAdapter($paginator->getQuery()));
+            $paginator->setMaxPerPage($limitPerPage);
+            $paginator->setCurrentPage($page);
         }
 
         return $paginator;
