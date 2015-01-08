@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the ControllerExtraBundle for Symfony2.
  *
  * For the full copyright and license information, please view the LICENSE
@@ -117,7 +117,7 @@ class EntityProvider
     {
         if (!isset($class['factory'])) {
 
-            throw new InvalidArgumentException;
+            throw new InvalidArgumentException();
         }
 
         $factoryClass = $class['factory'];
@@ -134,7 +134,7 @@ class EntityProvider
             ? (
             $factoryStatic
                 ? $factoryClass
-                : new $factoryClass
+                : new $factoryClass()
             )
             : $this
                 ->container
@@ -173,7 +173,7 @@ class EntityProvider
                 ->container
                 ->getParameter($class);
             if ($classParameter && class_exists($classParameter)) {
-                return new $classParameter;
+                return new $classParameter();
             }
 
         } catch (InvalidArgumentException $exception) {
@@ -207,7 +207,7 @@ class EntityProvider
 
             throw new ClassNotFoundException(
                 $class,
-                new ErrorException
+                new ErrorException()
             );
         }
 
@@ -222,7 +222,7 @@ class EntityProvider
 
             throw new ClassNotFoundException(
                 $entityNamespace,
-                new ErrorException
+                new ErrorException()
             );
         }
 
@@ -230,6 +230,6 @@ class EntityProvider
          * Otherwise, assume that class is namespace of class
          */
 
-        return new $entityNamespace;
+        return new $entityNamespace();
     }
 }

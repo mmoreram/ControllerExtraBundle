@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the ControllerExtraBundle for Symfony2.
  *
  * For the full copyright and license information, please view the LICENSE
@@ -44,6 +44,13 @@ class Entity extends Annotation
     public $mapping;
 
     /**
+     * @var boolean
+     *
+     * Mapping fallback
+     */
+    public $mappingFallback;
+
+    /**
      * @var array
      *
      * Setters
@@ -85,6 +92,16 @@ class Entity extends Annotation
     public function getMapping()
     {
         return $this->mapping;
+    }
+
+    /**
+     * Get MappingFallback
+     *
+     * @return boolean MappingFallback
+     */
+    public function getMappingFallback()
+    {
+        return $this->mappingFallback;
     }
 
     /**

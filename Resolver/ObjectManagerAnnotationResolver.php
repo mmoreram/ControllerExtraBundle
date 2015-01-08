@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the ControllerExtraBundle for Symfony2.
  *
  * For the full copyright and license information, please view the LICENSE
@@ -105,7 +105,7 @@ class ObjectManagerAnnotationResolver implements AnnotationResolverInterface
              * parameters
              */
             $parameterName = $annotation->getName()
-                ? : $this->defaultName;
+                ?: $this->defaultName;
 
             $request->attributes->set(
                 $parameterName,

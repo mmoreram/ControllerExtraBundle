@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the ControllerExtraBundle for Symfony2.
  *
  * For the full copyright and license information, please view the LICENSE
@@ -66,6 +66,13 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
     protected $defaultPersist;
 
     /**
+     * @var boolean
+     *
+     * Mapping fallback
+     */
+    protected $mappingFallback;
+
+    /**
      * Construct method
      *
      * @param AbstractManagerRegistry  $doctrine                  Doctrine
@@ -73,13 +80,15 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
      * @param RequestParameterProvider $requestParametersProvider Request parameter provider
      * @param string                   $defaultName               Default name
      * @param boolean                  $defaultPersist            Default persist
+     * @param boolean                  $mappingFallback           Mapping fallback
      */
     public function __construct(
         AbstractManagerRegistry $doctrine,
         EntityProvider $entityProvider,
         RequestParameterProvider $requestParametersProvider,
         $defaultName,
-        $defaultPersist
+        $defaultPersist,
+        $mappingFallback = false
     )
     {
         $this->doctrine = $doctrine;
@@ -87,6 +96,7 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
         $this->requestParametersProvider = $requestParametersProvider;
         $this->defaultName = $defaultName;
         $this->defaultPersist = $defaultPersist;
+        $this->mappingFallback = $mappingFallback;
     }
 
     /**
@@ -143,7 +153,7 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
              * parameters
              */
             $parameterName = $annotation->getName()
-                ? : $this->defaultName;
+                ?: $this->defaultName;
 
             $request->attributes->set(
                 $parameterName,
@@ -171,6 +181,9 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
 
             $mapping = $annotation->getMapping();
             $requestParametersProvider = $this->requestParametersProvider;
+            $mappingFallback = !is_null($annotation->getMappingFallback())
+                ? $annotation->getMappingFallback()
+                : $this->mappingFallback;
 
             /**
              * Each value of the mapping array is computed and analyzed
@@ -178,9 +191,23 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
              * If the format is something like %value%, this service will
              * look for the real request attribute value
              */
-            $mapping = array_map(function ($value) use ($requestParametersProvider) {
-                return $requestParametersProvider->getParameterValue($value);
-            }, $mapping);
+
+            foreach ($mapping as $mappingKey => $mappingValue) {
+
+                $parameterValue = $requestParametersProvider->getParameterValue($mappingValue);
+
+                /**
+                 * Defined field is not found in current route, and we have
+                 * enabled the "mapping fallback" setting. In that case we
+                 * assume that the mapping definition is wrong, and we return
+                 * the entity itself
+                 */
+                if ($mappingFallback && ($parameterValue === $mappingValue)) {
+                    return $entity;
+                }
+
+                $mapping[$mappingKey] = $parameterValue;
+            };
 
             $entityClass = get_class($entity);
             $instance = $this

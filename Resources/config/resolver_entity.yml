@@ -18,5 +18,6 @@ services:
             request_parameters_provider: @mmoreram.controllerextra.provider.request_parameter_provider
             default_name: %mmoreram.controllerextra.entity_default_name%
             default_persist: %mmoreram.controllerextra.entity_default_persist%
+            mapping_fallback: %mmoreram.controllerextra.entity_fallback_mapping%
         tags:
             - { name: controller_extra.annotation }

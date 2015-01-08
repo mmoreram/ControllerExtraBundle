@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the ControllerExtraBundle for Symfony2.
  *
  * For the full copyright and license information, please view the LICENSE
@@ -42,7 +42,7 @@ class PaginatorAnnotationResolverTest extends AbstractWebTestCase
      */
     public function testPaginatorSimpleAnnotation()
     {
-        $fake = FakeFactory::createStatic();
+        $fake = FakeFactory::create();
         $fake->setField('');
         $entityManager = static::$kernel
             ->getContainer()
@@ -73,7 +73,7 @@ class PaginatorAnnotationResolverTest extends AbstractWebTestCase
      */
     public function testPaginatorNotMatchingAnnotation()
     {
-        $fake = FakeFactory::createStatic();
+        $fake = FakeFactory::create();
         $fake->setField('');
         $entityManager = static::$kernel
             ->getContainer()
@@ -111,7 +111,7 @@ class PaginatorAnnotationResolverTest extends AbstractWebTestCase
 
         for ($i = 0; $i < 30; $i++) {
 
-            $fake = FakeFactory::createStatic();
+            $fake = FakeFactory::create();
             $fake->setField('');
             $entityManager->persist($fake);
         }
@@ -139,7 +139,7 @@ class PaginatorAnnotationResolverTest extends AbstractWebTestCase
      */
     public function testPaginatorAnnotationPagerfanta()
     {
-        $fake = FakeFactory::createStatic();
+        $fake = FakeFactory::create();
         $fake->setField('');
         $entityManager = static::$kernel
             ->getContainer()

@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the ControllerExtraBundle for Symfony2.
  *
  * For the full copyright and license information, please view the LICENSE
@@ -170,7 +170,7 @@ class PaginatorAnnotationResolver extends AbstractAnnotationResolver implements 
                 ->requestParameterProvider
                 ->getParameterValue(
                     $annotation->getLimit()
-                    ? : $this->defaultLimitPerPage
+                    ?: $this->defaultLimitPerPage
                 );
 
             /**
@@ -181,7 +181,7 @@ class PaginatorAnnotationResolver extends AbstractAnnotationResolver implements 
                 ->requestParameterProvider
                 ->getParameterValue(
                     $annotation->getPage()
-                    ? : $this->defaultPage
+                    ?: $this->defaultPage
                 );
 
             /**
@@ -214,7 +214,7 @@ class PaginatorAnnotationResolver extends AbstractAnnotationResolver implements 
              * Get the parameter name. If not defined, is set as defined in
              * parameters
              */
-            $parameterName = $annotation->getName() ? : $this->defaultName;
+            $parameterName = $annotation->getName() ?: $this->defaultName;
             $parameterType = $this->getParameterType(
                 $method,
                 $parameterName

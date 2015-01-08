@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the ControllerExtraBundle for Symfony2.
  *
  * For the full copyright and license information, please view the LICENSE
@@ -106,7 +106,7 @@ class FormAnnotationResolver extends AbstractAnnotationResolver implements Annot
             /**
              * Get the parameter name. If not defined, is set as $form
              */
-            $parameterName = $annotation->getName() ? : $this->defaultName;
+            $parameterName = $annotation->getName() ?: $this->defaultName;
             $parameterClass = $this->getParameterType(
                 $method,
                 $parameterName

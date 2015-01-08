@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * This file is part of the ControllerExtraBundle for Symfony2.
  *
  * For the full copyright and license information, please view the LICENSE
@@ -101,6 +101,11 @@ class ControllerExtraExtension extends Extension
         $container->setParameter(
             'mmoreram.controllerextra.entity_default_persist',
             $config['entity']['default_persist']
+        );
+
+        $container->setParameter(
+            'mmoreram.controllerextra.entity_fallback_mapping',
+            $config['entity']['fallback_mapping']
         );
 
         /**
