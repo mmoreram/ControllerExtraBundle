@@ -300,10 +300,15 @@ class PaginatorAnnotationResolver extends AbstractAnnotationResolver implements 
      * @param string    $parameterType Parameter type
      * @param int       $limitPerPage
      * @param int       $page
-     * 
+     *
      * @return mixed Paginator instance
      */
-    public function decidePaginatorFormat(Paginator $paginator, $parameterType, $limitPerPage, $page)
+    public function decidePaginatorFormat(
+        Paginator $paginator,
+        $parameterType,
+        $limitPerPage,
+        $page
+    )
     {
         if ('Pagerfanta\Pagerfanta' === $parameterType) {
 
