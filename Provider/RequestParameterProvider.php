@@ -22,11 +22,11 @@ use Symfony\Component\HttpFoundation\RequestStack;
 class RequestParameterProvider
 {
     /**
-     * @var Request
+     * @var RequestStack
      *
-     * Request
+     * Request Stack
      */
-    protected $request;
+    protected $requestStack;
 
     /**
      * Construct method
@@ -35,7 +35,7 @@ class RequestParameterProvider
      */
     public function __construct(RequestStack $requestStack)
     {
-        $this->request = $requestStack->getCurrentRequest();
+        $this->requestStack = $requestStack;
     }
 
     /**
@@ -52,15 +52,19 @@ class RequestParameterProvider
      * If request is null, return just the value
      *
      * @param string $value Value
-     * @param mixed  $map   Map
+     * @param array  $map   Map
      *
-     * @return mixed
+     * @return string Value
      */
-    public function getParameterValue($value, $map = null)
+    public function getParameterValue($value, array $map = null)
     {
-        if ($this->request instanceof Request) {
+        $request = $this
+            ->requestStack
+            ->getCurrentRequest();
 
-            $bag = $this->request->attributes;
+        if ($request instanceof Request) {
+
+            $bag = $request->attributes;
 
             $trimedValue = trim($value, '~');
 
