@@ -102,6 +102,8 @@ $ php vendor/phpunit/phpunit/phpunit.php
 By default, all annotations are loaded, but any individual annotation can be
 completely disabled by setting to false `active` parameter.
 
+Default values are:
+
 ``` yml
 controller_extra:
     resolver_priority: -8
@@ -271,7 +273,7 @@ public function indexAction()
 ```
 
 If you do not define the `method`, default one will be used. You can
-override this default value by defining new one in your config.yml. Same with
+override this default value by defining new one in your `config.yml`. Same with
 `static` value
 
 ``` yml
@@ -292,7 +294,8 @@ Creates a Doctrine Paginator object, given a request and a configuration. This
 annotation just injects into de controller a new
 `Doctrine\ORM\Tools\Pagination\Pagination` instance ready to be iterated.
 
-You can enable/disable this bundle by overriding `active` flag in configuration
+You can enable/disable this bundle by overriding `active` flag in configuration file
+`config.yml`
 
 ``` yml
 controller_extra:
@@ -460,9 +463,9 @@ public function indexAction(Paginator $paginator)
 }
 ```
 
-With the third value you can define a map where to match your own direction
-nomenclature with DQL one. DQL nomenclature just accept ASC for Ascendant and
-DESC for Descendant.
+With the third and fourth value you can define a map where to match your own
+direction nomenclature with DQL one. DQL nomenclature just accept ASC for
+Ascendant and DESC for Descendant.
 
 This is very useful when you need to match a url format with the DQL one. You
 can refer to an existing Request attribute using `~value~` format
@@ -606,9 +609,10 @@ public function indexAction(Paginator $paginator)
 You can do some left joins in this section. The `innerJoins` section must be
 defined as an array of array, where each array can have these fields:
 
-* First field: Entity alias (x.Address)
-* Second field: Relation identifier (a)
-* Third field: If true, this relation is added in select group. Otherwise, wont
+* First position: Entity alias (x)
+* Second position: Entity relation (Address)
+* Third position: Relation identifier (a)
+* Fourth position: If true, this relation is added in select group. Otherwise, wont
 be loaded until its request ***(optional)***
 
 ``` php
@@ -637,7 +641,7 @@ instance with some interesting information about your pagination.
 
 * currentPage : Current page fetched
 * totalElements : Total elements given your criteria. If none criteria is
-defined in your configuration, this value will all elements of a certain entity.
+defined in your configuration, this value will show all elements of a certain entity.
 * totalPages : Total pages you can fetch given a criteria.
 
 To inject this object you need to define the "attributes" annotation field with
@@ -936,7 +940,8 @@ public function indexAction(User $user)
 
 Given an entity, return the ObjectManager that manages it.
 
-You can enable/disable this bundle by overriding `active` flag in configuration
+You can enable/disable this bundle by overriding `active` flag in configuration file
+`config.yml`
 
 ``` yml
 controller_extra:
@@ -1021,7 +1026,7 @@ public function indexAction(AbstractType $userType)
 ```
 
 This annotation allows you to not only create an instance of FormType, but
-also allows you to inject a From object or a FormView object
+also allows you to inject a Form object or a FormView object
 
 To inject a Form object you only need to cast method value as such.
 
@@ -1189,7 +1194,7 @@ public function indexAction()
 ```
 
 If not otherwise specified, default Doctrine Manager will be flushed with this
-annotation. You can overwrite default Mangager in your config.yml file
+annotation. You can overwrite default Manager in your `config.yml` file.
 
 ``` yml
 controller_extra:
@@ -1197,7 +1202,7 @@ controller_extra:
         default_manager: my_custom_manager
 ```
 
-You can also overwrite overwrite this value in every single Flush Annotation
+You can also override this value in every single Flush Annotation
 instance defining `manager` value
 
 ``` php
@@ -1218,7 +1223,7 @@ public function indexAction()
 ```
 
 If you want to change default manager in all annotation instances, you should
-overwrite bundle parameter.
+override bundle parameter in your `config.yml` file.
 
 ``` yml
 controller_extra:
@@ -1306,7 +1311,7 @@ public function indexAction(User $user, Address $address)
 ```
 
 By default, JsonResponse is created using default `status` and `headers` defined
-in bundle parameters. You can overwrite them.
+in bundle parameters. You can overwrite them in your `config.yml` file.
 
 ``` yml
 controller_extra:
@@ -1365,7 +1370,7 @@ public function indexAction()
 ```
 
 You can define the level of the message. You can define default one if none is
-specified overwriting it in your `config.yml` file.
+specified overriding it in your `config.yml` file.
 
 ``` yml
 controller_extra:
@@ -1407,7 +1412,7 @@ interface
 
 
 You can also define the execution of the log. You can define default one if
-none is specified overwriting it in your `config.yml` file.
+none is specified overriding it in your `config.yml` file.
 
 ``` yml
 controller_extra:
