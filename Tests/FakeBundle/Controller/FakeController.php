@@ -153,6 +153,28 @@ class FakeController extends Controller
     /**
      * Public method
      *
+     * @\Mmoreram\ControllerExtraBundle\Annotation\Entity(
+     *      name = "entity",
+     *      class = "FakeBundle:Fake",
+     *      mapping = {
+     *          "id" = "~id~",
+     *          "field" = "value",
+     *      },
+     *      notFoundException = {
+     *          "exception" = "Symfony\Component\HttpKernel\Exception\NotFoundHttpException",
+     *          "message" = "Entity was not found"
+     *      }
+     * )
+     *
+     * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
+     */
+    public function entityNotFoundExceptionAction(Fake $entity)
+    {
+    }
+
+    /**
+     * Public method
+     *
      * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
      */
     public function jsonResponseAction()

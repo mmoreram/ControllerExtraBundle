@@ -932,6 +932,41 @@ public function indexAction(User $user)
 }
 ```
 
+### Not found exception
+
+Sometimes you search for an entity that unfortunately does not exist, in this case an exception is launched. But you can
+customize the exception that you want to be launched.
+
+
+``` php
+<?php
+
+use Mmoreram\ControllerExtraBundle\Annotation\Entity;
+use Mmoreram\ControllerExtraBundle\Entity\User;
+
+/**
+ * Simple controller method
+ *
+ * This Controller matches pattern /user/edit/{id}
+ *
+ * @Entity(
+ *      class = "MmoreramCustomBundle:User",
+ *      name  = "user",
+ *      mapping = {
+ *          "id": "~id~",
+ *          "username": "~nonexisting~"
+ *      },
+ *      notFoundException = {
+ *          "exception" = "Symfony\Component\HttpKernel\Exception\NotFoundHttpException",
+ *          "message" = "Enter a valid entity identifier"
+ *      }
+ * )
+ */
+public function indexAction(User $user)
+{
+}
+```
+
 ## @ObjectManager
 
 Given an entity, return the ObjectManager that manages it.
