@@ -18,6 +18,7 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 use Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\Fake;
 use Mmoreram\ControllerExtraBundle\ValueObject\PaginatorAttributes;
@@ -160,6 +161,26 @@ class FakeController extends Controller
         return array(
             'index' => 'value'
         );
+    }
+
+    /**
+     * Public method
+     *
+     * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
+     */
+    public function jsonResponseExceptionAction()
+    {
+        return new \Exception('Exception message');
+    }
+
+    /**
+     * Public method
+     *
+     * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
+     */
+    public function jsonResponseHttpExceptionAction()
+    {
+        return new NotFoundHttpException('Not found exception');
     }
 
     /**

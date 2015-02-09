@@ -14,6 +14,7 @@ services:
         class: %mmoreram.controllerextra.resolver.json_resolver_annotation_resolver.class%
         arguments:
             default_status: %mmoreram.controllerextra.json_response_default_status%
+            default_error_status: %mmoreram.controllerextra.json_response_default_error_status%
             default_headers: %mmoreram.controllerextra.json_response_default_headers%
         tags:
             - { name: controller_extra.annotation }

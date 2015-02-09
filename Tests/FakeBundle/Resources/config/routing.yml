@@ -18,6 +18,14 @@ FakeBundleControllerJsonResponse:
     pattern: /fake/jsonresponse
     defaults: { _controller: FakeBundle:Fake:jsonResponse }
 
+FakeBundleControllerJsonResponseException:
+    pattern: /fake/jsonresponseexception
+    defaults: { _controller: FakeBundle:Fake:jsonResponseException }
+
+FakeBundleControllerJsonResponseHttpException:
+    pattern: /fake/jsonresponsehttpexception
+    defaults: { _controller: FakeBundle:Fake:jsonResponseHttpException }
+
 FakeBundleControllerPaginator:
     pattern: /fake/paginator/{field}/{dir}/{page}/{limit}
     defaults: { _controller: FakeBundle:Fake:paginator }

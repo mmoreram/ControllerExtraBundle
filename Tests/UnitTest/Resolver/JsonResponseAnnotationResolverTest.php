@@ -15,7 +15,9 @@ namespace Mmoreram\ControllerExtraBundle\Tests\UnitTest\Resolver;
 
 use PHPUnit_Framework_TestCase;
 use ReflectionMethod;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
 use Mmoreram\ControllerExtraBundle\Resolver\JsonResponseAnnotationResolver;
@@ -325,6 +327,128 @@ class JsonResponseAnnotationResolverTest extends \PHPUnit_Framework_TestCase
         $event
             ->expects($this->never())
             ->method('setResponse');
+
+        $jsonResponseAnnotationResolver->onKernelView($event);
+    }
+
+    /**
+     * Test onKernelResponse with generic exception
+     */
+    public function testOnKernelExceptionResponse()
+    {
+        $exceptionMessage     = 'Response message';
+        $defaultErrorStatus   = 500;
+        $exceptionResponse    = new \Exception($exceptionMessage);
+        $expectedJsonResponse = JsonResponse::create(
+            array('message' => $exceptionMessage),
+            $defaultErrorStatus,
+            array()
+        );
+
+        /**
+         * @var JsonResponseAnnotationResolver $jsonResponseAnnotationResolver
+         */
+        $jsonResponseAnnotationResolver = $this
+            ->getMockBuilder('Mmoreram\ControllerExtraBundle\Resolver\JsonResponseAnnotationResolver')
+            ->disableOriginalConstructor()
+            ->setMethods(array(
+                'getReturnJson',
+                'getHeaders',
+                'getDefaultErrorStatus',
+            ))
+            ->getMock();
+
+        $jsonResponseAnnotationResolver
+            ->expects($this->once())
+            ->method('getReturnJson')
+            ->will($this->returnValue(true));
+
+        $jsonResponseAnnotationResolver
+            ->expects($this->once())
+            ->method('getHeaders')
+            ->will($this->returnValue(array()));
+
+        $jsonResponseAnnotationResolver
+            ->expects($this->once())
+            ->method('getDefaultErrorStatus')
+            ->will($this->returnValue($defaultErrorStatus));
+
+        $event = $this
+            ->getMockBuilder('Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent')
+            ->disableOriginalConstructor()
+            ->setMethods(array(
+                'getControllerResult',
+                'setResponse',
+            ))
+            ->getMock();
+
+        $event
+            ->expects($this->once())
+            ->method('getControllerResult')
+            ->will($this->returnValue($exceptionResponse));
+
+        $event
+            ->expects($this->once())
+            ->method('setResponse')
+            ->with($expectedJsonResponse);
+
+        $jsonResponseAnnotationResolver->onKernelView($event);
+    }
+
+    /**
+     * Test onKernelResponse with http exception
+     */
+    public function testOnKernelHttpExceptionResponse()
+    {
+        $exceptionMessage     = 'HTTP Response message';
+        $defaultErrorStatus   = 404;
+        $exceptionResponse    = new HttpException($defaultErrorStatus, $exceptionMessage);
+        $expectedJsonResponse = JsonResponse::create(
+            array('message' => $exceptionMessage),
+            $defaultErrorStatus,
+            array()
+        );
+
+        /**
+         * @var JsonResponseAnnotationResolver $jsonResponseAnnotationResolver
+         */
+        $jsonResponseAnnotationResolver = $this
+            ->getMockBuilder('Mmoreram\ControllerExtraBundle\Resolver\JsonResponseAnnotationResolver')
+            ->disableOriginalConstructor()
+            ->setMethods(array(
+                'getReturnJson',
+                'getHeaders',
+            ))
+            ->getMock();
+
+        $jsonResponseAnnotationResolver
+            ->expects($this->once())
+            ->method('getReturnJson')
+            ->will($this->returnValue(true));
+
+        $jsonResponseAnnotationResolver
+            ->expects($this->once())
+            ->method('getHeaders')
+            ->will($this->returnValue(array()));
+
+        $event = $this
+            ->getMockBuilder('Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent')
+            ->disableOriginalConstructor()
+            ->setMethods(array(
+                'getControllerResult',
+                'setResponse',
+            ))
+            ->getMock();
+
+        $event
+            ->expects($this->once())
+            ->method('getControllerResult')
+            ->will($this->returnValue($exceptionResponse));
+
+        $event
+            ->expects($this->once())
+            ->method('setResponse')
+            ->with($expectedJsonResponse);
 
         $jsonResponseAnnotationResolver->onKernelView($event);
     }

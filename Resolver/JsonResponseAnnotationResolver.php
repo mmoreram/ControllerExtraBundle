@@ -16,6 +16,7 @@ namespace Mmoreram\ControllerExtraBundle\Resolver;
 use ReflectionMethod;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
 
 use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
@@ -33,6 +34,13 @@ class JsonResponseAnnotationResolver implements AnnotationResolverInterface
      * Status
      */
     protected $defaultStatus;
+
+    /**
+     * @var integer
+     *
+     * Error status
+     */
+    protected $defaultErrorStatus;
 
     /**
      * @var array
@@ -65,13 +73,15 @@ class JsonResponseAnnotationResolver implements AnnotationResolverInterface
     /**
      * Construct method
      *
-     * @param integer $defaultStatus  Default status
-     * @param array   $defaultHeaders Default headers
+     * @param integer $defaultStatus      Default status
+     * @param integer $defaultErrorStatus Default error status
+     * @param array   $defaultHeaders     Default headers
      */
-    public function __construct($defaultStatus, array $defaultHeaders)
+    public function __construct($defaultStatus, $defaultErrorStatus, array $defaultHeaders)
     {
-        $this->defaultStatus = $defaultStatus;
-        $this->defaultHeaders = $defaultHeaders;
+        $this->defaultStatus      = $defaultStatus;
+        $this->defaultErrorStatus = $defaultErrorStatus;
+        $this->defaultHeaders     = $defaultHeaders;
     }
 
     /**
@@ -95,6 +105,16 @@ class JsonResponseAnnotationResolver implements AnnotationResolverInterface
     }
 
     /**
+     * Get default error response status
+     *
+     * @return integer Default error Response status
+     */
+    public function getDefaultErrorStatus()
+    {
+        return $this->defaultErrorStatus;
+    }
+
+    /**
      * Get default response headers
      *
      * @return integer Default Response headers
@@ -115,9 +135,21 @@ class JsonResponseAnnotationResolver implements AnnotationResolverInterface
     }
 
     /**
+     * Set response status
+     *
+     * @param integer $status The status response to set
+     *
+     * @return integer Response status
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+    }
+
+    /**
      * Get response headers
      *
-     * @return integer Response headers
+     * @return array Response headers
      */
     public function getHeaders()
     {
@@ -170,6 +202,16 @@ class JsonResponseAnnotationResolver implements AnnotationResolverInterface
         if ($this->getReturnJson()) {
 
             $result = $event->getControllerResult();
+
+            if ($result instanceof \Exception) {
+                if ($result instanceof HttpExceptionInterface) {
+                    $this->setStatus($result->getStatusCode());
+                } else {
+                    $this->setStatus($this->getDefaultErrorStatus());
+                }
+                $result = array('message' => $result->getMessage());
+            }
+
             $response = JsonResponse::create(
                 $result,
                 $this->getStatus(),

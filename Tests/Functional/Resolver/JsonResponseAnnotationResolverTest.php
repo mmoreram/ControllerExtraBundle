@@ -21,9 +21,9 @@ use Mmoreram\ControllerExtraBundle\Tests\Functional\AbstractWebTestCase;
 class JsonResponseAnnotationResolverTest extends AbstractWebTestCase
 {
     /**
-     * testAnnotation
+     * Test annotation for a right request
      */
-    public function testAnnotation()
+    public function testAnnotationForRightRequest()
     {
         $this->client->request('GET', '/fake/jsonresponse');
 
@@ -36,4 +36,41 @@ class JsonResponseAnnotationResolverTest extends AbstractWebTestCase
         );
     }
 
+    /**
+     * Test annotation for a request launching an exception
+     */
+    public function testAnnotationRequestWithException()
+    {
+        $this->client->request('GET', '/fake/jsonresponseexception');
+
+        $response = $this
+            ->client
+            ->getResponse();
+
+        $this->assertEquals(
+            '{"message":"Exception message"}',
+            $response->getContent()
+        );
+
+        $this->assertEquals(
+            '500',
+            $response->getStatusCode()
+        );
+    }
+
+    /**
+     * Test annotation for a request launching a http exception
+     */
+    public function testAnnotationRequestWithHttpException()
+    {
+        $this->client->request('GET', '/fake/jsonresponsehttpexception');
+
+        $this->assertEquals(
+            '{"message":"Not found exception"}',
+            $this
+                ->client
+                ->getResponse()
+                ->getContent()
+        );
+    }
 }

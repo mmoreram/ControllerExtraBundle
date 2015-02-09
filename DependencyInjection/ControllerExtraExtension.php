@@ -122,6 +122,11 @@ class ControllerExtraExtension extends Extension
         );
 
         $container->setParameter(
+            'mmoreram.controllerextra.json_response_default_error_status',
+            $config['json_response']['default_error_status']
+        );
+
+        $container->setParameter(
             'mmoreram.controllerextra.json_response_default_headers',
             $config['json_response']['default_headers']
         );
