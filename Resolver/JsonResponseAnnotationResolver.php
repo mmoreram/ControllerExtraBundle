@@ -16,8 +16,9 @@ namespace Mmoreram\ControllerExtraBundle\Resolver;
 use ReflectionMethod;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
+use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
 use Mmoreram\ControllerExtraBundle\Annotation\JsonResponse as AnnotationJsonResponse;
@@ -211,6 +212,34 @@ class JsonResponseAnnotationResolver implements AnnotationResolverInterface
                 }
                 $result = array('message' => $result->getMessage());
             }
+
+            $response = JsonResponse::create(
+                $result,
+                $this->getStatus(),
+                $this->getHeaders()
+            );
+
+            $event->setResponse($response);
+        }
+    }
+
+    /**
+     * Method executed when uncaught exception is launched
+     *
+     * @param GetResponseForExceptionEvent $event Event
+     */
+    public function onKernelException(GetResponseForExceptionEvent $event)
+    {
+        if ($this->getReturnJson()) {
+
+            $exception = $event->getException();
+
+            if ($exception instanceof HttpExceptionInterface) {
+                $this->setStatus($exception->getStatusCode());
+            } else {
+                $this->setStatus($this->getDefaultErrorStatus());
+            }
+            $result = array('message' => $exception->getMessage());
 
             $response = JsonResponse::create(
                 $result,

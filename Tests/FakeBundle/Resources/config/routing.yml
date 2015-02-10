@@ -26,6 +26,10 @@ FakeBundleControllerJsonResponseException:
     pattern: /fake/jsonresponseexception
     defaults: { _controller: FakeBundle:Fake:jsonResponseException }
 
+FakeBundleControllerJsonResponseAnnotationException:
+    pattern: /fake/jsonresponseannotationexception
+    defaults: { _controller: FakeBundle:Fake:jsonResponseAnnotationException }
+
 FakeBundleControllerJsonResponseHttpException:
     pattern: /fake/jsonresponsehttpexception
     defaults: { _controller: FakeBundle:Fake:jsonResponseHttpException }

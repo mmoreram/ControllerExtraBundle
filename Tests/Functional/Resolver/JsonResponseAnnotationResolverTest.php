@@ -65,12 +65,40 @@ class JsonResponseAnnotationResolverTest extends AbstractWebTestCase
     {
         $this->client->request('GET', '/fake/jsonresponsehttpexception');
 
+        $response = $this
+            ->client
+            ->getResponse();
+
         $this->assertEquals(
             '{"message":"Not found exception"}',
-            $this
-                ->client
-                ->getResponse()
-                ->getContent()
+            $response->getContent()
+        );
+
+        $this->assertEquals(
+            '404',
+            $response->getStatusCode()
+        );
+    }
+
+    /**
+     * Test that an exception is laucned from an annotation
+     */
+    public function testAnnotationRequestWhenExceptionIsLaunchedByAnnotation()
+    {
+        $this->client->request('GET', '/fake/jsonresponseannotationexception');
+
+        $response = $this
+            ->client
+            ->getResponse();
+
+        $this->assertEquals(
+            '{"message":"Exception launched from an annotation"}',
+            $response->getContent()
+        );
+
+        $this->assertEquals(
+            '404',
+            $response->getStatusCode()
         );
     }
 }
