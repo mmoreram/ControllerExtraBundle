@@ -43,6 +43,9 @@
         "psr-0": { "Mmoreram\\ControllerExtraBundle": "" }
     },
     "minimum-stability": "stable",
+    "config": {
+        "bin-dir": "bin"
+    },
     "extra": {
         "branch-alias": {
             "dev-master": "1.0-dev"

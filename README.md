@@ -1381,6 +1381,40 @@ public function indexAction(User $user, Address $address)
 }
 ```
 
+If an Exception is returned the response status is set by default to 500 and the Exception message is returned as
+response.
+
+`STATUS 500 Internal server error`
+
+``` json
+{
+    message : 'Exception message'
+}
+
+```
+
+In case we use a HttpExceptionInterface the use the exception status code as status code. In case we launch this
+exception
+
+``` php
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+
+...
+
+return new NotFoundHttpException('Resource not found');
+```
+
+We'll receive this response
+
+`STATUS 404 Not Found`
+
+``` json
+{
+    message : 'Resource not found'
+}
+
+```
+
 > If multiple @Mmoreram\JsonResponse are defined in same action, last instance 
 > will overwrite previous. Anyway just one instance should be defined.
 
