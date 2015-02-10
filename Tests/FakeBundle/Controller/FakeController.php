@@ -206,6 +206,27 @@ class FakeController extends Controller
     }
 
     /**
+     * Public method
+     *
+     * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
+     * @\Mmoreram\ControllerExtraBundle\Annotation\Entity(
+     *      name = "entity",
+     *      class = "FakeBundle:Fake",
+     *      mapping = {
+     *          "id" = "~id~",
+     *          "field" = "value",
+     *      },
+     *      notFoundException = {
+     *          "exception" = "Symfony\Component\HttpKernel\Exception\NotFoundHttpException",
+     *          "message" = "Exception launched from an annotation"
+     *      }
+     * )
+     */
+    public function jsonResponseAnnotationExceptionAction(Fake $entity)
+    {
+    }
+
+    /**
      * Public pagination method
      *
      * @\Mmoreram\ControllerExtraBundle\Annotation\Paginator(

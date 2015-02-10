@@ -1415,6 +1415,9 @@ We'll receive this response
 
 ```
 
+> If the exception is being launched on an annotation (e.g. Entity annotation) remember to add the JsonResponse
+> annotation at the beginning or at least before any annotation that could cause an exception
+
 > If multiple @Mmoreram\JsonResponse are defined in same action, last instance 
 > will overwrite previous. Anyway just one instance should be defined.
 
