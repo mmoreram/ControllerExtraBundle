@@ -14,6 +14,10 @@ FakeBundleControllerEntityMappingFallback:
     pattern: /fake/entity/mapped/fallback/{id}
     defaults: { _controller: FakeBundle:Fake:entityMappingFallback }
 
+FakeBundleControllerEntityNotFoundException:
+    pattern: /fake/entity/not/found/{id}
+    defaults: { _controller: FakeBundle:Fake:entityNotFoundException }
+
 FakeBundleControllerJsonResponse:
     pattern: /fake/jsonresponse
     defaults: { _controller: FakeBundle:Fake:jsonResponse }

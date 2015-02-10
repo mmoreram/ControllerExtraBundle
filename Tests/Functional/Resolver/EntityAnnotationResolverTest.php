@@ -141,4 +141,22 @@ class EntityAnnotationResolverTest extends AbstractWebTestCase
                 '/fake/entity/mapped/fallback/1'
             );
     }
+
+    /**
+     * Test entity annotation when entity is not found and entity exception is set
+     */
+    public function testEntityNotFound()
+    {
+        $this->setExpectedException(
+            'Symfony\Component\HttpKernel\Exception\NotFoundHttpException',
+            'Entity was not found'
+        );
+
+        $this
+            ->client
+            ->request(
+                'GET',
+                '/fake/entity/not/found/not-found-id'
+            );
+    }
 }

@@ -117,7 +117,7 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
     )
     {
         /**
-         * Annotation is only laoded if is typeof AnnotationEntity
+         * Annotation is only loaded if is typeof AnnotationEntity
          */
         if ($annotation instanceof AnnotationEntity) {
 
@@ -217,6 +217,11 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
                 ->findOneBy($mapping);
 
             if (!($instance instanceof $entityClass)) {
+
+                $notFoundException = $annotation->getNotFoundException();
+                if (!empty($notFoundException)) {
+                    throw new $notFoundException['exception']($notFoundException['message']);
+                }
 
                 throw new EntityNotFoundException(
                     'Entity of type ' . $entityClass . ' with mapping ' .

@@ -65,6 +65,13 @@ class Entity extends Annotation
     public $persist;
 
     /**
+     * @var array
+     *
+     * Not found exception
+     */
+    public $notFoundException;
+
+    /**
      * return class
      *
      * @return string Class
@@ -122,5 +129,15 @@ class Entity extends Annotation
     public function getPersist()
     {
         return $this->persist;
+    }
+
+    /**
+     * return the not found exception
+     *
+     * @return array
+     */
+    public function getNotFoundException()
+    {
+        return $this->notFoundException;
     }
 }
