@@ -26,10 +26,11 @@ class AbstractAnnotationResolver
      *
      * @param ReflectionMethod $method        Method
      * @param string           $parameterName Parameter name
+     * @param string|null      $default       Default type if not defined
      *
-     * @return string Parameter type
+     * @return string|null Parameter type
      */
-    public function getParameterType(ReflectionMethod $method, $parameterName)
+    public function getParameterType(ReflectionMethod $method, $parameterName, $default = null)
     {
         /**
          * Method parameters load.
@@ -48,11 +49,14 @@ class AbstractAnnotationResolver
         /**
          * Get parameter class for TypeHinting
          *
-         * @var ReflectionParameter $parameter
+         * @var ReflectionParameter[] $parametersIndexed
          */
-        $parameter = $parametersIndexed[$parameterName];
+        if (!isset($parametersIndexed[$parameterName])) {
 
-        return $parameter
+            return $default;
+        }
+
+        return $parametersIndexed[$parameterName]
             ->getClass()
             ->getName();
     }
