@@ -303,7 +303,7 @@ class FakeController extends Controller
     public function paginatorSimpleAction(Paginator $paginator)
     {
         return array(
-            'count' => count($paginator)
+            'count' => $paginator->getIterator()->count()
         );
     }
 
@@ -338,7 +338,7 @@ class FakeController extends Controller
     public function paginatorNotMatchingAction(Paginator $paginator)
     {
         return array(
-            'count' => count($paginator)
+            'count' => $paginator->getIterator()->count()
         );
     }
 
@@ -377,7 +377,7 @@ class FakeController extends Controller
     )
     {
         return array(
-            'count' => count($paginator),
+            'count' => $paginator->getIterator()->count(),
             'totalPages' => $paginatorAttributes->getTotalPages(),
             'totalElements' => $paginatorAttributes->getTotalElements(),
             'currentPage' => $paginatorAttributes->getCurrentPage(),
@@ -410,7 +410,7 @@ class FakeController extends Controller
     )
     {
         return array(
-            'count' => $paginator->count(),
+            'count' => $paginator->getIterator()->count(),
         );
     }
 
@@ -460,5 +460,66 @@ class FakeController extends Controller
     public function entityMappingFallbackAction(Fake $entity)
     {
         return new Response();
+    }
+
+    /**
+     * Public pagination method
+     *
+     * @\Mmoreram\ControllerExtraBundle\Annotation\Paginator(
+     *      attributes = "paginatorAttributes",
+     *      class = {
+     *          "factory" = "Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory",
+     *          "method" = "createNonStatic",
+     *          "static" = false
+     *      },
+     *      limit = "?limit?",
+     *      page = "?page?",
+     * )
+     *
+     * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
+     */
+    public function paginatorQueryAction(
+        Paginator $paginator,
+        PaginatorAttributes $paginatorAttributes
+    )
+    {
+        return array(
+            'count' => $paginator->getIterator()->count(),
+            'totalPages' => $paginatorAttributes->getTotalPages(),
+            'totalElements' => $paginatorAttributes->getTotalElements(),
+            'currentPage' => $paginatorAttributes->getCurrentPage(),
+        );
+    }
+
+    /**
+     * Public pagination method
+     *
+     * @\Mmoreram\ControllerExtraBundle\Annotation\Paginator(
+     *      attributes = "paginatorAttributes",
+     *      class = {
+     *          "factory" = "Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory",
+     *          "method" = "createNonStatic",
+     *          "static" = false
+     *      },
+     *      limit = "#limit#",
+     *      page = "#page#",
+     *      wheres = {
+     *          { "x", "id" , "LIKE", "#id#", true }
+     *      },
+     * )
+     *
+     * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
+     */
+    public function paginatorRequestAction(
+        Paginator $paginator,
+        PaginatorAttributes $paginatorAttributes
+    )
+    {
+        return array(
+            'count' => $paginator->getIterator()->count(),
+            'totalPages' => $paginatorAttributes->getTotalPages(),
+            'totalElements' => $paginatorAttributes->getTotalElements(),
+            'currentPage' => $paginatorAttributes->getCurrentPage(),
+        );
     }
 }

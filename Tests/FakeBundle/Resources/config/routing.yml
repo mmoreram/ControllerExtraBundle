@@ -50,6 +50,14 @@ FakeBundleControllerPaginatorAttributes:
     pattern: /fake/paginator/attributes/{field}/{dir}/{page}/{limit}
     defaults: { _controller: FakeBundle:Fake:paginatorAttributes }
 
+FakeBundleControllerPaginatorQuery:
+    pattern: /fake/paginator/query
+    defaults: { _controller: FakeBundle:Fake:paginatorQuery }
+
+FakeBundleControllerPaginatorRequest:
+    pattern: /fake/paginator/request
+    defaults: { _controller: FakeBundle:Fake:paginatorRequest }
+
 FakeBundleControllerPaginatorPagerFanta:
     pattern: /fake/paginator/pagerfanta/{field}/{dir}/{page}/{limit}
     defaults: { _controller: FakeBundle:Fake:paginatorPagerFanta }

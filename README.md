@@ -345,7 +345,9 @@ controller_extra:
         default_page: 1
 ```
 
-You can refer to an existing Request attribute using `~value~` format
+You can refer to an existing Request attribute using `~value~` format, to any
+`$_GET` element by using format `?field?` or to any `$_POST` by using format
+`#field#`
 
 ``` php
 /**
@@ -393,7 +395,9 @@ controller_extra:
         default_limit_per_page: 10
 ```
 
-You can refer to an existing Request attribute using `~value~` format
+You can refer to an existing Request attribute using `~value~` format, to any
+`$_GET` element by using format `?field?` or to any `$_POST` by using format
+`#field#`
 
 ``` php
 /**
@@ -468,7 +472,9 @@ direction nomenclature with DQL one. DQL nomenclature just accept ASC for
 Ascendant and DESC for Descendant.
 
 This is very useful when you need to match a url format with the DQL one. You
-can refer to an existing Request attribute using `~value~` format
+can refer to an existing Request attribute using `~value~` format, to any
+`$_GET` element by using format `?field?` or to any $_POST by using format
+`#field#`
 
 ``` php
 /**
@@ -510,6 +516,7 @@ positions:
 * Second position: Entity field
 * Third position: Operator *=, <=, >, LIKE...*
 * Fourth position: Value to compare with
+* Fifth position: Is a filter. By default, false
 
 ``` php
 /**
@@ -520,7 +527,7 @@ positions:
  *      wheres = {
  *          {"x", "enabled", "=", true},
  *          {"x", "age", ">", 18},
- *          {"x", "name", "LIKE", "Efervescencio"},
+ *          {"x", "name", "LIKE", "Eferv%"},
  *      }
  * )
  */
@@ -529,7 +536,9 @@ public function indexAction(Paginator $paginator)
 }
 ```
 
-You can refer to an existing Request attribute using `~value~` format
+You can refer to an existing Request attribute using `~value~` format, to any
+`$_GET` element by using format `?field?` or to any `$_POST` by using format
+`#field#`
 
 ``` php
 /**
@@ -541,6 +550,32 @@ You can refer to an existing Request attribute using `~value~` format
  *      class = "MmoreramCustomBundle:User",
  *      wheres = {
  *          {"x", "name", "LIKE", "~field~"},
+ *      }
+ * )
+ */
+public function indexAction(Paginator $paginator)
+{
+}
+```
+
+You can use as well this feature for optional filtering by setting the last
+position to `true`. In that case, if the filter value is not found, such line
+will be ignored.
+
+``` php
+/**
+ * Simple controller method
+ *
+ * This Controller matches pattern /myroute?query=name%
+ * This Controller matches pattern /myroute as well
+ *
+ * In both cases this will work. In the first case we will apply the where line
+ * in the paginator. In the second case, we wont.
+ *
+ * @PaginatorAnnotation(
+ *      class = "MmoreramCustomBundle:User",
+ *      wheres = {
+ *          {"x", "name", "LIKE", "?query?", true},
  *      }
  * )
  */
@@ -864,7 +899,8 @@ the mapped instance satisfying it.
 
 The keys of the map represent the names of the mapped fields and the values
 represent their desired values. Remember than you can refer to any Request
-attribute by using format `~field~`.
+attribute by using format `~field~`, to any `$_GET` element by using format
+`?field?` or to any `$_POST` by using format `#field#`
 
 ``` php
 <?php

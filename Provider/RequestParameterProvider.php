@@ -13,6 +13,7 @@
 
 namespace Mmoreram\ControllerExtraBundle\Provider;
 
+use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -64,20 +65,63 @@ class RequestParameterProvider
 
         if ($request instanceof Request) {
 
-            $bag = $request->attributes;
+            /**
+             * Resolving the elements from the query
+             */
+            $value = $this->resolveValueFromParameterBag(
+                $request->attributes,
+                '~',
+                $value
+            );
 
-            $trimedValue = trim($value, '~');
+            /**
+             * Resolving the values from the request ($_POST)
+             */
+            $value = $this->resolveValueFromParameterBag(
+                $request->request,
+                '#',
+                $value
+            );
 
-            if (
-                ('~' . $trimedValue . '~' === $value) &&
-                $bag->has($trimedValue)
-            ) {
-                $value = $bag->get($trimedValue);
-            }
+            /**
+             * Resolving the values from the query ($_GET)
+             */
+            $value = $this->resolveValueFromParameterBag(
+                $request->query,
+                '?',
+                $value
+            );
         }
 
         return is_array($map) && isset($map[$value])
             ? $map[$value]
             : $value;
+    }
+
+    /**
+     * Given a bag and a delimiter, return the resolved value
+     *
+     * @param ParameterBag $parameterBag Parameter Bag
+     * @param string       $delimiter    Delimiter
+     * @param string       $value        Value
+     *
+     * @return string Resolved value
+     */
+    protected function resolveValueFromParameterBag(
+        ParameterBag $parameterBag,
+        $delimiter,
+        $value
+    )
+    {
+        $trimmedValue = trim($value, $delimiter);
+
+        if (
+            ($delimiter . $trimmedValue . $delimiter === $value) &&
+            $parameterBag->has($trimmedValue)
+        ) {
+            $value = $parameterBag->get($trimmedValue);
+        }
+
+        return $value;
     }
 }
