@@ -283,6 +283,7 @@ class PaginatorAnnotationResolver extends AbstractAnnotationResolver implements 
 
             $paginatorAttributes
                 ->setCurrentPage($page)
+                ->setLimitPerPage($limitPerPage)
                 ->setTotalElements($total)
                 ->setTotalPages(ceil($total / $limitPerPage));
 

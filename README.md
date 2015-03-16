@@ -643,6 +643,7 @@ instance with some interesting information about your pagination.
 * totalElements : Total elements given your criteria. If none criteria is
 defined in your configuration, this value will show all elements of a certain entity.
 * totalPages : Total pages you can fetch given a criteria.
+* limitPerPage: Maximum number of elements in each page.
 
 To inject this object you need to define the "attributes" annotation field with
 the method parameter name.
@@ -668,6 +669,7 @@ public function indexAction(
     $currentPage = $paginatorAttributes->getCurrentPage();
     $totalElements = $paginatorAttributes->getTotalElements();
     $totalPages = $paginatorAttributes->getTotalPages();
+    $limitPerPage = $paginatorAttributes->getLimitPerPage();
 
 }
 ```

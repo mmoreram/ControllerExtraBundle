@@ -40,6 +40,13 @@ class PaginatorAttributes
     protected $currentPage;
 
     /**
+     * @var integer
+     *
+     * number of elements per page
+     */
+    protected $limitPerPage;
+
+    /**
      * Sets TotalElements
      *
      * @param int $totalElements TotalElements
@@ -109,5 +116,29 @@ class PaginatorAttributes
     public function getCurrentPage()
     {
         return $this->currentPage;
+    }
+
+    /**
+     * Sets LimitPerPage
+     *
+     * @param int $limitPerPage
+     *
+     * @return PaginatorAttributes Self object
+     */
+    public function setLimitPerPage($limitPerPage)
+    {
+        $this->limitPerPage = $limitPerPage;
+
+        return $this;
+    }
+
+    /**
+     * Get LimitPerPage
+     *
+     * @return int LimitPerPage
+     */
+    public function getLimitPerPage()
+    {
+        return $this->limitPerPage;
     }
 }
