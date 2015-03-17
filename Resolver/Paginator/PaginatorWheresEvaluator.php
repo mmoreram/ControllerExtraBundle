@@ -64,6 +64,15 @@ class PaginatorWheresEvaluator implements PaginatorEvaluatorInterface
                     ->requestParameterProvider
                     ->getParameterValue($where[3]);
 
+                $optionalFilter = (boolean) isset($where[4])
+                    ? $where[4]
+                    : false;
+
+                if ($optionalFilter && ($where[3] === $whereValue)) {
+
+                    continue;
+                }
+
                 $queryBuilder
                     ->andWhere(trim($where[0]) . '.' . trim($where[1]) . " " . $where[2] . " ?0" . $iteration)
                     ->setParameter("0" . $iteration, $whereValue);

@@ -164,4 +164,121 @@ class PaginatorAnnotationResolverTest extends AbstractWebTestCase
                 ->getContent()
         );
     }
+
+    /**
+     * Test paginator with query
+     */
+    public function testPaginatorAnnotationQuery()
+    {
+        $entityManager = static::$kernel
+            ->getContainer()
+            ->get('doctrine')
+            ->getManagerForClass('Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\Fake');
+
+        for ($i = 0; $i < 30; $i++) {
+
+            $fake = FakeFactory::create();
+            $fake->setField('');
+            $entityManager->persist($fake);
+        }
+        $entityManager->flush();
+
+        $this
+            ->client
+            ->request(
+                'GET',
+                '/fake/paginator/query?limit=7&page=3'
+            );
+
+        $response = json_decode($this
+            ->client
+            ->getResponse()
+            ->getContent(), true);
+
+        $this->assertEquals(5, $response['totalPages']);
+        $this->assertEquals(30, $response['totalElements']);
+        $this->assertEquals(3, $response['currentPage']);
+        $this->assertEquals(7, $response['count']);
+    }
+
+    /**
+     * Test paginator with request
+     */
+    public function testPaginatorAnnotationRequest()
+    {
+        $entityManager = static::$kernel
+            ->getContainer()
+            ->get('doctrine')
+            ->getManagerForClass('Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\Fake');
+
+        for ($i = 0; $i < 30; $i++) {
+
+            $fake = FakeFactory::create();
+            $fake->setField('');
+            $entityManager->persist($fake);
+        }
+        $entityManager->flush();
+
+        $this
+            ->client
+            ->request(
+                'POST',
+                '/fake/paginator/request',
+                array(
+                    'page'  => 4,
+                    'limit' => 9,
+                )
+            );
+
+        $response = json_decode($this
+            ->client
+            ->getResponse()
+            ->getContent(), true);
+
+        $this->assertEquals(4, $response['totalPages']);
+        $this->assertEquals(30, $response['totalElements']);
+        $this->assertEquals(4, $response['currentPage']);
+        $this->assertEquals(3, $response['count']);
+    }
+
+    /**
+     * Test paginator with request
+     */
+    public function testPaginatorAnnotationRequestFilter()
+    {
+        $entityManager = static::$kernel
+            ->getContainer()
+            ->get('doctrine')
+            ->getManagerForClass('Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\Fake');
+
+        for ($i = 0; $i < 30; $i++) {
+
+            $fake = FakeFactory::create();
+            $fake->setField('');
+            $entityManager->persist($fake);
+        }
+        $entityManager->flush();
+
+        $this
+            ->client
+            ->request(
+                'POST',
+                '/fake/paginator/request',
+                array(
+                    'page'  => 2,
+                    'limit' => 4,
+                    'id' => '1%',
+                )
+            );
+
+        $response = json_decode($this
+            ->client
+            ->getResponse()
+            ->getContent(), true);
+
+        $this->assertEquals(3, $response['totalPages']);
+        $this->assertEquals(11, $response['totalElements']);
+        $this->assertEquals(2, $response['currentPage']);
+        $this->assertEquals(4, $response['count']);
+    }
 }
