@@ -17,6 +17,7 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 use Mmoreram\ControllerExtraBundle\Annotation\Log as AnnotationLog;
+use Mmoreram\ControllerExtraBundle\Provider\RequestParameterProvider;
 
 /**
  * Dependency Injection configuration
@@ -39,6 +40,17 @@ class Configuration implements ConfigurationInterface
                  */
                 ->integerNode('resolver_priority')
                     ->defaultValue(-8)
+                ->end()
+
+                /**
+                 * Provider request
+                 */
+                ->enumNode('request')
+                    ->values(array(
+                        RequestParameterProvider::CURRENT_REQUEST,
+                        RequestParameterProvider::MASTER_REQUEST,
+                    ))
+                    ->defaultValue(RequestParameterProvider::CURRENT_REQUEST)
                 ->end()
 
                 /**
