@@ -23,11 +23,32 @@ use Symfony\Component\HttpFoundation\RequestStack;
 class RequestParameterProvider
 {
     /**
+     * @var string
+     *
+     * Master request
+     */
+    const MASTER_REQUEST = 'master';
+
+    /**
+     * @var string
+     *
+     * Current request
+     */
+    const CURRENT_REQUEST = 'current';
+
+    /**
      * @var RequestStack
      *
      * Request Stack
      */
     protected $requestStack;
+
+    /**
+     * @var string
+     *
+     * Request type
+     */
+    protected $requestType;
 
     /**
      * Construct method
@@ -37,6 +58,20 @@ class RequestParameterProvider
     public function __construct(RequestStack $requestStack)
     {
         $this->requestStack = $requestStack;
+    }
+
+    /**
+     * Set request type
+     *
+     * @param string $requestType Request type
+     *
+     * @return $this Self object
+     */
+    public function setRequestType($requestType)
+    {
+        $this->requestType = $requestType;
+
+        return $this;
     }
 
     /**
@@ -59,9 +94,13 @@ class RequestParameterProvider
      */
     public function getParameterValue($value, array $map = null)
     {
-        $request = $this
-            ->requestStack
-            ->getCurrentRequest();
+        $request = $this->requestType == self::CURRENT_REQUEST
+            ? $this
+                ->requestStack
+                ->getCurrentRequest()
+            : $this
+                ->requestStack
+                ->getMasterRequest();
 
         if ($request instanceof Request) {
 

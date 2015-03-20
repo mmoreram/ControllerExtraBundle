@@ -107,6 +107,7 @@ Default values are:
 ``` yml
 controller_extra:
     resolver_priority: -8
+    request: current
     factory:
         default_method: create
         default_static: true
@@ -348,6 +349,9 @@ controller_extra:
 You can refer to an existing Request attribute using `~value~` format, to any
 `$_GET` element by using format `?field?` or to any `$_POST` by using format
 `#field#`
+
+> You can choose between Master Request or Current Request accessing to its
+> attributes, by configuring the request value of the configuration.
 
 ``` php
 /**

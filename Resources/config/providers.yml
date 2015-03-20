@@ -15,3 +15,5 @@ services:
         class: %mmoreram.controllerextra.provider.request_parameter_provider.class%
         arguments:
             request_stack: @request_stack
+        calls:
+            - [setRequestType, [%mmoreram.controllerextra.request%]]

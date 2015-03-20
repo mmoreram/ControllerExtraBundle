@@ -46,6 +46,11 @@ class ControllerExtraExtension extends Extension
             $config['resolver_priority']
         );
 
+        $container->setParameter(
+            'mmoreram.controllerextra.request',
+            $config['request']
+        );
+
         /**
          * Factory parameters
          */
