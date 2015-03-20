@@ -220,7 +220,7 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
 
                 $notFoundException = $annotation->getNotFoundException();
                 if (!empty($notFoundException)) {
-                    throw new $notFoundException['exception']($notFoundException['message']);
+                    throw new $notFoundException['exception'()]($notFoundException['message']);
                 }
 
                 throw new EntityNotFoundException(

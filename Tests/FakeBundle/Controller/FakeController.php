@@ -17,6 +17,9 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -521,5 +524,34 @@ class FakeController extends Controller
             'totalElements' => $paginatorAttributes->getTotalElements(),
             'currentPage' => $paginatorAttributes->getCurrentPage(),
         );
+    }
+
+    /**
+     * Form methods
+     *
+     * @\Mmoreram\ControllerExtraBundle\Annotation\Form(
+     *      class = "Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Form\Type\FakeType",
+     *      name = "form1"
+     * )
+     * @\Mmoreram\ControllerExtraBundle\Annotation\Form(
+     *      class = "Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Form\Type\FakeType",
+     *      name = "form2"
+     * )
+     * @\Mmoreram\ControllerExtraBundle\Annotation\Form(
+     *      class = "Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Form\Type\FakeType",
+     *      name = "form3"
+     * )
+     * @\Mmoreram\ControllerExtraBundle\Annotation\Form(
+     *      class = "Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Form\Type\FakeType",
+     *      name = "form4"
+     * )
+     */
+    public function formAction(
+        AbstractType $form1,
+        FormInterface $form2,
+        FormView $form3
+    )
+    {
+        return new Response();
     }
 }

@@ -65,3 +65,7 @@ FakeBundleControllerPaginatorPagerFanta:
 FakeBundleControllerObjectManager:
     pattern: /fake/objectmanager
     defaults: { _controller: FakeBundle:Fake:objectManager }
+
+FakeBundleControllerForm:
+    pattern: /fake/form
+    defaults: { _controller: FakeBundle:Fake:form }
