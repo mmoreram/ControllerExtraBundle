@@ -31,10 +31,11 @@ class FakeType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults([
+        $resolver->setDefaults(array(
             'data_class' => 'Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\Fake',
-        ]);
+        ));
     }
+
     /**
      * Buildform function
      *
