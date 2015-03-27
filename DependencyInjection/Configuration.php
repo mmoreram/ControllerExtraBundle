@@ -208,6 +208,17 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->end()
+
+                /**
+                 * Get config definition
+                 */
+                ->arrayNode('get')
+                    ->addDefaultsIfNotSet()
+                        ->children()
+                        ->booleanNode('active')
+                        ->defaultTrue()
+                    ->end()
+                ->end()
             ->end();
 
         return $treeBuilder;

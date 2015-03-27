@@ -65,3 +65,19 @@ FakeBundleControllerPaginatorPagerFanta:
 FakeBundleControllerObjectManager:
     pattern: /fake/objectmanager
     defaults: { _controller: FakeBundle:Fake:objectManager }
+
+FakeBundleControllerGetQueryString:
+    pattern: /fake/getquerystring
+    defaults: { _controller: FakeBundle:Fake:queryString }
+
+FakeBundleControllerGetQueryStringChangingParamName:
+    pattern: /fake/getquerystringchangingparamname
+    defaults: { _controller: FakeBundle:Fake:queryStringChangingName }
+
+FakeBundleControllerGetQueryStringChangingDefaultValue:
+    pattern: /fake/getquerystringchangingdefaultvalue
+    defaults: { _controller: FakeBundle:Fake:queryStringChangingDefaultValue }
+
+FakeBundleControllerGetQueryStringDeep:
+    pattern: /fake/getquerystringdeep
+    defaults: { _controller: FakeBundle:Fake:queryStringDeep }
