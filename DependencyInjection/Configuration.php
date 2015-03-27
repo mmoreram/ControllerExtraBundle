@@ -219,6 +219,19 @@ class Configuration implements ConfigurationInterface
                         ->defaultTrue()
                     ->end()
                 ->end()
+
+                /**
+                 * Post config definition
+                 */
+                ->arrayNode('post')
+                    ->addDefaultsIfNotSet()
+                        ->children()
+                        ->booleanNode('active')
+                        ->defaultTrue()
+                        ->end()
+                    ->end()
+                ->end()
+
             ->end();
 
         return $treeBuilder;

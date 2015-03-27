@@ -610,4 +610,92 @@ class FakeController extends Controller
             'param' => $param
         );
     }
+
+    /**
+     * Gets a post parameter without changing the param name
+     *
+     * @param string $param The post param
+     *
+     * @return array The retrieved param
+     *
+     * @\Mmoreram\ControllerExtraBundle\Annotation\Post(
+     *      path = "param"
+     * )
+     *
+     * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
+     */
+    public function postParameterAction(
+        $param
+    ) {
+        return array(
+            'param' => $param
+        );
+    }
+
+    /**
+     * Gets a post parameter changing the param name
+     *
+     * @param string $getParam The post param
+     *
+     * @return array The retrieved param
+     *
+     * @\Mmoreram\ControllerExtraBundle\Annotation\Post(
+     *      path = "param",
+     *      name = "getParam"
+     * )
+     *
+     * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
+     */
+    public function postParameterChangingNameAction(
+        $getParam
+    ) {
+        return array(
+            'param' => $getParam
+        );
+    }
+
+    /**
+     * Gets a post parameter changing default value
+     *
+     * @param string $param The post param
+     *
+     * @return array The retrieved param
+     *
+     * @\Mmoreram\ControllerExtraBundle\Annotation\Post(
+     *      path = "param",
+     *      default = "default-value"
+     * )
+     *
+     * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
+     */
+    public function postParameterChangingDefaultValueAction(
+        $param
+    ) {
+        return array(
+            'param' => $param
+        );
+    }
+
+    /**
+     * Gets a post using deep option
+     *
+     * @param string $param The post param
+     *
+     * @return array The retrieved param
+     *
+     * @\Mmoreram\ControllerExtraBundle\Annotation\Post(
+     *      path = "param[key]",
+     *      name = "param",
+     *      deep = true
+     * )
+     *
+     * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
+     */
+    public function postParameterDeepAction(
+        $param
+    ) {
+        return array(
+            'param' => $param
+        );
+    }
 }

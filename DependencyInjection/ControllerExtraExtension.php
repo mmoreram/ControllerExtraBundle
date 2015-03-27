@@ -199,6 +199,14 @@ class ControllerExtraExtension extends Extension
         );
 
         /**
+         * Post parameters
+         */
+        $container->setParameter(
+            'mmoreram.controllerextra.post_active',
+            $config['post']['active']
+        );
+
+        /**
          * Load config files
          */
         $loader = new YamlFileLoader(
@@ -289,6 +297,14 @@ class ControllerExtraExtension extends Extension
         if ($config['get']['active']) {
 
             $loader->load('resolver_get.yml');
+        }
+
+        /**
+        * Only loads post resolver config definition if is active
+        */
+        if ($config['post']['active']) {
+
+            $loader->load('resolver_post.yml');
         }
 
         return $this;

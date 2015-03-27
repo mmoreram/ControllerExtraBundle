@@ -81,3 +81,20 @@ FakeBundleControllerGetQueryStringChangingDefaultValue:
 FakeBundleControllerGetQueryStringDeep:
     pattern: /fake/getquerystringdeep
     defaults: { _controller: FakeBundle:Fake:queryStringDeep }
+
+FakeBundleControllerGetPostParameter:
+    pattern: /fake/getpostparameter
+    defaults: { _controller: FakeBundle:Fake:postParameter }
+
+FakeBundleControllerGetPostParameterChangingParamName:
+    pattern: /fake/getpostparameterchangingparamname
+    defaults: { _controller: FakeBundle:Fake:postParameterChangingName }
+
+FakeBundleControllerGetPostParameterChangingDefaultValue:
+    pattern: /fake/getpostparameterchangingdefaultvalue
+    defaults: { _controller: FakeBundle:Fake:postParameterChangingDefaultValue }
+
+FakeBundleControllerGetPostParameterDeep:
+    pattern: /fake/getpostparameterdeep
+    defaults: { _controller: FakeBundle:Fake:postParameterDeep }
+
