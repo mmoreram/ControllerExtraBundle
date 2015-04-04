@@ -44,6 +44,8 @@ Table of contents
     * [@Flush](#flush)
     * [@JsonResponse](#jsonresponse)
     * [@Log](#log)
+    * [@Get](#get)
+    * [@Post](#Post)
 1. [Custom annotations](#custom-annotations)
     * [Annotation](#annotation)
     * [Resolver](#resolver)
@@ -1559,6 +1561,181 @@ Several executions can be used,
 * @Mmoreram\Log::EXEC_PRE - Logged before controller execution
 * @Mmoreram\Log::EXEC_POST - Logged after controller execution
 * @Mmoreram\Log::EXEC_BOTH - Logged both
+
+## @Get
+
+The Get annotation allows you to get any parameter from the request query string.
+
+For a `GET` request like:
+
+```
+GET /my-page?foo=bar HTTP/1.1
+```
+
+You can can simply get the `foo` var using the `GET` annotation
+
+``` php
+<?php
+
+use Mmoreram\ControllerExtraBundle\Annotation\Get;
+
+/**
+ * Simple controller method
+ *
+ * @Get(
+ *     path = "foo"
+ * )
+ */
+public function indexAction($foo)
+{
+    // Use the foo var
+}
+```
+
+You can also customize the var name and the default value in case the var is not
+sent on the query string.
+
+For a `GET` request like:
+
+```
+GET /my-page HTTP/1.1
+```
+
+And this annotation
+
+``` php
+<?php
+
+use Mmoreram\ControllerExtraBundle\Annotation\Get;
+
+/**
+ * Simple controller method
+ *
+ * @Get(
+ *     path = "foo",
+ *     name = "varName",
+ *     default = 'bar',
+ * )
+ */
+public function indexAction($varName)
+{
+    // This would print 'bar'
+    echo $varName;
+}
+```
+
+You can also use a deep option like [Symfony parameter bag get method]
+(http://api.symfony.com/2.0/Symfony/Component/HttpFoundation/ParameterBag.html#method_get)
+, if true, a path like foo[bar] will find deeper items.
+By default this option is disabled.
+
+``` php
+<?php
+
+use Mmoreram\ControllerExtraBundle\Annotation\Get;
+
+/**
+ * Simple controller method
+ *
+ * @Get(
+ *     path = "foo[bar]",
+ *     name = "varName",
+ *     deep = true
+ * )
+ */
+public function indexAction($varName)
+{
+    // ...
+}
+```
+
+## @Post
+
+The Post annotation allows you to get any parameter from the post request body.
+
+For a `POST` request like:
+
+```
+POST /my-page HTTP/1.1
+foo=bar
+```
+
+You can can simply get the `foo` var using the `POST` annotation
+
+``` php
+<?php
+
+use Mmoreram\ControllerExtraBundle\Annotation\Post;
+
+/**
+ * Simple controller method
+ *
+ * @Post(
+ *     path = "foo"
+ * )
+ */
+public function indexAction($foo)
+{
+    // Use the foo var
+}
+```
+
+You can also customize the var name and the default value in case the var is not
+sent on the query string.
+
+For a `POST` request like:
+
+```
+POST /my-page HTTP/1.1
+```
+
+And this annotation
+
+``` php
+<?php
+
+use Mmoreram\ControllerExtraBundle\Annotation\Post;
+
+/**
+ * Simple controller method
+ *
+ * @Post(
+ *     path = "foo",
+ *     name = "varName",
+ *     default = 'bar',
+ * )
+ */
+public function indexAction($varName)
+{
+    // This would print 'bar'
+    echo $varName;
+}
+```
+
+You can also use a deep option like [Symfony parameter bag get method]
+(http://api.symfony.com/2.0/Symfony/Component/HttpFoundation/ParameterBag.html#method_get)
+, if true, a path like foo[bar] will find deeper items.
+By default this option is disabled.
+
+``` php
+<?php
+
+use Mmoreram\ControllerExtraBundle\Annotation\Post;
+
+/**
+ * Simple controller method
+ *
+ * @Post(
+ *     path = "foo[bar]",
+ *     name = "varName",
+ *     deep = true
+ * )
+ */
+public function indexAction($varName)
+{
+    // ...
+}
+```
 
 # Custom annotations
 
