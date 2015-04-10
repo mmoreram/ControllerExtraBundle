@@ -522,4 +522,180 @@ class FakeController extends Controller
             'currentPage' => $paginatorAttributes->getCurrentPage(),
         );
     }
+
+    /**
+     * Gets a query string parameter without changing the param name
+     *
+     * @param string $param The query string param
+     *
+     * @return array The retrieved param
+     *
+     * @\Mmoreram\ControllerExtraBundle\Annotation\Get(
+     *      path = "param"
+     * )
+     *
+     * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
+     */
+    public function queryStringAction(
+        $param
+    ) {
+        return array(
+            'param' => $param
+        );
+    }
+
+    /**
+     * Gets a query string parameter changing the param name
+     *
+     * @param string $getParam The query string param
+     *
+     * @return array The retrieved param
+     *
+     * @\Mmoreram\ControllerExtraBundle\Annotation\Get(
+     *      path = "param",
+     *      name = "getParam"
+     * )
+     *
+     * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
+     */
+    public function queryStringChangingNameAction(
+        $getParam
+    ) {
+        return array(
+            'param' => $getParam
+        );
+    }
+
+    /**
+     * Gets a query string parameter changing default value
+     *
+     * @param string $param The query string param
+     *
+     * @return array The retrieved param
+     *
+     * @\Mmoreram\ControllerExtraBundle\Annotation\Get(
+     *      path = "param",
+     *      default = "default-value"
+     * )
+     *
+     * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
+     */
+    public function queryStringChangingDefaultValueAction(
+        $param
+    ) {
+        return array(
+            'param' => $param
+        );
+    }
+
+    /**
+     * Gets a query string using deep option
+     *
+     * @param string $param The query string param
+     *
+     * @return array The retrieved param
+     *
+     * @\Mmoreram\ControllerExtraBundle\Annotation\Get(
+     *      path = "param[key]",
+     *      name = "param",
+     *      deep = true
+     * )
+     *
+     * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
+     */
+    public function queryStringDeepAction(
+        $param
+    ) {
+        return array(
+            'param' => $param
+        );
+    }
+
+    /**
+     * Gets a post parameter without changing the param name
+     *
+     * @param string $param The post param
+     *
+     * @return array The retrieved param
+     *
+     * @\Mmoreram\ControllerExtraBundle\Annotation\Post(
+     *      path = "param"
+     * )
+     *
+     * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
+     */
+    public function postParameterAction(
+        $param
+    ) {
+        return array(
+            'param' => $param
+        );
+    }
+
+    /**
+     * Gets a post parameter changing the param name
+     *
+     * @param string $getParam The post param
+     *
+     * @return array The retrieved param
+     *
+     * @\Mmoreram\ControllerExtraBundle\Annotation\Post(
+     *      path = "param",
+     *      name = "getParam"
+     * )
+     *
+     * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
+     */
+    public function postParameterChangingNameAction(
+        $getParam
+    ) {
+        return array(
+            'param' => $getParam
+        );
+    }
+
+    /**
+     * Gets a post parameter changing default value
+     *
+     * @param string $param The post param
+     *
+     * @return array The retrieved param
+     *
+     * @\Mmoreram\ControllerExtraBundle\Annotation\Post(
+     *      path = "param",
+     *      default = "default-value"
+     * )
+     *
+     * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
+     */
+    public function postParameterChangingDefaultValueAction(
+        $param
+    ) {
+        return array(
+            'param' => $param
+        );
+    }
+
+    /**
+     * Gets a post using deep option
+     *
+     * @param string $param The post param
+     *
+     * @return array The retrieved param
+     *
+     * @\Mmoreram\ControllerExtraBundle\Annotation\Post(
+     *      path = "param[key]",
+     *      name = "param",
+     *      deep = true
+     * )
+     *
+     * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
+     */
+    public function postParameterDeepAction(
+        $param
+    ) {
+        return array(
+            'param' => $param
+        );
+    }
 }

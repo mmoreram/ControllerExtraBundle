@@ -65,3 +65,36 @@ FakeBundleControllerPaginatorPagerFanta:
 FakeBundleControllerObjectManager:
     pattern: /fake/objectmanager
     defaults: { _controller: FakeBundle:Fake:objectManager }
+
+FakeBundleControllerGetQueryString:
+    pattern: /fake/getquerystring
+    defaults: { _controller: FakeBundle:Fake:queryString }
+
+FakeBundleControllerGetQueryStringChangingParamName:
+    pattern: /fake/getquerystringchangingparamname
+    defaults: { _controller: FakeBundle:Fake:queryStringChangingName }
+
+FakeBundleControllerGetQueryStringChangingDefaultValue:
+    pattern: /fake/getquerystringchangingdefaultvalue
+    defaults: { _controller: FakeBundle:Fake:queryStringChangingDefaultValue }
+
+FakeBundleControllerGetQueryStringDeep:
+    pattern: /fake/getquerystringdeep
+    defaults: { _controller: FakeBundle:Fake:queryStringDeep }
+
+FakeBundleControllerGetPostParameter:
+    pattern: /fake/getpostparameter
+    defaults: { _controller: FakeBundle:Fake:postParameter }
+
+FakeBundleControllerGetPostParameterChangingParamName:
+    pattern: /fake/getpostparameterchangingparamname
+    defaults: { _controller: FakeBundle:Fake:postParameterChangingName }
+
+FakeBundleControllerGetPostParameterChangingDefaultValue:
+    pattern: /fake/getpostparameterchangingdefaultvalue
+    defaults: { _controller: FakeBundle:Fake:postParameterChangingDefaultValue }
+
+FakeBundleControllerGetPostParameterDeep:
+    pattern: /fake/getpostparameterdeep
+    defaults: { _controller: FakeBundle:Fake:postParameterDeep }
+
