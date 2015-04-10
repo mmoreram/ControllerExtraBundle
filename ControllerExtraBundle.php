@@ -26,56 +26,14 @@ use Mmoreram\ControllerExtraBundle\CompilerPass\ResolverCompilerPass;
 class ControllerExtraBundle extends Bundle
 {
     /**
-     * Boots the Bundle.
-     */
-    public function boot()
-    {
-        $kernel = $this->container->get('kernel');
-
-        AnnotationRegistry::registerFile($kernel
-            ->locateResource("@ControllerExtraBundle/Annotation/Form.php")
-        );
-
-        AnnotationRegistry::registerFile($kernel
-            ->locateResource("@ControllerExtraBundle/Annotation/Flush.php")
-        );
-
-        AnnotationRegistry::registerFile($kernel
-            ->locateResource("@ControllerExtraBundle/Annotation/Log.php")
-        );
-
-        AnnotationRegistry::registerFile($kernel
-            ->locateResource("@ControllerExtraBundle/Annotation/JsonResponse.php")
-        );
-
-        AnnotationRegistry::registerFile($kernel
-            ->locateResource("@ControllerExtraBundle/Annotation/Paginator.php")
-        );
-
-        AnnotationRegistry::registerFile($kernel
-            ->locateResource("@ControllerExtraBundle/Annotation/Entity.php")
-        );
-
-        AnnotationRegistry::registerFile($kernel
-            ->locateResource("@ControllerExtraBundle/Annotation/ObjectManager.php")
-        );
-
-        AnnotationRegistry::registerFile($kernel
-            ->locateResource("@ControllerExtraBundle/Annotation/Get.php")
-        );
-
-        AnnotationRegistry::registerFile($kernel
-            ->locateResource("@ControllerExtraBundle/Annotation/Post.php")
-        );
-    }
-
-    /**
      * Builds bundle
      *
      * @param ContainerBuilder $container Container
      */
     public function build(ContainerBuilder $container)
     {
+        parent::build($container);
+
         /**
          * Adds compiler passes
          */

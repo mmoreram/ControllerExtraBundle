@@ -1,10 +1,21 @@
 {
     "name": "mmoreram/controller-extra-bundle",
     "description": "Some specific controller features",
-    "keywords": ["symfony2", "controller", "annotations", "controller-extra-bundle"],
+    "keywords": [
+        "symfony2",
+        "controller",
+        "annotations",
+        "controller-extra-bundle"
+    ],
     "homepage": "https://github.com/mmoreram/ControllerExtraBundle",
     "type": "symfony-bundle",
     "license": "MIT",
+    "support": {
+        "email": "yuhu@mmoreram.com",
+        "forum": "https://gitter.im/mmoreram/ControllerExtraBundle",
+        "source": "https://github.com/mmoreram/ControllerExtraBundle",
+        "issues": "https://github.com/mmoreram/ControllerExtraBundle/issues"
+    },
     "authors": [
         {
             "name": "Marc Morera",
@@ -39,11 +50,11 @@
         "doctrine/orm": "to use the @Paginator annotation",
         "white-october/pagerfanta-bundle": "to use the @Paginator annotation with Pagerfanta support"
     },
-    "target-dir": "Mmoreram/ControllerExtraBundle",
     "autoload": {
-        "psr-0": { "Mmoreram\\ControllerExtraBundle": "" }
+        "psr-4": {
+            "Mmoreram\\ControllerExtraBundle\\": ""
+        }
     },
-    "minimum-stability": "stable",
     "config": {
         "bin-dir": "bin"
     },
