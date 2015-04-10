@@ -14,7 +14,6 @@
 namespace Mmoreram\ControllerExtraBundle\Resolver\Abstracts;
 
 use ReflectionMethod;
-use ReflectionParameter;
 
 /**
  * Class AbstractAnnotationResolver
@@ -26,34 +25,24 @@ class AbstractAnnotationResolver
      *
      * @param ReflectionMethod $method        Method
      * @param string           $parameterName Parameter name
+     * @param string|null      $default       Default type if not defined
      *
-     * @return string Parameter type
+     * @return string|null Parameter type
      */
-    public function getParameterType(ReflectionMethod $method, $parameterName)
+    public function getParameterType(ReflectionMethod $method, $parameterName, $default = null)
     {
-        /**
-         * Method parameters load.
-         *
-         * A hash is created to access to all needed parameters
-         * with cost O(1)
-         */
         $parameters = $method->getParameters();
-        $parametersIndexed = array();
 
         foreach ($parameters as $parameter) {
+            if ($parameter->getName() === $parameterName) {
+                $class = $parameter->getClass();
 
-            $parametersIndexed[$parameter->getName()] = $parameter;
+                return $class
+                    ? $class->getName()
+                    : $default;
+            }
         }
 
-        /**
-         * Get parameter class for TypeHinting
-         *
-         * @var ReflectionParameter $parameter
-         */
-        $parameter = $parametersIndexed[$parameterName];
-
-        return $parameter
-            ->getClass()
-            ->getName();
+        return $default;
     }
 }

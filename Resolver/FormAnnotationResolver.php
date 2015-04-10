@@ -109,7 +109,8 @@ class FormAnnotationResolver extends AbstractAnnotationResolver implements Annot
             $parameterName = $annotation->getName() ?: $this->defaultName;
             $parameterClass = $this->getParameterType(
                 $method,
-                $parameterName
+                $parameterName,
+                'Symfony\\Component\\Form\\FormInterface'
             );
 
             /**

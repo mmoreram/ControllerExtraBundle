@@ -98,3 +98,6 @@ FakeBundleControllerGetPostParameterDeep:
     pattern: /fake/getpostparameterdeep
     defaults: { _controller: FakeBundle:Fake:postParameterDeep }
 
+FakeBundleControllerForm:
+    pattern: /fake/form
+    defaults: { _controller: FakeBundle:Fake:form }
