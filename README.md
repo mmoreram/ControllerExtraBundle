@@ -113,7 +113,7 @@ controller_extra:
     factory:
         default_method: create
         default_static: true
-    pagination:
+    paginator:
         active: true
         default_name: paginator
         default_page: 1
