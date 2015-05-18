@@ -150,8 +150,7 @@ class RequestParameterProvider
         ParameterBag $parameterBag,
         $delimiter,
         $value
-    )
-    {
+    ) {
         $trimmedValue = trim($value, $delimiter);
 
         if (

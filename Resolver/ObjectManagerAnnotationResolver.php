@@ -60,8 +60,7 @@ class ObjectManagerAnnotationResolver implements AnnotationResolverInterface
         AbstractManagerRegistry $doctrine,
         EntityProvider $entityProvider,
         $defaultName
-    )
-    {
+    ) {
         $this->doctrine = $doctrine;
         $this->entityProvider = $entityProvider;
         $this->defaultName = $defaultName;
@@ -82,8 +81,7 @@ class ObjectManagerAnnotationResolver implements AnnotationResolverInterface
         Request $request,
         Annotation $annotation,
         ReflectionMethod $method
-    )
-    {
+    ) {
         /**
          * Annotation is only laoded if is typeof AnnotationEntity
          */

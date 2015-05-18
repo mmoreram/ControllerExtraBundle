@@ -55,13 +55,11 @@ class PaginatorEvaluatorCollector implements PaginatorEvaluatorInterface
     public function evaluate(
         QueryBuilder $queryBuilder,
         AnnotationPaginator $annotation
-    )
-    {
+    ) {
         /**
          * @var PaginatorEvaluatorInterface $paginatorEvaluator
          */
         foreach ($this->paginatorEvaluators as $paginatorEvaluator) {
-
             $paginatorEvaluator->evaluate($queryBuilder, $annotation);
         }
 

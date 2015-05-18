@@ -52,14 +52,10 @@ class PaginatorOrderByEvaluator implements PaginatorEvaluatorInterface
     public function evaluate(
         QueryBuilder $queryBuilder,
         AnnotationPaginator $annotation
-    )
-    {
+    ) {
         if (is_array($annotation->getOrderBy())) {
-
             foreach ($annotation->getOrderBy() as $orderBy) {
-
                 if (is_array($orderBy)) {
-
                     $field = $this
                         ->requestParameterProvider
                         ->getParameterValue(trim($orderBy[1]));
@@ -83,5 +79,4 @@ class PaginatorOrderByEvaluator implements PaginatorEvaluatorInterface
 
         return $this;
     }
-
 }

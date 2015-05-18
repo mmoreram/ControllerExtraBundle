@@ -35,19 +35,15 @@ class PaginatorInnerJoinsEvaluator implements PaginatorEvaluatorInterface
     public function evaluate(
         QueryBuilder $queryBuilder,
         AnnotationPaginator $annotation
-    )
-    {
+    ) {
         if (is_array($annotation->getInnerJoins())) {
-
             foreach ($annotation->getInnerJoins() as $innerJoin) {
-
                 $queryBuilder->innerJoin(
                     trim($innerJoin[0]) . '.' . trim($innerJoin[1]),
                     trim($innerJoin[2])
                 );
 
                 if (isset($innerJoin[3]) && $innerJoin[3]) {
-
                     $queryBuilder->addSelect(trim($innerJoin[2]));
                 }
             }

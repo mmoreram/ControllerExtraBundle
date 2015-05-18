@@ -117,7 +117,7 @@ class FakeController extends Controller
     public function entityMappedAction(Fake $entity)
     {
         return array(
-            'id' => $entity->getId()
+            'id' => $entity->getId(),
         );
     }
 
@@ -184,7 +184,7 @@ class FakeController extends Controller
     public function jsonResponseAction()
     {
         return array(
-            'index' => 'value'
+            'index' => 'value',
         );
     }
 
@@ -306,7 +306,7 @@ class FakeController extends Controller
     public function paginatorSimpleAction(Paginator $paginator)
     {
         return array(
-            'count' => $paginator->getIterator()->count()
+            'count' => $paginator->getIterator()->count(),
         );
     }
 
@@ -342,7 +342,7 @@ class FakeController extends Controller
     public function paginatorMultipleWhereAction(Paginator $paginator)
     {
         return array(
-            'count' => $paginator->getIterator()->count()
+            'count' => $paginator->getIterator()->count(),
         );
     }
 
@@ -377,7 +377,30 @@ class FakeController extends Controller
     public function paginatorNotMatchingAction(Paginator $paginator)
     {
         return array(
-            'count' => $paginator->getIterator()->count()
+            'count' => $paginator->getIterator()->count(),
+        );
+    }
+
+    /**
+     * Public pagination method
+     *
+     * @\Mmoreram\ControllerExtraBundle\Annotation\Paginator(
+     *      class = {
+     *          "factory" = "Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory",
+     *          "method" = "createNonStatic",
+     *          "static" = false
+     *      },
+     *      wheres = {
+     *          { "x", "field" , "LIKE", "%?search?%" }
+     *      }
+     * )
+     *
+     * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
+     */
+    public function PaginatorLikeWithGetParameterAction(Paginator $paginator)
+    {
+        return array(
+            'count' => $paginator->getIterator()->count(),
         );
     }
 
@@ -413,8 +436,7 @@ class FakeController extends Controller
     public function paginatorAttributesAction(
         Paginator $paginator,
         PaginatorAttributes $paginatorAttributes
-    )
-    {
+    ) {
         return array(
             'count' => $paginator->getIterator()->count(),
             'totalPages' => $paginatorAttributes->getTotalPages(),
@@ -446,8 +468,7 @@ class FakeController extends Controller
      */
     public function paginatorPagerFantaAction(
         Pagerfanta $paginator
-    )
-    {
+    ) {
         return array(
             'count' => $paginator->getIterator()->count(),
         );
@@ -479,8 +500,7 @@ class FakeController extends Controller
         ObjectManager $objectManager1,
         ObjectManager $objectManager2,
         ObjectManager $objectManager3
-    )
-    {
+    ) {
         return array();
     }
 
@@ -520,8 +540,7 @@ class FakeController extends Controller
     public function paginatorQueryAction(
         Paginator $paginator,
         PaginatorAttributes $paginatorAttributes
-    )
-    {
+    ) {
         return array(
             'count' => $paginator->getIterator()->count(),
             'totalPages' => $paginatorAttributes->getTotalPages(),
@@ -552,8 +571,7 @@ class FakeController extends Controller
     public function paginatorRequestAction(
         Paginator $paginator,
         PaginatorAttributes $paginatorAttributes
-    )
-    {
+    ) {
         return array(
             'count' => $paginator->getIterator()->count(),
             'totalPages' => $paginatorAttributes->getTotalPages(),
@@ -579,7 +597,7 @@ class FakeController extends Controller
         $param
     ) {
         return array(
-            'param' => $param
+            'param' => $param,
         );
     }
 
@@ -601,7 +619,7 @@ class FakeController extends Controller
         $getParam
     ) {
         return array(
-            'param' => $getParam
+            'param' => $getParam,
         );
     }
 
@@ -623,7 +641,7 @@ class FakeController extends Controller
         $param
     ) {
         return array(
-            'param' => $param
+            'param' => $param,
         );
     }
 
@@ -646,7 +664,7 @@ class FakeController extends Controller
         $param
     ) {
         return array(
-            'param' => $param
+            'param' => $param,
         );
     }
 
@@ -667,7 +685,7 @@ class FakeController extends Controller
         $param
     ) {
         return array(
-            'param' => $param
+            'param' => $param,
         );
     }
 
@@ -689,7 +707,7 @@ class FakeController extends Controller
         $getParam
     ) {
         return array(
-            'param' => $getParam
+            'param' => $getParam,
         );
     }
 
@@ -711,7 +729,7 @@ class FakeController extends Controller
         $param
     ) {
         return array(
-            'param' => $param
+            'param' => $param,
         );
     }
 
@@ -734,7 +752,7 @@ class FakeController extends Controller
         $param
     ) {
         return array(
-            'param' => $param
+            'param' => $param,
         );
     }
 
@@ -762,8 +780,7 @@ class FakeController extends Controller
         AbstractType $form1,
         FormInterface $form2,
         FormView $form3
-    )
-    {
+    ) {
         return new Response();
     }
 }

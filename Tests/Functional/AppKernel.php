@@ -59,7 +59,6 @@ class AppKernel extends Kernel
         'ControllerExtraBundle' .
         DIRECTORY_SEPARATOR .
         '/Cache/';
-
     }
 
     /**

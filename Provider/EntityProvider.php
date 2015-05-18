@@ -68,8 +68,7 @@ class EntityProvider
         KernelInterface $kernel,
         $defaultFactoryMethod,
         $defaultFactoryStatic
-    )
-    {
+    ) {
         $this->container = $container;
         $this->kernel = $kernel;
         $this->defaultFactoryMethod = $defaultFactoryMethod;
@@ -116,7 +115,6 @@ class EntityProvider
     public function evaluateEntityInstanceFactory(array $class)
     {
         if (!isset($class['factory'])) {
-
             throw new InvalidArgumentException();
         }
 
@@ -175,9 +173,7 @@ class EntityProvider
             if ($classParameter && class_exists($classParameter)) {
                 return new $classParameter();
             }
-
         } catch (InvalidArgumentException $exception) {
-
         }
 
         $namespace = explode(':', $class, 2);
@@ -204,7 +200,6 @@ class EntityProvider
             isset($namespace[1])
         )
         ) {
-
             throw new ClassNotFoundException(
                 $class,
                 new ErrorException()
@@ -219,7 +214,6 @@ class EntityProvider
         $entityNamespace = $bundleNamespace . '\\Entity\\' . $namespace[1];
 
         if (!class_exists($entityNamespace)) {
-
             throw new ClassNotFoundException(
                 $entityNamespace,
                 new ErrorException()

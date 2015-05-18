@@ -110,7 +110,6 @@ class PaginatorAnnotationResolverTest extends AbstractWebTestCase
             ->getManagerForClass('Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\Fake');
 
         for ($i = 0; $i < 30; $i++) {
-
             $fake = FakeFactory::create();
             $fake->setField('');
             $entityManager->persist($fake);
@@ -176,7 +175,6 @@ class PaginatorAnnotationResolverTest extends AbstractWebTestCase
             ->getManagerForClass('Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\Fake');
 
         for ($i = 0; $i < 30; $i++) {
-
             $fake = FakeFactory::create();
             $fake->setField('');
             $entityManager->persist($fake);
@@ -212,7 +210,6 @@ class PaginatorAnnotationResolverTest extends AbstractWebTestCase
             ->getManagerForClass('Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\Fake');
 
         for ($i = 0; $i < 30; $i++) {
-
             $fake = FakeFactory::create();
             $fake->setField('');
             $entityManager->persist($fake);
@@ -252,7 +249,6 @@ class PaginatorAnnotationResolverTest extends AbstractWebTestCase
             ->getManagerForClass('Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\Fake');
 
         for ($i = 0; $i < 30; $i++) {
-
             $fake = FakeFactory::create();
             $fake->setField('');
             $entityManager->persist($fake);
@@ -289,6 +285,7 @@ class PaginatorAnnotationResolverTest extends AbstractWebTestCase
     {
         $fake = FakeFactory::create();
         $fake->setField('test');
+
         $entityManager = static::$kernel
             ->getContainer()
             ->get('doctrine')
@@ -297,12 +294,42 @@ class PaginatorAnnotationResolverTest extends AbstractWebTestCase
         $entityManager->persist($fake);
         $entityManager->flush();
 
-
         $this
             ->client
             ->request(
                 'GET',
                 '/fake/paginator/multiplewhere/id/2/1/5'
+            );
+
+        $this->assertEquals(
+            '{"count":1}',
+            $this
+                ->client
+                ->getResponse()
+                ->getContent()
+        );
+    }
+
+    /**
+     * Test paginator simple
+     */
+    public function testPaginatorWithLikeWithGetParameterAnnotation()
+    {
+        $fake = FakeFactory::create();
+        $fake->setField('we are doing a test from paginator');
+        $entityManager = static::$kernel
+            ->getContainer()
+            ->get('doctrine')
+            ->getManagerForClass('Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\Fake');
+
+        $entityManager->persist($fake);
+        $entityManager->flush();
+
+        $this
+            ->client
+            ->request(
+                'GET',
+                '/fake/paginator/likewithgetparameter?search=test'
             );
 
         $this->assertEquals(

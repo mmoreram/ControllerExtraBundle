@@ -135,7 +135,6 @@ class LogAnnotationResolverTest extends PHPUnit_Framework_TestCase
             $loggerMethod,
             $loggerMessage
         );
-
     }
 
     /**
@@ -322,13 +321,11 @@ class LogAnnotationResolverTest extends PHPUnit_Framework_TestCase
             ->will($this->returnValue($message));
 
         if ($logMessageIsCalled) {
-
             $logAnnotationResolver
                 ->expects($this->atLeastOnce())
                 ->method('logMessage')
                 ->with($this->equalTo($logger), $this->equalTo($level), $this->equalTo($message));
         } else {
-
             $logAnnotationResolver
                 ->expects($this->never())
                 ->method('logMessage');
@@ -418,13 +415,11 @@ class LogAnnotationResolverTest extends PHPUnit_Framework_TestCase
             ->will($this->returnValue($execute));
 
         if ($logMessageIsCalled) {
-
             $logAnnotationResolver
                 ->expects($this->atLeastOnce())
                 ->method('logMessage')
                 ->with($this->equalTo($logger), $this->equalTo($level), $this->equalTo($message));
         } else {
-
             $logAnnotationResolver
                 ->expects($this->never())
                 ->method('logMessage');

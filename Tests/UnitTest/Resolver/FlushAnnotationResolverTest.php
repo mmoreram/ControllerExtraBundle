@@ -160,7 +160,7 @@ class FlushAnnotationResolverTest extends \PHPUnit_Framework_TestCase
             array(false, 'default'),
             array('', 'default'),
             array('main', 'main'),
-            array('default', 'default')
+            array('default', 'default'),
         );
     }
 

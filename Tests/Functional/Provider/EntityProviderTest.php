@@ -77,53 +77,53 @@ class EntityProviderTest extends WebTestCase
                 array(
                     'factory' => 'Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory',
                     'static' => false,
-                )
+                ),
             ),
             array(
                 array(
                     'factory' => 'Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory',
                     'method' => 'generateNonStatic',
                     'static' => false,
-                )
+                ),
             ),
             array(
                 array(
                     'factory' => 'Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory',
                     'method' => 'generate',
                     'static' => true,
-                )
+                ),
             ),
             array(
                 array(
                     'factory' => 'Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory',
                     'method' => 'generate',
-                )
+                ),
             ),
             array(
                 array(
                     'factory' => 'controller_extra_bundle.factory.fake',
                     'static' => false,
-                )
+                ),
             ),
             array(
                 array(
                     'factory' => 'controller_extra_bundle.factory.fake',
                     'method' => 'generateNonStatic',
                     'static' => false,
-                )
+                ),
             ),
             array(
                 array(
                     'factory' => 'controller_extra_bundle.factory.fake',
                     'method' => 'generate',
                     'static' => true,
-                )
+                ),
             ),
             array(
                 array(
                     'factory' => 'controller_extra_bundle.factory.fake',
                     'method' => 'generate',
-                )
+                ),
             ),
         );
     }

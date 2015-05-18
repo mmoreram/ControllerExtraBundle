@@ -35,12 +35,9 @@ class PaginatorNotNullsEvaluator implements PaginatorEvaluatorInterface
     public function evaluate(
         QueryBuilder $queryBuilder,
         AnnotationPaginator $annotation
-    )
-    {
+    ) {
         if (is_array($annotation->getNotNulls())) {
-
             foreach ($annotation->getNotNulls() as $notNull) {
-
                 $queryBuilder->andWhere(trim($notNull[0]) . '.' . trim($notNull[1]) . ' IS NOT NULL');
             }
         }
