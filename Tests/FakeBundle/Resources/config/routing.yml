@@ -58,6 +58,10 @@ FakeBundleControllerPaginatorRequest:
     pattern: /fake/paginator/request
     defaults: { _controller: FakeBundle:Fake:paginatorRequest }
 
+FakeBundleControllerPaginatorMultipleWheres:
+    pattern: /fake/paginator/multiplewhere/{field}/{dir}/{page}/{limit}
+    defaults: { _controller: FakeBundle:Fake:paginatorMultipleWhere }
+
 FakeBundleControllerPaginatorPagerFanta:
     pattern: /fake/paginator/pagerfanta/{field}/{dir}/{page}/{limit}
     defaults: { _controller: FakeBundle:Fake:paginatorPagerFanta }
