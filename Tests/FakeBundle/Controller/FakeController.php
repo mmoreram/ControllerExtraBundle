@@ -328,6 +328,42 @@ class FakeController extends Controller
      *          }}
      *      },
      *      wheres = {
+     *          { "x", "id" , ">=", 1 },
+     *          { "x", "field" , "=", "test" }
+     *      },
+     *      notNulls = {
+     *          {"x", "id"},
+     *          {"x", "field"},
+     *      }
+     * )
+     *
+     * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
+     */
+    public function paginatorMultipleWhereAction(Paginator $paginator)
+    {
+        return array(
+            'count' => $paginator->getIterator()->count()
+        );
+    }
+
+    /**
+     * Public pagination method
+     *
+     * @\Mmoreram\ControllerExtraBundle\Annotation\Paginator(
+     *      class = {
+     *          "factory" = "Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory",
+     *          "method" = "createNonStatic",
+     *          "static" = false
+     *      },
+     *      page = "~page~",
+     *      limit = "~limit~",
+     *      orderBy = {
+     *          { "x", "~field~", "~dir~", {
+     *              "1" = "ASC",
+     *              "2" = "DESC",
+     *          }}
+     *      },
+     *      wheres = {
      *          { "x", "id" , ">=", 2 }
      *      },
      *      notNulls = {
