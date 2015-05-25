@@ -152,9 +152,7 @@ class ResolverEventListener
          * Every annotation found is parsed
          */
         foreach ($methodAnnotations as $annotation) {
-
             if ($annotation instanceof Annotation) {
-
                 $this->analyzeAnnotation($request, $method, $annotation, $this->resolverStack);
             }
         }
@@ -175,7 +173,6 @@ class ResolverEventListener
          * Every resolver must evaluate its logic
          */
         foreach ($resolverStack as $resolver) {
-
             $resolver->evaluateAnnotation($request, $annotation, $method);
         }
     }

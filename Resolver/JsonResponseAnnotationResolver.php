@@ -170,8 +170,7 @@ class JsonResponseAnnotationResolver implements AnnotationResolverInterface
         Request $request,
         Annotation $annotation,
         ReflectionMethod $method
-    )
-    {
+    ) {
         /**
          * Annotation is only laoded if is typeof WorkAnnotation
          */
@@ -201,7 +200,6 @@ class JsonResponseAnnotationResolver implements AnnotationResolverInterface
          * Only flushes if exists AnnotationFlush as a controller annotations
          */
         if ($this->getReturnJson()) {
-
             $result = $event->getControllerResult();
 
             if ($result instanceof \Exception) {
@@ -231,7 +229,6 @@ class JsonResponseAnnotationResolver implements AnnotationResolverInterface
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
         if ($this->getReturnJson()) {
-
             $exception = $event->getException();
 
             if ($exception instanceof HttpExceptionInterface) {

@@ -47,7 +47,6 @@ class ResolverCompilerPass implements CompilerPassInterface
          * We add every tagged Resolver into EventListener
          */
         foreach ($taggedServices as $id => $attributes) {
-
             $definition->addMethodCall(
                 'addResolver',
                 array(new Reference($id))

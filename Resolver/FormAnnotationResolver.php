@@ -61,8 +61,7 @@ class FormAnnotationResolver extends AbstractAnnotationResolver implements Annot
         FormRegistryInterface $formRegistry,
         FormFactoryInterface $formFactory,
         $defaultName
-    )
-    {
+    ) {
         $this->formRegistry = $formRegistry;
         $this->formFactory = $formFactory;
         $this->defaultName = $defaultName;
@@ -81,8 +80,7 @@ class FormAnnotationResolver extends AbstractAnnotationResolver implements Annot
         Request $request,
         Annotation $annotation,
         ReflectionMethod $method
-    )
-    {
+    ) {
         /**
          * Annotation is only laoded if is typeof WorkAnnotation
          */
@@ -97,7 +95,7 @@ class FormAnnotationResolver extends AbstractAnnotationResolver implements Annot
              * Get FormType object given a service name
              */
             $type = class_exists($annotationValue)
-                ? new $annotationValue
+                ? new $annotationValue()
                 : $this
                     ->formRegistry
                     ->getType($annotationValue)
@@ -149,8 +147,7 @@ class FormAnnotationResolver extends AbstractAnnotationResolver implements Annot
         AnnotationForm $annotation,
         $parameterClass,
         AbstractType $type
-    )
-    {
+    ) {
         /**
          * Checks if parameter typehinting is AbstractType
          * In this case, form type as defined method parameter
@@ -170,7 +167,6 @@ class FormAnnotationResolver extends AbstractAnnotationResolver implements Annot
          * Handling request if needed
          */
         if ($annotation->getHandleRequest()) {
-
             $form->handleRequest($request);
 
             if ($annotation->getValidate()) {
@@ -188,7 +184,7 @@ class FormAnnotationResolver extends AbstractAnnotationResolver implements Annot
         if (in_array(
             $parameterClass, array(
                 'Symfony\\Component\\Form\\Form',
-                'Symfony\\Component\\Form\\FormInterface'
+                'Symfony\\Component\\Form\\FormInterface',
             )
         )) {
             return $form;

@@ -197,13 +197,11 @@ class LogAnnotationResolver implements AnnotationResolverInterface
         Request $request,
         Annotation $annotation,
         ReflectionMethod $method
-    )
-    {
+    ) {
         /**
          * Annotation is only laoded if is typeof AnnotationLog
          */
         if ($annotation instanceof AnnotationLog) {
-
             $this->level = $annotation->getLevel()
                 ? $annotation->getLevel()
                 : $this->getDefaultLevel();
@@ -219,7 +217,6 @@ class LogAnnotationResolver implements AnnotationResolverInterface
              * Only logs before controller execution if EXEC_PRE or EXEC_BOTH
              */
             if (in_array($this->getExecute(), array(AnnotationLog::EXEC_PRE, AnnotationLog::EXEC_BOTH))) {
-
                 $this->logMessage($this->getLogger(), $this->getLevel(), $this->getValue());
             }
         }
@@ -240,7 +237,6 @@ class LogAnnotationResolver implements AnnotationResolverInterface
              * Only logs before controller execution if EXEC_POST or EXEC_BOTH
              */
             if (in_array($this->getExecute(), array(AnnotationLog::EXEC_POST, AnnotationLog::EXEC_BOTH))) {
-
                 $this->logMessage($this->getLogger(), $this->getLevel(), $this->getValue());
             }
         }

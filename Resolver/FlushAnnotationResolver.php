@@ -139,13 +139,11 @@ class FlushAnnotationResolver implements AnnotationResolverInterface
         Request $request,
         Annotation $annotation,
         ReflectionMethod $method
-    )
-    {
+    ) {
         /**
          * Annotation is only laoded if is typeof AnnotationFlush
          */
         if ($annotation instanceof AnnotationFlush) {
-
             $managerName = $annotation->getManager()
                 ?: $this->getDefaultManager();
 
@@ -169,9 +167,7 @@ class FlushAnnotationResolver implements AnnotationResolverInterface
              * For every entity defined, we try to get it from Request Attributes
              */
             foreach ($entities as $entityName) {
-
                 if ($request->attributes->has($entityName)) {
-
                     $this->entities[] = $request->attributes->get($entityName);
                 }
             }
@@ -181,7 +177,6 @@ class FlushAnnotationResolver implements AnnotationResolverInterface
              * In this case, flush all
              */
             if ($this->entities->isEmpty()) {
-
                 $this->entities = null;
             }
 

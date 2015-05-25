@@ -233,13 +233,11 @@ class ControllerExtraExtension extends Extension
     public function loadResolverConfiguration(
         YamlFileLoader $loader,
         array $config
-    )
-    {
+    ) {
         /**
          * Only load form resolver config definition if is active
          */
         if ($config['form']['active']) {
-
             $loader->load('resolver_form.yml');
         }
 
@@ -247,7 +245,6 @@ class ControllerExtraExtension extends Extension
          * Only load flush resolver config definition if is active
          */
         if ($config['flush']['active']) {
-
             $loader->load('resolver_flush.yml');
         }
 
@@ -255,7 +252,6 @@ class ControllerExtraExtension extends Extension
          * Only load entity resolver config definition if is active
          */
         if ($config['entity']['active']) {
-
             $loader->load('resolver_entity.yml');
         }
 
@@ -263,7 +259,6 @@ class ControllerExtraExtension extends Extension
          * Only load log resolver config definition if is active
          */
         if ($config['log']['active']) {
-
             $loader->load('resolver_log.yml');
         }
 
@@ -271,7 +266,6 @@ class ControllerExtraExtension extends Extension
          * Only load json resolver config definition if is active
          */
         if ($config['json_response']['active']) {
-
             $loader->load('resolver_json_response.yml');
         }
 
@@ -279,7 +273,6 @@ class ControllerExtraExtension extends Extension
          * Only load paginator resolver config definition if is active
          */
         if ($config['paginator']['active']) {
-
             $loader->load('resolver_paginator.yml');
         }
 
@@ -287,7 +280,6 @@ class ControllerExtraExtension extends Extension
          * Only load object manager resolver config definition if is active
          */
         if ($config['object_manager']['active']) {
-
             $loader->load('resolver_object_manager.yml');
         }
 
@@ -295,15 +287,13 @@ class ControllerExtraExtension extends Extension
          * Only load get resolver config definition if is active
          */
         if ($config['get']['active']) {
-
             $loader->load('resolver_get.yml');
         }
 
         /**
-        * Only loads post resolver config definition if is active
-        */
+         * Only loads post resolver config definition if is active
+         */
         if ($config['post']['active']) {
-
             $loader->load('resolver_post.yml');
         }
 

@@ -89,8 +89,7 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
         $defaultName,
         $defaultPersist,
         $mappingFallback = false
-    )
-    {
+    ) {
         $this->doctrine = $doctrine;
         $this->entityProvider = $entityProvider;
         $this->requestParametersProvider = $requestParametersProvider;
@@ -114,8 +113,7 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
         Request $request,
         Annotation $annotation,
         ReflectionMethod $method
-    )
-    {
+    ) {
         /**
          * Annotation is only loaded if is typeof AnnotationEntity
          */
@@ -178,7 +176,6 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
     public function evaluateMapping(AnnotationEntity $annotation, $entity)
     {
         if (is_array($annotation->getMapping())) {
-
             $mapping = $annotation->getMapping();
             $requestParametersProvider = $this->requestParametersProvider;
             $mappingFallback = !is_null($annotation->getMappingFallback())
@@ -191,9 +188,7 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
              * If the format is something like %value%, this service will
              * look for the real request attribute value
              */
-
             foreach ($mapping as $mappingKey => $mappingValue) {
-
                 $parameterValue = $requestParametersProvider->getParameterValue($mappingValue);
 
                 /**
@@ -217,7 +212,6 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
                 ->findOneBy($mapping);
 
             if (!($instance instanceof $entityClass)) {
-
                 $notFoundException = $annotation->getNotFoundException();
                 if (!empty($notFoundException)) {
                     $exceptionClassName = $notFoundException['exception'];
@@ -248,7 +242,6 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
     public function evaluateSetters(ParameterBag $attributes, $entity, array $setters)
     {
         foreach ($setters as $method => $value) {
-
             $entity->$method($attributes->get($value));
         }
 

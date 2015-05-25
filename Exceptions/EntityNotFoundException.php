@@ -20,5 +20,4 @@ use Mmoreram\ControllerExtraBundle\Exceptions\Abstracts\AbstractControllerExtraB
  */
 class EntityNotFoundException extends AbstractControllerExtraBundleException
 {
-
 }

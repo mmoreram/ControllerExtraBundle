@@ -165,8 +165,8 @@ class PostAnnotationResolverTest extends AbstractWebTestCase
             '/fake/getpostparameterdeep',
             array(
                 'param' => array(
-                    'key' => 'value'
-                )
+                    'key' => 'value',
+                ),
             )
         );
 

@@ -103,8 +103,7 @@ class PaginatorAnnotationResolver extends AbstractAnnotationResolver implements 
         $defaultName,
         $defaultPage,
         $defaultLimitPerPage
-    )
-    {
+    ) {
         $this->doctrine = $doctrine;
         $this->entityProvider = $entityProvider;
         $this->requestParameterProvider = $requestParameterProvider;
@@ -129,8 +128,7 @@ class PaginatorAnnotationResolver extends AbstractAnnotationResolver implements 
         Request $request,
         Annotation $annotation,
         ReflectionMethod $method
-    )
-    {
+    ) {
         /**
          * Annotation is only loaded if is type-of AnnotationEntity
          */
@@ -274,10 +272,8 @@ class PaginatorAnnotationResolver extends AbstractAnnotationResolver implements 
         Paginator $paginator,
         $limitPerPage,
         $page
-    )
-    {
+    ) {
         if ($annotation->getAttributes()) {
-
             $paginatorAttributes = new PaginatorAttributes();
             $total = $paginator->count();
 
@@ -309,10 +305,8 @@ class PaginatorAnnotationResolver extends AbstractAnnotationResolver implements 
         $parameterType,
         $limitPerPage,
         $page
-    )
-    {
+    ) {
         if ('Pagerfanta\Pagerfanta' === $parameterType) {
-
             $paginator = new Pagerfanta(new DoctrineORMAdapter($paginator->getQuery()));
             $paginator->setMaxPerPage($limitPerPage);
             $paginator->setCurrentPage($page);

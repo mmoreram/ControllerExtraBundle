@@ -22,5 +22,4 @@ use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\AbstractResponse;
  */
 class JsonResponse extends AbstractResponse
 {
-
 }

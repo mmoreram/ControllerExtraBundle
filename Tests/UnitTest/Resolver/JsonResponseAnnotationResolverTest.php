@@ -147,7 +147,7 @@ class JsonResponseAnnotationResolverTest extends \PHPUnit_Framework_TestCase
             array(false, 200),
             array('', 200),
             array(403, 403),
-            array(200, 200)
+            array(200, 200),
         );
     }
 
@@ -199,7 +199,7 @@ class JsonResponseAnnotationResolverTest extends \PHPUnit_Framework_TestCase
             array(false, array()),
             array('', array()),
             array(array(1, 'foo'), array(1, 'foo')),
-            array(array(), array())
+            array(array(), array()),
         );
     }
 
@@ -302,7 +302,7 @@ class JsonResponseAnnotationResolverTest extends \PHPUnit_Framework_TestCase
             ->getMockBuilder('Mmoreram\ControllerExtraBundle\Resolver\JsonResponseAnnotationResolver')
             ->disableOriginalConstructor()
             ->setMethods(array(
-                'getReturnJson'
+                'getReturnJson',
             ))
             ->getMock();
 

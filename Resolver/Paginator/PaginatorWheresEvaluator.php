@@ -52,24 +52,25 @@ class PaginatorWheresEvaluator implements PaginatorEvaluatorInterface
     public function evaluate(
         QueryBuilder $queryBuilder,
         AnnotationPaginator $annotation
-    )
-    {
+    ) {
         $iteration = 0;
 
         if (is_array($annotation->getWheres())) {
-
             foreach ($annotation->getWheres() as $where) {
+                $annotationWhereParameter = $where[3];
+                $whereParameter = $this->clearWildcards($annotationWhereParameter);
 
                 $whereValue = $this
                     ->requestParameterProvider
-                    ->getParameterValue($where[3]);
+                    ->getParameterValue($whereParameter);
+
+                $whereValue = $this->addWildcards($annotationWhereParameter, $whereValue);
 
                 $optionalFilter = (boolean) isset($where[4])
                     ? $where[4]
                     : false;
 
-                if ($optionalFilter && ($where[3] === $whereValue)) {
-
+                if ($optionalFilter && ($whereParameter === $whereValue)) {
                     continue;
                 }
 
@@ -82,5 +83,39 @@ class PaginatorWheresEvaluator implements PaginatorEvaluatorInterface
         }
 
         return $this;
+    }
+
+    /**
+     * Remove wildcards from query if necessary
+     *
+     * @param string $where Where from annotation
+     *
+     * @return string
+     */
+    private function clearWildcards($where)
+    {
+        return trim($where, '%');
+    }
+
+    /**
+     * Add wildcards to query if necessary
+     *
+     * @param string $annotationWhereParameter Where from annotation
+     * @param string $whereValue               Where replaced with request parameters
+     *
+     * @return string
+     */
+    private function addWildcards($annotationWhereParameter, $whereValue)
+    {
+        $hasInitialPercentage = (strpos($annotationWhereParameter, '%') === 0);
+        $hasEndPercentage = (strpos($annotationWhereParameter, '%') === 0);
+        if ($hasInitialPercentage) {
+            $whereValue = '%' . $whereValue;
+        }
+        if ($hasEndPercentage) {
+            $whereValue = $whereValue . '%';
+        }
+
+        return $whereValue;
     }
 }

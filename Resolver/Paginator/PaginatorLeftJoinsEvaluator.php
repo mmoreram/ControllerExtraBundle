@@ -35,19 +35,15 @@ class PaginatorLeftJoinsEvaluator implements PaginatorEvaluatorInterface
     public function evaluate(
         QueryBuilder $queryBuilder,
         AnnotationPaginator $annotation
-    )
-    {
+    ) {
         if (is_array($annotation->getLeftJoins())) {
-
             foreach ($annotation->getLeftJoins() as $leftJoin) {
-
                 $queryBuilder->leftJoin(
                     trim($leftJoin[0]) . '.' . trim($leftJoin[1]),
                     trim($leftJoin[2])
                 );
 
                 if (isset($leftJoin[3]) && $leftJoin[3]) {
-
                     $queryBuilder->addSelect(trim($leftJoin[2]));
                 }
             }
