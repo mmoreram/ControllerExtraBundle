@@ -323,7 +323,7 @@ controller_extra:
 > in a parameter named `$paginator`. This behaviour can be configured using
 > `default_name` in configuration.
 
-This annotation can be configurated with these sections
+This annotation can be configured with these sections
 
 ### Paginator Entity
 
@@ -963,7 +963,7 @@ ensure that if the mapping fails, a new empty entity will be returned.
 > this value is `false`
 
 Lets see an example. Because we have enabled the mappingFallback, and because
-the mapping definition not maches with the assigned route, we will return a new
+the mapping definition does not match the assigned route, we will return a new
 empty User entity.
 
 ``` php
@@ -995,9 +995,9 @@ public function indexAction(User $user)
 
 ### Not found exception
 
-Sometimes you search for an entity that unfortunately does not exist, in this case an exception is launched. But you can
-customize the exception that you want to be launched.
-
+Sometimes you search for an entity that unfortunately does not exist, in this
+case an exception is launched. But you can customize the exception that you want
+to be launched.
 
 ``` php
 <?php
@@ -1438,8 +1438,8 @@ public function indexAction(User $user, Address $address)
 }
 ```
 
-If an Exception is returned the response status is set by default to 500 and the Exception message is returned as
-response.
+If an Exception is returned the response status is set by default to 500 and the
+Exception message is returned as response.
 
 `STATUS 500 Internal server error`
 
@@ -1450,8 +1450,8 @@ response.
 
 ```
 
-In case we use a HttpExceptionInterface the use the exception status code as status code. In case we launch this
-exception
+In case we use a HttpExceptionInterface the use the exception status code as
+status code. In case we launch this exception
 
 ``` php
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -1472,8 +1472,9 @@ We'll receive this response
 
 ```
 
-> If the exception is being launched on an annotation (e.g. Entity annotation) remember to add the JsonResponse
-> annotation at the beginning or at least before any annotation that could cause an exception
+> If the exception is being launched on an annotation (e.g. Entity annotation)
+> remember to add the JsonResponse annotation at the beginning or at least before
+> any annotation that could cause an exception.
 
 > If multiple @Mmoreram\JsonResponse are defined in same action, last instance 
 > will overwrite previous. Anyway just one instance should be defined.
