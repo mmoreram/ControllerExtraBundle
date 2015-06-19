@@ -492,7 +492,7 @@ Ascendant and DESC for Descendant.
 
 This is very useful when you need to match a url format with the DQL one. You
 can refer to an existing Request attribute using `~value~` format, to any
-`$_GET` element by using format `?field?` or to any $_POST by using format
+`$_GET` element by using format `?field?` or to any `$_POST` by using format
 `#field#`
 
 ``` php
