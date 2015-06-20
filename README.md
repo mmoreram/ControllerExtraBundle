@@ -422,11 +422,11 @@ You can refer to an existing Request attribute using `~value~` format, to any
 /**
  * Simple controller method
  *
- * This Controller matches pattern /myroute/paginate/{pag}/{limit}
+ * This Controller matches pattern /myroute/paginate/{foo}/{limit}
  *
  * @PaginatorAnnotation(
  *      class = "MmoreramCustomBundle:User",
- *      page = "~pag~",
+ *      page = "~foo~",
  *      limit = "~limit~"
  * )
  */
