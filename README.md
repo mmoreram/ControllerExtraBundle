@@ -606,7 +606,7 @@ public function indexAction(Paginator $paginator)
 ### Paginator Not Nulls
 
 You can also define some fields to not null. Is same as `wheres` section, but
-specific for NULL assignments. The `noNulls` section must be defined as an array
+specific for NULL assignments. The `notNulls` section must be defined as an array
 of arrays, and each array should contain these positions:
 
 * First position: Object (Principal object is set as `x`)
