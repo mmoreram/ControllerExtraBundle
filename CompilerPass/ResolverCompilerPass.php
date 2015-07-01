@@ -29,6 +29,10 @@ class ResolverCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
+        if (!$container->hasDefinition('mmoreram.controllerextra.event_listeners.resolver_event_listener')) {
+            return;
+        }
+
         /**
          * We get our eventlistener
          */
