@@ -23,7 +23,7 @@ use Symfony\Component\DependencyInjection\Reference;
 class PaginatorCompilerPass implements CompilerPassInterface
 {
     /**
-     * Every service tagged as controllerextra.annotation will be processed
+     * Every service tagged as controller_extra.paginator_evaluator will be processed
      *
      * @param ContainerBuilder $container Container
      */
