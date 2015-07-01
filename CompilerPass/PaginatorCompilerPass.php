@@ -29,6 +29,10 @@ class PaginatorCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
+        if (!$container->hasDefinition('mmoreram.controllerextra.collector.paginator_evaluator_collector')) {
+            return;
+        }
+
         /**
          * We get our collector
          */
