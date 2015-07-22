@@ -42,13 +42,15 @@
         "symfony/monolog-bundle": "~2.3",
         "doctrine/orm": "~2.3",
         "symfony/form": "~2.3",
-        "pagerfanta/pagerfanta": "~1.0"
+        "pagerfanta/pagerfanta": "~1.0",
+        "knplabs/knp-components": "~1.2"
     },
     "suggest": {
-        "symfony/monolog-bundle": "to use the @Log annotation",
-        "symfony/form": "to use the @Form annotation",
-        "doctrine/orm": "to use the @Paginator annotation",
-        "white-october/pagerfanta-bundle": "to use the @Paginator annotation with Pagerfanta support"
+        "symfony/monolog-bundle": "To use the @Log annotation",
+        "symfony/form": "To use the @Form annotation",
+        "doctrine/orm": "To use the @Paginator annotation",
+        "white-october/pagerfanta-bundle": "To use the @Paginator annotation with Pagerfanta support",
+        "knplabs/knp-paginator-bundle": "To use the @Paginator annotation with KNPPaginator support"
     },
     "autoload": {
         "psr-4": {

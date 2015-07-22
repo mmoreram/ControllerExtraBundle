@@ -165,6 +165,37 @@ class PaginatorAnnotationResolverTest extends AbstractWebTestCase
     }
 
     /**
+     * Test paginator with knppaginator
+     */
+    public function testPaginatorAnnotationKNPPaginator()
+    {
+        $fake = FakeFactory::create();
+        $fake->setField('');
+        $entityManager = static::$kernel
+            ->getContainer()
+            ->get('doctrine')
+            ->getManagerForClass('Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\Fake');
+
+        $entityManager->persist($fake);
+        $entityManager->flush();
+
+        $this
+            ->client
+            ->request(
+                'GET',
+                '/fake/paginator/knppaginator/id/2/1/5'
+            );
+
+        $this->assertEquals(
+            '{"count":1}',
+            $this
+                ->client
+                ->getResponse()
+                ->getContent()
+        );
+    }
+
+    /**
      * Test paginator with query
      */
     public function testPaginatorAnnotationQuery()
