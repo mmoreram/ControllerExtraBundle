@@ -1513,7 +1513,7 @@ Every Annotation instance can overwrite this value using `level` field.
 ``` php
 <?php
 
-use Mmoreram\ControllerExtraBundle\Annotation\Flush;
+use Mmoreram\ControllerExtraBundle\Annotation\Log;
 
 /**
  * Simple controller method
