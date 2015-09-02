@@ -36,6 +36,9 @@ class PaginatorAnnotationResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function testKNPPaginatorResolving()
     {
+        if (defined('HHVM_VERSION') && HHVM_VERSION_ID < 30800) {
+            $this->markTestSkipped('This test fails on HHVM < 3.8.0');
+        }
         $resolver = $this->getResolver();
         $mockPaginator = $this->getMockPaginator();
         $mockPaginator->expects($this->once())->method('getQuery')->willReturn(array());
