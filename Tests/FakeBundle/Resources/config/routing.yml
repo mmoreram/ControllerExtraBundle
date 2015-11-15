@@ -70,6 +70,10 @@ FakeBundleControllerPaginatorPagerFanta:
     pattern: /fake/paginator/pagerfanta/{field}/{dir}/{page}/{limit}
     defaults: { _controller: FakeBundle:Fake:paginatorPagerFanta }
 
+FakeBundleControllerPaginatorKNPPaginator:
+    pattern: /fake/paginator/knppaginator/{field}/{dir}/{page}/{limit}
+    defaults: { _controller: FakeBundle:Fake:paginatorKNPPaginator }
+
 FakeBundleControllerObjectManager:
     pattern: /fake/objectmanager
     defaults: { _controller: FakeBundle:Fake:objectManager }

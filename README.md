@@ -36,6 +36,7 @@ Table of contents
         * [Paginator Attributes](#paginator-attributes)
         * [Paginator Example](#paginator-example)
         * [Pagerfanta Add-on](#pagerfanta-add-on)
+        * [KNPPaginator Add-on](#knppaginator-add-on)
     * [@Entity](#entity)
         * [Entity Mapping](#entity-mapping)
         * [Entity Mapping fallback](#entity-mapping-fallback)
@@ -823,6 +824,29 @@ use Pagerfanta\Pagerfanta;
  * )
  */
 public function indexAction(Pagerfanta $paginator)
+{
+}
+```
+
+### KNPPaginator Add-on
+This annotation can create a KNPPaginator instance if you need it. You only have
+to define your parameter as such, and the annotation resolver will wrap your
+paginator with a KNPPaginator object instance.
+``` php
+use Knp\Component\Pager\Pagination\PaginationInterface;
+
+/**
+ * Simple controller method
+ *
+ * This Controller matches pattern /myroute/paginate/
+ *
+ * @PaginatorAnnotation(
+ *      class = "MmoreramCustomBundle:User",
+ *      page = 1,
+ *      limit = 10
+ * )
+ */
+public function indexAction(PaginationInterface $paginator)
 {
 }
 ```

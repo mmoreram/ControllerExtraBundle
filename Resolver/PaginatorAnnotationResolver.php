@@ -311,6 +311,10 @@ class PaginatorAnnotationResolver extends AbstractAnnotationResolver implements 
             $paginator->setMaxPerPage($limitPerPage);
             $paginator->setCurrentPage($page);
         }
+        if ('Knp\Component\Pager\Pagination\PaginationInterface' === $parameterType) {
+            $knp = new \Knp\Component\Pager\Paginator();
+            $paginator = $knp->paginate($paginator->getQuery(), $page, $limitPerPage);
+        }
 
         return $paginator;
     }
