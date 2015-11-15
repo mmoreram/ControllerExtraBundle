@@ -660,7 +660,7 @@ public function indexAction(Paginator $paginator)
 
 ### Paginator Inner Join
 
-You can do some left joins in this section. The `innerJoins` section must be
+You can do some inner joins in this section. The `innerJoins` section must be
 defined as an array of array, where each array can have these fields:
 
 * First position: Entity alias (x)
