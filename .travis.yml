@@ -1,5 +1,7 @@
 language: php
 
+sudo: false
+
 env:
     COMPOSER_OPTIONS=""
 
@@ -29,7 +31,7 @@ install:
     - composer update --prefer-source --no-interaction ${COMPOSER_OPTIONS}
 
 script:
-    - phpunit -c phpunit.xml.dist
+    - phpunit
 
 notifications:
     email: false
