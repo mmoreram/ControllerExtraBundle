@@ -71,7 +71,7 @@ Open a command console, enter your project directory and execute the
 following command to download the latest stable version of this bundle:
 
 ```bash
-$ composer require mmoreram/controller-extra-bundle "1.0.*@dev"
+$ composer require mmoreram/controller-extra-bundle
 ```
 
 This command requires you to have Composer installed globally, as explained
