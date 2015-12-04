@@ -94,9 +94,7 @@ class FormAnnotationResolver extends AbstractAnnotationResolver implements Annot
             /**
              * Get FormType object given a service name.
              */
-            $type = class_exists($annotationValue)
-                ? new $annotationValue()
-                : $this
+            $type = $this
                     ->formRegistry
                     ->getType($annotationValue)
                     ->getInnerType();
