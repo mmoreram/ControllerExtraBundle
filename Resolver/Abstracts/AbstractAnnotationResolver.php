@@ -16,12 +16,12 @@ namespace Mmoreram\ControllerExtraBundle\Resolver\Abstracts;
 use ReflectionMethod;
 
 /**
- * Class AbstractAnnotationResolver
+ * Class AbstractAnnotationResolver.
  */
 class AbstractAnnotationResolver
 {
     /**
-     * Return parameter type
+     * Return parameter type.
      *
      * @param ReflectionMethod $method        Method
      * @param string           $parameterName Parameter name

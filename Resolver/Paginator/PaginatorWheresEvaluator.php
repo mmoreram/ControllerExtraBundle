@@ -20,7 +20,7 @@ use Mmoreram\ControllerExtraBundle\Provider\RequestParameterProvider;
 use Mmoreram\ControllerExtraBundle\Resolver\Paginator\Interfaces\PaginatorEvaluatorInterface;
 
 /**
- * Class PaginatorWheresEvaluator
+ * Class PaginatorWheresEvaluator.
  */
 class PaginatorWheresEvaluator implements PaginatorEvaluatorInterface
 {
@@ -32,7 +32,7 @@ class PaginatorWheresEvaluator implements PaginatorEvaluatorInterface
     protected $requestParameterProvider;
 
     /**
-     * Construct
+     * Construct.
      *
      * @param RequestParameterProvider $requestParameterProvider Request Parameter provider
      */
@@ -42,7 +42,7 @@ class PaginatorWheresEvaluator implements PaginatorEvaluatorInterface
     }
 
     /**
-     * Evaluates inner joins
+     * Evaluates inner joins.
      *
      * @param QueryBuilder        $queryBuilder Query builder
      * @param AnnotationPaginator $annotation   Annotation
@@ -75,10 +75,10 @@ class PaginatorWheresEvaluator implements PaginatorEvaluatorInterface
                 }
 
                 $queryBuilder
-                    ->andWhere(trim($where[0]) . '.' . trim($where[1]) . " " . $where[2] . " ?0" . $iteration)
-                    ->setParameter("0" . $iteration, $whereValue);
+                    ->andWhere(trim($where[0]) . '.' . trim($where[1]) . ' ' . $where[2] . ' ?0' . $iteration)
+                    ->setParameter('0' . $iteration, $whereValue);
 
-                $iteration++;
+                ++$iteration;
             }
         }
 
@@ -86,7 +86,7 @@ class PaginatorWheresEvaluator implements PaginatorEvaluatorInterface
     }
 
     /**
-     * Remove wildcards from query if necessary
+     * Remove wildcards from query if necessary.
      *
      * @param string $where Where from annotation
      *
@@ -98,7 +98,7 @@ class PaginatorWheresEvaluator implements PaginatorEvaluatorInterface
     }
 
     /**
-     * Add wildcards to query if necessary
+     * Add wildcards to query if necessary.
      *
      * @param string $annotationWhereParameter Where from annotation
      * @param string $whereValue               Where replaced with request parameters

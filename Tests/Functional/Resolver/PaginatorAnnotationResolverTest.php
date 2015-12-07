@@ -17,12 +17,12 @@ use Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory;
 use Mmoreram\ControllerExtraBundle\Tests\Functional\AbstractWebTestCase;
 
 /**
- * Class PaginatorResolverTest
+ * Class PaginatorResolverTest.
  */
 class PaginatorAnnotationResolverTest extends AbstractWebTestCase
 {
     /**
-     * testAnnotation
+     * testAnnotation.
      */
     public function testAnnotation()
     {
@@ -38,7 +38,7 @@ class PaginatorAnnotationResolverTest extends AbstractWebTestCase
     }
 
     /**
-     * Test paginator simple
+     * Test paginator simple.
      */
     public function testPaginatorSimpleAnnotation()
     {
@@ -69,7 +69,7 @@ class PaginatorAnnotationResolverTest extends AbstractWebTestCase
     }
 
     /**
-     * Test paginator not matching
+     * Test paginator not matching.
      */
     public function testPaginatorNotMatchingAnnotation()
     {
@@ -100,7 +100,7 @@ class PaginatorAnnotationResolverTest extends AbstractWebTestCase
     }
 
     /**
-     * Test paginator with attributes
+     * Test paginator with attributes.
      */
     public function testPaginatorAnnotationAttributes()
     {
@@ -109,7 +109,7 @@ class PaginatorAnnotationResolverTest extends AbstractWebTestCase
             ->get('doctrine')
             ->getManagerForClass('Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\Fake');
 
-        for ($i = 0; $i < 30; $i++) {
+        for ($i = 0; $i < 30; ++$i) {
             $fake = FakeFactory::create();
             $fake->setField('');
             $entityManager->persist($fake);
@@ -134,7 +134,7 @@ class PaginatorAnnotationResolverTest extends AbstractWebTestCase
     }
 
     /**
-     * Test paginator with pagerfanta
+     * Test paginator with pagerfanta.
      */
     public function testPaginatorAnnotationPagerfanta()
     {
@@ -165,7 +165,7 @@ class PaginatorAnnotationResolverTest extends AbstractWebTestCase
     }
 
     /**
-     * Test paginator with knppaginator
+     * Test paginator with knppaginator.
      */
     public function testPaginatorAnnotationKNPPaginator()
     {
@@ -196,7 +196,7 @@ class PaginatorAnnotationResolverTest extends AbstractWebTestCase
     }
 
     /**
-     * Test paginator with query
+     * Test paginator with query.
      */
     public function testPaginatorAnnotationQuery()
     {
@@ -205,7 +205,7 @@ class PaginatorAnnotationResolverTest extends AbstractWebTestCase
             ->get('doctrine')
             ->getManagerForClass('Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\Fake');
 
-        for ($i = 0; $i < 30; $i++) {
+        for ($i = 0; $i < 30; ++$i) {
             $fake = FakeFactory::create();
             $fake->setField('');
             $entityManager->persist($fake);
@@ -231,7 +231,7 @@ class PaginatorAnnotationResolverTest extends AbstractWebTestCase
     }
 
     /**
-     * Test paginator with request
+     * Test paginator with request.
      */
     public function testPaginatorAnnotationRequest()
     {
@@ -240,7 +240,7 @@ class PaginatorAnnotationResolverTest extends AbstractWebTestCase
             ->get('doctrine')
             ->getManagerForClass('Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\Fake');
 
-        for ($i = 0; $i < 30; $i++) {
+        for ($i = 0; $i < 30; ++$i) {
             $fake = FakeFactory::create();
             $fake->setField('');
             $entityManager->persist($fake);
@@ -252,10 +252,10 @@ class PaginatorAnnotationResolverTest extends AbstractWebTestCase
             ->request(
                 'POST',
                 '/fake/paginator/request',
-                array(
-                    'page'  => 4,
+                [
+                    'page' => 4,
                     'limit' => 9,
-                )
+                ]
             );
 
         $response = json_decode($this
@@ -270,7 +270,7 @@ class PaginatorAnnotationResolverTest extends AbstractWebTestCase
     }
 
     /**
-     * Test paginator with request
+     * Test paginator with request.
      */
     public function testPaginatorAnnotationRequestFilter()
     {
@@ -279,7 +279,7 @@ class PaginatorAnnotationResolverTest extends AbstractWebTestCase
             ->get('doctrine')
             ->getManagerForClass('Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\Fake');
 
-        for ($i = 0; $i < 30; $i++) {
+        for ($i = 0; $i < 30; ++$i) {
             $fake = FakeFactory::create();
             $fake->setField('');
             $entityManager->persist($fake);
@@ -291,11 +291,11 @@ class PaginatorAnnotationResolverTest extends AbstractWebTestCase
             ->request(
                 'POST',
                 '/fake/paginator/request',
-                array(
-                    'page'  => 2,
+                [
+                    'page' => 2,
                     'limit' => 4,
                     'id' => '1%',
-                )
+                ]
             );
 
         $response = json_decode($this
@@ -310,7 +310,7 @@ class PaginatorAnnotationResolverTest extends AbstractWebTestCase
     }
 
     /**
-     * Test paginator with multiple where
+     * Test paginator with multiple where.
      */
     public function testPaginatorMultipleWhereAnnotation()
     {
@@ -342,7 +342,7 @@ class PaginatorAnnotationResolverTest extends AbstractWebTestCase
     }
 
     /**
-     * Test paginator simple
+     * Test paginator simple.
      */
     public function testPaginatorWithLikeWithGetParameterAnnotation()
     {

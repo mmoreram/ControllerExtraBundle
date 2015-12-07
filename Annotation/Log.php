@@ -16,7 +16,7 @@ namespace Mmoreram\ControllerExtraBundle\Annotation;
 use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
 
 /**
- * Log annotation driver
+ * Log annotation driver.
  *
  * @Annotation
  */
@@ -114,7 +114,7 @@ class Log extends Annotation
     public $execute;
 
     /**
-     * return manager
+     * return manager.
      *
      * @return string Manager
      */
@@ -124,7 +124,7 @@ class Log extends Annotation
     }
 
     /**
-     * return execution
+     * return execution.
      *
      * @return string execution
      */

@@ -20,12 +20,12 @@ use Mmoreram\ControllerExtraBundle\Annotation\Log as AnnotationLog;
 use Mmoreram\ControllerExtraBundle\Provider\RequestParameterProvider;
 
 /**
- * Dependency Injection configuration
+ * Dependency Injection configuration.
  */
 class Configuration implements ConfigurationInterface
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getConfigTreeBuilder()
     {
@@ -36,25 +36,25 @@ class Configuration implements ConfigurationInterface
             ->children()
 
                 /**
-                 * Bundle config definition
+                 * Bundle config definition.
                  */
                 ->integerNode('resolver_priority')
                     ->defaultValue(-8)
                 ->end()
 
                 /**
-                 * Provider request
+                 * Provider request.
                  */
                 ->enumNode('request')
-                    ->values(array(
+                    ->values([
                         RequestParameterProvider::CURRENT_REQUEST,
                         RequestParameterProvider::MASTER_REQUEST,
-                    ))
+                    ])
                     ->defaultValue(RequestParameterProvider::CURRENT_REQUEST)
                 ->end()
 
                 /**
-                 * Default factory definition
+                 * Default factory definition.
                  */
                 ->arrayNode('factory')
                     ->addDefaultsIfNotSet()
@@ -69,7 +69,7 @@ class Configuration implements ConfigurationInterface
                 ->end()
 
                 /**
-                 * Form config definition
+                 * Form config definition.
                  */
                 ->arrayNode('form')
                     ->addDefaultsIfNotSet()
@@ -84,7 +84,7 @@ class Configuration implements ConfigurationInterface
                 ->end()
 
                 /**
-                 * Flush config definition
+                 * Flush config definition.
                  */
                 ->arrayNode('flush')
                     ->addDefaultsIfNotSet()
@@ -99,7 +99,7 @@ class Configuration implements ConfigurationInterface
                 ->end()
 
                 /**
-                 * Entity config definition
+                 * Entity config definition.
                  */
                 ->arrayNode('entity')
                     ->addDefaultsIfNotSet()
@@ -120,7 +120,7 @@ class Configuration implements ConfigurationInterface
                 ->end()
 
                 /**
-                 * Bundle config definition
+                 * Bundle config definition.
                  */
                 ->arrayNode('json_response')
                     ->addDefaultsIfNotSet()
@@ -138,13 +138,13 @@ class Configuration implements ConfigurationInterface
                             ->useAttributeAsKey('name')
                             ->prototype('scalar')
                             ->end()
-                            ->defaultValue(array())
+                            ->defaultValue([])
                         ->end()
                     ->end()
                 ->end()
 
                 /**
-                 * Log config definition
+                 * Log config definition.
                  */
                 ->arrayNode('log')
                     ->addDefaultsIfNotSet()
@@ -153,7 +153,7 @@ class Configuration implements ConfigurationInterface
                             ->defaultTrue()
                         ->end()
                         ->enumNode('default_level')
-                            ->values(array(
+                            ->values([
                                 AnnotationLog::LVL_EMERG,
                                 AnnotationLog::LVL_ALERT,
                                 AnnotationLog::LVL_CRIT,
@@ -162,15 +162,15 @@ class Configuration implements ConfigurationInterface
                                 AnnotationLog::LVL_INFO,
                                 AnnotationLog::LVL_DEBUG,
                                 AnnotationLog::LVL_LOG,
-                            ))
+                            ])
                             ->defaultValue(AnnotationLog::LVL_INFO)
                         ->end()
                         ->enumNode('default_execute')
-                            ->values(array(
+                            ->values([
                                 AnnotationLog::EXEC_PRE,
                                 AnnotationLog::EXEC_POST,
                                 AnnotationLog::EXEC_BOTH,
-                            ))
+                            ])
                             ->defaultValue(AnnotationLog::EXEC_PRE)
                         ->end()
                     ->end()
@@ -195,7 +195,7 @@ class Configuration implements ConfigurationInterface
                 ->end()
 
                 /**
-                 * Object manager config definition
+                 * Object manager config definition.
                  */
                 ->arrayNode('object_manager')
                     ->addDefaultsIfNotSet()
@@ -210,7 +210,7 @@ class Configuration implements ConfigurationInterface
                 ->end()
 
                 /**
-                 * Get config definition
+                 * Get config definition.
                  */
                 ->arrayNode('get')
                     ->addDefaultsIfNotSet()
@@ -222,7 +222,7 @@ class Configuration implements ConfigurationInterface
                 ->end()
 
                 /**
-                 * Post config definition
+                 * Post config definition.
                  */
                 ->arrayNode('post')
                     ->addDefaultsIfNotSet()

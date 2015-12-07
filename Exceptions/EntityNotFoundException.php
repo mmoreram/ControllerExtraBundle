@@ -16,7 +16,7 @@ namespace Mmoreram\ControllerExtraBundle\Exceptions;
 use Mmoreram\ControllerExtraBundle\Exceptions\Abstracts\AbstractControllerExtraBundleException;
 
 /**
- * Abstract exception for all bundle exceptions
+ * Abstract exception for all bundle exceptions.
  */
 class EntityNotFoundException extends AbstractControllerExtraBundleException
 {

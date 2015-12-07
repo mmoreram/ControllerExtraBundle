@@ -16,7 +16,7 @@ namespace Mmoreram\ControllerExtraBundle\Annotation;
 use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
 
 /**
- * Entity annotation driver
+ * Entity annotation driver.
  *
  * @Annotation
  */
@@ -44,7 +44,7 @@ class Entity extends Annotation
     public $mapping;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * Mapping fallback
      */
@@ -55,10 +55,10 @@ class Entity extends Annotation
      *
      * Setters
      */
-    public $setters = array();
+    public $setters = [];
 
     /**
-     * @var boolean
+     * @var bool
      *
      * Persist entity
      */
@@ -72,7 +72,7 @@ class Entity extends Annotation
     public $notFoundException;
 
     /**
-     * return class
+     * return class.
      *
      * @return string Class
      */
@@ -82,7 +82,7 @@ class Entity extends Annotation
     }
 
     /**
-     * return name
+     * return name.
      *
      * @return string Name
      */
@@ -92,7 +92,7 @@ class Entity extends Annotation
     }
 
     /**
-     * return mapping
+     * return mapping.
      *
      * @return array Mapping
      */
@@ -102,9 +102,9 @@ class Entity extends Annotation
     }
 
     /**
-     * Get MappingFallback
+     * Get MappingFallback.
      *
-     * @return boolean MappingFallback
+     * @return bool MappingFallback
      */
     public function getMappingFallback()
     {
@@ -112,7 +112,7 @@ class Entity extends Annotation
     }
 
     /**
-     * return setters
+     * return setters.
      *
      * @return array Setters
      */
@@ -122,9 +122,9 @@ class Entity extends Annotation
     }
 
     /**
-     * return persist
+     * return persist.
      *
-     * @return boolean persist
+     * @return bool persist
      */
     public function getPersist()
     {
@@ -132,7 +132,7 @@ class Entity extends Annotation
     }
 
     /**
-     * return the not found exception
+     * return the not found exception.
      *
      * @return array
      */

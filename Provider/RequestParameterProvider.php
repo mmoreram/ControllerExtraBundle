@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Class RequestParameterProvider
+ * Class RequestParameterProvider.
  */
 class RequestParameterProvider
 {
@@ -51,7 +51,7 @@ class RequestParameterProvider
     protected $requestType;
 
     /**
-     * Construct method
+     * Construct method.
      *
      * @param RequestStack $requestStack Request stack
      */
@@ -61,7 +61,7 @@ class RequestParameterProvider
     }
 
     /**
-     * Set request type
+     * Set request type.
      *
      * @param string $requestType Request type
      *
@@ -105,7 +105,7 @@ class RequestParameterProvider
         if ($request instanceof Request) {
 
             /**
-             * Resolving the elements from the query
+             * Resolving the elements from the query.
              */
             $value = $this->resolveValueFromParameterBag(
                 $request->attributes,
@@ -114,7 +114,7 @@ class RequestParameterProvider
             );
 
             /**
-             * Resolving the values from the request ($_POST)
+             * Resolving the values from the request ($_POST).
              */
             $value = $this->resolveValueFromParameterBag(
                 $request->request,
@@ -123,7 +123,7 @@ class RequestParameterProvider
             );
 
             /**
-             * Resolving the values from the query ($_GET)
+             * Resolving the values from the query ($_GET).
              */
             $value = $this->resolveValueFromParameterBag(
                 $request->query,
@@ -138,7 +138,7 @@ class RequestParameterProvider
     }
 
     /**
-     * Given a bag and a delimiter, return the resolved value
+     * Given a bag and a delimiter, return the resolved value.
      *
      * @param ParameterBag $parameterBag Parameter Bag
      * @param string       $delimiter    Delimiter

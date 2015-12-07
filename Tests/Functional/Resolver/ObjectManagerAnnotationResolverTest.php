@@ -16,12 +16,12 @@ namespace Mmoreram\ControllerExtraBundle\Tests\Functional\Resolver;
 use Mmoreram\ControllerExtraBundle\Tests\Functional\AbstractWebTestCase;
 
 /**
- * Class ObjectManagerAnnotationResolverTest
+ * Class ObjectManagerAnnotationResolverTest.
  */
 class ObjectManagerAnnotationResolverTest extends AbstractWebTestCase
 {
     /**
-     * testAnnotation
+     * testAnnotation.
      */
     public function testAnnotation()
     {

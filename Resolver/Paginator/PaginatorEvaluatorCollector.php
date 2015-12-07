@@ -19,7 +19,7 @@ use Mmoreram\ControllerExtraBundle\Annotation\Paginator as AnnotationPaginator;
 use Mmoreram\ControllerExtraBundle\Resolver\Paginator\Interfaces\PaginatorEvaluatorInterface;
 
 /**
- * Class PaginatorEvaluatorCollection
+ * Class PaginatorEvaluatorCollection.
  */
 class PaginatorEvaluatorCollector implements PaginatorEvaluatorInterface
 {
@@ -28,10 +28,10 @@ class PaginatorEvaluatorCollector implements PaginatorEvaluatorInterface
      *
      * Paginator Evaluator collection
      */
-    protected $paginatorEvaluators = array();
+    protected $paginatorEvaluators = [];
 
     /**
-     * Add paginator evaluator collection
+     * Add paginator evaluator collection.
      *
      * @param PaginatorEvaluatorInterface $paginatorEvaluator Paginator Evaluator
      *
@@ -45,7 +45,7 @@ class PaginatorEvaluatorCollector implements PaginatorEvaluatorInterface
     }
 
     /**
-     * Evaluates inner joins
+     * Evaluates inner joins.
      *
      * @param QueryBuilder        $queryBuilder Query builder
      * @param AnnotationPaginator $annotation   Annotation

@@ -20,7 +20,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 use Mmoreram\ControllerExtraBundle\EventListener\ResolverEventListener;
 
 /**
- * Tests ResolverEventListener class
+ * Tests ResolverEventListener class.
  */
 class ResolverEventListenerTest extends PHPUnit_Framework_TestCase
 {
@@ -39,7 +39,7 @@ class ResolverEventListenerTest extends PHPUnit_Framework_TestCase
     protected $reader;
 
     /**
-     * Set up
+     * Set up.
      */
     public function setUp()
     {
@@ -55,7 +55,7 @@ class ResolverEventListenerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests add resolver
+     * Tests add resolver.
      */
     public function testAddResolver()
     {
@@ -64,7 +64,7 @@ class ResolverEventListenerTest extends PHPUnit_Framework_TestCase
          */
         $resolverEventListener = $this
             ->getMockBuilder('Mmoreram\ControllerExtraBundle\EventListener\ResolverEventListener')
-            ->setConstructorArgs(array($this->kernel, $this->reader))
+            ->setConstructorArgs([$this->kernel, $this->reader])
             ->setMethods(null)
             ->getMock();
 

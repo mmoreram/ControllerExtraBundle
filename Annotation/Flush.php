@@ -16,7 +16,7 @@ namespace Mmoreram\ControllerExtraBundle\Annotation;
 use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
 
 /**
- * Flush annotation driver
+ * Flush annotation driver.
  *
  * @Annotation
  */
@@ -37,7 +37,7 @@ class Flush extends Annotation
     public $entity;
 
     /**
-     * return manager
+     * return manager.
      *
      * @return string Manager
      */
@@ -47,7 +47,7 @@ class Flush extends Annotation
     }
 
     /**
-     * return entity
+     * return entity.
      *
      * @return string Entity
      */

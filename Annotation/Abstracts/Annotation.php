@@ -16,14 +16,14 @@ namespace Mmoreram\ControllerExtraBundle\Annotation\Abstracts;
 use Doctrine\Common\Annotations\Annotation as DoctrineAnnotation;
 
 /**
- * Flush annotation driver
+ * Flush annotation driver.
  *
  * @Annotation
  */
 abstract class Annotation extends DoctrineAnnotation
 {
     /**
-     * return value
+     * return value.
      *
      * @return string Value
      */

@@ -26,7 +26,7 @@ use Mmoreram\ControllerExtraBundle\Provider\RequestParameterProvider;
 use Mmoreram\ControllerExtraBundle\Resolver\Interfaces\AnnotationResolverInterface;
 
 /**
- * EntityAnnotationResolver, an implementation of AnnotationResolverInterface
+ * EntityAnnotationResolver, an implementation of AnnotationResolverInterface.
  */
 class EntityAnnotationResolver implements AnnotationResolverInterface
 {
@@ -59,28 +59,28 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
     protected $defaultName;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * Default persist value
      */
     protected $defaultPersist;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * Mapping fallback
      */
     protected $mappingFallback;
 
     /**
-     * Construct method
+     * Construct method.
      *
      * @param AbstractManagerRegistry  $doctrine                  Doctrine
      * @param EntityProvider           $entityProvider            Entity provider
      * @param RequestParameterProvider $requestParametersProvider Request parameter provider
      * @param string                   $defaultName               Default name
-     * @param boolean                  $defaultPersist            Default persist
-     * @param boolean                  $mappingFallback           Mapping fallback
+     * @param bool                     $defaultPersist            Default persist
+     * @param bool                     $mappingFallback           Mapping fallback
      */
     public function __construct(
         AbstractManagerRegistry $doctrine,
@@ -115,12 +115,12 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
         ReflectionMethod $method
     ) {
         /**
-         * Annotation is only loaded if is typeof AnnotationEntity
+         * Annotation is only loaded if is typeof AnnotationEntity.
          */
         if ($annotation instanceof AnnotationEntity) {
 
             /**
-             * Creating new instance of desired entity
+             * Creating new instance of desired entity.
              */
             $entity = $this
                 ->entityProvider
@@ -128,17 +128,17 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
 
             /**
              * Tries to get a mapped instance of this entity.
-             * If not mapped, just return old new created
+             * If not mapped, just return old new created.
              */
             $entity = $this->evaluateMapping($annotation, $entity);
 
             /**
-             * Persists entity if defined
+             * Persists entity if defined.
              */
             $this->resolvePersist($annotation, $entity);
 
             /**
-             * If is decided this entity has to be persisted into manager
+             * If is decided this entity has to be persisted into manager.
              */
             $this->evaluateSetters(
                 $request->attributes,
@@ -148,7 +148,7 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
 
             /**
              * Get the parameter name. If not defined, is set as defined in
-             * parameters
+             * parameters.
              */
             $parameterName = $annotation->getName()
                 ?: $this->defaultName;
@@ -163,12 +163,12 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
     }
 
     /**
-     * Resolve doctrine mapping
+     * Resolve doctrine mapping.
      *
      * @param AnnotationEntity $annotation Annotation
-     * @param Object           $entity     Entity
+     * @param object           $entity     Entity
      *
-     * @return Object Entity given or mapped instance
+     * @return object Entity given or mapped instance
      *
      * @throws EntityNotFoundException Entity was intended to be mapped but not
      *                                 exists
@@ -183,7 +183,7 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
                 : $this->mappingFallback;
 
             /**
-             * Each value of the mapping array is computed and analyzed
+             * Each value of the mapping array is computed and analyzed.
              *
              * If the format is something like %value%, this service will
              * look for the real request attribute value
@@ -195,7 +195,7 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
                  * Defined field is not found in current route, and we have
                  * enabled the "mapping fallback" setting. In that case we
                  * assume that the mapping definition is wrong, and we return
-                 * the entity itself
+                 * the entity itself.
                  */
                 if ($mappingFallback && ($parameterValue === $mappingValue)) {
                     return $entity;
@@ -231,10 +231,10 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
     }
 
     /**
-     * Evaluate setters
+     * Evaluate setters.
      *
      * @param ParameterBag $attributes Request attributes
-     * @param Object       $entity     Entity
+     * @param object       $entity     Entity
      * @param array        $setters    Array of setters
      *
      * @return EntityAnnotationResolver self Object
@@ -249,7 +249,7 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
     }
 
     /**
-     * Persist block
+     * Persist block.
      *
      * This block defines if entity must be persisted using desired
      * manager.
@@ -262,14 +262,14 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
      * every single annotation
      *
      * @param AnnotationEntity $annotation Annotation
-     * @param Object           $entity     Entity
+     * @param object           $entity     Entity
      *
      * @return EntityAnnotationResolver self Object
      */
     protected function resolvePersist(AnnotationEntity $annotation, $entity)
     {
         /**
-         * Persist block
+         * Persist block.
          *
          * This block defines if entity must be persisted using desired
          * manager.
@@ -283,7 +283,7 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
 
         /**
          * Get the persist variable. If not defined, is set as defined in
-         * parameters
+         * parameters.
          */
         $persist = !is_null($annotation->getPersist())
             ? $annotation->getPersist()
@@ -292,7 +292,7 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
         if ($persist) {
 
             /**
-             * Loading locally desired Doctrine manager
+             * Loading locally desired Doctrine manager.
              */
             $this
                 ->doctrine

@@ -20,7 +20,7 @@ use Mmoreram\ControllerExtraBundle\Provider\RequestParameterProvider;
 use Mmoreram\ControllerExtraBundle\Resolver\Paginator\Interfaces\PaginatorEvaluatorInterface;
 
 /**
- * Class PaginatorOrderByEvaluator
+ * Class PaginatorOrderByEvaluator.
  */
 class PaginatorOrderByEvaluator implements PaginatorEvaluatorInterface
 {
@@ -32,7 +32,7 @@ class PaginatorOrderByEvaluator implements PaginatorEvaluatorInterface
     protected $requestParameterProvider;
 
     /**
-     * Construct
+     * Construct.
      *
      * @param RequestParameterProvider $requestParameterProvider Request Parameter provider
      */
@@ -42,7 +42,7 @@ class PaginatorOrderByEvaluator implements PaginatorEvaluatorInterface
     }
 
     /**
-     * Evaluates inner joins
+     * Evaluates inner joins.
      *
      * @param QueryBuilder        $queryBuilder Query builder
      * @param AnnotationPaginator $annotation   Annotation

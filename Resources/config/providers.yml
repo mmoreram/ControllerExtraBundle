@@ -6,14 +6,14 @@ services:
     mmoreram.controllerextra.provider.entity_provider:
         class: %mmoreram.controllerextra.provider.entity_provider.class%
         arguments:
-            container: @service_container
-            kernel: @kernel
-            default_factory_method: %mmoreram.controllerextra.factory_default_method%
-            default_factory_static: %mmoreram.controllerextra.factory_default_static%
+            - "@service_container"
+            - "@kernel"
+            - %mmoreram.controllerextra.factory_default_method%
+            - %mmoreram.controllerextra.factory_default_static%
 
     mmoreram.controllerextra.provider.request_parameter_provider:
         class: %mmoreram.controllerextra.provider.request_parameter_provider.class%
         arguments:
-            request_stack: @request_stack
+            - "@request_stack"
         calls:
             - [setRequestType, [%mmoreram.controllerextra.request%]]

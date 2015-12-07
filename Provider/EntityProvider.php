@@ -23,7 +23,7 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
- * Class EntityProvider
+ * Class EntityProvider.
  */
 class EntityProvider
 {
@@ -56,7 +56,7 @@ class EntityProvider
     protected $defaultFactoryStatic;
 
     /**
-     * construct method
+     * construct method.
      *
      * @param ContainerInterface $container            Container
      * @param KernelInterface    $kernel               Kernel
@@ -76,7 +76,7 @@ class EntityProvider
     }
 
     /**
-     * Class provider, given several formats
+     * Class provider, given several formats.
      *
      * Accepted formats:
      *
@@ -92,7 +92,7 @@ class EntityProvider
      *
      * @param mixed $class Formatted class
      *
-     * @return Object|null Entity if exists, otherwise null
+     * @return object|null Entity if exists, otherwise null
      */
     public function provide($class)
     {
@@ -102,11 +102,11 @@ class EntityProvider
     }
 
     /**
-     * Evaluates entity instance using a factory
+     * Evaluates entity instance using a factory.
      *
      * @param array $class Class
      *
-     * @return Object Entity instance
+     * @return object Entity instance
      *
      * @throws InvalidArgumentException          if the service is not defined
      * @throws ServiceCircularReferenceException When a circular reference is detected
@@ -144,11 +144,11 @@ class EntityProvider
     }
 
     /**
-     * Evaluates entity instance using the namespace
+     * Evaluates entity instance using the namespace.
      *
      * @param string $class Class
      *
-     * @return Object Entity instance
+     * @return object Entity instance
      *
      * @throws ClassNotFoundException if class is not found
      */
@@ -156,7 +156,7 @@ class EntityProvider
     {
         /**
          * Trying to generate new entity given that the class is the entity
-         * namespace
+         * namespace.
          */
         if (class_exists($class)) {
             return new $class();
@@ -164,7 +164,7 @@ class EntityProvider
 
         /**
          * Trying to generate new entity given that the namespace is defined in
-         * as a Container parameter
+         * as a Container parameter.
          */
         try {
             $classParameter = $this
@@ -180,7 +180,7 @@ class EntityProvider
         $bundles = $this->kernel->getBundles();
 
         /**
-         * Trying to get entity using Doctrine short format
+         * Trying to get entity using Doctrine short format.
          *
          * MyBundle:MyEntity
          *
@@ -221,7 +221,7 @@ class EntityProvider
         }
 
         /**
-         * Otherwise, assume that class is namespace of class
+         * Otherwise, assume that class is namespace of class.
          */
 
         return new $entityNamespace();

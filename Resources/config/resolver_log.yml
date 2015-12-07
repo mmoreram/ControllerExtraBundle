@@ -13,7 +13,7 @@ services:
     mmoreram.controllerextra.resolver.log_annotation_resolver:
         class: %mmoreram.controllerextra.resolver.log_annotation_resolver.class%
         arguments:
-            logger: @logger
+            - "@logger"
         calls:
             - [setDefaultLevel, [%mmoreram.controllerextra.log_default_level%]]
             - [setDefaultExecute, [%mmoreram.controllerextra.log_default_execute%]]

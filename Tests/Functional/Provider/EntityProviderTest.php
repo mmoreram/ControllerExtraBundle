@@ -18,7 +18,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Mmoreram\ControllerExtraBundle\Provider\EntityProvider;
 
 /**
- * Class EntityProviderTest
+ * Class EntityProviderTest.
  */
 class EntityProviderTest extends WebTestCase
 {
@@ -37,7 +37,7 @@ class EntityProviderTest extends WebTestCase
     protected $entityNamespace = 'Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\Fake';
 
     /**
-     * Set up
+     * Set up.
      */
     public function setUp()
     {
@@ -50,7 +50,7 @@ class EntityProviderTest extends WebTestCase
     }
 
     /**
-     * Testing class provider with good results
+     * Testing class provider with good results.
      *
      * @dataProvider dataProvide
      */
@@ -63,68 +63,68 @@ class EntityProviderTest extends WebTestCase
     }
 
     /**
-     * Provider for testProvide
+     * Provider for testProvide.
      *
      * @return array
      */
     public function dataProvide()
     {
-        return array(
-            array($this->entityNamespace),
-            array('controller_extra_bundle.entity.fake.class'),
-            array('FakeBundle:Fake'),
-            array(
-                array(
+        return [
+            [$this->entityNamespace],
+            ['controller_extra_bundle.entity.fake.class'],
+            ['FakeBundle:Fake'],
+            [
+                [
                     'factory' => 'Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory',
                     'static' => false,
-                ),
-            ),
-            array(
-                array(
+                ],
+            ],
+            [
+                [
                     'factory' => 'Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory',
                     'method' => 'generateNonStatic',
                     'static' => false,
-                ),
-            ),
-            array(
-                array(
+                ],
+            ],
+            [
+                [
                     'factory' => 'Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory',
                     'method' => 'generate',
                     'static' => true,
-                ),
-            ),
-            array(
-                array(
+                ],
+            ],
+            [
+                [
                     'factory' => 'Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory',
                     'method' => 'generate',
-                ),
-            ),
-            array(
-                array(
+                ],
+            ],
+            [
+                [
                     'factory' => 'controller_extra_bundle.factory.fake',
                     'static' => false,
-                ),
-            ),
-            array(
-                array(
+                ],
+            ],
+            [
+                [
                     'factory' => 'controller_extra_bundle.factory.fake',
                     'method' => 'generateNonStatic',
                     'static' => false,
-                ),
-            ),
-            array(
-                array(
+                ],
+            ],
+            [
+                [
                     'factory' => 'controller_extra_bundle.factory.fake',
                     'method' => 'generate',
                     'static' => true,
-                ),
-            ),
-            array(
-                array(
+                ],
+            ],
+            [
+                [
                     'factory' => 'controller_extra_bundle.factory.fake',
                     'method' => 'generate',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 }

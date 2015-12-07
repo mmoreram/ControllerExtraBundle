@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the ControllerExtraBundle for Symfony2.
  *
@@ -8,11 +9,9 @@
  * Feel free to edit as you please, and have fun.
  *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @author Nil Portugués <contact@nilportugues.com>
  */
 
 namespace Mmoreram\ControllerExtraBundle\Annotation;
-
 
 use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
 
@@ -47,7 +46,7 @@ abstract class RequestBagAnnotation extends Annotation
     public $deep = false;
 
     /**
-     * Gets the path
+     * Gets the path.
      *
      * @return string
      */
@@ -57,7 +56,7 @@ abstract class RequestBagAnnotation extends Annotation
     }
 
     /**
-     * Sets the path
+     * Sets the path.
      *
      * @param string $path
      */
@@ -67,7 +66,7 @@ abstract class RequestBagAnnotation extends Annotation
     }
 
     /**
-     * Gets the name
+     * Gets the name.
      *
      * @return null|string
      */
@@ -77,7 +76,7 @@ abstract class RequestBagAnnotation extends Annotation
     }
 
     /**
-     * Sets the name
+     * Sets the name.
      *
      * @param string $name
      */
@@ -87,7 +86,7 @@ abstract class RequestBagAnnotation extends Annotation
     }
 
     /**
-     * Gets the default
+     * Gets the default.
      *
      * @return mixed
      */
@@ -97,7 +96,7 @@ abstract class RequestBagAnnotation extends Annotation
     }
 
     /**
-     * Sets the default
+     * Sets the default.
      *
      * @param mixed $default The default value
      */
@@ -107,7 +106,7 @@ abstract class RequestBagAnnotation extends Annotation
     }
 
     /**
-     * Is deep
+     * Is deep.
      *
      * @return mixed
      */
@@ -117,12 +116,12 @@ abstract class RequestBagAnnotation extends Annotation
     }
 
     /**
-     * Sets is deep
+     * Sets is deep.
      *
-     * @param boolean $deep
+     * @param bool $deep
      */
     public function setDeep($deep)
     {
         $this->deep = $deep;
     }
-} 
+}

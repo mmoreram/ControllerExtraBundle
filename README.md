@@ -1665,7 +1665,8 @@ public function indexAction($varName)
 You can also use a deep option like [Symfony parameter bag get method]
 (http://api.symfony.com/2.0/Symfony/Component/HttpFoundation/ParameterBag.html#method_get)
 , if true, a path like foo[bar] will find deeper items.
-By default this option is disabled.
+By default this option is disabled. Only available until Symfony `v2.8` and
+removed since `v3.0`.
 
 ``` php
 <?php
@@ -1753,7 +1754,8 @@ public function indexAction($varName)
 You can also use a deep option like [Symfony parameter bag get method]
 (http://api.symfony.com/2.0/Symfony/Component/HttpFoundation/ParameterBag.html#method_get)
 , if true, a path like foo[bar] will find deeper items.
-By default this option is disabled.
+By default this option is disabled.. Only available until Symfony `v2.8` and
+removed since `v3.0`.
 
 ``` php
 <?php

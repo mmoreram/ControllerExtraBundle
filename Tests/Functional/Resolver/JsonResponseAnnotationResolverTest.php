@@ -16,12 +16,12 @@ namespace Mmoreram\ControllerExtraBundle\Tests\Functional\Resolver;
 use Mmoreram\ControllerExtraBundle\Tests\Functional\AbstractWebTestCase;
 
 /**
- * Class JsonResponseAnnotationResolverTest
+ * Class JsonResponseAnnotationResolverTest.
  */
 class JsonResponseAnnotationResolverTest extends AbstractWebTestCase
 {
     /**
-     * Test annotation for a right request
+     * Test annotation for a right request.
      */
     public function testAnnotationForRightRequest()
     {
@@ -37,7 +37,7 @@ class JsonResponseAnnotationResolverTest extends AbstractWebTestCase
     }
 
     /**
-     * Test annotation for a request launching an exception
+     * Test annotation for a request launching an exception.
      */
     public function testAnnotationRequestWithException()
     {
@@ -59,7 +59,7 @@ class JsonResponseAnnotationResolverTest extends AbstractWebTestCase
     }
 
     /**
-     * Test annotation for a request launching a http exception
+     * Test annotation for a request launching a http exception.
      */
     public function testAnnotationRequestWithHttpException()
     {
@@ -81,7 +81,7 @@ class JsonResponseAnnotationResolverTest extends AbstractWebTestCase
     }
 
     /**
-     * Test that an exception is laucned from an annotation
+     * Test that an exception is laucned from an annotation.
      */
     public function testAnnotationRequestWhenExceptionIsLaunchedByAnnotation()
     {

@@ -24,7 +24,7 @@ use Mmoreram\ControllerExtraBundle\Provider\EntityProvider;
 use Mmoreram\ControllerExtraBundle\Resolver\Interfaces\AnnotationResolverInterface;
 
 /**
- * Class ObjectManagerAnnotationResolver
+ * Class ObjectManagerAnnotationResolver.
  */
 class ObjectManagerAnnotationResolver implements AnnotationResolverInterface
 {
@@ -50,7 +50,7 @@ class ObjectManagerAnnotationResolver implements AnnotationResolverInterface
     protected $defaultName;
 
     /**
-     * Construct method
+     * Construct method.
      *
      * @param AbstractManagerRegistry $doctrine       Doctrine
      * @param EntityProvider          $entityProvider Entity provider
@@ -83,12 +83,12 @@ class ObjectManagerAnnotationResolver implements AnnotationResolverInterface
         ReflectionMethod $method
     ) {
         /**
-         * Annotation is only laoded if is typeof AnnotationEntity
+         * Annotation is only laoded if is typeof AnnotationEntity.
          */
         if ($annotation instanceof AnnotationObjectManager) {
 
             /**
-             * Creating new instance of desired entity
+             * Creating new instance of desired entity.
              */
             $entity = $this
                 ->entityProvider
@@ -100,7 +100,7 @@ class ObjectManagerAnnotationResolver implements AnnotationResolverInterface
 
             /**
              * Get the parameter name. If not defined, is set as defined in
-             * parameters
+             * parameters.
              */
             $parameterName = $annotation->getName()
                 ?: $this->defaultName;

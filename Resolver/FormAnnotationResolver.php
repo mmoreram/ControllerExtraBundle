@@ -25,7 +25,7 @@ use Mmoreram\ControllerExtraBundle\Resolver\Abstracts\AbstractAnnotationResolver
 use Mmoreram\ControllerExtraBundle\Resolver\Interfaces\AnnotationResolverInterface;
 
 /**
- * FormAnnotationResolver, an implementation of  AnnotationResolverInterface
+ * FormAnnotationResolver, an implementation of  AnnotationResolverInterface.
  */
 class FormAnnotationResolver extends AbstractAnnotationResolver implements AnnotationResolverInterface
 {
@@ -51,7 +51,7 @@ class FormAnnotationResolver extends AbstractAnnotationResolver implements Annot
     protected $defaultName;
 
     /**
-     * Construct method
+     * Construct method.
      *
      * @param FormRegistryInterface $formRegistry Form Registry
      * @param FormFactoryInterface  $formFactory  Form Factory
@@ -82,17 +82,17 @@ class FormAnnotationResolver extends AbstractAnnotationResolver implements Annot
         ReflectionMethod $method
     ) {
         /**
-         * Annotation is only laoded if is typeof WorkAnnotation
+         * Annotation is only laoded if is typeof WorkAnnotation.
          */
         if ($annotation instanceof AnnotationForm) {
 
             /**
-             * Once loaded Annotation info, we just instanced Service name
+             * Once loaded Annotation info, we just instanced Service name.
              */
             $annotationValue = $annotation->getClass();
 
             /**
-             * Get FormType object given a service name
+             * Get FormType object given a service name.
              */
             $type = class_exists($annotationValue)
                 ? new $annotationValue()
@@ -102,7 +102,7 @@ class FormAnnotationResolver extends AbstractAnnotationResolver implements Annot
                     ->getInnerType();
 
             /**
-             * Get the parameter name. If not defined, is set as $form
+             * Get the parameter name. If not defined, is set as $form.
              */
             $parameterName = $annotation->getName() ?: $this->defaultName;
             $parameterClass = $this->getParameterType(
@@ -113,7 +113,7 @@ class FormAnnotationResolver extends AbstractAnnotationResolver implements Annot
 
             /**
              * Requiring result with calling getBuiltObject(), set as request
-             * attribute desired element
+             * attribute desired element.
              */
             $request->attributes->set(
                 $parameterName,
@@ -139,7 +139,7 @@ class FormAnnotationResolver extends AbstractAnnotationResolver implements Annot
      * @param string               $parameterClass Class type of  method parameter
      * @param AbstractType         $type           Built Type object
      *
-     * @return Mixed object to inject as a method parameter
+     * @return mixed object to inject as a method parameter
      */
     protected function getBuiltObject(
         Request $request,
@@ -150,7 +150,7 @@ class FormAnnotationResolver extends AbstractAnnotationResolver implements Annot
     ) {
         /**
          * Checks if parameter typehinting is AbstractType
-         * In this case, form type as defined method parameter
+         * In this case, form type as defined method parameter.
          */
         if ('Symfony\\Component\\Form\\AbstractType' == $parameterClass) {
             return $type;
@@ -159,12 +159,12 @@ class FormAnnotationResolver extends AbstractAnnotationResolver implements Annot
         $entity = $request->attributes->get($annotation->getEntity());
 
         /**
-         * Creates form object from type
+         * Creates form object from type.
          */
-        $form = $formFactory->create($type, $entity);
+        $form = $formFactory->create(get_class($type), $entity);
 
         /**
-         * Handling request if needed
+         * Handling request if needed.
          */
         if ($annotation->getHandleRequest()) {
             $form->handleRequest($request);
@@ -179,20 +179,20 @@ class FormAnnotationResolver extends AbstractAnnotationResolver implements Annot
 
         /**
          * Checks if parameter typehinting is Form
-         * In this case, inject form as defined method parameter
+         * In this case, inject form as defined method parameter.
          */
         if (in_array(
-            $parameterClass, array(
+            $parameterClass, [
                 'Symfony\\Component\\Form\\Form',
                 'Symfony\\Component\\Form\\FormInterface',
-            )
+            ]
         )) {
             return $form;
         }
 
         /**
          * Checks if parameter typehinting is FormView
-         * In this case, inject form's view as defined method parameter
+         * In this case, inject form's view as defined method parameter.
          */
         if ('Symfony\\Component\\Form\\FormView' == $parameterClass) {
             return $form->createView();

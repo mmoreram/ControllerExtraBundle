@@ -21,7 +21,7 @@ use Mmoreram\ControllerExtraBundle\Annotation\Get;
 use Mmoreram\ControllerExtraBundle\Resolver\Interfaces\AnnotationResolverInterface;
 
 /**
- * GetAnnotationResolver, an implementation of AnnotationResolverInterface
+ * GetAnnotationResolver, an implementation of AnnotationResolverInterface.
  */
 class GetAnnotationResolver implements AnnotationResolverInterface
 {
@@ -45,7 +45,7 @@ class GetAnnotationResolver implements AnnotationResolverInterface
         ReflectionMethod $method
     ) {
         /**
-         * Annotation is only loaded if is typeof AnnotationEntity
+         * Annotation is only loaded if is typeof AnnotationEntity.
          */
         if ($annotation instanceof Get) {
             $param = $request

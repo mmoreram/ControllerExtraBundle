@@ -19,11 +19,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
 
 /**
- * Abstract Annotation resolver
+ * Abstract Annotation resolver.
  */
 interface AnnotationResolverInterface
 {
-
     /**
      * Specific annotation evaluation.
      *

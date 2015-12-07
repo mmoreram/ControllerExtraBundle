@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Mmoreram\ControllerExtraBundle\Resolver\FlushAnnotationResolver;
 
 /**
- * Tests FlushAnnotationResolver class
+ * Tests FlushAnnotationResolver class.
  */
 class FlushAnnotationResolverTest extends \PHPUnit_Framework_TestCase
 {
@@ -47,17 +47,17 @@ class FlushAnnotationResolverTest extends \PHPUnit_Framework_TestCase
     protected $reflectionMethod;
 
     /**
-     * Setup method
+     * Setup method.
      */
     public function setUp()
     {
         $this->flushAnnotationResolver = $this
             ->getMockBuilder('Mmoreram\ControllerExtraBundle\Resolver\FlushAnnotationResolver')
             ->disableOriginalConstructor()
-            ->setMethods(array(
+            ->setMethods([
                 'getDoctrine',
                 'getDefaultManager',
-            ))
+            ])
             ->getMock();
 
         $manager = $this
@@ -68,10 +68,10 @@ class FlushAnnotationResolverTest extends \PHPUnit_Framework_TestCase
         $doctrine = $this
             ->getMockBuilder('Symfony\Bridge\Doctrine\ManagerRegistry')
             ->disableOriginalConstructor()
-            ->setMethods(array(
+            ->setMethods([
                 'getManager',
                 'getAliasNamespace',
-            ))
+            ])
             ->getMock();
 
         $doctrine
@@ -103,7 +103,7 @@ class FlushAnnotationResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests DefaultManager name method
+     * Tests DefaultManager name method.
      *
      * @param string $annotationManager Manager defined in annotation
      * @param string $resultManager     Result Manager
@@ -115,10 +115,10 @@ class FlushAnnotationResolverTest extends \PHPUnit_Framework_TestCase
         $doctrine = $this
             ->getMockBuilder('Symfony\Bridge\Doctrine\ManagerRegistry')
             ->disableOriginalConstructor()
-            ->setMethods(array(
+            ->setMethods([
                 'getManager',
                 'getAliasNamespace',
-            ))
+            ])
             ->getMock();
 
         $doctrine
@@ -134,9 +134,9 @@ class FlushAnnotationResolverTest extends \PHPUnit_Framework_TestCase
         $annotation = $this
             ->getMockBuilder('Mmoreram\ControllerExtraBundle\Annotation\Flush')
             ->disableOriginalConstructor()
-            ->setMethods(array(
+            ->setMethods([
                 'getManager',
-            ))
+            ])
             ->getMock();
 
         $annotation
@@ -148,20 +148,20 @@ class FlushAnnotationResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Data for testManager
+     * Data for testManager.
      *
      * @return array data
      */
     public function dataManager()
     {
-        return array(
+        return [
 
-            array(null, 'default'),
-            array(false, 'default'),
-            array('', 'default'),
-            array('main', 'main'),
-            array('default', 'default'),
-        );
+            [null, 'default'],
+            [false, 'default'],
+            ['', 'default'],
+            ['main', 'main'],
+            ['default', 'default'],
+        ];
     }
 
     /**
@@ -181,9 +181,9 @@ class FlushAnnotationResolverTest extends \PHPUnit_Framework_TestCase
         $annotation = $this
             ->getMockBuilder('Mmoreram\ControllerExtraBundle\Annotation\Flush')
             ->disableOriginalConstructor()
-            ->setMethods(array(
+            ->setMethods([
                 'getEntity',
-            ))
+            ])
             ->getMock();
 
         $annotation
@@ -206,45 +206,45 @@ class FlushAnnotationResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Data provider for testEntities method
+     * Data provider for testEntities method.
      *
      * @return array data
      */
     public function dataEntities()
     {
-        return array(
+        return [
 
-            array(
-                null, array(), null,
-            ),
-            array(
+            [
+                null, [], null,
+            ],
+            [
                 'entity',
-                array('entity' => 'entity_value'),
-                new ArrayCollection(array('entity_value')),
-            ),
-            array(
-                array('entity'),
-                array('entity' => 'entity_value'),
-                new ArrayCollection(array('entity_value')),
-            ),
-            array(
-                array('entity'),
-                array(),
+                ['entity' => 'entity_value'],
+                new ArrayCollection(['entity_value']),
+            ],
+            [
+                ['entity'],
+                ['entity' => 'entity_value'],
+                new ArrayCollection(['entity_value']),
+            ],
+            [
+                ['entity'],
+                [],
                 null,
-            ),
-            array(
-                array('entity', 'entity2'),
-                array('entity2' => 'entity2_value'),
-                new ArrayCollection(array('entity2_value')),
-            ),
-        );
+            ],
+            [
+                ['entity', 'entity2'],
+                ['entity2' => 'entity2_value'],
+                new ArrayCollection(['entity2_value']),
+            ],
+        ];
     }
 
     /**
-     * Tests Annotation type
+     * Tests Annotation type.
      *
-     * @param string  $annotationNamespace Annotation namespace
-     * @param boolean $mustFlush           Must flush
+     * @param string $annotationNamespace Annotation namespace
+     * @param bool   $mustFlush           Must flush
      *
      * @dataProvider dataAnnotationNamespace
      */
@@ -269,27 +269,27 @@ class FlushAnnotationResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Data for testAnnotationNamespace
+     * Data for testAnnotationNamespace.
      *
      * @return array data
      */
     public function dataAnnotationNamespace()
     {
-        return array(
+        return [
 
-            array('Mmoreram\ControllerExtraBundle\Annotation\Flush', true),
-            array('Mmoreram\ControllerExtraBundle\Annotation\Log', false),
-            array('Mmoreram\ControllerExtraBundle\Annotation\Form', false),
-            array('Mmoreram\ControllerExtraBundle\Annotation\Entity', false),
-        );
+            ['Mmoreram\ControllerExtraBundle\Annotation\Flush', true],
+            ['Mmoreram\ControllerExtraBundle\Annotation\Log', false],
+            ['Mmoreram\ControllerExtraBundle\Annotation\Form', false],
+            ['Mmoreram\ControllerExtraBundle\Annotation\Entity', false],
+        ];
     }
 
     /**
-     * onKernelResponse method
+     * onKernelResponse method.
      */
 
     /**
-     * Tests onKernelResponse method
+     * Tests onKernelResponse method.
      *
      * This case considers mustFlush as false
      */
@@ -298,9 +298,9 @@ class FlushAnnotationResolverTest extends \PHPUnit_Framework_TestCase
         $flushAnnotationResolver = $this
             ->getMockBuilder('Mmoreram\ControllerExtraBundle\Resolver\FlushAnnotationResolver')
             ->disableOriginalConstructor()
-            ->setMethods(array(
+            ->setMethods([
                 'getMustFlush',
-            ))
+            ])
             ->getMock();
 
         $event = $this
@@ -311,9 +311,9 @@ class FlushAnnotationResolverTest extends \PHPUnit_Framework_TestCase
         $manager = $this
             ->getMockBuilder('Doctrine\ORM\EntityManager')
             ->disableOriginalConstructor()
-            ->setMethods(array(
+            ->setMethods([
                 'flush',
-            ))
+            ])
             ->getMock();
 
         $manager
@@ -329,7 +329,7 @@ class FlushAnnotationResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests onKernelResponse method
+     * Tests onKernelResponse method.
      *
      * This case considers mustFlush as false
      */
@@ -338,10 +338,10 @@ class FlushAnnotationResolverTest extends \PHPUnit_Framework_TestCase
         $flushAnnotationResolver = $this
             ->getMockBuilder('Mmoreram\ControllerExtraBundle\Resolver\FlushAnnotationResolver')
             ->disableOriginalConstructor()
-            ->setMethods(array(
+            ->setMethods([
                 'getMustFlush',
                 'getManager',
-            ))
+            ])
             ->getMock();
 
         $event = $this
@@ -352,9 +352,9 @@ class FlushAnnotationResolverTest extends \PHPUnit_Framework_TestCase
         $manager = $this
             ->getMockBuilder('Doctrine\ORM\EntityManager')
             ->disableOriginalConstructor()
-            ->setMethods(array(
+            ->setMethods([
                 'flush',
-            ))
+            ])
             ->getMock();
 
         $manager

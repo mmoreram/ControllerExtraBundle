@@ -23,11 +23,10 @@ use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
 use Mmoreram\ControllerExtraBundle\Resolver\Interfaces\AnnotationResolverInterface;
 
 /**
- * Resolver Event Listener
+ * Resolver Event Listener.
  */
 class ResolverEventListener
 {
-
     /**
      * @var KernelInterface
      *
@@ -47,10 +46,10 @@ class ResolverEventListener
      *
      * Resolver stack
      */
-    protected $resolverStack = array();
+    protected $resolverStack = [];
 
     /**
-     * Construct method
+     * Construct method.
      *
      * @param KernelInterface $kernel Kernel
      * @param Reader          $reader Reader
@@ -62,7 +61,7 @@ class ResolverEventListener
     }
 
     /**
-     * Return kernel object
+     * Return kernel object.
      *
      * @return KernelInterface Kernel
      */
@@ -72,7 +71,7 @@ class ResolverEventListener
     }
 
     /**
-     * Return reader
+     * Return reader.
      *
      * @return Reader Reader
      */
@@ -82,7 +81,7 @@ class ResolverEventListener
     }
 
     /**
-     * Return resolver stack
+     * Return resolver stack.
      *
      * @return array Resolver stack
      */
@@ -92,7 +91,7 @@ class ResolverEventListener
     }
 
     /**
-     * Add resolver into stack
+     * Add resolver into stack.
      *
      * @param AnnotationResolverInterface $resolver Resolver
      *
@@ -106,7 +105,7 @@ class ResolverEventListener
     }
 
     /**
-     * Method executed while loading Controller
+     * Method executed while loading Controller.
      *
      * @param FilterControllerEvent $event Filter Controller event
      */
@@ -114,12 +113,12 @@ class ResolverEventListener
     {
 
         /**
-         * Data load
+         * Data load.
          */
         $controller = $event->getController();
 
         /**
-         * If is not a valid controller structure, return
+         * If is not a valid controller structure, return.
          */
         if (!is_array($controller)) {
             return;
@@ -129,13 +128,13 @@ class ResolverEventListener
         $method = new ReflectionMethod($controller[0], $controller[1]);
 
         /**
-         * Given specific configuration, analyze full request
+         * Given specific configuration, analyze full request.
          */
         $this->analyzeRequest($request, $this->getReader(), $method);
     }
 
     /**
-     * Evaluate request
+     * Evaluate request.
      *
      * @param Request          $request Request
      * @param Reader           $reader  Reader
@@ -144,12 +143,12 @@ class ResolverEventListener
     public function analyzeRequest(Request $request, Reader $reader, ReflectionMethod $method)
     {
         /**
-         * Annotations load
+         * Annotations load.
          */
         $methodAnnotations = $reader->getMethodAnnotations($method);
 
         /**
-         * Every annotation found is parsed
+         * Every annotation found is parsed.
          */
         foreach ($methodAnnotations as $annotation) {
             if ($annotation instanceof Annotation) {
@@ -159,7 +158,7 @@ class ResolverEventListener
     }
 
     /**
-     * Allow every available resolver to solve its own logic
+     * Allow every available resolver to solve its own logic.
      *
      * @param Request          $request       Request
      * @param ReflectionMethod $method        Method
@@ -170,7 +169,7 @@ class ResolverEventListener
     {
 
         /**
-         * Every resolver must evaluate its logic
+         * Every resolver must evaluate its logic.
          */
         foreach ($resolverStack as $resolver) {
             $resolver->evaluateAnnotation($request, $annotation, $method);

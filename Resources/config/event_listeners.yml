@@ -6,7 +6,7 @@ services:
     mmoreram.controllerextra.event_listeners.resolver_event_listener:
         class: %mmoreram.controllerextra.event_listeners.resolver_event_listener.class%
         arguments:
-            kernel: @kernel
-            annotations_reader: @annotation_reader
+            - "@kernel"
+            - "@annotation_reader"
         tags:
             - { name: kernel.event_listener, event: kernel.controller, method: onKernelController, priority: %mmoreram.controllerextra.resolver_priority% }

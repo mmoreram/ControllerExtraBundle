@@ -18,12 +18,12 @@ use Doctrine\ORM\QueryBuilder;
 use Mmoreram\ControllerExtraBundle\Annotation\Paginator as AnnotationPaginator;
 
 /**
- * Class PaginatorEvaluatorInterface
+ * Class PaginatorEvaluatorInterface.
  */
 interface PaginatorEvaluatorInterface
 {
     /**
-     * Evaluates inner joins
+     * Evaluates inner joins.
      *
      * @param QueryBuilder        $queryBuilder Query builder
      * @param AnnotationPaginator $annotation   Annotation

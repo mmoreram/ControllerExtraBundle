@@ -17,12 +17,12 @@ use Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory;
 use Mmoreram\ControllerExtraBundle\Tests\Functional\AbstractWebTestCase;
 
 /**
- * Class EntityAnnotationResolverTest
+ * Class EntityAnnotationResolverTest.
  */
 class EntityAnnotationResolverTest extends AbstractWebTestCase
 {
     /**
-     * testAnnotation
+     * testAnnotation.
      */
     public function testAnnotation()
     {
@@ -35,7 +35,7 @@ class EntityAnnotationResolverTest extends AbstractWebTestCase
     }
 
     /**
-     * Test fake mapping
+     * Test fake mapping.
      */
     public function testMappingAnnotation()
     {
@@ -66,7 +66,7 @@ class EntityAnnotationResolverTest extends AbstractWebTestCase
     }
 
     /**
-     * Test fake mapping
+     * Test fake mapping.
      */
     public function testMappingManyAnnotation()
     {
@@ -97,7 +97,7 @@ class EntityAnnotationResolverTest extends AbstractWebTestCase
     }
 
     /**
-     * Test fake mapping
+     * Test fake mapping.
      *
      * @expectedException \Mmoreram\ControllerExtraBundle\Exceptions\EntityNotFoundException
      */
@@ -130,7 +130,7 @@ class EntityAnnotationResolverTest extends AbstractWebTestCase
     }
 
     /**
-     * Test entity annotation with mapping fallback
+     * Test entity annotation with mapping fallback.
      */
     public function testMappingFallback()
     {
@@ -143,7 +143,7 @@ class EntityAnnotationResolverTest extends AbstractWebTestCase
     }
 
     /**
-     * Test entity annotation when entity is not found and entity exception is set
+     * Test entity annotation when entity is not found and entity exception is set.
      */
     public function testEntityNotFound()
     {

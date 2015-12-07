@@ -16,7 +16,7 @@ namespace Mmoreram\ControllerExtraBundle\Exceptions\Abstracts;
 use Exception;
 
 /**
- * Abstract exception for all bundle exceptions
+ * Abstract exception for all bundle exceptions.
  */
 abstract class AbstractControllerExtraBundleException extends Exception
 {

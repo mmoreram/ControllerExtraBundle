@@ -16,7 +16,7 @@ namespace Mmoreram\ControllerExtraBundle\Annotation;
 use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\AbstractResponse;
 
 /**
- * JsonResponse annotation driver
+ * JsonResponse annotation driver.
  *
  * @Annotation
  */

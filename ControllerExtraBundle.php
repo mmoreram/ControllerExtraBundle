@@ -21,7 +21,7 @@ use Mmoreram\ControllerExtraBundle\CompilerPass\PaginatorCompilerPass;
 use Mmoreram\ControllerExtraBundle\CompilerPass\ResolverCompilerPass;
 
 /**
- * ControllerExtraBundle, an extension of Bundle
+ * ControllerExtraBundle, an extension of Bundle.
  */
 class ControllerExtraBundle extends Bundle
 {
@@ -35,48 +35,48 @@ class ControllerExtraBundle extends Bundle
             ->get('kernel');
 
         AnnotationRegistry::registerFile($kernel
-            ->locateResource("@ControllerExtraBundle/Annotation/Form.php")
+            ->locateResource('@ControllerExtraBundle/Annotation/Form.php')
         );
 
         AnnotationRegistry::registerFile($kernel
-            ->locateResource("@ControllerExtraBundle/Annotation/Form.php")
+            ->locateResource('@ControllerExtraBundle/Annotation/Form.php')
         );
 
         AnnotationRegistry::registerFile($kernel
-            ->locateResource("@ControllerExtraBundle/Annotation/Flush.php")
+            ->locateResource('@ControllerExtraBundle/Annotation/Flush.php')
         );
 
         AnnotationRegistry::registerFile($kernel
-            ->locateResource("@ControllerExtraBundle/Annotation/Log.php")
+            ->locateResource('@ControllerExtraBundle/Annotation/Log.php')
         );
 
         AnnotationRegistry::registerFile($kernel
-            ->locateResource("@ControllerExtraBundle/Annotation/JsonResponse.php")
+            ->locateResource('@ControllerExtraBundle/Annotation/JsonResponse.php')
         );
 
         AnnotationRegistry::registerFile($kernel
-            ->locateResource("@ControllerExtraBundle/Annotation/Paginator.php")
+            ->locateResource('@ControllerExtraBundle/Annotation/Paginator.php')
         );
 
         AnnotationRegistry::registerFile($kernel
-            ->locateResource("@ControllerExtraBundle/Annotation/Entity.php")
+            ->locateResource('@ControllerExtraBundle/Annotation/Entity.php')
         );
 
         AnnotationRegistry::registerFile($kernel
-            ->locateResource("@ControllerExtraBundle/Annotation/ObjectManager.php")
+            ->locateResource('@ControllerExtraBundle/Annotation/ObjectManager.php')
         );
 
         AnnotationRegistry::registerFile($kernel
-            ->locateResource("@ControllerExtraBundle/Annotation/Get.php")
+            ->locateResource('@ControllerExtraBundle/Annotation/Get.php')
         );
 
         AnnotationRegistry::registerFile($kernel
-            ->locateResource("@ControllerExtraBundle/Annotation/Post.php")
+            ->locateResource('@ControllerExtraBundle/Annotation/Post.php')
         );
     }
 
     /**
-     * Builds bundle
+     * Builds bundle.
      *
      * @param ContainerBuilder $container Container
      */
@@ -85,7 +85,7 @@ class ControllerExtraBundle extends Bundle
         parent::build($container);
 
         /**
-         * Adds compiler passes
+         * Adds compiler passes.
          */
         $container->addCompilerPass(new ResolverCompilerPass());
         $container->addCompilerPass(new PaginatorCompilerPass());

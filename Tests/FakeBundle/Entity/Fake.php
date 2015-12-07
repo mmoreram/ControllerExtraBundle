@@ -14,12 +14,12 @@
 namespace Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity;
 
 /**
- * Fake Entity object
+ * Fake Entity object.
  */
 class Fake
 {
     /**
-     * @var integer
+     * @var int
      *
      * Id
      */
@@ -33,9 +33,9 @@ class Fake
     protected $field;
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer $id Id
+     * @return int $id Id
      */
     public function getId()
     {
@@ -43,7 +43,7 @@ class Fake
     }
 
     /**
-     * Sets Field
+     * Sets Field.
      *
      * @param string $field Field
      *
@@ -57,7 +57,7 @@ class Fake
     }
 
     /**
-     * Get Field
+     * Get Field.
      *
      * @return string Field
      */
