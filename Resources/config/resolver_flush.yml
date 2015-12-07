@@ -13,8 +13,8 @@ services:
     mmoreram.controllerextra.resolver.flush_annotation_resolver:
         class: %mmoreram.controllerextra.resolver.flush_annotation_resolver.class%
         arguments:
-            doctrine: @doctrine
-            default_manager: %mmoreram.controllerextra.flush_default_manager%
+            - "@doctrine"
+            - %mmoreram.controllerextra.flush_default_manager%
         tags:
             - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
             - { name: controller_extra.annotation }

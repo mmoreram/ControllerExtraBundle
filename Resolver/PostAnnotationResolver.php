@@ -21,7 +21,7 @@ use Mmoreram\ControllerExtraBundle\Annotation\Post;
 use Mmoreram\ControllerExtraBundle\Resolver\Interfaces\AnnotationResolverInterface;
 
 /**
- * PostAnnotationResolver, an implementation of AnnotationResolverInterface
+ * PostAnnotationResolver, an implementation of AnnotationResolverInterface.
  */
 class PostAnnotationResolver implements AnnotationResolverInterface
 {
@@ -46,7 +46,7 @@ class PostAnnotationResolver implements AnnotationResolverInterface
     ) {
 
         /**
-         * Annotation is only loaded if is typeof AnnotationEntity
+         * Annotation is only loaded if is typeof AnnotationEntity.
          */
         if ($annotation instanceof Post) {
             $param = $request

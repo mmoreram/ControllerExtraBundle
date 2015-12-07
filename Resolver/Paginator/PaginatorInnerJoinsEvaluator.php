@@ -19,13 +19,12 @@ use Mmoreram\ControllerExtraBundle\Annotation\Paginator as AnnotationPaginator;
 use Mmoreram\ControllerExtraBundle\Resolver\Paginator\Interfaces\PaginatorEvaluatorInterface;
 
 /**
- * Class PaginatorInnerJoinsEvaluator
+ * Class PaginatorInnerJoinsEvaluator.
  */
 class PaginatorInnerJoinsEvaluator implements PaginatorEvaluatorInterface
 {
-
     /**
-     * Evaluates inner joins
+     * Evaluates inner joins.
      *
      * @param QueryBuilder        $queryBuilder Query builder
      * @param AnnotationPaginator $annotation   Annotation

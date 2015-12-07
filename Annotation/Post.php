@@ -14,11 +14,10 @@
 namespace Mmoreram\ControllerExtraBundle\Annotation;
 
 /**
- * Post annotation driver
+ * Post annotation driver.
  *
  * @Annotation
  */
 class Post extends RequestBagAnnotation
 {
-
 }

@@ -21,22 +21,22 @@ use Mmoreram\ControllerExtraBundle\ControllerExtraBundle;
 use Mmoreram\ControllerExtraBundle\Tests\FakeBundle\FakeBundle;
 
 /**
- * AppKernel for testing
+ * AppKernel for testing.
  */
 class AppKernel extends Kernel
 {
     /**
-     * Registers all needed bundles
+     * Registers all needed bundles.
      */
     public function registerBundles()
     {
-        return array(
+        return [
             new FrameworkBundle(),
             new DoctrineBundle(),
             new MonologBundle(),
             new ControllerExtraBundle(),
             new FakeBundle(),
-        );
+        ];
     }
 
     /**
@@ -48,7 +48,7 @@ class AppKernel extends Kernel
     }
 
     /**
-     * Return Cache dir
+     * Return Cache dir.
      *
      * @return string
      */
@@ -62,7 +62,7 @@ class AppKernel extends Kernel
     }
 
     /**
-     * Return log dir
+     * Return log dir.
      *
      * @return string
      */

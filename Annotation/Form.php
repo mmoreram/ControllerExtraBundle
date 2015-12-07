@@ -16,7 +16,7 @@ namespace Mmoreram\ControllerExtraBundle\Annotation;
 use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
 
 /**
- * Form annotation driver
+ * Form annotation driver.
  *
  * @Annotation
  */
@@ -44,7 +44,7 @@ class Form extends Annotation
     public $entity;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * Handle request
      */
@@ -59,7 +59,7 @@ class Form extends Annotation
     public $validate = false;
 
     /**
-     * return name
+     * return name.
      *
      * @return string Name
      */
@@ -69,7 +69,7 @@ class Form extends Annotation
     }
 
     /**
-     * return class
+     * return class.
      *
      * @return string Class
      */
@@ -79,7 +79,7 @@ class Form extends Annotation
     }
 
     /**
-     * return entity
+     * return entity.
      *
      * @return string Entity
      */
@@ -89,7 +89,7 @@ class Form extends Annotation
     }
 
     /**
-     * return handle request
+     * return handle request.
      *
      * @return string Handle Request
      */
@@ -99,7 +99,7 @@ class Form extends Annotation
     }
 
     /**
-     * return validate value
+     * return validate value.
      *
      * @return string Validate param name
      */

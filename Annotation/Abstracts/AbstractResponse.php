@@ -14,12 +14,12 @@
 namespace Mmoreram\ControllerExtraBundle\Annotation\Abstracts;
 
 /**
- * Class AbstractResponse
+ * Class AbstractResponse.
  */
 abstract class AbstractResponse extends Annotation
 {
     /**
-     * @var integer
+     * @var int
      *
      * Status
      */
@@ -30,12 +30,12 @@ abstract class AbstractResponse extends Annotation
      *
      * Headers
      */
-    protected $headers = array();
+    protected $headers = [];
 
     /**
-     * Get response status
+     * Get response status.
      *
-     * @return integer Response status
+     * @return int Response status
      */
     public function getStatus()
     {
@@ -43,9 +43,9 @@ abstract class AbstractResponse extends Annotation
     }
 
     /**
-     * Get response headers
+     * Get response headers.
      *
-     * @return integer Response headers
+     * @return int Response headers
      */
     public function getHeaders()
     {

@@ -23,33 +23,36 @@
         }
     ],
     "require": {
-        "php": "^5.3.3|^7.0",
-        "doctrine/common": "^2.3|^3.0",
-        "symfony/config": "^2.3|^3.0",
-        "symfony/http-kernel": "^2.3|^3.0",
-        "symfony/http-foundation": "^2.4|^3.0",
-        "symfony/dependency-injection": "^2.3|^3.0"
+        "php": "^5.4|^7.0",
+        "doctrine/common": "^2.5",
+        "symfony/config": "^2.8|^3.0",
+        "symfony/http-kernel": "^2.8|^3.0",
+        "symfony/http-foundation": "^2.8|^3.0",
+        "symfony/dependency-injection": "^2.8|^3.0"
     },
     "require-dev": {
         "doctrine/doctrine-bundle": "~1.2",
         "doctrine/annotations": "~1.0, >=1.2",
-        "symfony/framework-bundle": "^2.4|^3.0",
-        "symfony/finder": "^2.3|^3.0",
-        "symfony/validator": "^2.3|^3.0",
-        "symfony/browser-kit": "^2.3|^3.0",
-        "phpunit/phpunit": ">=3.7",
-        "mmoreram/php-formatter": "1.1.0",
-        "symfony/monolog-bundle": "^2.3|^3.0",
+        "symfony/framework-bundle": "^2.8|^3.0",
+        "symfony/finder": "^2.8|^3.0",
+        "symfony/validator": "^2.8|^3.0",
+        "symfony/browser-kit": "^2.8|^3.0",
+        "symfony/css-selector": "^2.8|^3.0",
+        "symfony/monolog-bundle": "^2.8|^3.0",
+        "symfony/form": "^2.8|^3.0",
         "doctrine/orm": "^2.5",
-        "symfony/form": "^2.5|^3.0",
         "pagerfanta/pagerfanta": "~1.0",
-        "knplabs/knp-components": "~1.2"
+        "knplabs/knp-paginator-bundle": "~2.5.1",
+
+        "phpunit/phpunit": "4.8.19",
+        "fabpot/php-cs-fixer": "1.11",
+        "mmoreram/php-formatter": "1.1.0"
     },
     "suggest": {
         "symfony/monolog-bundle": "To use the @Log annotation",
         "symfony/form": "To use the @Form annotation",
         "doctrine/orm": "To use the @Paginator annotation",
-        "white-october/pagerfanta-bundle": "To use the @Paginator annotation with Pagerfanta support",
+        "pagerfanta/pagerfanta": "To use the @Paginator annotation with Pagerfanta support",
         "knplabs/knp-paginator-bundle": "To use the @Paginator annotation with KNPPaginator support"
     },
     "autoload": {
@@ -64,5 +67,13 @@
         "branch-alias": {
             "dev-master": "1.0-dev"
         }
+    },
+    "scripts": {
+        "check-style": [
+            "bin/php-cs-fixer fix --config-file=.php_cs",
+            "bin/php-formatter f:h:f .",
+            "bin/php-formatter f:u:s ."
+        ],
+        "test": "phpunit"
     }
 }

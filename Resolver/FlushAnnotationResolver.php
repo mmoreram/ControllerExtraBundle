@@ -25,7 +25,7 @@ use Mmoreram\ControllerExtraBundle\Annotation\Flush as AnnotationFlush;
 use Mmoreram\ControllerExtraBundle\Resolver\Interfaces\AnnotationResolverInterface;
 
 /**
- * FormAnnotationResolver, an implementation of  AnnotationResolverInterface
+ * FormAnnotationResolver, an implementation of  AnnotationResolverInterface.
  */
 class FlushAnnotationResolver implements AnnotationResolverInterface
 {
@@ -58,14 +58,14 @@ class FlushAnnotationResolver implements AnnotationResolverInterface
     public $entities;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * Must flush boolean
      */
     protected $mustFlush = false;
 
     /**
-     * Construct method
+     * Construct method.
      *
      * @param AbstractManagerRegistry $doctrine       Doctrine
      * @param string                  $defaultManager Default manager
@@ -77,7 +77,7 @@ class FlushAnnotationResolver implements AnnotationResolverInterface
     }
 
     /**
-     * Get Doctrine object
+     * Get Doctrine object.
      *
      * @return AbstractManagerRegistry Doctrine instance
      */
@@ -87,7 +87,7 @@ class FlushAnnotationResolver implements AnnotationResolverInterface
     }
 
     /**
-     * Get default manager name
+     * Get default manager name.
      *
      * @return string Default manager
      */
@@ -97,7 +97,7 @@ class FlushAnnotationResolver implements AnnotationResolverInterface
     }
 
     /**
-     * Get Manager object
+     * Get Manager object.
      *
      * @return ObjectManager Manager
      */
@@ -107,7 +107,7 @@ class FlushAnnotationResolver implements AnnotationResolverInterface
     }
 
     /**
-     * Get entities
+     * Get entities.
      *
      * @return ArrayCollection Entities to flush
      */
@@ -117,9 +117,9 @@ class FlushAnnotationResolver implements AnnotationResolverInterface
     }
 
     /**
-     * Return if manager must be flushed
+     * Return if manager must be flushed.
      *
-     * @return boolean Manager must be flushed
+     * @return bool Manager must be flushed
      */
     public function getMustFlush()
     {
@@ -141,30 +141,30 @@ class FlushAnnotationResolver implements AnnotationResolverInterface
         ReflectionMethod $method
     ) {
         /**
-         * Annotation is only laoded if is typeof AnnotationFlush
+         * Annotation is only laoded if is typeof AnnotationFlush.
          */
         if ($annotation instanceof AnnotationFlush) {
             $managerName = $annotation->getManager()
                 ?: $this->getDefaultManager();
 
             /**
-             * Loading locally desired Doctrine manager
+             * Loading locally desired Doctrine manager.
              */
             $this->manager = $this
                 ->getDoctrine()
                 ->getManager($managerName);
 
             /**
-             * Set locally entities to flush. If null, flush all
+             * Set locally entities to flush. If null, flush all.
              */
             $this->entities = new ArrayCollection();
             $entity = $annotation->getEntity();
             $entities = is_array($entity)
                 ? $entity
-                : array($entity);
+                : [$entity];
 
             /**
-             * For every entity defined, we try to get it from Request Attributes
+             * For every entity defined, we try to get it from Request Attributes.
              */
             foreach ($entities as $entityName) {
                 if ($request->attributes->has($entityName)) {
@@ -174,14 +174,14 @@ class FlushAnnotationResolver implements AnnotationResolverInterface
 
             /**
              * If we have not found any entity to flush, or any has been defined.
-             * In this case, flush all
+             * In this case, flush all.
              */
             if ($this->entities->isEmpty()) {
                 $this->entities = null;
             }
 
             /**
-             * In this case, manager must be flushed after controller logic
+             * In this case, manager must be flushed after controller logic.
              */
             $this->mustFlush = true;
         }
@@ -190,19 +190,19 @@ class FlushAnnotationResolver implements AnnotationResolverInterface
     }
 
     /**
-     * Method executed while loading Controller
+     * Method executed while loading Controller.
      *
      * @param FilterResponseEvent $event Filter Response event
      */
     public function onKernelResponse(FilterResponseEvent $event)
     {
         /**
-         * Only flushes if exists AnnotationFlush as a controller annotations
+         * Only flushes if exists AnnotationFlush as a controller annotations.
          */
         if ($this->getMustFlush()) {
 
             /**
-             * Flushing manager
+             * Flushing manager.
              */
             $this
                 ->getManager()

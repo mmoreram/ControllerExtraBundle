@@ -16,7 +16,7 @@ namespace Mmoreram\ControllerExtraBundle\Tests\FakeBundle;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
- * Class FakeBundle
+ * Class FakeBundle.
  */
 class FakeBundle extends Bundle
 {

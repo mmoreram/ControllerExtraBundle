@@ -1,115 +1,115 @@
 FakeBundleControllerEntity:
-    pattern: /fake/entity
+    path: /fake/entity
     defaults: { _controller: FakeBundle:Fake:entity }
 
 FakeBundleControllerEntityMapped:
-    pattern: /fake/entity/mapped/{id}
+    path: /fake/entity/mapped/{id}
     defaults: { _controller: FakeBundle:Fake:entityMapped }
 
 FakeBundleControllerEntityMappedMany:
-    pattern: /fake/entity/mapped/many/{id}
+    path: /fake/entity/mapped/many/{id}
     defaults: { _controller: FakeBundle:Fake:entityMappedMany }
 
 FakeBundleControllerEntityMappingFallback:
-    pattern: /fake/entity/mapped/fallback/{id}
+    path: /fake/entity/mapped/fallback/{id}
     defaults: { _controller: FakeBundle:Fake:entityMappingFallback }
 
 FakeBundleControllerEntityNotFoundException:
-    pattern: /fake/entity/not/found/{id}
+    path: /fake/entity/not/found/{id}
     defaults: { _controller: FakeBundle:Fake:entityNotFoundException }
 
 FakeBundleControllerJsonResponse:
-    pattern: /fake/jsonresponse
+    path: /fake/jsonresponse
     defaults: { _controller: FakeBundle:Fake:jsonResponse }
 
 FakeBundleControllerJsonResponseException:
-    pattern: /fake/jsonresponseexception
+    path: /fake/jsonresponseexception
     defaults: { _controller: FakeBundle:Fake:jsonResponseException }
 
 FakeBundleControllerJsonResponseAnnotationException:
-    pattern: /fake/jsonresponseannotationexception
+    path: /fake/jsonresponseannotationexception
     defaults: { _controller: FakeBundle:Fake:jsonResponseAnnotationException }
 
 FakeBundleControllerJsonResponseHttpException:
-    pattern: /fake/jsonresponsehttpexception
+    path: /fake/jsonresponsehttpexception
     defaults: { _controller: FakeBundle:Fake:jsonResponseHttpException }
 
 FakeBundleControllerPaginatorLikeConditionAndGetParameter:
-    pattern: /fake/paginator/likewithgetparameter
+    path: /fake/paginator/likewithgetparameter
     defaults: { _controller: FakeBundle:Fake:paginatorLikeWithGetParameter }
 
 FakeBundleControllerPaginator:
-    pattern: /fake/paginator/{field}/{dir}/{page}/{limit}
+    path: /fake/paginator/{field}/{dir}/{page}/{limit}
     defaults: { _controller: FakeBundle:Fake:paginator }
 
 FakeBundleControllerPaginatorSimple:
-    pattern: /fake/paginator/simple/{field}/{dir}/{page}/{limit}
+    path: /fake/paginator/simple/{field}/{dir}/{page}/{limit}
     defaults: { _controller: FakeBundle:Fake:paginatorSimple }
 
 FakeBundleControllerPaginatorNotMatching:
-    pattern: /fake/paginator/notmatching/{field}/{dir}/{page}/{limit}
+    path: /fake/paginator/notmatching/{field}/{dir}/{page}/{limit}
     defaults: { _controller: FakeBundle:Fake:paginatorNotMatching }
 
 FakeBundleControllerPaginatorAttributes:
-    pattern: /fake/paginator/attributes/{field}/{dir}/{page}/{limit}
+    path: /fake/paginator/attributes/{field}/{dir}/{page}/{limit}
     defaults: { _controller: FakeBundle:Fake:paginatorAttributes }
 
 FakeBundleControllerPaginatorQuery:
-    pattern: /fake/paginator/query
+    path: /fake/paginator/query
     defaults: { _controller: FakeBundle:Fake:paginatorQuery }
 
 FakeBundleControllerPaginatorRequest:
-    pattern: /fake/paginator/request
+    path: /fake/paginator/request
     defaults: { _controller: FakeBundle:Fake:paginatorRequest }
 
 FakeBundleControllerPaginatorMultipleWheres:
-    pattern: /fake/paginator/multiplewhere/{field}/{dir}/{page}/{limit}
+    path: /fake/paginator/multiplewhere/{field}/{dir}/{page}/{limit}
     defaults: { _controller: FakeBundle:Fake:paginatorMultipleWhere }
 
 FakeBundleControllerPaginatorPagerFanta:
-    pattern: /fake/paginator/pagerfanta/{field}/{dir}/{page}/{limit}
+    path: /fake/paginator/pagerfanta/{field}/{dir}/{page}/{limit}
     defaults: { _controller: FakeBundle:Fake:paginatorPagerFanta }
 
 FakeBundleControllerPaginatorKNPPaginator:
-    pattern: /fake/paginator/knppaginator/{field}/{dir}/{page}/{limit}
+    path: /fake/paginator/knppaginator/{field}/{dir}/{page}/{limit}
     defaults: { _controller: FakeBundle:Fake:paginatorKNPPaginator }
 
 FakeBundleControllerObjectManager:
-    pattern: /fake/objectmanager
+    path: /fake/objectmanager
     defaults: { _controller: FakeBundle:Fake:objectManager }
 
 FakeBundleControllerGetQueryString:
-    pattern: /fake/getquerystring
+    path: /fake/getquerystring
     defaults: { _controller: FakeBundle:Fake:queryString }
 
 FakeBundleControllerGetQueryStringChangingParamName:
-    pattern: /fake/getquerystringchangingparamname
+    path: /fake/getquerystringchangingparamname
     defaults: { _controller: FakeBundle:Fake:queryStringChangingName }
 
 FakeBundleControllerGetQueryStringChangingDefaultValue:
-    pattern: /fake/getquerystringchangingdefaultvalue
+    path: /fake/getquerystringchangingdefaultvalue
     defaults: { _controller: FakeBundle:Fake:queryStringChangingDefaultValue }
 
 FakeBundleControllerGetQueryStringDeep:
-    pattern: /fake/getquerystringdeep
+    path: /fake/getquerystringdeep
     defaults: { _controller: FakeBundle:Fake:queryStringDeep }
 
 FakeBundleControllerGetPostParameter:
-    pattern: /fake/getpostparameter
+    path: /fake/getpostparameter
     defaults: { _controller: FakeBundle:Fake:postParameter }
 
 FakeBundleControllerGetPostParameterChangingParamName:
-    pattern: /fake/getpostparameterchangingparamname
+    path: /fake/getpostparameterchangingparamname
     defaults: { _controller: FakeBundle:Fake:postParameterChangingName }
 
 FakeBundleControllerGetPostParameterChangingDefaultValue:
-    pattern: /fake/getpostparameterchangingdefaultvalue
+    path: /fake/getpostparameterchangingdefaultvalue
     defaults: { _controller: FakeBundle:Fake:postParameterChangingDefaultValue }
 
 FakeBundleControllerGetPostParameterDeep:
-    pattern: /fake/getpostparameterdeep
+    path: /fake/getpostparameterdeep
     defaults: { _controller: FakeBundle:Fake:postParameterDeep }
 
 FakeBundleControllerForm:
-    pattern: /fake/form
+    path: /fake/form
     defaults: { _controller: FakeBundle:Fake:form }

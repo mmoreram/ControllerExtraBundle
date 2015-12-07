@@ -16,7 +16,7 @@ namespace Mmoreram\ControllerExtraBundle\Annotation;
 use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
 
 /**
- * Class ObjectManager
+ * Class ObjectManager.
  *
  * @Annotation
  */
@@ -37,7 +37,7 @@ class ObjectManager extends Annotation
     protected $name;
 
     /**
-     * Get Class
+     * Get Class.
      *
      * @return string Class
      */
@@ -47,7 +47,7 @@ class ObjectManager extends Annotation
     }
 
     /**
-     * return name
+     * return name.
      *
      * @return string Name
      */

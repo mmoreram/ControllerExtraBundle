@@ -16,19 +16,19 @@ namespace Mmoreram\ControllerExtraBundle\Tests\Functional\Resolver;
 use Mmoreram\ControllerExtraBundle\Tests\Functional\AbstractWebTestCase;
 
 /**
- * Class PostAnnotationResolverTest
+ * Class PostAnnotationResolverTest.
  */
 class PostAnnotationResolverTest extends AbstractWebTestCase
 {
     /**
-     * Test obtain a $_POST parameter
+     * Test obtain a $_POST parameter.
      */
     public function testObtainPostParameterAnnotation()
     {
         $this->client->request(
             'POST',
             '/fake/getpostparameter',
-            array('param' => 'test')
+            ['param' => 'test']
         );
 
         $response = json_decode($this
@@ -44,7 +44,7 @@ class PostAnnotationResolverTest extends AbstractWebTestCase
     }
 
     /**
-     * Test obtain non existent $_POST parameter
+     * Test obtain non existent $_POST parameter.
      */
     public function testObtainNonExistentPostParameterAnnotation()
     {
@@ -66,14 +66,14 @@ class PostAnnotationResolverTest extends AbstractWebTestCase
     }
 
     /**
-     * Test obtain a $_POST parameter changing the param name
+     * Test obtain a $_POST parameter changing the param name.
      */
     public function testObtainPostParameterChangingParamNameAnnotation()
     {
         $this->client->request(
             'POST',
             '/fake/getpostparameterchangingparamname',
-            array('param' => 'test')
+            ['param' => 'test']
         );
 
         $response = json_decode($this
@@ -89,7 +89,7 @@ class PostAnnotationResolverTest extends AbstractWebTestCase
     }
 
     /**
-     * Test obtain a $_POST parameter changing the param name
+     * Test obtain a $_POST parameter changing the param name.
      */
     public function testObtainNonExistentPostParameterChangingParamNameAnnotation()
     {
@@ -111,14 +111,14 @@ class PostAnnotationResolverTest extends AbstractWebTestCase
     }
 
     /**
-     * Test obtain a $_POST parameter changing the default value
+     * Test obtain a $_POST parameter changing the default value.
      */
     public function testObtainPostParameterChangingDefaultAnnotation()
     {
         $this->client->request(
             'POST',
             '/fake/getpostparameterchangingdefaultvalue',
-            array('param' => 'value')
+            ['param' => 'value']
         );
 
         $response = json_decode($this
@@ -134,7 +134,7 @@ class PostAnnotationResolverTest extends AbstractWebTestCase
     }
 
     /**
-     * Test obtain an unexistent $_POST parameter changing the default value
+     * Test obtain an unexistent $_POST parameter changing the default value.
      */
     public function testObtainNonExistentPostParameterChangingDefaultAnnotation()
     {
@@ -156,18 +156,23 @@ class PostAnnotationResolverTest extends AbstractWebTestCase
     }
 
     /**
-     * Test obtain a $_POST parameter using deep mode
+     * Test obtain a $_POST parameter using deep mode.
      */
     public function testObtainPostParameterDeepAnnotation()
     {
+        $getMethod = new \ReflectionMethod('Symfony\Component\HttpFoundation\ParameterBag', 'get');
+        if ($getMethod->getNumberOfParameters() === 2) {
+            $this->markTestSkipped('Feature not allowed in Symfony ^3.0.0');
+        }
+
         $this->client->request(
             'POST',
             '/fake/getpostparameterdeep',
-            array(
-                'param' => array(
+            [
+                'param' => [
                     'key' => 'value',
-                ),
-            )
+                ],
+            ]
         );
 
         $response = json_decode($this
@@ -183,10 +188,15 @@ class PostAnnotationResolverTest extends AbstractWebTestCase
     }
 
     /**
-     * Test obtain an unexistent $_POST parameter using deep mode
+     * Test obtain an unexistent $_POST parameter using deep mode.
      */
     public function testObtainUnexistentPostParameterDeepAnnotation()
     {
+        $getMethod = new \ReflectionMethod('Symfony\Component\HttpFoundation\ParameterBag', 'get');
+        if ($getMethod->getNumberOfParameters() === 2) {
+            $this->markTestSkipped('Feature not allowed in Symfony ^3.0.0');
+        }
+
         $this->client->request(
             'POST',
             '/fake/getpostparameterdeep'

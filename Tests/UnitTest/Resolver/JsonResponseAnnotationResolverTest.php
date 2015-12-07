@@ -13,7 +13,6 @@
 
 namespace Mmoreram\ControllerExtraBundle\Tests\UnitTest\Resolver;
 
-use PHPUnit_Framework_TestCase;
 use ReflectionMethod;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,7 +22,7 @@ use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
 use Mmoreram\ControllerExtraBundle\Resolver\JsonResponseAnnotationResolver;
 
 /**
- * Tests JsonResponseAnnotationResolver class
+ * Tests JsonResponseAnnotationResolver class.
  */
 class JsonResponseAnnotationResolverTest extends \PHPUnit_Framework_TestCase
 {
@@ -56,17 +55,17 @@ class JsonResponseAnnotationResolverTest extends \PHPUnit_Framework_TestCase
     protected $annotation;
 
     /**
-     * Setup method
+     * Setup method.
      */
     public function setUp()
     {
         $this->jsonResponseAnnotationResolver = $this
             ->getMockBuilder('Mmoreram\ControllerExtraBundle\Resolver\JsonResponseAnnotationResolver')
             ->disableOriginalConstructor()
-            ->setMethods(array(
+            ->setMethods([
                 'getDefaultStatus',
                 'getDefaultHeaders',
-            ))
+            ])
             ->getMock();
 
         $this->jsonResponseAnnotationResolver
@@ -77,7 +76,7 @@ class JsonResponseAnnotationResolverTest extends \PHPUnit_Framework_TestCase
         $this->jsonResponseAnnotationResolver
             ->expects($this->any())
             ->method('getDefaultHeaders')
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $this->request = $this
             ->getMockBuilder('Symfony\Component\HttpFoundation\Request')
@@ -92,18 +91,18 @@ class JsonResponseAnnotationResolverTest extends \PHPUnit_Framework_TestCase
         $this->annotation = $this
             ->getMockBuilder('Mmoreram\ControllerExtraBundle\Annotation\JsonResponse')
             ->disableOriginalConstructor()
-            ->setMethods(array(
+            ->setMethods([
                 'getStatus',
                 'getHeaders',
-            ))
+            ])
             ->getMock();
     }
 
     /**
-     * Tests DefaultManager name method
+     * Tests DefaultManager name method.
      *
-     * @param integer $annotationStatus Status defined in annotation
-     * @param integer $resultStatus     Result Status
+     * @param int $annotationStatus Status defined in annotation
+     * @param int $resultStatus     Result Status
      *
      * @dataProvider dataStatus
      */
@@ -112,9 +111,9 @@ class JsonResponseAnnotationResolverTest extends \PHPUnit_Framework_TestCase
         $annotation = $this
             ->getMockBuilder('Mmoreram\ControllerExtraBundle\Annotation\JsonResponse')
             ->disableOriginalConstructor()
-            ->setMethods(array(
+            ->setMethods([
                 'getStatus',
-            ))
+            ])
             ->getMock();
 
         $annotation
@@ -135,27 +134,27 @@ class JsonResponseAnnotationResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Data for testStatus
+     * Data for testStatus.
      *
      * @return array data
      */
     public function dataStatus()
     {
-        return array(
+        return [
 
-            array(null, 200),
-            array(false, 200),
-            array('', 200),
-            array(403, 403),
-            array(200, 200),
-        );
+            [null, 200],
+            [false, 200],
+            ['', 200],
+            [403, 403],
+            [200, 200],
+        ];
     }
 
     /**
-     * Tests DefaultManager name method
+     * Tests DefaultManager name method.
      *
-     * @param integer $annotationHeaders Headers defined in annotation
-     * @param integer $resultHeaders     Result Headers
+     * @param int $annotationHeaders Headers defined in annotation
+     * @param int $resultHeaders     Result Headers
      *
      * @dataProvider dataHeaders
      */
@@ -164,9 +163,9 @@ class JsonResponseAnnotationResolverTest extends \PHPUnit_Framework_TestCase
         $annotation = $this
             ->getMockBuilder('Mmoreram\ControllerExtraBundle\Annotation\JsonResponse')
             ->disableOriginalConstructor()
-            ->setMethods(array(
+            ->setMethods([
                 'getHeaders',
-            ))
+            ])
             ->getMock();
 
         $annotation
@@ -187,24 +186,24 @@ class JsonResponseAnnotationResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Data for testHeaders
+     * Data for testHeaders.
      *
      * @return array data
      */
     public function dataHeaders()
     {
-        return array(
+        return [
 
-            array(null, array()),
-            array(false, array()),
-            array('', array()),
-            array(array(1, 'foo'), array(1, 'foo')),
-            array(array(), array()),
-        );
+            [null, []],
+            [false, []],
+            ['', []],
+            [[1, 'foo'], [1, 'foo']],
+            [[], []],
+        ];
     }
 
     /**
-     * Tests Right Annotation
+     * Tests Right Annotation.
      */
     public function testAnnotationRight()
     {
@@ -218,7 +217,7 @@ class JsonResponseAnnotationResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests Wrong Annotation
+     * Tests Wrong Annotation.
      */
     public function testAnnotationFail()
     {
@@ -237,7 +236,7 @@ class JsonResponseAnnotationResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test onKernelView with right value
+     * Test onKernelView with right value.
      */
     public function testOnKernelViewRight()
     {
@@ -247,11 +246,11 @@ class JsonResponseAnnotationResolverTest extends \PHPUnit_Framework_TestCase
         $jsonResponseAnnotationResolver = $this
             ->getMockBuilder('Mmoreram\ControllerExtraBundle\Resolver\JsonResponseAnnotationResolver')
             ->disableOriginalConstructor()
-            ->setMethods(array(
+            ->setMethods([
                 'getReturnJson',
                 'getStatus',
                 'getHeaders',
-            ))
+            ])
             ->getMock();
 
         $jsonResponseAnnotationResolver
@@ -267,15 +266,15 @@ class JsonResponseAnnotationResolverTest extends \PHPUnit_Framework_TestCase
         $jsonResponseAnnotationResolver
             ->expects($this->once())
             ->method('getHeaders')
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $event = $this
             ->getMockBuilder('Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent')
             ->disableOriginalConstructor()
-            ->setMethods(array(
+            ->setMethods([
                 'getControllerResult',
                 'setResponse',
-            ))
+            ])
             ->getMock();
 
         $event
@@ -291,7 +290,7 @@ class JsonResponseAnnotationResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test onKernelResponse with wrong value
+     * Test onKernelResponse with wrong value.
      */
     public function testOnKernelResponseWrong()
     {
@@ -301,9 +300,9 @@ class JsonResponseAnnotationResolverTest extends \PHPUnit_Framework_TestCase
         $jsonResponseAnnotationResolver = $this
             ->getMockBuilder('Mmoreram\ControllerExtraBundle\Resolver\JsonResponseAnnotationResolver')
             ->disableOriginalConstructor()
-            ->setMethods(array(
+            ->setMethods([
                 'getReturnJson',
-            ))
+            ])
             ->getMock();
 
         $jsonResponseAnnotationResolver
@@ -314,10 +313,10 @@ class JsonResponseAnnotationResolverTest extends \PHPUnit_Framework_TestCase
         $event = $this
             ->getMockBuilder('Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent')
             ->disableOriginalConstructor()
-            ->setMethods(array(
+            ->setMethods([
                 'getControllerResult',
                 'setResponse',
-            ))
+            ])
             ->getMock();
 
         $event
@@ -332,17 +331,17 @@ class JsonResponseAnnotationResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test onKernelResponse with generic exception
+     * Test onKernelResponse with generic exception.
      */
     public function testOnKernelExceptionResponse()
     {
-        $exceptionMessage     = 'Response message';
-        $defaultErrorStatus   = 500;
-        $exceptionResponse    = new \Exception($exceptionMessage);
+        $exceptionMessage = 'Response message';
+        $defaultErrorStatus = 500;
+        $exceptionResponse = new \Exception($exceptionMessage);
         $expectedJsonResponse = JsonResponse::create(
-            array('message' => $exceptionMessage),
+            ['message' => $exceptionMessage],
             $defaultErrorStatus,
-            array()
+            []
         );
 
         /**
@@ -351,11 +350,11 @@ class JsonResponseAnnotationResolverTest extends \PHPUnit_Framework_TestCase
         $jsonResponseAnnotationResolver = $this
             ->getMockBuilder('Mmoreram\ControllerExtraBundle\Resolver\JsonResponseAnnotationResolver')
             ->disableOriginalConstructor()
-            ->setMethods(array(
+            ->setMethods([
                 'getReturnJson',
                 'getHeaders',
                 'getDefaultErrorStatus',
-            ))
+            ])
             ->getMock();
 
         $jsonResponseAnnotationResolver
@@ -366,7 +365,7 @@ class JsonResponseAnnotationResolverTest extends \PHPUnit_Framework_TestCase
         $jsonResponseAnnotationResolver
             ->expects($this->once())
             ->method('getHeaders')
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $jsonResponseAnnotationResolver
             ->expects($this->once())
@@ -376,10 +375,10 @@ class JsonResponseAnnotationResolverTest extends \PHPUnit_Framework_TestCase
         $event = $this
             ->getMockBuilder('Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent')
             ->disableOriginalConstructor()
-            ->setMethods(array(
+            ->setMethods([
                 'getControllerResult',
                 'setResponse',
-            ))
+            ])
             ->getMock();
 
         $event
@@ -396,17 +395,17 @@ class JsonResponseAnnotationResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test onKernelResponse with http exception
+     * Test onKernelResponse with http exception.
      */
     public function testOnKernelHttpExceptionResponse()
     {
-        $exceptionMessage     = 'HTTP Response message';
-        $defaultErrorStatus   = 404;
-        $exceptionResponse    = new HttpException($defaultErrorStatus, $exceptionMessage);
+        $exceptionMessage = 'HTTP Response message';
+        $defaultErrorStatus = 404;
+        $exceptionResponse = new HttpException($defaultErrorStatus, $exceptionMessage);
         $expectedJsonResponse = JsonResponse::create(
-            array('message' => $exceptionMessage),
+            ['message' => $exceptionMessage],
             $defaultErrorStatus,
-            array()
+            []
         );
 
         /**
@@ -415,10 +414,10 @@ class JsonResponseAnnotationResolverTest extends \PHPUnit_Framework_TestCase
         $jsonResponseAnnotationResolver = $this
             ->getMockBuilder('Mmoreram\ControllerExtraBundle\Resolver\JsonResponseAnnotationResolver')
             ->disableOriginalConstructor()
-            ->setMethods(array(
+            ->setMethods([
                 'getReturnJson',
                 'getHeaders',
-            ))
+            ])
             ->getMock();
 
         $jsonResponseAnnotationResolver
@@ -429,15 +428,15 @@ class JsonResponseAnnotationResolverTest extends \PHPUnit_Framework_TestCase
         $jsonResponseAnnotationResolver
             ->expects($this->once())
             ->method('getHeaders')
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $event = $this
             ->getMockBuilder('Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent')
             ->disableOriginalConstructor()
-            ->setMethods(array(
+            ->setMethods([
                 'getControllerResult',
                 'setResponse',
-            ))
+            ])
             ->getMock();
 
         $event

@@ -13,13 +13,11 @@
 
 namespace Mmoreram\ControllerExtraBundle\Annotation;
 
-
 /**
- * Get annotation driver
+ * Get annotation driver.
  *
  * @Annotation
  */
 class Get extends RequestBagAnnotation
 {
-
 }

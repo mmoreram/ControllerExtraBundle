@@ -19,7 +19,7 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\HttpKernel\Client;
 
 /**
- * Class AbstractWebTestCase
+ * Class AbstractWebTestCase.
  */
 class AbstractWebTestCase extends WebTestCase
 {
@@ -38,7 +38,7 @@ class AbstractWebTestCase extends WebTestCase
     protected static $application;
 
     /**
-     * Setup
+     * Setup.
      */
     public function setUp()
     {
@@ -48,23 +48,23 @@ class AbstractWebTestCase extends WebTestCase
         static::$application->setAutoExit(false);
         $this->client = static::createClient();
 
-        static::$application->run(new ArrayInput(array(
-            'command'          => 'doctrine:database:drop',
+        static::$application->run(new ArrayInput([
+            'command' => 'doctrine:database:drop',
             '--no-interaction' => true,
-            '--force'          => true,
-            '--quiet'          => true,
-        )));
+            '--force' => true,
+            '--quiet' => true,
+        ]));
 
-        static::$application->run(new ArrayInput(array(
-            'command'          => 'doctrine:database:create',
+        static::$application->run(new ArrayInput([
+            'command' => 'doctrine:database:create',
             '--no-interaction' => true,
-            '--quiet'          => true,
-        )));
+            '--quiet' => true,
+        ]));
 
-        static::$application->run(new ArrayInput(array(
-            'command'          => 'doctrine:schema:create',
+        static::$application->run(new ArrayInput([
+            'command' => 'doctrine:schema:create',
             '--no-interaction' => true,
-            '--quiet'          => true,
-        )));
+            '--quiet' => true,
+        ]));
     }
 }

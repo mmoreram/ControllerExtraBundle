@@ -19,7 +19,7 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 /**
- * This is the class that loads and manages your bundle configuration
+ * This is the class that loads and manages your bundle configuration.
  */
 class ControllerExtraExtension extends Extension
 {
@@ -39,7 +39,7 @@ class ControllerExtraExtension extends Extension
         $config = $this->processConfiguration($configuration, $config);
 
         /**
-         * Common parameters
+         * Common parameters.
          */
         $container->setParameter(
             'mmoreram.controllerextra.resolver_priority',
@@ -52,7 +52,7 @@ class ControllerExtraExtension extends Extension
         );
 
         /**
-         * Factory parameters
+         * Factory parameters.
          */
         $container->setParameter(
             'mmoreram.controllerextra.factory_default_method',
@@ -65,7 +65,7 @@ class ControllerExtraExtension extends Extension
         );
 
         /**
-         * Form parameters
+         * Form parameters.
          */
         $container->setParameter(
             'mmoreram.controllerextra.form_active',
@@ -78,7 +78,7 @@ class ControllerExtraExtension extends Extension
         );
 
         /**
-         * Flush parameters
+         * Flush parameters.
          */
         $container->setParameter(
             'mmoreram.controllerextra.flush_active',
@@ -91,7 +91,7 @@ class ControllerExtraExtension extends Extension
         );
 
         /**
-         * Entity parameters
+         * Entity parameters.
          */
         $container->setParameter(
             'mmoreram.controllerextra.entity_active',
@@ -114,7 +114,7 @@ class ControllerExtraExtension extends Extension
         );
 
         /**
-         * JsonResponse parameters
+         * JsonResponse parameters.
          */
         $container->setParameter(
             'mmoreram.controllerextra.json_response_active',
@@ -137,7 +137,7 @@ class ControllerExtraExtension extends Extension
         );
 
         /**
-         * Log parameters
+         * Log parameters.
          */
         $container->setParameter(
             'mmoreram.controllerextra.log_active',
@@ -155,7 +155,7 @@ class ControllerExtraExtension extends Extension
         );
 
         /**
-         * Paginator parameters
+         * Paginator parameters.
          */
         $container->setParameter(
             'mmoreram.controllerextra.paginator_active',
@@ -178,7 +178,7 @@ class ControllerExtraExtension extends Extension
         );
 
         /**
-         * Object manager parameters
+         * Object manager parameters.
          */
         $container->setParameter(
             'mmoreram.controllerextra.object_manager_active',
@@ -191,7 +191,7 @@ class ControllerExtraExtension extends Extension
         );
 
         /**
-         * Get parameters
+         * Get parameters.
          */
         $container->setParameter(
             'mmoreram.controllerextra.get_active',
@@ -199,7 +199,7 @@ class ControllerExtraExtension extends Extension
         );
 
         /**
-         * Post parameters
+         * Post parameters.
          */
         $container->setParameter(
             'mmoreram.controllerextra.post_active',
@@ -207,7 +207,7 @@ class ControllerExtraExtension extends Extension
         );
 
         /**
-         * Load config files
+         * Load config files.
          */
         $loader = new YamlFileLoader(
             $container,
@@ -215,7 +215,6 @@ class ControllerExtraExtension extends Extension
         );
 
         $loader->load('classes.yml');
-        $loader->load('externals.yml');
         $loader->load('providers.yml');
         $loader->load('event_listeners.yml');
 
@@ -223,7 +222,7 @@ class ControllerExtraExtension extends Extension
     }
 
     /**
-     * Load resolver config files
+     * Load resolver config files.
      *
      * @param YamlFileLoader $loader Loader
      * @param array          $config Config
@@ -235,63 +234,63 @@ class ControllerExtraExtension extends Extension
         array $config
     ) {
         /**
-         * Only load form resolver config definition if is active
+         * Only load form resolver config definition if is active.
          */
         if ($config['form']['active']) {
             $loader->load('resolver_form.yml');
         }
 
         /**
-         * Only load flush resolver config definition if is active
+         * Only load flush resolver config definition if is active.
          */
         if ($config['flush']['active']) {
             $loader->load('resolver_flush.yml');
         }
 
         /**
-         * Only load entity resolver config definition if is active
+         * Only load entity resolver config definition if is active.
          */
         if ($config['entity']['active']) {
             $loader->load('resolver_entity.yml');
         }
 
         /**
-         * Only load log resolver config definition if is active
+         * Only load log resolver config definition if is active.
          */
         if ($config['log']['active']) {
             $loader->load('resolver_log.yml');
         }
 
         /**
-         * Only load json resolver config definition if is active
+         * Only load json resolver config definition if is active.
          */
         if ($config['json_response']['active']) {
             $loader->load('resolver_json_response.yml');
         }
 
         /**
-         * Only load paginator resolver config definition if is active
+         * Only load paginator resolver config definition if is active.
          */
         if ($config['paginator']['active']) {
             $loader->load('resolver_paginator.yml');
         }
 
         /**
-         * Only load object manager resolver config definition if is active
+         * Only load object manager resolver config definition if is active.
          */
         if ($config['object_manager']['active']) {
             $loader->load('resolver_object_manager.yml');
         }
 
         /**
-         * Only load get resolver config definition if is active
+         * Only load get resolver config definition if is active.
          */
         if ($config['get']['active']) {
             $loader->load('resolver_get.yml');
         }
 
         /**
-         * Only loads post resolver config definition if is active
+         * Only loads post resolver config definition if is active.
          */
         if ($config['post']['active']) {
             $loader->load('resolver_post.yml');

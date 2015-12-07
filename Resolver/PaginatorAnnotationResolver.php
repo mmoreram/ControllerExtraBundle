@@ -31,7 +31,7 @@ use Mmoreram\ControllerExtraBundle\Resolver\Paginator\PaginatorEvaluatorCollecto
 use Mmoreram\ControllerExtraBundle\ValueObject\PaginatorAttributes;
 
 /**
- * Class PaginatorAnnotationResolver
+ * Class PaginatorAnnotationResolver.
  */
 class PaginatorAnnotationResolver extends AbstractAnnotationResolver implements AnnotationResolverInterface
 {
@@ -71,29 +71,29 @@ class PaginatorAnnotationResolver extends AbstractAnnotationResolver implements 
     protected $defaultName;
 
     /**
-     * @var integer
+     * @var int
      *
      * Default page value
      */
     protected $defaultPage;
 
     /**
-     * @var integer
+     * @var int
      *
      * Default page value
      */
     protected $defaultLimitPerPage;
 
     /**
-     * Construct method
+     * Construct method.
      *
      * @param AbstractManagerRegistry     $doctrine                    Doctrine
      * @param EntityProvider              $entityProvider              Entity Provider
      * @param RequestParameterProvider    $requestParameterProvider    Request parameter provider
      * @param PaginatorEvaluatorCollector $paginatorEvaluatorCollector PaginatorEvaluator collector
      * @param string                      $defaultName                 Default name
-     * @param integer                     $defaultPage                 Default page
-     * @param integer                     $defaultLimitPerPage         Default limit per page
+     * @param int                         $defaultPage                 Default page
+     * @param int                         $defaultLimitPerPage         Default limit per page
      */
     public function __construct(
         AbstractManagerRegistry $doctrine,
@@ -114,7 +114,7 @@ class PaginatorAnnotationResolver extends AbstractAnnotationResolver implements 
     }
 
     /**
-     * Specific annotation evaluation
+     * Specific annotation evaluation.
      *
      * All method code will executed only if specific active flag is true
      *
@@ -130,19 +130,19 @@ class PaginatorAnnotationResolver extends AbstractAnnotationResolver implements 
         ReflectionMethod $method
     ) {
         /**
-         * Annotation is only loaded if is type-of AnnotationEntity
+         * Annotation is only loaded if is type-of AnnotationEntity.
          */
         if ($annotation instanceof AnnotationPaginator) {
 
             /**
-             * Creating new instance of desired entity
+             * Creating new instance of desired entity.
              */
             $entity = $this
                 ->entityProvider
                 ->provide($annotation->getClass());
 
             /**
-             * We create a basic query builder
+             * We create a basic query builder.
              */
             $queryBuilder = $this->createQueryBuilder($entity);
 
@@ -162,7 +162,7 @@ class PaginatorAnnotationResolver extends AbstractAnnotationResolver implements 
 
             /**
              * Calculating limit of elements per page. Value can be evaluated
-             * using as reference a Request attribute value
+             * using as reference a Request attribute value.
              */
             $limitPerPage = (int) $this
                 ->requestParameterProvider
@@ -173,7 +173,7 @@ class PaginatorAnnotationResolver extends AbstractAnnotationResolver implements 
 
             /**
              * Calculating page to fetch. Value can be evaluated using as
-             * reference a Request attribute value
+             * reference a Request attribute value.
              */
             $page = (int) $this
                 ->requestParameterProvider
@@ -185,7 +185,7 @@ class PaginatorAnnotationResolver extends AbstractAnnotationResolver implements 
             /**
              * If attributes is not null, this bundle will place in the method
              * parameter named as defined a new PaginatorAttributes Value Object
-             * with all needed data
+             * with all needed data.
              */
             $this->evaluateAttributes(
                 $request,
@@ -196,12 +196,12 @@ class PaginatorAnnotationResolver extends AbstractAnnotationResolver implements 
             );
 
             /**
-             * Calculating offset, given number per pageand page
+             * Calculating offset, given number per pageand page.
              */
             $offset = $limitPerPage * ($page - 1);
 
             /**
-             * Retrieving the Paginator iterator
+             * Retrieving the Paginator iterator.
              */
             $paginator
                 ->getQuery()
@@ -210,7 +210,7 @@ class PaginatorAnnotationResolver extends AbstractAnnotationResolver implements 
 
             /**
              * Get the parameter name. If not defined, is set as defined in
-             * parameters
+             * parameters.
              */
             $parameterName = $annotation->getName() ?: $this->defaultName;
             $parameterType = $this->getParameterType(
@@ -239,9 +239,9 @@ class PaginatorAnnotationResolver extends AbstractAnnotationResolver implements 
     }
 
     /**
-     * Generate QueryBuilder
+     * Generate QueryBuilder.
      *
-     * @param Object $entity Entity instance
+     * @param object $entity Entity instance
      *
      * @return QueryBuilder Query builder
      */
@@ -253,7 +253,7 @@ class PaginatorAnnotationResolver extends AbstractAnnotationResolver implements 
             ->doctrine
             ->getManagerForClass(get_class($entity))
             ->createQueryBuilder()
-            ->select(array('x'))
+            ->select(['x'])
             ->from($entityNamespace, 'x');
     }
 
@@ -263,8 +263,8 @@ class PaginatorAnnotationResolver extends AbstractAnnotationResolver implements 
      * @param Request             $request      Request
      * @param AnnotationPaginator $annotation   Annotation
      * @param Paginator           $paginator    Paginator
-     * @param integer             $limitPerPage Limit per page
-     * @param integer             $page         Page
+     * @param int                 $limitPerPage Limit per page
+     * @param int                 $page         Page
      */
     protected function evaluateAttributes(
         Request $request,
@@ -291,7 +291,7 @@ class PaginatorAnnotationResolver extends AbstractAnnotationResolver implements 
     }
 
     /**
-     * Return real usable Paginator instance given the definition type
+     * Return real usable Paginator instance given the definition type.
      *
      * @param Paginator $paginator     Paginator
      * @param string    $parameterType Parameter type

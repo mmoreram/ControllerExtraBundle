@@ -14,40 +14,40 @@
 namespace Mmoreram\ControllerExtraBundle\ValueObject;
 
 /**
- * Class PaginatorAttributes
+ * Class PaginatorAttributes.
  */
 class PaginatorAttributes
 {
     /**
-     * @var integer
+     * @var int
      *
      * total pages
      */
     protected $totalPages;
 
     /**
-     * @var integer
+     * @var int
      *
      * total elements
      */
     protected $totalElements;
 
     /**
-     * @var integer
+     * @var int
      *
      * total page
      */
     protected $currentPage;
 
     /**
-     * @var integer
+     * @var int
      *
      * number of elements per page
      */
     protected $limitPerPage;
 
     /**
-     * Sets TotalElements
+     * Sets TotalElements.
      *
      * @param int $totalElements TotalElements
      *
@@ -61,7 +61,7 @@ class PaginatorAttributes
     }
 
     /**
-     * Get TotalElements
+     * Get TotalElements.
      *
      * @return int TotalElements
      */
@@ -71,7 +71,7 @@ class PaginatorAttributes
     }
 
     /**
-     * Sets TotalPages
+     * Sets TotalPages.
      *
      * @param int $totalPages TotalPages
      *
@@ -85,7 +85,7 @@ class PaginatorAttributes
     }
 
     /**
-     * Get TotalPages
+     * Get TotalPages.
      *
      * @return int TotalPages
      */
@@ -95,7 +95,7 @@ class PaginatorAttributes
     }
 
     /**
-     * Sets CurrentPage
+     * Sets CurrentPage.
      *
      * @param int $currentPage CurrentPage
      *
@@ -109,7 +109,7 @@ class PaginatorAttributes
     }
 
     /**
-     * Get CurrentPage
+     * Get CurrentPage.
      *
      * @return int CurrentPage
      */
@@ -119,7 +119,7 @@ class PaginatorAttributes
     }
 
     /**
-     * Sets LimitPerPage
+     * Sets LimitPerPage.
      *
      * @param int $limitPerPage
      *
@@ -133,7 +133,7 @@ class PaginatorAttributes
     }
 
     /**
-     * Get LimitPerPage
+     * Get LimitPerPage.
      *
      * @return int LimitPerPage
      */

@@ -22,7 +22,7 @@ use Mmoreram\ControllerExtraBundle\Annotation\Log as AnnotationLog;
 use Mmoreram\ControllerExtraBundle\Resolver\LogAnnotationResolver;
 
 /**
- * Tests FlushAnnotationResolver class
+ * Tests FlushAnnotationResolver class.
  */
 class LogAnnotationResolverTest extends PHPUnit_Framework_TestCase
 {
@@ -48,7 +48,7 @@ class LogAnnotationResolverTest extends PHPUnit_Framework_TestCase
     protected $annotation;
 
     /**
-     * Setup method
+     * Setup method.
      */
     public function setUp()
     {
@@ -69,7 +69,7 @@ class LogAnnotationResolverTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests DefaultManager name method
+     * Tests DefaultManager name method.
      */
     public function testDefaultLevel()
     {
@@ -88,7 +88,7 @@ class LogAnnotationResolverTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests DefaultManager name method
+     * Tests DefaultManager name method.
      */
     public function testDefaultExecute()
     {
@@ -107,7 +107,7 @@ class LogAnnotationResolverTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests log message method
+     * Tests log message method.
      */
     public function testLogMessage()
     {
@@ -138,7 +138,7 @@ class LogAnnotationResolverTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests level setting in evaluateAnnotation method
+     * Tests level setting in evaluateAnnotation method.
      *
      * @param string $defaultLevel Default level
      * @param string $level        Level
@@ -159,9 +159,9 @@ class LogAnnotationResolverTest extends PHPUnit_Framework_TestCase
         $logAnnotationResolver = $this
             ->getMockBuilder('Mmoreram\ControllerExtraBundle\Resolver\LogAnnotationResolver')
             ->disableOriginalConstructor()
-            ->setMethods(array(
+            ->setMethods([
                 'getDefaultLevel',
-            ))
+            ])
             ->getMock();
 
         $logAnnotationResolver
@@ -182,22 +182,22 @@ class LogAnnotationResolverTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testEvaluateAnnotationLevel data provider
+     * testEvaluateAnnotationLevel data provider.
      *
      * @return array Data
      */
     public function dataEvaluateAnnotationLevel()
     {
-        return array(
-            array('info', null, 'info'),
-            array('info', false, 'info'),
-            array('info', 'info', 'info'),
-            array('info', 'error', 'error'),
-        );
+        return [
+            ['info', null, 'info'],
+            ['info', false, 'info'],
+            ['info', 'info', 'info'],
+            ['info', 'error', 'error'],
+        ];
     }
 
     /**
-     * Tests execute setting in evaluateAnnotation method
+     * Tests execute setting in evaluateAnnotation method.
      *
      * @param string $defaultExecute Default execute
      * @param string $execute        Execute
@@ -218,11 +218,11 @@ class LogAnnotationResolverTest extends PHPUnit_Framework_TestCase
         $logAnnotationResolver = $this
             ->getMockBuilder('Mmoreram\ControllerExtraBundle\Resolver\LogAnnotationResolver')
             ->disableOriginalConstructor()
-            ->setMethods(array(
+            ->setMethods([
                 'getDefaultExecute',
                 'logMessage',
                 'getLogger',
-            ))
+            ])
             ->getMock();
 
         $logAnnotationResolver
@@ -253,28 +253,28 @@ class LogAnnotationResolverTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testEvaluateAnnotationLevel data provider
+     * testEvaluateAnnotationLevel data provider.
      *
      * @return array Data
      */
     public function dataEvaluateAnnotationExecute()
     {
-        return array(
-            array(AnnotationLog::EXEC_POST, null, AnnotationLog::EXEC_POST),
-            array(AnnotationLog::EXEC_POST, false, AnnotationLog::EXEC_POST),
-            array(AnnotationLog::EXEC_POST, AnnotationLog::EXEC_POST, AnnotationLog::EXEC_POST),
-            array(AnnotationLog::EXEC_POST, AnnotationLog::EXEC_PRE, AnnotationLog::EXEC_PRE),
-        );
+        return [
+            [AnnotationLog::EXEC_POST, null, AnnotationLog::EXEC_POST],
+            [AnnotationLog::EXEC_POST, false, AnnotationLog::EXEC_POST],
+            [AnnotationLog::EXEC_POST, AnnotationLog::EXEC_POST, AnnotationLog::EXEC_POST],
+            [AnnotationLog::EXEC_POST, AnnotationLog::EXEC_PRE, AnnotationLog::EXEC_PRE],
+        ];
     }
 
     /**
-     * Tests evaluateAnnotation method with a both execution
+     * Tests evaluateAnnotation method with a both execution.
      *
      * This case considers that Annotation is a Flush annotation and no manager
      * is defined in it
      *
-     * @param string  $execute            Execute
-     * @param boolean $logMessageIsCalled Log message is called
+     * @param string $execute            Execute
+     * @param bool   $logMessageIsCalled Log message is called
      *
      * @dataProvider dataEvaluateAnnotation
      */
@@ -291,13 +291,13 @@ class LogAnnotationResolverTest extends PHPUnit_Framework_TestCase
         $logAnnotationResolver = $this
             ->getMockBuilder('Mmoreram\ControllerExtraBundle\Resolver\LogAnnotationResolver')
             ->disableOriginalConstructor()
-            ->setMethods(array(
+            ->setMethods([
                 'getLogger',
                 'logMessage',
                 'getLevel',
                 'getExecute',
                 'getValue',
-            ))
+            ])
             ->getMock();
 
         $logAnnotationResolver
@@ -339,27 +339,27 @@ class LogAnnotationResolverTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testEvaluateAnnotationLevel data provider
+     * testEvaluateAnnotationLevel data provider.
      *
      * @return array Data
      */
     public function dataEvaluateAnnotation()
     {
-        return array(
-            array(AnnotationLog::EXEC_PRE, true),
-            array(AnnotationLog::EXEC_BOTH, true),
-            array(AnnotationLog::EXEC_POST, false),
-        );
+        return [
+            [AnnotationLog::EXEC_PRE, true],
+            [AnnotationLog::EXEC_BOTH, true],
+            [AnnotationLog::EXEC_POST, false],
+        ];
     }
 
     /**
-     * Tests onKernelResponse with Exec both
+     * Tests onKernelResponse with Exec both.
      *
      * This case is with mustLog true
      *
-     * @param string  $execute            Execute
-     * @param boolean $mustLog            Must log
-     * @param boolean $logMessageIsCalled Log message is called
+     * @param string $execute            Execute
+     * @param bool   $mustLog            Must log
+     * @param bool   $logMessageIsCalled Log message is called
      *
      * @dataProvider dataOnKernelResponse
      */
@@ -374,14 +374,14 @@ class LogAnnotationResolverTest extends PHPUnit_Framework_TestCase
         $logAnnotationResolver = $this
             ->getMockBuilder('Mmoreram\ControllerExtraBundle\Resolver\LogAnnotationResolver')
             ->disableOriginalConstructor()
-            ->setMethods(array(
+            ->setMethods([
                 'getLogger',
                 'getMustLog',
                 'logMessage',
                 'getLevel',
                 'getExecute',
                 'getValue',
-            ))
+            ])
             ->getMock();
 
         $logger = $this
@@ -434,27 +434,27 @@ class LogAnnotationResolverTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testEvaluateAnnotationLevel data provider
+     * testEvaluateAnnotationLevel data provider.
      *
      * @return array Data
      */
     public function dataOnKernelResponse()
     {
-        return array(
-            array(AnnotationLog::EXEC_PRE, true, false),
-            array(AnnotationLog::EXEC_PRE, false, false),
-            array(AnnotationLog::EXEC_BOTH, true, true),
-            array(AnnotationLog::EXEC_BOTH, false, false),
-            array(AnnotationLog::EXEC_POST, true, true),
-            array(AnnotationLog::EXEC_POST, false, false),
-        );
+        return [
+            [AnnotationLog::EXEC_PRE, true, false],
+            [AnnotationLog::EXEC_PRE, false, false],
+            [AnnotationLog::EXEC_BOTH, true, true],
+            [AnnotationLog::EXEC_BOTH, false, false],
+            [AnnotationLog::EXEC_POST, true, true],
+            [AnnotationLog::EXEC_POST, false, false],
+        ];
     }
 
     /**
-     * Tests Annotation type
+     * Tests Annotation type.
      *
-     * @param string  $annotationNamespace Annotation namespace
-     * @param integer $times               Times getClass will be called
+     * @param string $annotationNamespace Annotation namespace
+     * @param int    $times               Times getClass will be called
      *
      * @dataProvider dataAnnotationNamespace
      */
@@ -472,7 +472,7 @@ class LogAnnotationResolverTest extends PHPUnit_Framework_TestCase
         $annotation = $this
             ->getMockBuilder($annotationNamespace)
             ->disableOriginalConstructor()
-            ->setMethods(array('getLevel'))
+            ->setMethods(['getLevel'])
             ->getMock();
 
         $annotation
@@ -487,18 +487,18 @@ class LogAnnotationResolverTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Data for testAnnotationNamespace
+     * Data for testAnnotationNamespace.
      *
      * @return array data
      */
     public function dataAnnotationNamespace()
     {
-        return array(
+        return [
 
-            array('Mmoreram\ControllerExtraBundle\Annotation\Log', 1),
-            array('Mmoreram\ControllerExtraBundle\Annotation\Entity', 0),
-            array('Mmoreram\ControllerExtraBundle\Annotation\Flush', 0),
-            array('Mmoreram\ControllerExtraBundle\Annotation\Form', 0),
-        );
+            ['Mmoreram\ControllerExtraBundle\Annotation\Log', 1],
+            ['Mmoreram\ControllerExtraBundle\Annotation\Entity', 0],
+            ['Mmoreram\ControllerExtraBundle\Annotation\Flush', 0],
+            ['Mmoreram\ControllerExtraBundle\Annotation\Form', 0],
+        ];
     }
 }

@@ -23,7 +23,7 @@ use Mmoreram\ControllerExtraBundle\Annotation\Log as AnnotationLog;
 use Mmoreram\ControllerExtraBundle\Resolver\Interfaces\AnnotationResolverInterface;
 
 /**
- * LogAnnotationResolver, an implementation of  AnnotationResolverInterface
+ * LogAnnotationResolver, an implementation of  AnnotationResolverInterface.
  */
 class LogAnnotationResolver implements AnnotationResolverInterface
 {
@@ -49,7 +49,7 @@ class LogAnnotationResolver implements AnnotationResolverInterface
     protected $defaultExecute;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * Must log
      */
@@ -77,7 +77,7 @@ class LogAnnotationResolver implements AnnotationResolverInterface
     protected $value;
 
     /**
-     * Construct method
+     * Construct method.
      *
      * @param LoggerInterface $logger Logger
      */
@@ -87,7 +87,7 @@ class LogAnnotationResolver implements AnnotationResolverInterface
     }
 
     /**
-     * Return container
+     * Return container.
      *
      * @return LoggerInterface Logger
      */
@@ -97,7 +97,7 @@ class LogAnnotationResolver implements AnnotationResolverInterface
     }
 
     /**
-     * Set default level name
+     * Set default level name.
      *
      * @param string $defaultLevel Default level name
      *
@@ -111,7 +111,7 @@ class LogAnnotationResolver implements AnnotationResolverInterface
     }
 
     /**
-     * Get default level name
+     * Get default level name.
      *
      * @return string Default level
      */
@@ -121,7 +121,7 @@ class LogAnnotationResolver implements AnnotationResolverInterface
     }
 
     /**
-     * Set default execute name
+     * Set default execute name.
      *
      * @param string $defaultExecute Default execute value
      *
@@ -135,7 +135,7 @@ class LogAnnotationResolver implements AnnotationResolverInterface
     }
 
     /**
-     * Get default execute value
+     * Get default execute value.
      *
      * @return string Default execute
      */
@@ -145,9 +145,9 @@ class LogAnnotationResolver implements AnnotationResolverInterface
     }
 
     /**
-     * Get must log
+     * Get must log.
      *
-     * @return boolean Must log
+     * @return bool Must log
      */
     public function getMustLog()
     {
@@ -155,9 +155,9 @@ class LogAnnotationResolver implements AnnotationResolverInterface
     }
 
     /**
-     * Get level
+     * Get level.
      *
-     * @return boolean Level
+     * @return bool Level
      */
     public function getLevel()
     {
@@ -165,7 +165,7 @@ class LogAnnotationResolver implements AnnotationResolverInterface
     }
 
     /**
-     * Get execute
+     * Get execute.
      *
      * @return string Execute
      */
@@ -175,7 +175,7 @@ class LogAnnotationResolver implements AnnotationResolverInterface
     }
 
     /**
-     * Get value
+     * Get value.
      *
      * @return string Value
      */
@@ -199,7 +199,7 @@ class LogAnnotationResolver implements AnnotationResolverInterface
         ReflectionMethod $method
     ) {
         /**
-         * Annotation is only laoded if is typeof AnnotationLog
+         * Annotation is only laoded if is typeof AnnotationLog.
          */
         if ($annotation instanceof AnnotationLog) {
             $this->level = $annotation->getLevel()
@@ -214,9 +214,9 @@ class LogAnnotationResolver implements AnnotationResolverInterface
             $this->value = $annotation->getValue();
 
             /**
-             * Only logs before controller execution if EXEC_PRE or EXEC_BOTH
+             * Only logs before controller execution if EXEC_PRE or EXEC_BOTH.
              */
-            if (in_array($this->getExecute(), array(AnnotationLog::EXEC_PRE, AnnotationLog::EXEC_BOTH))) {
+            if (in_array($this->getExecute(), [AnnotationLog::EXEC_PRE, AnnotationLog::EXEC_BOTH])) {
                 $this->logMessage($this->getLogger(), $this->getLevel(), $this->getValue());
             }
         }
@@ -225,7 +225,7 @@ class LogAnnotationResolver implements AnnotationResolverInterface
     }
 
     /**
-     * Method executed while loading Controller
+     * Method executed while loading Controller.
      *
      * @param FilterResponseEvent $event Filter Response event
      */
@@ -234,16 +234,16 @@ class LogAnnotationResolver implements AnnotationResolverInterface
         if ($this->getMustLog()) {
 
             /**
-             * Only logs before controller execution if EXEC_POST or EXEC_BOTH
+             * Only logs before controller execution if EXEC_POST or EXEC_BOTH.
              */
-            if (in_array($this->getExecute(), array(AnnotationLog::EXEC_POST, AnnotationLog::EXEC_BOTH))) {
+            if (in_array($this->getExecute(), [AnnotationLog::EXEC_POST, AnnotationLog::EXEC_BOTH])) {
                 $this->logMessage($this->getLogger(), $this->getLevel(), $this->getValue());
             }
         }
     }
 
     /**
-     * Send value to log
+     * Send value to log.
      *
      * @param LoggerInterface $logger Logger
      * @param string          $level  Level
@@ -254,7 +254,7 @@ class LogAnnotationResolver implements AnnotationResolverInterface
     public function logMessage(LoggerInterface $logger, $level, $value)
     {
         /**
-         * Logs content, using specified level
+         * Logs content, using specified level.
          */
         $logger->$level($value);
 

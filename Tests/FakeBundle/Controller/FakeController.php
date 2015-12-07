@@ -28,12 +28,12 @@ use Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\Fake;
 use Mmoreram\ControllerExtraBundle\ValueObject\PaginatorAttributes;
 
 /**
- * Fake Controller object
+ * Fake Controller object.
  */
 class FakeController extends Controller
 {
     /**
-     * Public method
+     * Public method.
      *
      * @\Mmoreram\ControllerExtraBundle\Annotation\Entity(
      *      name = "entityName",
@@ -103,7 +103,7 @@ class FakeController extends Controller
     }
 
     /**
-     * Public method
+     * Public method.
      *
      * @\Mmoreram\ControllerExtraBundle\Annotation\Entity(
      *      name = "entity",
@@ -117,13 +117,13 @@ class FakeController extends Controller
      */
     public function entityMappedAction(Fake $entity)
     {
-        return array(
+        return [
             'id' => $entity->getId(),
-        );
+        ];
     }
 
     /**
-     * Public method
+     * Public method.
      *
      * @\Mmoreram\ControllerExtraBundle\Annotation\Entity(
      *      name = "entity",
@@ -149,14 +149,14 @@ class FakeController extends Controller
      */
     public function entityMappedManyAction(Fake $entity, Fake $entityFallback)
     {
-        return array(
+        return [
             'id' => $entity->getId(),
             'null' => $entityFallback->getId(),
-        );
+        ];
     }
 
     /**
-     * Public method
+     * Public method.
      *
      * @\Mmoreram\ControllerExtraBundle\Annotation\Entity(
      *      name = "entity",
@@ -178,19 +178,19 @@ class FakeController extends Controller
     }
 
     /**
-     * Public method
+     * Public method.
      *
      * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
      */
     public function jsonResponseAction()
     {
-        return array(
+        return [
             'index' => 'value',
-        );
+        ];
     }
 
     /**
-     * Public method
+     * Public method.
      *
      * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
      */
@@ -200,7 +200,7 @@ class FakeController extends Controller
     }
 
     /**
-     * Public method
+     * Public method.
      *
      * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
      */
@@ -210,7 +210,7 @@ class FakeController extends Controller
     }
 
     /**
-     * Public method
+     * Public method.
      *
      * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
      * @\Mmoreram\ControllerExtraBundle\Annotation\Entity(
@@ -231,7 +231,7 @@ class FakeController extends Controller
     }
 
     /**
-     * Public pagination method
+     * Public pagination method.
      *
      * @\Mmoreram\ControllerExtraBundle\Annotation\Paginator(
      *      class = {
@@ -271,13 +271,13 @@ class FakeController extends Controller
             ->getQuery()
             ->getDQL();
 
-        return array(
+        return [
             'dql' => $dql,
-        );
+        ];
     }
 
     /**
-     * Public pagination method
+     * Public pagination method.
      *
      * @\Mmoreram\ControllerExtraBundle\Annotation\Paginator(
      *      class = {
@@ -306,13 +306,13 @@ class FakeController extends Controller
      */
     public function paginatorSimpleAction(Paginator $paginator)
     {
-        return array(
+        return [
             'count' => $paginator->getIterator()->count(),
-        );
+        ];
     }
 
     /**
-     * Public pagination method
+     * Public pagination method.
      *
      * @\Mmoreram\ControllerExtraBundle\Annotation\Paginator(
      *      class = {
@@ -342,13 +342,13 @@ class FakeController extends Controller
      */
     public function paginatorMultipleWhereAction(Paginator $paginator)
     {
-        return array(
+        return [
             'count' => $paginator->getIterator()->count(),
-        );
+        ];
     }
 
     /**
-     * Public pagination method
+     * Public pagination method.
      *
      * @\Mmoreram\ControllerExtraBundle\Annotation\Paginator(
      *      class = {
@@ -377,13 +377,13 @@ class FakeController extends Controller
      */
     public function paginatorNotMatchingAction(Paginator $paginator)
     {
-        return array(
+        return [
             'count' => $paginator->getIterator()->count(),
-        );
+        ];
     }
 
     /**
-     * Public pagination method
+     * Public pagination method.
      *
      * @\Mmoreram\ControllerExtraBundle\Annotation\Paginator(
      *      class = {
@@ -400,13 +400,13 @@ class FakeController extends Controller
      */
     public function PaginatorLikeWithGetParameterAction(Paginator $paginator)
     {
-        return array(
+        return [
             'count' => $paginator->getIterator()->count(),
-        );
+        ];
     }
 
     /**
-     * Public pagination method
+     * Public pagination method.
      *
      * @\Mmoreram\ControllerExtraBundle\Annotation\Paginator(
      *      attributes = "paginatorAttributes",
@@ -438,16 +438,16 @@ class FakeController extends Controller
         Paginator $paginator,
         PaginatorAttributes $paginatorAttributes
     ) {
-        return array(
+        return [
             'count' => $paginator->getIterator()->count(),
             'totalPages' => $paginatorAttributes->getTotalPages(),
             'totalElements' => $paginatorAttributes->getTotalElements(),
             'currentPage' => $paginatorAttributes->getCurrentPage(),
-        );
+        ];
     }
 
     /**
-     * Public pagination method with pagerfanta instance
+     * Public pagination method with pagerfanta instance.
      *
      * @\Mmoreram\ControllerExtraBundle\Annotation\Paginator(
      *      class = {
@@ -470,13 +470,13 @@ class FakeController extends Controller
     public function paginatorPagerFantaAction(
         Pagerfanta $paginator
     ) {
-        return array(
+        return [
             'count' => $paginator->getIterator()->count(),
-        );
+        ];
     }
 
     /**
-     * Public pagination method with knppaginator instance
+     * Public pagination method with knppaginator instance.
      *
      * @\Mmoreram\ControllerExtraBundle\Annotation\Paginator(
      *      class = {
@@ -499,13 +499,13 @@ class FakeController extends Controller
     public function paginatorKNPPaginatorAction(
         PaginationInterface $paginator
     ) {
-        return array(
+        return [
             'count' => $paginator->getTotalItemCount(),
-        );
+        ];
     }
 
     /**
-     * Public objectManager method
+     * Public objectManager method.
      *
      * @\Mmoreram\ControllerExtraBundle\Annotation\ObjectManager(
      *      name = "objectManager1",
@@ -531,11 +531,11 @@ class FakeController extends Controller
         ObjectManager $objectManager2,
         ObjectManager $objectManager3
     ) {
-        return array();
+        return [];
     }
 
     /**
-     * Tested that works mapping fallback. Mapping fallback disabled and failing
+     * Tested that works mapping fallback. Mapping fallback disabled and failing.
      *
      * @\Mmoreram\ControllerExtraBundle\Annotation\Entity(
      *      name = "entity",
@@ -552,7 +552,7 @@ class FakeController extends Controller
     }
 
     /**
-     * Public pagination method
+     * Public pagination method.
      *
      * @\Mmoreram\ControllerExtraBundle\Annotation\Paginator(
      *      attributes = "paginatorAttributes",
@@ -571,16 +571,16 @@ class FakeController extends Controller
         Paginator $paginator,
         PaginatorAttributes $paginatorAttributes
     ) {
-        return array(
+        return [
             'count' => $paginator->getIterator()->count(),
             'totalPages' => $paginatorAttributes->getTotalPages(),
             'totalElements' => $paginatorAttributes->getTotalElements(),
             'currentPage' => $paginatorAttributes->getCurrentPage(),
-        );
+        ];
     }
 
     /**
-     * Public pagination method
+     * Public pagination method.
      *
      * @\Mmoreram\ControllerExtraBundle\Annotation\Paginator(
      *      attributes = "paginatorAttributes",
@@ -602,16 +602,16 @@ class FakeController extends Controller
         Paginator $paginator,
         PaginatorAttributes $paginatorAttributes
     ) {
-        return array(
+        return [
             'count' => $paginator->getIterator()->count(),
             'totalPages' => $paginatorAttributes->getTotalPages(),
             'totalElements' => $paginatorAttributes->getTotalElements(),
             'currentPage' => $paginatorAttributes->getCurrentPage(),
-        );
+        ];
     }
 
     /**
-     * Gets a query string parameter without changing the param name
+     * Gets a query string parameter without changing the param name.
      *
      * @param string $param The query string param
      *
@@ -626,13 +626,13 @@ class FakeController extends Controller
     public function queryStringAction(
         $param
     ) {
-        return array(
+        return [
             'param' => $param,
-        );
+        ];
     }
 
     /**
-     * Gets a query string parameter changing the param name
+     * Gets a query string parameter changing the param name.
      *
      * @param string $getParam The query string param
      *
@@ -648,13 +648,13 @@ class FakeController extends Controller
     public function queryStringChangingNameAction(
         $getParam
     ) {
-        return array(
+        return [
             'param' => $getParam,
-        );
+        ];
     }
 
     /**
-     * Gets a query string parameter changing default value
+     * Gets a query string parameter changing default value.
      *
      * @param string $param The query string param
      *
@@ -670,13 +670,13 @@ class FakeController extends Controller
     public function queryStringChangingDefaultValueAction(
         $param
     ) {
-        return array(
+        return [
             'param' => $param,
-        );
+        ];
     }
 
     /**
-     * Gets a query string using deep option
+     * Gets a query string using deep option.
      *
      * @param string $param The query string param
      *
@@ -693,13 +693,13 @@ class FakeController extends Controller
     public function queryStringDeepAction(
         $param
     ) {
-        return array(
+        return [
             'param' => $param,
-        );
+        ];
     }
 
     /**
-     * Gets a post parameter without changing the param name
+     * Gets a post parameter without changing the param name.
      *
      * @param string $param The post param
      *
@@ -714,13 +714,13 @@ class FakeController extends Controller
     public function postParameterAction(
         $param
     ) {
-        return array(
+        return [
             'param' => $param,
-        );
+        ];
     }
 
     /**
-     * Gets a post parameter changing the param name
+     * Gets a post parameter changing the param name.
      *
      * @param string $getParam The post param
      *
@@ -736,13 +736,13 @@ class FakeController extends Controller
     public function postParameterChangingNameAction(
         $getParam
     ) {
-        return array(
+        return [
             'param' => $getParam,
-        );
+        ];
     }
 
     /**
-     * Gets a post parameter changing default value
+     * Gets a post parameter changing default value.
      *
      * @param string $param The post param
      *
@@ -758,13 +758,13 @@ class FakeController extends Controller
     public function postParameterChangingDefaultValueAction(
         $param
     ) {
-        return array(
+        return [
             'param' => $param,
-        );
+        ];
     }
 
     /**
-     * Gets a post using deep option
+     * Gets a post using deep option.
      *
      * @param string $param The post param
      *
@@ -781,13 +781,13 @@ class FakeController extends Controller
     public function postParameterDeepAction(
         $param
     ) {
-        return array(
+        return [
             'param' => $param,
-        );
+        ];
     }
 
     /**
-     * Form methods
+     * Form methods.
      *
      * @\Mmoreram\ControllerExtraBundle\Annotation\Form(
      *      class = "Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Form\Type\FakeType",

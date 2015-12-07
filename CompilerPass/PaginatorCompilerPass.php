@@ -18,12 +18,12 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Class PaginatorCompilerPass
+ * Class PaginatorCompilerPass.
  */
 class PaginatorCompilerPass implements CompilerPassInterface
 {
     /**
-     * Every service tagged as controller_extra.paginator_evaluator will be processed
+     * Every service tagged as controller_extra.paginator_evaluator will be processed.
      *
      * @param ContainerBuilder $container Container
      */
@@ -34,26 +34,26 @@ class PaginatorCompilerPass implements CompilerPassInterface
         }
 
         /**
-         * We get our collector
+         * We get our collector.
          */
         $definition = $container->getDefinition(
             'mmoreram.controllerextra.collector.paginator_evaluator_collector'
         );
 
         /**
-         * We get all tagged services
+         * We get all tagged services.
          */
         $taggedServices = $container->findTaggedServiceIds(
             'controller_extra.paginator_evaluator'
         );
 
         /**
-         * We add every tagged Resolver into EventListener
+         * We add every tagged Resolver into EventListener.
          */
         foreach ($taggedServices as $id => $attributes) {
             $definition->addMethodCall(
                 'addPaginatorEvaluator',
-                array(new Reference($id))
+                [new Reference($id)]
             );
         }
     }

@@ -13,11 +13,11 @@ services:
     mmoreram.controllerextra.resolver.entity_annotation_resolver:
         class: %mmoreram.controllerextra.resolver.entity_annotation_resolver.class%
         arguments:
-            doctrine: @doctrine
-            entity_provider: @mmoreram.controllerextra.provider.entity_provider
-            request_parameters_provider: @mmoreram.controllerextra.provider.request_parameter_provider
-            default_name: %mmoreram.controllerextra.entity_default_name%
-            default_persist: %mmoreram.controllerextra.entity_default_persist%
-            mapping_fallback: %mmoreram.controllerextra.entity_fallback_mapping%
+            - "@doctrine"
+            - "@mmoreram.controllerextra.provider.entity_provider"
+            - "@mmoreram.controllerextra.provider.request_parameter_provider"
+            - %mmoreram.controllerextra.entity_default_name%
+            - %mmoreram.controllerextra.entity_default_persist%
+            - %mmoreram.controllerextra.entity_fallback_mapping%
         tags:
             - { name: controller_extra.annotation }

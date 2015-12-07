@@ -16,12 +16,12 @@ namespace Mmoreram\ControllerExtraBundle\Tests\Functional\Resolver;
 use Mmoreram\ControllerExtraBundle\Tests\Functional\AbstractWebTestCase;
 
 /**
- * Class GetAnnotationResolverTest
+ * Class GetAnnotationResolverTest.
  */
 class GetAnnotationResolverTest extends AbstractWebTestCase
 {
     /**
-     * Test obtain a $_GET parameter
+     * Test obtain a $_GET parameter.
      */
     public function testObtainGetParameterAnnotation()
     {
@@ -41,7 +41,7 @@ class GetAnnotationResolverTest extends AbstractWebTestCase
     }
 
     /**
-     * Test obtain non existent $_GET parameter
+     * Test obtain a non existent $_GET parameter.
      */
     public function testObtainNonExistentGetParameterAnnotation()
     {
@@ -61,7 +61,7 @@ class GetAnnotationResolverTest extends AbstractWebTestCase
     }
 
     /**
-     * Test obtain a $_GET parameter changing the param name
+     * Test obtain a $_GET parameter changing the param name.
      */
     public function testObtainGetParameterChangingParamNameAnnotation()
     {
@@ -81,10 +81,15 @@ class GetAnnotationResolverTest extends AbstractWebTestCase
     }
 
     /**
-     * Test obtain a $_GET parameter changing the param name
+     * Test obtain a $_GET parameter changing the param name.
      */
     public function testObtainNonExistentGetParameterChangingParamNameAnnotation()
     {
+        $getMethod = new \ReflectionMethod('Symfony\Component\HttpFoundation\ParameterBag', 'get');
+        if ($getMethod->getNumberOfParameters() === 2) {
+            $this->markTestSkipped('Feature not allowed in Symfony ^3.0.0');
+        }
+
         $uri = '/fake/getquerystringchangingparamname';
         $this->client->request('GET', $uri);
 
@@ -101,10 +106,15 @@ class GetAnnotationResolverTest extends AbstractWebTestCase
     }
 
     /**
-     * Test obtain a $_GET parameter changing the default value
+     * Test obtain a $_GET parameter changing the default value.
      */
     public function testObtainGetParameterChangingDefaultAnnotation()
     {
+        $getMethod = new \ReflectionMethod('Symfony\Component\HttpFoundation\ParameterBag', 'get');
+        if ($getMethod->getNumberOfParameters() === 2) {
+            $this->markTestSkipped('Feature not allowed in Symfony ^3.0.0');
+        }
+
         $uri = '/fake/getquerystringchangingdefaultvalue?param=value';
         $this->client->request('GET', $uri);
 
@@ -121,7 +131,7 @@ class GetAnnotationResolverTest extends AbstractWebTestCase
     }
 
     /**
-     * Test obtain an unexistent $_GET parameter changing the default value
+     * Test obtain a non existent $_GET parameter changing the default value.
      */
     public function testObtainNonExistentGetParameterChangingDefaultAnnotation()
     {
@@ -137,46 +147,6 @@ class GetAnnotationResolverTest extends AbstractWebTestCase
             'default-value',
             $response['param'],
             'The resolved param is supposed to be the default value if no param is received'
-        );
-    }
-
-    /**
-     * Test obtain a $_GET parameter using deep mode
-     */
-    public function testObtainGetParameterDeepAnnotation()
-    {
-        $uri = '/fake/getquerystringdeep?param[key]=value';
-        $this->client->request('GET', $uri);
-
-        $response = json_decode($this
-            ->client
-            ->getResponse()
-            ->getContent(), true);
-
-        $this->assertEquals(
-            'value',
-            $response['param'],
-            'The query string is not being correctly resolved'
-        );
-    }
-
-    /**
-     * Test obtain an unexistent $_GET parameter using deep mode
-     */
-    public function testObtainUnexistentGetParameterDeepAnnotation()
-    {
-        $uri = '/fake/getquerystringdeep';
-        $this->client->request('GET', $uri);
-
-        $response = json_decode($this
-            ->client
-            ->getResponse()
-            ->getContent(), true);
-
-        $this->assertEquals(
-            null,
-            $response['param'],
-            'The resolved param is supposed to be null if no param is received'
         );
     }
 }

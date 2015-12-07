@@ -16,7 +16,7 @@ namespace Mmoreram\ControllerExtraBundle\Annotation;
 use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
 
 /**
- * Class Paginator
+ * Class Paginator.
  *
  * @Annotation
  */
@@ -37,14 +37,14 @@ class Paginator extends Annotation
     public $name;
 
     /**
-     * @var integer
+     * @var int
      *
      * page
      */
     protected $page;
 
     /**
-     * @var integer
+     * @var int
      *
      * limit
      */
@@ -93,7 +93,7 @@ class Paginator extends Annotation
     protected $attributes;
 
     /**
-     * Get Class
+     * Get Class.
      *
      * @return string Class
      */
@@ -103,7 +103,7 @@ class Paginator extends Annotation
     }
 
     /**
-     * return name
+     * return name.
      *
      * @return string Name
      */
@@ -113,7 +113,7 @@ class Paginator extends Annotation
     }
 
     /**
-     * Get Page
+     * Get Page.
      *
      * @return int Page
      */
@@ -123,7 +123,7 @@ class Paginator extends Annotation
     }
 
     /**
-     * Get OrderBy
+     * Get OrderBy.
      *
      * @return array OrderBy
      */
@@ -133,7 +133,7 @@ class Paginator extends Annotation
     }
 
     /**
-     * Get Limit
+     * Get Limit.
      *
      * @return int Limit
      */
@@ -143,7 +143,7 @@ class Paginator extends Annotation
     }
 
     /**
-     * Get InnerJoins
+     * Get InnerJoins.
      *
      * @return array InnerJoins
      */
@@ -153,7 +153,7 @@ class Paginator extends Annotation
     }
 
     /**
-     * Get LeftJoins
+     * Get LeftJoins.
      *
      * @return array LeftJoins
      */
@@ -163,7 +163,7 @@ class Paginator extends Annotation
     }
 
     /**
-     * Get Wheres
+     * Get Wheres.
      *
      * @return array Wheres
      */
@@ -173,7 +173,7 @@ class Paginator extends Annotation
     }
 
     /**
-     * Get NotNulls
+     * Get NotNulls.
      *
      * @return array NotNulls
      */
@@ -183,7 +183,7 @@ class Paginator extends Annotation
     }
 
     /**
-     * Get Attributes
+     * Get Attributes.
      *
      * @return string Attributes
      */

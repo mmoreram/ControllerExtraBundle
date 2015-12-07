@@ -16,12 +16,12 @@ namespace Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory;
 use Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\Fake;
 
 /**
- * Class FakeFactory
+ * Class FakeFactory.
  */
 class FakeFactory
 {
     /**
-     * Returns a new Fake instance
+     * Returns a new Fake instance.
      *
      * @return Fake Fake entity
      */
@@ -31,32 +31,32 @@ class FakeFactory
     }
 
     /**
-     * Returns a new Fake instance
+     * Returns a new Fake instance.
      *
      * @return Fake Fake entity
      */
     public function createNonStatic()
     {
-        return FakeFactory::create();
+        return self::create();
     }
 
     /**
-     * Returns a new Fake instance
+     * Returns a new Fake instance.
      *
      * @return Fake Fake entity
      */
     public static function generate()
     {
-        return FakeFactory::create();
+        return self::create();
     }
 
     /**
-     * Returns a new Fake instance
+     * Returns a new Fake instance.
      *
      * @return Fake Fake entity
      */
     public function generateNonStatic()
     {
-        return FakeFactory::create();
+        return self::create();
     }
 }

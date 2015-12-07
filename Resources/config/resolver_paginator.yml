@@ -19,13 +19,13 @@ services:
     mmoreram.controllerextra.resolver.paginator_annotation_resolver:
         class: %mmoreram.controllerextra.resolver.paginator_annotation_resolver.class%
         arguments:
-            doctrine: @doctrine
-            entity_provider: @mmoreram.controllerextra.provider.entity_provider
-            request_parameter_provider: @mmoreram.controllerextra.provider.request_parameter_provider
-            paginator_evaluator_collector: @mmoreram.controllerextra.collector.paginator_evaluator_collector
-            default_name: %mmoreram.controllerextra.paginator_default_name%
-            default_page: %mmoreram.controllerextra.paginator_default_page%
-            default_limit_per_page: %mmoreram.controllerextra.paginator_default_limit_per_page%
+            - "@doctrine"
+            - "@mmoreram.controllerextra.provider.entity_provider"
+            - "@mmoreram.controllerextra.provider.request_parameter_provider"
+            - "@mmoreram.controllerextra.collector.paginator_evaluator_collector"
+            - %mmoreram.controllerextra.paginator_default_name%
+            - %mmoreram.controllerextra.paginator_default_page%
+            - %mmoreram.controllerextra.paginator_default_limit_per_page%
         tags:
             - { name: controller_extra.annotation }
 
@@ -51,14 +51,14 @@ services:
     mmoreram.controllerextra.evaluator.paginator_wheres_evaluator:
         class: %mmoreram.controllerextra.evaluator.paginator_wheres_evaluator.class%
         arguments:
-            request_parameter_provider: @mmoreram.controllerextra.provider.request_parameter_provider
+            - "@mmoreram.controllerextra.provider.request_parameter_provider"
         tags:
             - { name: controller_extra.paginator_evaluator }
 
     mmoreram.controllerextra.evaluator.paginator_orderby_evaluator:
         class: %mmoreram.controllerextra.evaluator.paginator_orderby_evaluator.class%
         arguments:
-            request_parameter_provider: @mmoreram.controllerextra.provider.request_parameter_provider
+            - "@mmoreram.controllerextra.provider.request_parameter_provider"
         tags:
             - { name: controller_extra.paginator_evaluator }
 

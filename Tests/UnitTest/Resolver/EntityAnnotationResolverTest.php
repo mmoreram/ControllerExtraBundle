@@ -24,7 +24,7 @@ use Mmoreram\ControllerExtraBundle\Provider\EntityProvider;
 use Mmoreram\ControllerExtraBundle\Resolver\EntityAnnotationResolver;
 
 /**
- * Tests FlushAnnotationResolver class
+ * Tests FlushAnnotationResolver class.
  */
 class EntityAnnotationResolverTest extends PHPUnit_Framework_TestCase
 {
@@ -64,7 +64,7 @@ class EntityAnnotationResolverTest extends PHPUnit_Framework_TestCase
     protected $annotation;
 
     /**
-     * Setup method
+     * Setup method.
      */
     public function setUp()
     {
@@ -81,13 +81,13 @@ class EntityAnnotationResolverTest extends PHPUnit_Framework_TestCase
         $manager = $this
             ->getMockBuilder('Doctrine\ORM\EntityManager')
             ->disableOriginalConstructor()
-            ->setMethods(array())
+            ->setMethods([])
             ->getMock();
 
         $doctrine = $this
             ->getMockBuilder('Symfony\Bridge\Doctrine\ManagerRegistry')
             ->disableOriginalConstructor()
-            ->setMethods(array())
+            ->setMethods([])
             ->getMock();
 
         $doctrine
@@ -98,7 +98,7 @@ class EntityAnnotationResolverTest extends PHPUnit_Framework_TestCase
         $requestParameterProvider = $this
             ->getMockBuilder('Mmoreram\ControllerExtraBundle\Provider\RequestParameterProvider')
             ->disableOriginalConstructor()
-            ->setMethods(array())
+            ->setMethods([])
             ->getMock();
 
         $requestParameterProvider
@@ -122,9 +122,9 @@ class EntityAnnotationResolverTest extends PHPUnit_Framework_TestCase
         $this->attributes = $this
             ->getMockBuilder('Symfony\Component\HttpFoundation\ParameterBag')
             ->disableOriginalConstructor()
-            ->setMethods(array(
+            ->setMethods([
                 'set',
-            ))
+            ])
             ->getMock();
 
         $this->request->attributes = $this->attributes;
@@ -132,10 +132,10 @@ class EntityAnnotationResolverTest extends PHPUnit_Framework_TestCase
         $this->annotation = $this
             ->getMockBuilder('Mmoreram\ControllerExtraBundle\Annotation\Entity')
             ->disableOriginalConstructor()
-            ->setMethods(array(
+            ->setMethods([
                 'getClass',
                 'getName',
-            ))
+            ])
             ->getMock();
 
         $this->reflectionMethod = $this
@@ -145,7 +145,7 @@ class EntityAnnotationResolverTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests field name
+     * Tests field name.
      *
      * @param string $name       Name
      * @param string $resultName Result name
@@ -185,26 +185,26 @@ class EntityAnnotationResolverTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Data name data provider
+     * Data name data provider.
      *
      * @return array Data name array
      */
     public function dataName()
     {
-        return array(
-            array(null, 'default'),
-            array(false, 'default'),
-            array('', 'default'),
-            array('default', 'default'),
-            array('myEntity', 'myEntity'),
-        );
+        return [
+            [null, 'default'],
+            [false, 'default'],
+            ['', 'default'],
+            ['default', 'default'],
+            ['myEntity', 'myEntity'],
+        ];
     }
 
     /**
-     * Tests Annotation type
+     * Tests Annotation type.
      *
-     * @param string  $annotationNamespace Annotation namespace
-     * @param integer $times               Times getClass will be called
+     * @param string $annotationNamespace Annotation namespace
+     * @param int    $times               Times getClass will be called
      *
      * @dataProvider dataAnnotationNamespace
      */
@@ -216,7 +216,7 @@ class EntityAnnotationResolverTest extends PHPUnit_Framework_TestCase
         $annotation = $this
             ->getMockBuilder($annotationNamespace)
             ->disableOriginalConstructor()
-            ->setMethods(array('getClass'))
+            ->setMethods(['getClass'])
             ->getMock();
 
         $annotation
@@ -232,17 +232,17 @@ class EntityAnnotationResolverTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Data for testAnnotationNamespace
+     * Data for testAnnotationNamespace.
      *
      * @return array data
      */
     public function dataAnnotationNamespace()
     {
-        return array(
-            array('Mmoreram\ControllerExtraBundle\Annotation\Entity', 1),
-            array('Mmoreram\ControllerExtraBundle\Annotation\Flush', 0),
-            array('Mmoreram\ControllerExtraBundle\Annotation\Log', 0),
-            array('Mmoreram\ControllerExtraBundle\Annotation\Form', 0),
-        );
+        return [
+            ['Mmoreram\ControllerExtraBundle\Annotation\Entity', 1],
+            ['Mmoreram\ControllerExtraBundle\Annotation\Flush', 0],
+            ['Mmoreram\ControllerExtraBundle\Annotation\Log', 0],
+            ['Mmoreram\ControllerExtraBundle\Annotation\Form', 0],
+        ];
     }
 }
