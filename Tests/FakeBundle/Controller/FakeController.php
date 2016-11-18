@@ -386,6 +386,7 @@ class FakeController extends Controller
      * Public pagination method.
      *
      * @\Mmoreram\ControllerExtraBundle\Annotation\Paginator(
+     *      name = "paginator",
      *      class = {
      *          "factory" = "Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory",
      *          "method" = "createNonStatic",
@@ -396,12 +397,41 @@ class FakeController extends Controller
      *      }
      * )
      *
+     * @\Mmoreram\ControllerExtraBundle\Annotation\Paginator(
+     *      name = "paginatorPartial1",
+     *      class = {
+     *          "factory" = "Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory",
+     *          "method" = "createNonStatic",
+     *          "static" = false
+     *      },
+     *      wheres = {
+     *          { "x", "field" , "LIKE", "?search1?%" }
+     *      }
+     * )
+     *
+     * @\Mmoreram\ControllerExtraBundle\Annotation\Paginator(
+     *      name = "paginatorPartial2",
+     *      class = {
+     *          "factory" = "Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory",
+     *          "method" = "createNonStatic",
+     *          "static" = false
+     *      },
+     *      wheres = {
+     *          { "x", "field" , "LIKE", "%?search2?" }
+     *      }
+     * )
+     *
      * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
      */
-    public function PaginatorLikeWithGetParameterAction(Paginator $paginator)
-    {
+    public function PaginatorLikeWithGetParameterAction(
+        Paginator $paginator,
+        Paginator $paginatorPartial1,
+        Paginator $paginatorPartial2
+    ) {
         return [
             'count' => $paginator->getIterator()->count(),
+            'count1' => $paginatorPartial1->getIterator()->count(),
+            'count2' => $paginatorPartial2->getIterator()->count(),
         ];
     }
 

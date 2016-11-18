@@ -107,12 +107,11 @@ class PaginatorWheresEvaluator implements PaginatorEvaluatorInterface
      */
     private function addWildcards($annotationWhereParameter, $whereValue)
     {
-        $hasInitialPercentage = (strpos($annotationWhereParameter, '%') === 0);
-        $hasEndPercentage = (strpos($annotationWhereParameter, '%') === 0);
-        if ($hasInitialPercentage) {
+        if (substr($annotationWhereParameter, 0, 1) === '%') {
             $whereValue = '%' . $whereValue;
         }
-        if ($hasEndPercentage) {
+
+        if (substr($annotationWhereParameter, -1, 1) === '%') {
             $whereValue = $whereValue . '%';
         }
 
