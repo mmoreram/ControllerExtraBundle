@@ -23,7 +23,7 @@
         }
     ],
     "require": {
-        "php": "^5.4|^7.0",
+        "php": ">=5.6",
         "doctrine/common": "^2.5",
         "symfony/config": "^2.8|^3.0",
         "symfony/http-kernel": "^2.8|^3.0",
@@ -44,9 +44,9 @@
         "pagerfanta/pagerfanta": "~1.0",
         "knplabs/knp-paginator-bundle": "~2.5.1",
 
-        "phpunit/phpunit": "4.8.19",
-        "friendsofphp/php-cs-fixer": "1.12.4",
-        "mmoreram/php-formatter": "1.1.0"
+        "phpunit/phpunit": "^5.6.4",
+        "friendsofphp/php-cs-fixer": "^1.12.4",
+        "mmoreram/php-formatter": "^1.1.0"
     },
     "suggest": {
         "symfony/monolog-bundle": "To use the @Log annotation",

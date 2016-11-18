@@ -48,7 +48,7 @@ class PaginatorAnnotationResolverTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $evaluator = $this->getMock('Mmoreram\ControllerExtraBundle\Resolver\Paginator\PaginatorEvaluatorCollector');
+        $evaluator = $this->createMock('Mmoreram\ControllerExtraBundle\Resolver\Paginator\PaginatorEvaluatorCollector');
 
         return new PaginatorAnnotationResolver(
             $doctrine,
