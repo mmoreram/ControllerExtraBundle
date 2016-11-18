@@ -54,7 +54,7 @@ class Form extends Annotation
      * @var validate
      *
      * Validates submited form if Request is handled.
-     * Name of field to set result.
+     * Name of field to set result
      */
     public $validate = false;
 

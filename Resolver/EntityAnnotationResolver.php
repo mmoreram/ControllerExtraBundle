@@ -202,7 +202,7 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
                 }
 
                 $mapping[$mappingKey] = $parameterValue;
-            };
+            }
 
             $entityClass = get_class($entity);
             $instance = $this

@@ -45,7 +45,7 @@
         "knplabs/knp-paginator-bundle": "~2.5.1",
 
         "phpunit/phpunit": "4.8.19",
-        "fabpot/php-cs-fixer": "1.11",
+        "friendsofphp/php-cs-fixer": "1.12.4",
         "mmoreram/php-formatter": "1.1.0"
     },
     "suggest": {

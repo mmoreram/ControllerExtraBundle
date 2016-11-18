@@ -13,9 +13,6 @@
 
 namespace Mmoreram\ControllerExtraBundle\Tests\UnitTest\Resolver;
 
-use Mmoreram\ControllerExtraBundle\Annotation\Form;
-use Mmoreram\ControllerExtraBundle\Resolver\FormAnnotationResolver;
-use Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Form\Type\FakeType;
 use PHPUnit_Framework_TestCase;
 use ReflectionMethod;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -23,6 +20,9 @@ use Symfony\Component\Form\FormRegistryInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
+use Mmoreram\ControllerExtraBundle\Annotation\Form;
+use Mmoreram\ControllerExtraBundle\Resolver\FormAnnotationResolver;
+use Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Form\Type\FakeType;
 
 /**
  * Tests FormAnnotationResolver class.

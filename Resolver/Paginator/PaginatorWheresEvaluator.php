@@ -66,7 +66,7 @@ class PaginatorWheresEvaluator implements PaginatorEvaluatorInterface
 
                 $whereValue = $this->addWildcards($annotationWhereParameter, $whereValue);
 
-                $optionalFilter = (boolean) isset($where[4])
+                $optionalFilter = (bool) isset($where[4])
                     ? $where[4]
                     : false;
 
