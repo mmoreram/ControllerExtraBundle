@@ -360,11 +360,26 @@ class PaginatorAnnotationResolverTest extends AbstractWebTestCase
             ->client
             ->request(
                 'GET',
-                '/fake/paginator/likewithgetparameter?search=test'
+                '/fake/paginator/likewithgetparameter?search=test&search1=we&search2=paginator'
             );
 
         $this->assertEquals(
-            '{"count":1}',
+            '{"count":1,"count1":1,"count2":1}',
+            $this
+                ->client
+                ->getResponse()
+                ->getContent()
+        );
+
+        $this
+            ->client
+            ->request(
+                'GET',
+                '/fake/paginator/likewithgetparameter?search=house&search1=Test&search2=Test'
+            );
+
+        $this->assertEquals(
+            '{"count":0,"count1":0,"count2":0}',
             $this
                 ->client
                 ->getResponse()
