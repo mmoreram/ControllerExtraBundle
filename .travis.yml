@@ -2,21 +2,18 @@ language: php
 
 sudo: false
 
-php:
-    - 5.4
-    - 5.5
-    - 5.6
-    - 7.0
-    - hhvm
-
 matrix:
     include:
-        - php: 5.4
+        - php: 5.6
           env: COMPOSER_OPTIONS="--prefer-lowest"
-        - php: 5.4
+        - php: 5.6
           env: $SYMFONY_VERSION="^2.8.0"
-        - php: 5.5.9
+        - php: 7.0
           env: $SYMFONY_VERSION="^3.0.0"
+        - php: 7.1
+          env: $SYMFONY_VERSION="^3.1.0"
+        - php: 5.6
+          env: $SYMFONY_VERSION="^3.1.0"
 
 before_install:
     - 'if [ "$SYMFONY_VERSION" != "" ]; then composer require --no-update symfony/symfony:${SYMFONY_VERSION}; fi;'

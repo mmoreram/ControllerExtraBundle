@@ -25,7 +25,7 @@ class Entity extends Annotation
     /**
      * @var string
      *
-     * Namespace of entity in a short namespace mode.
+     * Namespace of entity in a short namespace mode
      */
     public $class;
 

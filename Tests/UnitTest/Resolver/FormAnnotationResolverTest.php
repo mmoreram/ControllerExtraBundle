@@ -13,9 +13,6 @@
 
 namespace Mmoreram\ControllerExtraBundle\Tests\UnitTest\Resolver;
 
-use Mmoreram\ControllerExtraBundle\Annotation\Form;
-use Mmoreram\ControllerExtraBundle\Resolver\FormAnnotationResolver;
-use Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Form\Type\FakeType;
 use PHPUnit_Framework_TestCase;
 use ReflectionMethod;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -23,6 +20,9 @@ use Symfony\Component\Form\FormRegistryInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
+use Mmoreram\ControllerExtraBundle\Annotation\Form;
+use Mmoreram\ControllerExtraBundle\Resolver\FormAnnotationResolver;
+use Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Form\Type\FakeType;
 
 /**
  * Tests FormAnnotationResolver class.
@@ -72,8 +72,8 @@ class FormAnnotationResolverTest extends PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->formRegistry = $this->getMock('Symfony\Component\Form\FormRegistryInterface');
-        $this->formFactory = $this->getMock('Symfony\Component\Form\FormFactoryInterface');
+        $this->formRegistry = $this->createMock('Symfony\Component\Form\FormRegistryInterface');
+        $this->formFactory = $this->createMock('Symfony\Component\Form\FormFactoryInterface');
 
         $requestParameterProvider = $this
             ->getMockBuilder('Mmoreram\ControllerExtraBundle\Provider\RequestParameterProvider')
@@ -114,7 +114,7 @@ class FormAnnotationResolverTest extends PHPUnit_Framework_TestCase
      */
     public function testFQDNUsesFormRegistry()
     {
-        $resolvedFormTypeInterface = $this->getMock('Symfony\Component\Form\ResolvedFormTypeInterface');
+        $resolvedFormTypeInterface = $this->createMock('Symfony\Component\Form\ResolvedFormTypeInterface');
         $resolvedFormTypeInterface->method('getInnerType')->willReturn(new FakeType());
 
         $class = 'Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Form\Type\FakeType';
