@@ -11,30 +11,31 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
+declare(strict_types=1);
+
 namespace Mmoreram\ControllerExtraBundle\Annotation;
 
-use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
-
 /**
- * Class Paginator.
+ * Class CreatePaginator.
  *
  * @Annotation
+ * @Target({"METHOD"})
  */
-class Paginator extends Annotation
+final class CreatePaginator extends Annotation
 {
     /**
      * @var string
      *
-     * class
+     * Entity namespace
      */
-    protected $class;
+    protected $entityNamespace;
 
     /**
      * @var string
      *
      * Name of the parameter
      */
-    public $name;
+    protected $name;
 
     /**
      * @var int
@@ -51,39 +52,39 @@ class Paginator extends Annotation
     protected $limit;
 
     /**
-     * @var string
+     * @var array
      *
      * orderBy
      */
-    protected $orderBy;
+    protected $orderBy = [];
 
     /**
      * @var array
      *
      * left joins
      */
-    protected $leftJoins;
+    protected $leftJoins = [];
 
     /**
      * @var array
      *
      * inner joins
      */
-    protected $innerJoins;
+    protected $innerJoins = [];
 
     /**
      * @var array
      *
      * wheres
      */
-    protected $wheres;
+    protected $wheres = [];
 
     /**
      * @var array
      *
      * Not nulls
      */
-    protected $notNulls;
+    protected $notNulls = [];
 
     /**
      * @var string
@@ -93,21 +94,21 @@ class Paginator extends Annotation
     protected $attributes;
 
     /**
-     * Get Class.
+     * Get EntityNamespace.
      *
-     * @return string Class
+     * @return null|string
      */
-    public function getClass()
+    public function getEntityNamespace() : ? string
     {
-        return $this->class;
+        return $this->entityNamespace;
     }
 
     /**
      * return name.
      *
-     * @return string Name
+     * @return null|string Name
      */
-    public function getName()
+    public function getName() : ? string
     {
         return $this->name;
     }
@@ -115,7 +116,7 @@ class Paginator extends Annotation
     /**
      * Get Page.
      *
-     * @return int Page
+     * @return null|int|string Page
      */
     public function getPage()
     {
@@ -123,19 +124,9 @@ class Paginator extends Annotation
     }
 
     /**
-     * Get OrderBy.
-     *
-     * @return array OrderBy
-     */
-    public function getOrderBy()
-    {
-        return $this->orderBy;
-    }
-
-    /**
      * Get Limit.
      *
-     * @return int Limit
+     * @return null|int|string Limit
      */
     public function getLimit()
     {
@@ -143,11 +134,21 @@ class Paginator extends Annotation
     }
 
     /**
+     * Get OrderBy.
+     *
+     * @return array OrderBy
+     */
+    public function getOrderBy() : array
+    {
+        return $this->orderBy;
+    }
+
+    /**
      * Get InnerJoins.
      *
      * @return array InnerJoins
      */
-    public function getInnerJoins()
+    public function getInnerJoins() : array
     {
         return $this->innerJoins;
     }
@@ -157,7 +158,7 @@ class Paginator extends Annotation
      *
      * @return array LeftJoins
      */
-    public function getLeftJoins()
+    public function getLeftJoins() : array
     {
         return $this->leftJoins;
     }
@@ -167,7 +168,7 @@ class Paginator extends Annotation
      *
      * @return array Wheres
      */
-    public function getWheres()
+    public function getWheres() : array
     {
         return $this->wheres;
     }
@@ -177,7 +178,7 @@ class Paginator extends Annotation
      *
      * @return array NotNulls
      */
-    public function getNotNulls()
+    public function getNotNulls() : array
     {
         return $this->notNulls;
     }
@@ -185,9 +186,9 @@ class Paginator extends Annotation
     /**
      * Get Attributes.
      *
-     * @return string Attributes
+     * @return null|string Attributes
      */
-    public function getAttributes()
+    public function getAttributes() : ? string
     {
         return $this->attributes;
     }

@@ -11,6 +11,8 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
+declare(strict_types=1);
+
 namespace Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory;
 
 use Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\Fake;
@@ -23,40 +25,52 @@ class FakeFactory
     /**
      * Returns a new Fake instance.
      *
-     * @return Fake Fake entity
+     * @return Fake
      */
     public static function create()
     {
-        return new Fake();
+        $fake = new Fake();
+        $fake->setField('s_c');
+
+        return $fake;
     }
 
     /**
      * Returns a new Fake instance.
      *
-     * @return Fake Fake entity
+     * @return Fake
      */
     public function createNonStatic()
     {
-        return self::create();
+        $fake = self::create();
+        $fake->setField('ns_c');
+
+        return $fake;
     }
 
     /**
      * Returns a new Fake instance.
      *
-     * @return Fake Fake entity
+     * @return Fake
      */
     public static function generate()
     {
-        return self::create();
+        $fake = self::create();
+        $fake->setField('s_g');
+
+        return $fake;
     }
 
     /**
      * Returns a new Fake instance.
      *
-     * @return Fake Fake entity
+     * @return Fake
      */
     public function generateNonStatic()
     {
-        return self::create();
+        $fake = self::create();
+        $fake->setField('ns_g');
+
+        return $fake;
     }
 }

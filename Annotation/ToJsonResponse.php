@@ -11,13 +11,16 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
-namespace Mmoreram\ControllerExtraBundle\Exceptions\Abstracts;
+declare(strict_types=1);
 
-use Exception;
+namespace Mmoreram\ControllerExtraBundle\Annotation;
 
 /**
- * Abstract exception for all bundle exceptions.
+ * JsonResponse annotation driver.
+ *
+ * @Annotation
+ * @Target({"METHOD"})
  */
-abstract class AbstractControllerExtraBundleException extends Exception
+final class ToJsonResponse extends ResponseAnnotation
 {
 }

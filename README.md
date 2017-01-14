@@ -1,11 +1,6 @@
-ControllerExtra for Symfony2
-=====
+# ControllerExtra for Symfony2
 
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/66e58cb8-cc5c-4899-8082-80cf23ef15af/mini.png)](https://insight.sensiolabs.com/projects/66e58cb8-cc5c-4899-8082-80cf23ef15af)
 [![Build Status](https://travis-ci.org/mmoreram/ControllerExtraBundle.png?branch=master)](https://travis-ci.org/mmoreram/ControllerExtraBundle)
-[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/mmoreram/ControllerExtraBundle/badges/quality-score.png?s=e960930a8cd10d62ec092248d14af620aa96ea9a)](https://scrutinizer-ci.com/g/mmoreram/ControllerExtraBundle/)
-[![Latest Stable Version](https://poser.pugx.org/mmoreram/controller-extra-bundle/v/stable.png)](https://packagist.org/packages/mmoreram/controller-extra-bundle)
-[![Latest Unstable Version](https://poser.pugx.org/mmoreram/controller-extra-bundle/v/unstable.png)](https://packagist.org/packages/mmoreram/controller-extra-bundle)
 
 This bundle provides a collection of annotations for Symfony2 Controllers,
 designed to streamline the creation of certain objects and enable smaller and
@@ -13,18 +8,13 @@ more concise actions.
 
 Table of contents
 -----
-1. [Installing/Configuring](#installingconfiguring)
-    * [Tags](#tags)
-    * [Installing ControllerExtraBundle](#installing-controllerextrabundle)
-    * [Configuration](#configuration)
-    * [Tests](#tests)
+1. [Reference](#reference)
 1. [Entity Provider](#entity-provider)
     * [By namespace](#by-namespace)
     * [By doctrine shortcut](#by-doctrine-shortcut)
     * [By parameter](#by-parameter)
-    * [By factory](#by-factory)
-1. [Bundle Annotations](#bundle-annotations)
-    * [@Paginator](#paginator)
+1. [Controller Annotations](#controller-annotations)
+    * [@CreatePaginator](#-createpaginator)
         * [Paginator Entity](#paginator-entity)
         * [Paginator Page](#paginator-page)
         * [Paginator Limit](#paginator-limit)
@@ -37,83 +27,24 @@ Table of contents
         * [Paginator Example](#paginator-example)
         * [Pagerfanta Add-on](#pagerfanta-add-on)
         * [KNPPaginator Add-on](#knppaginator-add-on)
-    * [@Entity](#entity)
+    * [@LoadEntity](#-loadentity)
         * [Entity Mapping](#entity-mapping)
         * [Entity Mapping fallback](#entity-mapping-fallback)
-    * [@ObjectManager](#objectmanager)
-    * [@Form](#form)
-    * [@Flush](#flush)
-    * [@JsonResponse](#jsonresponse)
-    * [@Log](#log)
-    * [@Get](#get)
-    * [@Post](#Post)
+        * [Entity Repository](#entity-repository)
+        * [Entity Factory](#entity-factory)
+    * [@CreateForm](#-createform)
+    * [@Flush](#-flush)
+    * [@ToJsonResponse](#-tojsonresponse)
+    * [@Log](#-log)
+    * [@Get](#-get)
+    * [@Post](#-post)
 1. [Custom annotations](#custom-annotations)
     * [Annotation](#annotation)
     * [Resolver](#resolver)
     * [Definition](#definition)
     * [Registration](#registration)
-1. [Contributing](#contributing)
 
-# Installing/Configuring
-
-## Tags
-
-* Use last unstable version ( alias of `dev-master` ) to stay in last commit
-* Use last stable version tag to stay in a stable release.
-* [![Latest Unstable Version](https://poser.pugx.org/mmoreram/controller-extra-bundle/v/unstable.png)](https://packagist.org/packages/mmoreram/controller-extra-bundle)
-[![Latest Stable Version](https://poser.pugx.org/mmoreram/controller-extra-bundle/v/stable.png)](https://packagist.org/packages/mmoreram/controller-extra-bundle)
-
-## Installing  [ControllerExtraBundle](https://github.com/mmoreram/controller-extra-bundle)
-
-### Step 1: Download the Bundle
-
-Open a command console, enter your project directory and execute the
-following command to download the latest stable version of this bundle:
-
-```bash
-$ composer require mmoreram/controller-extra-bundle
-```
-
-This command requires you to have Composer installed globally, as explained
-in the [installation chapter](https://getcomposer.org/doc/00-intro.md)
-of the Composer documentation.
-
-### Step 2: Enable the Bundle
-
-Then, enable the bundle by adding the following in the `app/AppKernel.php`
-file of your project:
-
-```php
-<?php
-// app/AppKernel.php
-
-// ...
-class AppKernel extends Kernel
-{
-    public function registerBundles()
-    {
-        $bundles = array(
-            // ...
-
-            new Mmoreram\ControllerExtraBundle\ControllerExtraBundle(),
-        );
-
-        // ...
-    }
-
-    // ...
-}
-```
-
-## Tests
-
-You can test this bundle with this command
-
-``` bash
-$ php vendor/phpunit/phpunit/phpunit.php
-```
-
-## Configuration
+# Reference
 
 By default, all annotations are loaded, but any individual annotation can be
 completely disabled by setting to false `active` parameter.
@@ -124,9 +55,6 @@ Default values are:
 controller_extra:
     resolver_priority: -8
     request: current
-    factory:
-        default_method: create
-        default_static: true
     paginator:
         active: true
         default_name: paginator
@@ -137,6 +65,8 @@ controller_extra:
         default_name: entity
         default_persist: true
         default_mapping_fallback: false
+        default_factory_method: create
+        default_factory_mapping: true
     form:
         active: true
         default_name: form
@@ -232,80 +162,12 @@ public function indexAction()
 }
 ```
 
-## By factory
-
-You can an entity using a factory class. This configuration have three values.
-
-* factory - factory class
-* method - Method to use when retrieving the object
-* static - Method is static
-
-You can define the factory with a simple namespace
-
-``` php
-/**
- * Simple controller method
- *
- * @SomeAnnotation(
- *      class = {
- *          "factory" = "Mmoreram\CustomBundle\Factory\MyEntityFactory",
- *          "method" = "create",
- *          "static" = true,
- *      },
- * )
- */
-public function indexAction()
-{
-}
-```
-
-If you want to define your Factory as a service, with the possibility of
-overriding namespace, you can simply define service name. All other options have
-the same behaviour.
-
-``` yml
-parameters:
-
-    #
-    # Factories
-    #
-    my.bundle.factory.myentity_factory: Mmoreram\CustomBundle\Factory\MyEntityFactory
-```
-
-``` php
-/**
- * Simple controller method
- *
- * @SomeAnnotation(
- *      class = {
- *          "factory" = my.bundle.factory.myentity_factory,
- *          "method" = "create",
- *          "static" = true,
- *      },
- * )
- */
-public function indexAction()
-{
-}
-```
-
-If you do not define the `method`, default one will be used. You can
-override this default value by defining new one in your `config.yml`. Same with
-`static` value
-
-``` yml
-controller_extra:
-    factory:
-        default_method: create
-        default_static: true
-```
-
-
-# Bundle annotations
+# Controller annotations
 
 This bundle provide a reduced but useful set of annotations for your controller
+actions.
 
-## @Paginator
+## @CreatePaginator
 
 Creates a Doctrine Paginator object, given a request and a configuration. This
 annotation just injects into de controller a new
@@ -336,13 +198,13 @@ can check all available formats you can define it just reading the
 <?php
 
 use Doctrine\ORM\Tools\Pagination\Pagination;
-use Mmoreram\ControllerExtraBundle\Annotation\Paginator as PaginatorAnnotation;
+use Mmoreram\ControllerExtraBundle\Annotation\CreatePaginator;
 
 /**
  * Simple controller method
  *
- * @PaginatorAnnotation(
- *      class = "MmoreramCustomBundle:User",
+ * @CreatePaginator(
+ *      entityNamespace = "MmoreramCustomBundle:User",
  * )
  */
 public function indexAction(Paginator $paginator)
@@ -370,13 +232,16 @@ You can refer to an existing Request attribute using `~value~` format, to any
 > attributes, by configuring the request value of the configuration.
 
 ``` php
+use Doctrine\ORM\Tools\Pagination\Pagination;
+use Mmoreram\ControllerExtraBundle\Annotation\CreatePaginator;
+
 /**
  * Simple controller method
  *
  * This Controller matches pattern /myroute/paginate/{foo}
  *
- * @PaginatorAnnotation(
- *      class = "MmoreramCustomBundle:User",
+ * @CreatePaginator(
+ *      entityNamespace = "MmoreramCustomBundle:User",
  *      page = "~foo~"
  * )
  */
@@ -388,13 +253,16 @@ public function indexAction(Paginator $paginator)
 or you can hardcode the page to use.
 
 ``` php
+use Doctrine\ORM\Tools\Pagination\Pagination;
+use Mmoreram\ControllerExtraBundle\Annotation\CreatePaginator;
+
 /**
  * Simple controller method
  *
  * This Controller matches pattern /myroute/paginate/
  *
- * @PaginatorAnnotation(
- *      class = "MmoreramCustomBundle:User",
+ * @CreatePaginator(
+ *      entityNamespace = "MmoreramCustomBundle:User",
  *      page = 1
  * )
  */
@@ -420,13 +288,16 @@ You can refer to an existing Request attribute using `~value~` format, to any
 `#field#`
 
 ``` php
+use Doctrine\ORM\Tools\Pagination\Pagination;
+use Mmoreram\ControllerExtraBundle\Annotation\CreatePaginator;
+
 /**
  * Simple controller method
  *
  * This Controller matches pattern /myroute/paginate/{foo}/{limit}
  *
- * @PaginatorAnnotation(
- *      class = "MmoreramCustomBundle:User",
+ * @CreatePaginator(
+ *      entityNamespace = "MmoreramCustomBundle:User",
  *      page = "~foo~",
  *      limit = "~limit~"
  * )
@@ -439,13 +310,16 @@ public function indexAction(Paginator $paginator)
 or you can hardcode the page to use.
 
 ``` php
+use Doctrine\ORM\Tools\Pagination\Pagination;
+use Mmoreram\ControllerExtraBundle\Annotation\CreatePaginator;
+
 /**
  * Simple controller method
  *
  * This Controller matches pattern /myroute/paginate/
  *
- * @PaginatorAnnotation(
- *      class = "MmoreramCustomBundle:User",
+ * @CreatePaginator(
+ *      entityNamespace = "MmoreramCustomBundle:User",
  *      page = 1,
  *      limit = 10
  * )
@@ -467,11 +341,14 @@ arrays, and each array should contain these positions:
 * Fourth position: Custom direction map ***(optional)***
 
 ``` php
+use Doctrine\ORM\Tools\Pagination\Pagination;
+use Mmoreram\ControllerExtraBundle\Annotation\CreatePaginator;
+
 /**
  * Simple controller method
  *
- * @PaginatorAnnotation(
- *      class = "MmoreramCustomBundle:User",
+ * @CreatePaginator(
+ *      entityNamespace = "MmoreramCustomBundle:User",
  *      orderBy = {
  *          {"x", "createdAt", "ASC"},
  *          {"x", "updatedAt", "DESC"},
@@ -497,6 +374,9 @@ can refer to an existing Request attribute using `~value~` format, to any
 `#field#`
 
 ``` php
+use Doctrine\ORM\Tools\Pagination\Pagination;
+use Mmoreram\ControllerExtraBundle\Annotation\CreatePaginator;
+
 /**
  * Simple controller method
  *
@@ -507,8 +387,8 @@ can refer to an existing Request attribute using `~value~` format, to any
  * /myroute/paginate/order/id/1 -> ORDER BY id DESC
  * /myroute/paginate/order/enabled/0 - ORDER BY enabled ASC
  *
- * @PaginatorAnnotation(
- *      class = "MmoreramCustomBundle:User",
+ * @CreatePaginator(
+ *      entityNamespace = "MmoreramCustomBundle:User",
  *      orderBy = {
  *          {"x", "createdAt", "ASC"},
  *          {"x", "updatedAt", "DESC"},
@@ -539,11 +419,14 @@ positions:
 * Fifth position: Is a filter. By default, false
 
 ``` php
+use Doctrine\ORM\Tools\Pagination\Pagination;
+use Mmoreram\ControllerExtraBundle\Annotation\CreatePaginator;
+
 /**
  * Simple controller method
  *
- * @PaginatorAnnotation(
- *      class = "MmoreramCustomBundle:User",
+ * @CreatePaginator(
+ *      entityNamespace = "MmoreramCustomBundle:User",
  *      wheres = {
  *          {"x", "enabled", "=", true},
  *          {"x", "age", ">", 18},
@@ -561,13 +444,16 @@ You can refer to an existing Request attribute using `~value~` format, to any
 `#field#`
 
 ``` php
+use Doctrine\ORM\Tools\Pagination\Pagination;
+use Mmoreram\ControllerExtraBundle\Annotation\CreatePaginator;
+
 /**
  * Simple controller method
  *
  * This Controller matches pattern /myroute/{field}
  *
- * @PaginatorAnnotation(
- *      class = "MmoreramCustomBundle:User",
+ * @CreatePaginator(
+ *      entityNamespace = "MmoreramCustomBundle:User",
  *      wheres = {
  *          {"x", "name", "LIKE", "~field~"},
  *      }
@@ -583,6 +469,9 @@ position to `true`. In that case, if the filter value is not found, such line
 will be ignored.
 
 ``` php
+use Doctrine\ORM\Tools\Pagination\Pagination;
+use Mmoreram\ControllerExtraBundle\Annotation\CreatePaginator;
+
 /**
  * Simple controller method
  *
@@ -592,8 +481,8 @@ will be ignored.
  * In both cases this will work. In the first case we will apply the where line
  * in the paginator. In the second case, we wont.
  *
- * @PaginatorAnnotation(
- *      class = "MmoreramCustomBundle:User",
+ * @CreatePaginator(
+ *      entityNamespace = "MmoreramCustomBundle:User",
  *      wheres = {
  *          {"x", "name", "LIKE", "?query?", true},
  *      }
@@ -614,11 +503,14 @@ of arrays, and each array should contain these positions:
 * Second position: Field
 
 ``` php
+use Doctrine\ORM\Tools\Pagination\Pagination;
+use Mmoreram\ControllerExtraBundle\Annotation\CreatePaginator;
+
 /**
  * Simple controller method
  *
- * @PaginatorAnnotation(
- *      class = "MmoreramCustomBundle:User",
+ * @CreatePaginator(
+ *      entityNamespace = "MmoreramCustomBundle:User",
  *      notNulls = {
  *          {"x", "enabled"},
  *          {"x", "deleted"},
@@ -642,11 +534,14 @@ defined as an array of array, where each array can have these fields:
 be loaded until its request ***(optional)***
 
 ``` php
+use Doctrine\ORM\Tools\Pagination\Pagination;
+use Mmoreram\ControllerExtraBundle\Annotation\CreatePaginator;
+
 /**
  * Simple controller method
  *
- * @PaginatorAnnotation(
- *      class = "MmoreramCustomBundle:User",
+ * @CreatePaginator(
+ *      entityNamespace = "MmoreramCustomBundle:User",
  *      leftJoins = {
  *          {"x", "User", "u", true},
  *          {"x", "Address", "a", true},
@@ -671,11 +566,14 @@ defined as an array of array, where each array can have these fields:
 be loaded until its request ***(optional)***
 
 ``` php
+use Doctrine\ORM\Tools\Pagination\Pagination;
+use Mmoreram\ControllerExtraBundle\Annotation\CreatePaginator;
+
 /**
  * Simple controller method
  *
- * @PaginatorAnnotation(
- *      class = "MmoreramCustomBundle:User",
+ * @CreatePaginator(
+ *      entityNamespace = "MmoreramCustomBundle:User",
  *      innerJoins = {
  *          {"x", "User", "u", true},
  *          {"x", "Address", "a", true},
@@ -704,14 +602,18 @@ To inject this object you need to define the "attributes" annotation field with
 the method parameter name.
 
 ``` php
+use Doctrine\ORM\Tools\Pagination\Pagination;
+use Mmoreram\ControllerExtraBundle\Annotation\CreatePaginator;
+use Mmoreram\ControllerExtraBundle\ValueObject\PaginatorAttributes;
+
 /**
  * Simple controller method
  *
  * This Controller matches pattern /myroute/paginate/
  *
- * @PaginatorAnnotation(
+ * @CreatePaginator(
  *      attributes = "paginatorAttributes",
- *      class = "MmoreramCustomBundle:User",
+ *      entityNamespace = "MmoreramCustomBundle:User",
  *      page = 1,
  *      limit = 10
  * )
@@ -734,6 +636,9 @@ public function indexAction(
 This is a completed example and its DQL resolution
 
 ``` php
+use Doctrine\ORM\Tools\Pagination\Pagination;
+use Mmoreram\ControllerExtraBundle\Annotation\CreatePaginator;
+
 /**
  * Simple controller method
  *
@@ -744,12 +649,8 @@ This is a completed example and its DQL resolution
  * * limit = 10
  * * page = 1
  *
- * @PaginatorAnnotation(
- *      class = (
- *          factoryClass = "Mmoreram\ControllerExtraBundle\Factory\EntityFactory",
- *          factoryMethod = "create",
- *          factoryStatic = true
- *      ),
+ * @CreatePaginator(
+ *      entityNamespace = "ControllerExtraBundle:Fake",
  *      page = "~page~",
  *      limit = "~limit~",
  *      orderBy = {
@@ -810,6 +711,7 @@ to define your parameter as such, and the annotation resolver will wrap your
 paginator with a Pagerfanta object instance.
 
 ``` php
+use Mmoreram\ControllerExtraBundle\Annotation\CreatePaginator;
 use Pagerfanta\Pagerfanta;
 
 /**
@@ -817,8 +719,8 @@ use Pagerfanta\Pagerfanta;
  *
  * This Controller matches pattern /myroute/paginate/
  *
- * @PaginatorAnnotation(
- *      class = "MmoreramCustomBundle:User",
+ * @CreatePaginator(
+ *      entityNamespace = "MmoreramCustomBundle:User",
  *      page = 1,
  *      limit = 10
  * )
@@ -833,6 +735,7 @@ This annotation can create a KNPPaginator instance if you need it. You only have
 to define your parameter as such, and the annotation resolver will wrap your
 paginator with a KNPPaginator object instance.
 ``` php
+use Mmoreram\ControllerExtraBundle\Annotation\CreatePaginator;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 
 /**
@@ -840,8 +743,8 @@ use Knp\Component\Pager\Pagination\PaginationInterface;
  *
  * This Controller matches pattern /myroute/paginate/
  *
- * @PaginatorAnnotation(
- *      class = "MmoreramCustomBundle:User",
+ * @CreatePaginator(
+ *      entityNamespace = "MmoreramCustomBundle:User",
  *      page = 1,
  *      limit = 10
  * )
@@ -851,10 +754,9 @@ public function indexAction(PaginationInterface $paginator)
 }
 ```
 
-## @Entity
+## @LoadEntity
 
-Creates a simple empty entity, given a namespace, and places it as a method
-parameter.
+Loads an entity from your database, or creates a new one.
 
 ``` php
 <?php
@@ -866,7 +768,7 @@ use Mmoreram\ControllerExtraBundle\Entity\User;
  * Simple controller method
  *
  * @Entity(
- *      class = "MmoreramCustomBundle:User",
+ *      namespace = "MmoreramCustomBundle:User",
  *      name  = "user"
  * )
  */
@@ -893,11 +795,11 @@ use Mmoreram\ControllerExtraBundle\Entity\User;
  * Simple controller method
  *
  * @Entity(
- *      class = "MmoreramCustomBundle:Address",
+ *      namespace = "MmoreramCustomBundle:Address",
  *      name  = "address"
  * )
  * @Entity(
- *      class = "MmoreramCustomBundle:User",
+ *      namespace = "MmoreramCustomBundle:User",
  *      name  = "user",
  *      setters = {
  *          "setAddress": "address"
@@ -926,7 +828,7 @@ use Mmoreram\ControllerExtraBundle\Entity\User;
  * Simple controller method
  *
  * @Entity(
- *      class = "MmoreramCustomBundle:User",
+ *      namespace = "MmoreramCustomBundle:User",
  *      name  = "user",
  *      persist = false
  * )
@@ -959,7 +861,7 @@ use Mmoreram\ControllerExtraBundle\Entity\User;
  * This Controller matches pattern /user/edit/{id}/{username}
  *
  * @Entity(
- *      class = "MmoreramCustomBundle:User",
+ *      namespace = "MmoreramCustomBundle:User",
  *      name  = "user",
  *      mapping = {
  *          "id": "~id~",
@@ -978,13 +880,19 @@ is thrown.
 
 ### Entity Mapping Fallback
 
-So what if your mapping definition fails? This bundle gives this situation
-another chance when it happens. You can enable the `mappingFallback` flag to
-ensure that if the mapping fails, a new empty entity will be returned.
+So what if one ore more than one mapping references are not found? For example,
+you're trying to map the {id} parameter from your route, but this parameter is
+not even defined. Whan happens here? Well, you can assume then that you want to
+pass a new entity instance by using the *mappingFallback*.
 
 > By default, if `mapping_fallback` option is not set, the used value will be
 > the parameter `default_mapping_fallback` defined in configuration. By default
 > this value is `false`
+
+Don't confuse with the scenario where you're looking for an entity in your
+database, all mapping references have been resolved, and the entity is not
+found. In that case, a common "EntityNotFound" exception will be thrown by
+Doctrine.
 
 Lets see an example. Because we have enabled the mappingFallback, and because
 the mapping definition does not match the assigned route, we will return a new
@@ -1001,8 +909,8 @@ use Mmoreram\ControllerExtraBundle\Entity\User;
  *
  * This Controller matches pattern /user/edit/{id}
  *
- * @Entity(
- *      class = "MmoreramCustomBundle:User",
+ * @LoadEntity(
+ *      namespace = "MmoreramCustomBundle:User",
  *      name  = "user",
  *      mapping = {
  *          "id": "~id~",
@@ -1017,34 +925,26 @@ public function indexAction(User $user)
 }
 ```
 
-### Not found exception
+### Entity Repository
 
-Sometimes you search for an entity that unfortunately does not exist, in this
-case an exception is launched. But you can customize the exception that you want
-to be launched.
+By default, the Doctrine entity manager provides the right repository per each
+entity (not the default one, but the right specific one). Although, you can
+define a custom repository to be used in your annotation by using the repository
+configuration.
 
 ``` php
-<?php
-
-use Mmoreram\ControllerExtraBundle\Annotation\Entity;
-use Mmoreram\ControllerExtraBundle\Entity\User;
-
 /**
  * Simple controller method
  *
- * This Controller matches pattern /user/edit/{id}
- *
- * @Entity(
- *      class = "MmoreramCustomBundle:User",
- *      name  = "user",
+ * @CreateEntity(
+ *      namespace = "MmoreramCustomBundle:User",
  *      mapping = {
  *          "id": "~id~",
- *          "username": "~nonexisting~"
- *      },
- *      notFoundException = {
- *          "exception" = "Symfony\Component\HttpKernel\Exception\NotFoundHttpException",
- *          "message" = "Enter a valid entity identifier"
+ *          "username": "~username~"
  *      }
+ *      repository = {
+ *          "class" = "Mmoreram\CustomBundle\Repository\AnotherRepository",
+ *      },
  * )
  */
 public function indexAction(User $user)
@@ -1052,43 +952,105 @@ public function indexAction(User $user)
 }
 ```
 
-## @ObjectManager
-
-Given an entity, return the ObjectManager that manages it.
-
-You can enable/disable this bundle by overriding `active` flag in configuration file
-`config.yml`
-
-``` yml
-controller_extra:
-    object_manager:
-        active: true
-```
-
-> By default, if `name` option is not set, the generated object will be placed
-> in a parameter named `$objectManager`. This behaviour can be configured using
-> `default_name` in configuration.
+By default, the method *findOneBy* will always be used, unless you define
+another one.
 
 ``` php
-<?php
-
-use Doctrine\Common\Persistence\ObjectManager;
-use Mmoreram\ControllerExtraBundle\Annotation\ObjectManager as ObjectManagerAnnotation;
-
 /**
  * Simple controller method
  *
- * @ObjectManagerAnnotation(
- *      class = "\Mmoreram\CustomBundle\Entity\User",
- *      name  = "objectManager"
+ * @CreateEntity(
+ *      namespace = "MmoreramCustomBundle:User",
+ *      mapping = {
+ *          "id": "~id~",
+ *          "username": "~username~"
+ *      }
+ *      repository = {
+ *          "class" = "Mmoreram\CustomBundle\Repository\AnotherRepository",
+ *          "method" = "find",
+ *      },
  * )
  */
-public function indexAction(ObjectManager $objectManager)
+public function indexAction(User $user)
 {
 }
 ```
 
-## @Form
+### Entity Factory
+
+When the annotation considers that a new entity must be created, because no
+mapping information has been provided, or because the mapping fallback has been
+activated, by default a new instance will be created by using the *namespace*
+value.
+
+This configuration block has three positions
+
+* class - factory class
+* method - Method to use when retrieving the object
+* static - Method is static
+
+You can define the factory with a simple namespace
+
+``` php
+/**
+ * Simple controller method
+ *
+ * @CreateEntity(
+ *      namespace = "MmoreramCustomBundle:User",
+ *      factory = {
+ *          "class" = "Mmoreram\CustomBundle\Factory\UserFactory",
+ *          "method" = "create",
+ *          "static" = true,
+ *      },
+ * )
+ */
+public function indexAction(User $user)
+{
+}
+```
+
+If you want to define your Factory as a service, with the possibility of
+overriding namespace, you can simply define service name. All other options have
+the same behaviour.
+
+``` yml
+parameters:
+
+    #
+    # Factories
+    #
+    my.bundle.factory.user_factory: Mmoreram\CustomBundle\Factory\UserFactory
+```
+
+``` php
+/**
+ * Simple controller method
+ *
+ * @CreateEntity(
+ *      class = {
+ *          "factory" = my.bundle.factory.user_factory,
+ *          "method" = "create",
+ *          "static" = true,
+ *      },
+ * )
+ */
+public function indexAction(User $user)
+{
+}
+```
+
+If you do not define the `method`, default one will be used. You can
+override this default value by defining new one in your `config.yml`. Same with
+`static` value
+
+``` yml
+controller_extra:
+    entity:
+        default_factory_method: create
+        default_factory_static: true
+```
+
+## @CreateForm
 
 Provides form injection in your controller actions. This annotation only needs
 a name to be defined in, where you must define namespace where your form is
@@ -1097,13 +1059,13 @@ placed.
 ``` php
 <?php
 
-use Mmoreram\ControllerExtraBundle\Annotation\Form;
+use Mmoreram\ControllerExtraBundle\Annotation\CreateForm;
 use Symfony\Component\Form\AbstractType;
 
 /**
  * Simple controller method
  *
- * @Form(
+ * @CreateForm(
  *      class = "\Mmoreram\CustomBundle\Form\Type\UserType",
  *      name  = "userType"
  * )
@@ -1125,13 +1087,13 @@ DI.
 ``` php
 <?php
 
-use Mmoreram\ControllerExtraBundle\Annotation\Form;
+use Mmoreram\ControllerExtraBundle\Annotation\CreateForm;
 use Symfony\Component\Form\AbstractType;
 
 /**
  * Simple controller method
  *
- * @Form(
+ * @CreateForm(
  *      class = "user_type",
  *      name  = "userType"
  * )
@@ -1149,13 +1111,13 @@ To inject a Form object you only need to cast method value as such.
 ``` php
 <?php
 
-use Mmoreram\ControllerExtraBundle\Annotation\Form as AnnotationForm;
+use Mmoreram\ControllerExtraBundle\Annotation\CreateForm;
 use Symfony\Component\Form\Form;
 
 /**
  * Simple controller method
  *
- * @AnnotationForm(
+ * @CreateForm(
  *      class = "user_type",
  *      name  = "userForm"
  * )
@@ -1176,7 +1138,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\Form\Form;
 
-use Mmoreram\ControllerExtraBundle\Annotation\Form as AnnotationForm;
+use Mmoreram\ControllerExtraBundle\Annotation\CreateForm;
 use Mmoreram\ControllerExtraBundle\Entity\User;
 
 /**
@@ -1187,7 +1149,7 @@ use Mmoreram\ControllerExtraBundle\Entity\User;
  *      name = "view_user"
  * )
  * @ParamConverter("user", class="MmoreramCustomBundle:User")
- * @AnnotationForm(
+ * @CreateForm(
  *      class  = "user_type",
  *      entity = "user"
  *      name   = "userForm",
@@ -1209,7 +1171,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\Form\Form;
 
-use Mmoreram\ControllerExtraBundle\Annotation\Form as AnnotationForm;
+use Mmoreram\ControllerExtraBundle\Annotation\CreateForm;
 use Mmoreram\ControllerExtraBundle\Entity\User;
 
 /**
@@ -1220,7 +1182,7 @@ use Mmoreram\ControllerExtraBundle\Entity\User;
  *      name = "view_user"
  * )
  * @ParamConverter("user", class="MmoreramCustomBundle:User")
- * @AnnotationForm(
+ * @CreateForm(
  *      class         = "user_type",
  *      entity        = "user"
  *      handleRequest = true,
@@ -1243,7 +1205,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\Form\Form;
 
-use Mmoreram\ControllerExtraBundle\Annotation\Form as AnnotationForm;
+use Mmoreram\ControllerExtraBundle\Annotation\CreateForm;
 use Mmoreram\ControllerExtraBundle\Entity\User;
 
 /**
@@ -1254,7 +1216,7 @@ use Mmoreram\ControllerExtraBundle\Entity\User;
  *      name = "view_user"
  * )
  * @ParamConverter("user", class="MmoreramCustomBundle:User")
- * @AnnotationForm(
+ * @CreateForm(
  *      class         = "user_type",
  *      entity        = "user"
  *      handleRequest = true,
@@ -1274,12 +1236,12 @@ To inject a FormView object you only need to cast method variable as such.
 
 use Symfony\Component\Form\FormView;
 
-use Mmoreram\ControllerExtraBundle\Annotation\Form;
+use Mmoreram\ControllerExtraBundle\Annotation\CreateForm;
 
 /**
  * Simple controller method
  *
- * @Form(
+ * @CreateForm(
  *      class = "user_type",
  *      name  = "userFormView"
  * )
@@ -1402,7 +1364,7 @@ public function indexAction(User $user, Address $address)
 > If multiple @Mmoreram\Flush are defined in same action, last instance will
 > overwrite previous. Anyway just one instance should be defined.
 
-## @JsonResponse
+## @ToJsonResponse
 
 JsonResponse annotation allows you to create a 
 `Symfony\Component\HttpFoundation\JsonResponse` object, given a simple
@@ -1411,12 +1373,12 @@ controller return value.
 ``` php
 <?php
 
-use Mmoreram\ControllerExtraBundle\Annotation\JsonResponse;
+use Mmoreram\ControllerExtraBundle\Annotation\ToJsonResponse;
 
 /**
  * Simple controller method
  *
- * @JsonResponse
+ * @ToJsonResponse
  */
 public function indexAction(User $user, Address $address)
 {
@@ -1442,12 +1404,12 @@ You can also overwrite these values in each `@JsonResponse` annotation.
 ``` php
 <?php
 
-use Mmoreram\ControllerExtraBundle\Annotation\JsonResponse;
+use Mmoreram\ControllerExtraBundle\Annotation\ToJsonResponse;
 
 /**
  * Simple controller method
  *
- * @JsonResponse(
+ * @ToJsonResponse(
  *      status = 403,
  *      headers = {
  *          "User-Agent": "Googlebot/2.1"
@@ -1662,32 +1624,6 @@ public function indexAction($varName)
 }
 ```
 
-You can also use a deep option like [Symfony parameter bag get method]
-(http://api.symfony.com/2.0/Symfony/Component/HttpFoundation/ParameterBag.html#method_get)
-, if true, a path like foo[bar] will find deeper items.
-By default this option is disabled. Only available until Symfony `v2.8` and
-removed since `v3.0`.
-
-``` php
-<?php
-
-use Mmoreram\ControllerExtraBundle\Annotation\Get;
-
-/**
- * Simple controller method
- *
- * @Get(
- *     path = "foo[bar]",
- *     name = "varName",
- *     deep = true
- * )
- */
-public function indexAction($varName)
-{
-    // ...
-}
-```
-
 ## @Post
 
 The Post annotation allows you to get any parameter from the post request body.
@@ -1751,32 +1687,6 @@ public function indexAction($varName)
 }
 ```
 
-You can also use a deep option like [Symfony parameter bag get method]
-(http://api.symfony.com/2.0/Symfony/Component/HttpFoundation/ParameterBag.html#method_get)
-, if true, a path like foo[bar] will find deeper items.
-By default this option is disabled.. Only available until Symfony `v2.8` and
-removed since `v3.0`.
-
-``` php
-<?php
-
-use Mmoreram\ControllerExtraBundle\Annotation\Post;
-
-/**
- * Simple controller method
- *
- * @Post(
- *     path = "foo[bar]",
- *     name = "varName",
- *     deep = true
- * )
- */
-public function indexAction($varName)
-{
-    // ...
-}
-```
-
 # Custom annotations
 
 Using this bundle you can now create, in a very easy way, your own controller
@@ -1785,7 +1695,7 @@ annotation.
 ## Annotation
 
 The annotation object. You need to define the fields your custom annotation
-will contain. Must extends `Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation`
+will contain. Must extends `Mmoreram\ControllerExtraBundle\Annotation\Annotation`
 abstract class.
 
 ``` php
@@ -1793,14 +1703,15 @@ abstract class.
 
 namespace My\Bundle\Annotation;
 
-use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
+use Mmoreram\ControllerExtraBundle\Annotation\Annotation;
 
 /**
  * Entity annotation driver
  *
  * @Annotation
+ * @Target({"METHOD"})
  */
-class MyCustomAnnotation extends Annotation
+final class MyCustomAnnotation extends Annotation
 {
     /**
      * @var string
@@ -1825,8 +1736,8 @@ class MyCustomAnnotation extends Annotation
 
 Once you have defined your own annotation, you have to resolve how this
 annotation works in a controller. You can manage this using a Resolver. Must
-extend `Mmoreram\ControllerExtraBundle\Resolver\Interfaces\AnnotationResolverInterface;`
-abstract class.
+extend `Mmoreram\ControllerExtraBundle\Resolver\AnnotationResolver;` abstract 
+class.
 
 ``` php
 <?php
@@ -1835,24 +1746,25 @@ namespace My\Bundle\Resolver;
 
 use Symfony\Component\HttpFoundation\Request;
 
-use Mmoreram\ControllerExtraBundle\Resolver\Interfaces\AnnotationResolverInterface;
-use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
+use Mmoreram\ControllerExtraBundle\Resolver\AnnotationResolver;
+use Mmoreram\ControllerExtraBundle\Annotation\Annotation;
 
 /**
  * MyCustomAnnotation Resolver
  */
-class MyCustomAnnotationResolver implements AnnotationResolverInterface
+class MyCustomAnnotationResolver extends AnnotationResolver
 {
-
-    /**
+    **
      * Specific annotation evaluation.
-     * This method MUST be implemented because is defined in the interface
      *
-     * @param Request          $request    Request
-     * @param Annotation       $annotation Annotation
-     * @param ReflectionMethod $method     Method
+     * This method must be implemented in every single EventListener
+     * with specific logic
      *
-     * @return MyCustomAnnotationResolver self Object
+     * All method code will executed only if specific active flag is true
+     *
+     * @param Request          $request
+     * @param Annotation       $annotation
+     * @param ReflectionMethod $method
      */
     public function evaluateAnnotation(
         Request $request,
@@ -1957,26 +1869,3 @@ class ControllerExtraBundle extends Bundle
 ```
 
 *Et voilà!*  We can now use our custom Annotation in our project controllers.
-
-# Contributing
-
-All code is Symfony2 Code formatted, so every pull request must validate phpcs
-standards. You should read
-[Symfony2 coding standards](http://symfony.com/doc/current/contributing/code/standards.html)
-and install [this](https://github.com/opensky/Symfony2-coding-standard)
-CodeSniffer to check all code is validated.
-
-There is also a policy for contributing to this project. All pull request must
-be all explained step by step, to make us more understandable and easier to
-merge pull request. All new features must be tested with PHPUnit.
-
-If you'd like to contribute, please read the [Contributing Code][3] part of the
-documentation. If you're submitting a pull request, please follow the guidelines
-in the [Submitting a Patch][4] section and use the [Pull Request Template][5].
-
-[1]: https://github.com/sensiolabs/SensioFrameworkExtraBundle
-[2]: http://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/annotations/converters.html
-[3]: http://symfony.com/doc/current/contributing/code/index.html
-[4]: http://symfony.com/doc/current/contributing/code/patches.html#check-list
-[5]: http://symfony.com/doc/current/contributing/code/patches.html#make-a-pull-request
-[6]: https://github.com/php-fig/log/blob/master/Psr/Log/LoggerInterface.php

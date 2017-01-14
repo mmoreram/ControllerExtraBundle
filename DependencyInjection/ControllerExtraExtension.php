@@ -11,291 +11,173 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
+declare(strict_types=1);
+
 namespace Mmoreram\ControllerExtraBundle\DependencyInjection;
 
-use Symfony\Component\Config\FileLocator;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
-use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use Symfony\Component\Config\Definition\ConfigurationInterface;
+
+use Mmoreram\BaseBundle\DependencyInjection\BaseExtension;
 
 /**
  * This is the class that loads and manages your bundle configuration.
  */
-class ControllerExtraExtension extends Extension
+final class ControllerExtraExtension extends BaseExtension
 {
     /**
-     * Loads a specific configuration.
+     * Returns the recommended alias to use in XML.
      *
-     * @param array            $config    An array of configuration values
-     * @param ContainerBuilder $container A ContainerBuilder instance
+     * This alias is also the mandatory prefix to use when using YAML.
      *
-     * @throws \InvalidArgumentException When provided tag is not defined in this extension
+     * @return string The alias
      *
      * @api
      */
-    public function load(array $config, ContainerBuilder $container)
+    public function getAlias()
     {
-        $configuration = new Configuration();
-        $config = $this->processConfiguration($configuration, $config);
-
-        /**
-         * Common parameters.
-         */
-        $container->setParameter(
-            'mmoreram.controllerextra.resolver_priority',
-            $config['resolver_priority']
-        );
-
-        $container->setParameter(
-            'mmoreram.controllerextra.request',
-            $config['request']
-        );
-
-        /**
-         * Factory parameters.
-         */
-        $container->setParameter(
-            'mmoreram.controllerextra.factory_default_method',
-            $config['factory']['default_method']
-        );
-
-        $container->setParameter(
-            'mmoreram.controllerextra.factory_default_static',
-            $config['factory']['default_static']
-        );
-
-        /**
-         * Form parameters.
-         */
-        $container->setParameter(
-            'mmoreram.controllerextra.form_active',
-            $config['form']['active']
-        );
-
-        $container->setParameter(
-            'mmoreram.controllerextra.form_default_name',
-            $config['form']['default_name']
-        );
-
-        /**
-         * Flush parameters.
-         */
-        $container->setParameter(
-            'mmoreram.controllerextra.flush_active',
-            $config['flush']['active']
-        );
-
-        $container->setParameter(
-            'mmoreram.controllerextra.flush_default_manager',
-            $config['flush']['default_manager']
-        );
-
-        /**
-         * Entity parameters.
-         */
-        $container->setParameter(
-            'mmoreram.controllerextra.entity_active',
-            $config['entity']['active']
-        );
-
-        $container->setParameter(
-            'mmoreram.controllerextra.entity_default_name',
-            $config['entity']['default_name']
-        );
-
-        $container->setParameter(
-            'mmoreram.controllerextra.entity_default_persist',
-            $config['entity']['default_persist']
-        );
-
-        $container->setParameter(
-            'mmoreram.controllerextra.entity_fallback_mapping',
-            $config['entity']['fallback_mapping']
-        );
-
-        /**
-         * JsonResponse parameters.
-         */
-        $container->setParameter(
-            'mmoreram.controllerextra.json_response_active',
-            $config['json_response']['active']
-        );
-
-        $container->setParameter(
-            'mmoreram.controllerextra.json_response_default_status',
-            $config['json_response']['default_status']
-        );
-
-        $container->setParameter(
-            'mmoreram.controllerextra.json_response_default_error_status',
-            $config['json_response']['default_error_status']
-        );
-
-        $container->setParameter(
-            'mmoreram.controllerextra.json_response_default_headers',
-            $config['json_response']['default_headers']
-        );
-
-        /**
-         * Log parameters.
-         */
-        $container->setParameter(
-            'mmoreram.controllerextra.log_active',
-            $config['log']['active']
-        );
-
-        $container->setParameter(
-            'mmoreram.controllerextra.log_default_level',
-            $config['log']['default_level']
-        );
-
-        $container->setParameter(
-            'mmoreram.controllerextra.log_default_execute',
-            $config['log']['default_execute']
-        );
-
-        /**
-         * Paginator parameters.
-         */
-        $container->setParameter(
-            'mmoreram.controllerextra.paginator_active',
-            $config['paginator']['active']
-        );
-
-        $container->setParameter(
-            'mmoreram.controllerextra.paginator_default_name',
-            $config['paginator']['default_name']
-        );
-
-        $container->setParameter(
-            'mmoreram.controllerextra.paginator_default_page',
-            $config['paginator']['default_page']
-        );
-
-        $container->setParameter(
-            'mmoreram.controllerextra.paginator_default_limit_per_page',
-            $config['paginator']['default_limit_per_page']
-        );
-
-        /**
-         * Object manager parameters.
-         */
-        $container->setParameter(
-            'mmoreram.controllerextra.object_manager_active',
-            $config['object_manager']['active']
-        );
-
-        $container->setParameter(
-            'mmoreram.controllerextra.object_manager_default_name',
-            $config['object_manager']['default_name']
-        );
-
-        /**
-         * Get parameters.
-         */
-        $container->setParameter(
-            'mmoreram.controllerextra.get_active',
-            $config['get']['active']
-        );
-
-        /**
-         * Post parameters.
-         */
-        $container->setParameter(
-            'mmoreram.controllerextra.post_active',
-            $config['post']['active']
-        );
-
-        /**
-         * Load config files.
-         */
-        $loader = new YamlFileLoader(
-            $container,
-            new FileLocator(__DIR__ . '/../Resources/config')
-        );
-
-        $loader->load('classes.yml');
-        $loader->load('providers.yml');
-        $loader->load('event_listeners.yml');
-
-        $this->loadResolverConfiguration($loader, $config);
+        return 'controller_extra';
     }
 
     /**
-     * Load resolver config files.
+     * Get the Config file location.
      *
-     * @param YamlFileLoader $loader Loader
-     * @param array          $config Config
-     *
-     * @return ControllerExtraExtension self Object
+     * @return string
      */
-    public function loadResolverConfiguration(
-        YamlFileLoader $loader,
-        array $config
-    ) {
-        /**
-         * Only load form resolver config definition if is active.
-         */
-        if ($config['form']['active']) {
-            $loader->load('resolver_form.yml');
-        }
+    protected function getConfigFilesLocation() : string
+    {
+        return __DIR__ . '/../Resources/config';
+    }
 
-        /**
-         * Only load flush resolver config definition if is active.
-         */
-        if ($config['flush']['active']) {
-            $loader->load('resolver_flush.yml');
-        }
+    /**
+     * Config files to load.
+     *
+     * Each array position can be a simple file name if must be loaded always,
+     * or an array, with the filename in the first position, and a boolean in
+     * the second one.
+     *
+     * As a parameter, this method receives all loaded configuration, to allow
+     * setting this boolean value from a configuration value.
+     *
+     * return array(
+     *      'file1.yml',
+     *      'file2.yml',
+     *      ['file3.yml', $config['my_boolean'],
+     *      ...
+     * );
+     *
+     * @param array $config Config definitions
+     *
+     * @return array Config files
+     */
+    protected function getConfigFiles(array $config) : array
+    {
+        return [
+            'providers',
+            'annotations_resolver',
+            ['resolver_form', $config['form']['active']],
+            ['resolver_flush', $config['flush']['active']],
+            ['resolver_entity', $config['entity']['active']],
+            ['resolver_log', $config['log']['active']],
+            ['resolver_json_response', $config['json_response']['active']],
+            ['resolver_paginator', $config['paginator']['active']],
+            ['resolver_get', $config['get']['active']],
+            ['resolver_post', $config['post']['active']],
+        ];
+    }
 
-        /**
-         * Only load entity resolver config definition if is active.
-         */
-        if ($config['entity']['active']) {
-            $loader->load('resolver_entity.yml');
-        }
+    /**
+     * Return a new Configuration instance.
+     *
+     * If object returned by this method is an instance of
+     * ConfigurationInterface, extension will use the Configuration to read all
+     * bundle config definitions.
+     *
+     * Also will call getParametrizationValues method to load some config values
+     * to internal parameters.
+     *
+     * @return ConfigurationInterface|null
+     */
+    protected function getConfigurationInstance() : ? ConfigurationInterface
+    {
+        return new ControllerExtraConfiguration($this->getAlias());
+    }
 
-        /**
-         * Only load log resolver config definition if is active.
-         */
-        if ($config['log']['active']) {
-            $loader->load('resolver_log.yml');
-        }
+    /**
+     * Load Parametrization definition.
+     *
+     * return array(
+     *      'parameter1' => $config['parameter1'],
+     *      'parameter2' => $config['parameter2'],
+     *      ...
+     * );
+     *
+     * @param array $config Bundles config values
+     *
+     * @return array
+     */
+    protected function getParametrizationValues(array $config) : array
+    {
+        return [
+            /**
+             * Common parameters.
+             */
+            'controller_extra.resolver_priority' => $config['resolver_priority'],
+            'controller_extra.request' => $config['request'],
 
-        /**
-         * Only load json resolver config definition if is active.
-         */
-        if ($config['json_response']['active']) {
-            $loader->load('resolver_json_response.yml');
-        }
+            /**
+             * Form parameters.
+             */
+            'controller_extra.form_active' => $config['form']['active'],
+            'controller_extra.form_default_name' => $config['form']['default_name'],
 
-        /**
-         * Only load paginator resolver config definition if is active.
-         */
-        if ($config['paginator']['active']) {
-            $loader->load('resolver_paginator.yml');
-        }
+            /**
+             * Flush parameters.
+             */
+            'controller_extra.flush_active' => $config['flush']['active'],
+            'controller_extra.flush_default_manager' => $config['flush']['default_manager'],
 
-        /**
-         * Only load object manager resolver config definition if is active.
-         */
-        if ($config['object_manager']['active']) {
-            $loader->load('resolver_object_manager.yml');
-        }
+            /**
+             * Entity parameters.
+             */
+            'controller_extra.entity_active' => $config['entity']['active'],
+            'controller_extra.entity_default_name' => $config['entity']['default_name'],
+            'controller_extra.entity_default_persist' => $config['entity']['default_persist'],
+            'controller_extra.entity_fallback_mapping' => $config['entity']['fallback_mapping'],
+            'controller_extra.entity_default_factory_method' => $config['entity']['default_factory_method'],
+            'controller_extra.entity_default_factory_static' => $config['entity']['default_factory_static'],
 
-        /**
-         * Only load get resolver config definition if is active.
-         */
-        if ($config['get']['active']) {
-            $loader->load('resolver_get.yml');
-        }
+            /**
+             * JsonResponse parameters.
+             */
+            'controller_extra.json_response_active' => $config['json_response']['active'],
+            'controller_extra.json_response_default_status' => $config['json_response']['default_status'],
+            'controller_extra.json_response_default_error_status' => $config['json_response']['default_error_status'],
+            'controller_extra.json_response_default_headers' => $config['json_response']['default_headers'],
 
-        /**
-         * Only loads post resolver config definition if is active.
-         */
-        if ($config['post']['active']) {
-            $loader->load('resolver_post.yml');
-        }
+            /**
+             * Log parameters.
+             */
+            'controller_extra.log_active' => $config['log']['active'],
+            'controller_extra.log_default_level' => $config['log']['default_level'],
+            'controller_extra.log_default_execute' => $config['log']['default_execute'],
 
-        return $this;
+            /**
+             * Paginator parameters.
+             */
+            'controller_extra.paginator_active' => $config['paginator']['active'],
+            'controller_extra.paginator_default_name' => $config['paginator']['default_name'],
+            'controller_extra.paginator_default_page' => $config['paginator']['default_page'],
+            'controller_extra.paginator_default_limit_per_page' => $config['paginator']['default_limit_per_page'],
+
+            /**
+             * Get parameters.
+             */
+            'controller_extra.get_active' => $config['get']['active'],
+
+            /**
+             * Post parameters.
+             */
+            'controller_extra.post_active' => $config['post']['active'],
+        ];
     }
 }

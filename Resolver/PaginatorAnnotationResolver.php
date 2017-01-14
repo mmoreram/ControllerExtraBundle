@@ -11,102 +11,104 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
+declare(strict_types=1);
+
 namespace Mmoreram\ControllerExtraBundle\Resolver;
 
 use Doctrine\Common\Persistence\AbstractManagerRegistry;
 use Doctrine\ORM\QueryBuilder;
-use Doctrine\ORM\Tools\Pagination\Paginator;
+use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
+use Knp\Component\Pager\Pagination\PaginationInterface;
+use Knp\Component\Pager\Paginator as KnpPaginator;
+use Mmoreram\ControllerExtraBundle\Provider\Provider;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use ReflectionMethod;
 use Symfony\Component\HttpFoundation\Request;
 
-use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
-use Mmoreram\ControllerExtraBundle\Annotation\Paginator as AnnotationPaginator;
+use Mmoreram\ControllerExtraBundle\Annotation\Annotation;
+use Mmoreram\ControllerExtraBundle\Annotation\CreatePaginator;
 use Mmoreram\ControllerExtraBundle\Provider\EntityProvider;
-use Mmoreram\ControllerExtraBundle\Provider\RequestParameterProvider;
-use Mmoreram\ControllerExtraBundle\Resolver\Abstracts\AbstractAnnotationResolver;
-use Mmoreram\ControllerExtraBundle\Resolver\Interfaces\AnnotationResolverInterface;
 use Mmoreram\ControllerExtraBundle\Resolver\Paginator\PaginatorEvaluatorCollector;
 use Mmoreram\ControllerExtraBundle\ValueObject\PaginatorAttributes;
 
 /**
  * Class PaginatorAnnotationResolver.
  */
-class PaginatorAnnotationResolver extends AbstractAnnotationResolver implements AnnotationResolverInterface
+final class PaginatorAnnotationResolver extends AnnotationResolver
 {
     /**
      * @var AbstractManagerRegistry
      *
      * Doctrine
      */
-    protected $doctrine;
+    private $doctrine;
 
     /**
      * @var EntityProvider
      *
      * Entity provider
      */
-    protected $entityProvider;
+    private $entityProvider;
 
     /**
-     * @var RequestParameterProvider
+     * @var Provider
      *
-     * requestParameterProvider
+     * Provider collector
      */
-    protected $requestParameterProvider;
+    private $providerCollector;
 
     /**
      * @var PaginatorEvaluatorCollector
      *
      * PaginatorEvaluator collection
      */
-    protected $paginatorEvaluatorCollector;
+    private $paginatorEvaluatorCollector;
 
     /**
      * @var string
      *
      * Default name
      */
-    protected $defaultName;
+    private $defaultName;
 
     /**
      * @var int
      *
      * Default page value
      */
-    protected $defaultPage;
+    private $defaultPage;
 
     /**
      * @var int
      *
      * Default page value
      */
-    protected $defaultLimitPerPage;
+    private $defaultLimitPerPage;
 
     /**
      * Construct method.
      *
-     * @param AbstractManagerRegistry     $doctrine                    Doctrine
-     * @param EntityProvider              $entityProvider              Entity Provider
-     * @param RequestParameterProvider    $requestParameterProvider    Request parameter provider
-     * @param PaginatorEvaluatorCollector $paginatorEvaluatorCollector PaginatorEvaluator collector
-     * @param string                      $defaultName                 Default name
-     * @param int                         $defaultPage                 Default page
-     * @param int                         $defaultLimitPerPage         Default limit per page
+     * @param AbstractManagerRegistry     $doctrine
+     * @param EntityProvider              $entityProvider
+     * @param Provider                    $providerCollector
+     * @param PaginatorEvaluatorCollector $paginatorEvaluatorCollector
+     * @param string                      $defaultName
+     * @param int                         $defaultPage
+     * @param int                         $defaultLimitPerPage
      */
     public function __construct(
         AbstractManagerRegistry $doctrine,
         EntityProvider $entityProvider,
-        RequestParameterProvider $requestParameterProvider,
+        Provider $providerCollector,
         PaginatorEvaluatorCollector $paginatorEvaluatorCollector,
-        $defaultName,
-        $defaultPage,
-        $defaultLimitPerPage
+        string $defaultName,
+        int $defaultPage,
+        int $defaultLimitPerPage
     ) {
         $this->doctrine = $doctrine;
         $this->entityProvider = $entityProvider;
-        $this->requestParameterProvider = $requestParameterProvider;
+        $this->providerCollector = $providerCollector;
         $this->paginatorEvaluatorCollector = $paginatorEvaluatorCollector;
         $this->defaultName = $defaultName;
         $this->defaultPage = $defaultPage;
@@ -118,28 +120,28 @@ class PaginatorAnnotationResolver extends AbstractAnnotationResolver implements 
      *
      * All method code will executed only if specific active flag is true
      *
-     * @param Request          $request    Request
-     * @param Annotation       $annotation Annotation
-     * @param ReflectionMethod $method     Method
+     * @param Request          $request
+     * @param Annotation       $annotation
+     * @param ReflectionMethod $method
      *
-     * @return AnnotationResolverInterface|string self Object or dql
+     * @return null|string
      */
     public function evaluateAnnotation(
         Request $request,
         Annotation $annotation,
         ReflectionMethod $method
-    ) {
+    ) : ? string {
         /**
          * Annotation is only loaded if is type-of AnnotationEntity.
          */
-        if ($annotation instanceof AnnotationPaginator) {
+        if ($annotation instanceof CreatePaginator) {
 
             /**
              * Creating new instance of desired entity.
              */
             $entity = $this
                 ->entityProvider
-                ->provide($annotation->getClass());
+                ->evaluateEntityNamespace($annotation->getEntityNamespace());
 
             /**
              * We create a basic query builder.
@@ -158,29 +160,29 @@ class PaginatorAnnotationResolver extends AbstractAnnotationResolver implements 
                 ->paginatorEvaluatorCollector
                 ->evaluate($queryBuilder, $annotation);
 
-            $paginator = new Paginator($queryBuilder, true);
+            $paginator = new DoctrinePaginator($queryBuilder, true);
 
             /**
              * Calculating limit of elements per page. Value can be evaluated
              * using as reference a Request attribute value.
              */
-            $limitPerPage = (int) $this
-                ->requestParameterProvider
-                ->getParameterValue(
-                    $annotation->getLimit()
-                    ?: $this->defaultLimitPerPage
-                );
+            $annotationLimit = $annotation->getLimit() ?? $this->defaultLimitPerPage;
+            $limitPerPage = is_int($annotationLimit)
+                ? $annotationLimit
+                : (int) $this
+                    ->providerCollector
+                    ->provide($annotationLimit);
 
             /**
              * Calculating page to fetch. Value can be evaluated using as
              * reference a Request attribute value.
              */
-            $page = (int) $this
-                ->requestParameterProvider
-                ->getParameterValue(
-                    $annotation->getPage()
-                    ?: $this->defaultPage
-                );
+            $annotationPage = $annotation->getPage() ?? $this->defaultPage;
+            $page = is_int($annotationPage)
+                ? $annotationPage
+                : (int) $this
+                    ->providerCollector
+                    ->provide($annotationPage);
 
             /**
              * If attributes is not null, this bundle will place in the method
@@ -235,23 +237,21 @@ class PaginatorAnnotationResolver extends AbstractAnnotationResolver implements 
             return $dql;
         }
 
-        return $this;
+        return null;
     }
 
     /**
      * Generate QueryBuilder.
      *
-     * @param object $entity Entity instance
+     * @param string $entityNamespace
      *
-     * @return QueryBuilder Query builder
+     * @return QueryBuilder
      */
-    public function createQueryBuilder($entity)
+    private function createQueryBuilder(string $entityNamespace) : QueryBuilder
     {
-        $entityNamespace = get_class($entity);
-
         return $this
             ->doctrine
-            ->getManagerForClass(get_class($entity))
+            ->getManagerForClass($entityNamespace)
             ->createQueryBuilder()
             ->select(['x'])
             ->from($entityNamespace, 'x');
@@ -260,28 +260,27 @@ class PaginatorAnnotationResolver extends AbstractAnnotationResolver implements 
     /**
      * Evaluates Paginator attributes.
      *
-     * @param Request             $request      Request
-     * @param AnnotationPaginator $annotation   Annotation
-     * @param Paginator           $paginator    Paginator
-     * @param int                 $limitPerPage Limit per page
-     * @param int                 $page         Page
+     * @param Request           $request
+     * @param CreatePaginator   $annotation
+     * @param DoctrinePaginator $paginator
+     * @param int               $limitPerPage
+     * @param int               $page
      */
-    protected function evaluateAttributes(
+    private function evaluateAttributes(
         Request $request,
-        AnnotationPaginator $annotation,
-        Paginator $paginator,
-        $limitPerPage,
-        $page
+        CreatePaginator $annotation,
+        DoctrinePaginator $paginator,
+        int $limitPerPage,
+        int $page
     ) {
         if ($annotation->getAttributes()) {
-            $paginatorAttributes = new PaginatorAttributes();
             $total = $paginator->count();
-
-            $paginatorAttributes
-                ->setCurrentPage($page)
-                ->setLimitPerPage($limitPerPage)
-                ->setTotalElements($total)
-                ->setTotalPages(ceil($total / $limitPerPage));
+            $paginatorAttributes = new PaginatorAttributes(
+                (int) ceil($total / $limitPerPage),
+                $total,
+                $page,
+                $limitPerPage
+            );
 
             $request->attributes->set(
                 trim($annotation->getAttributes()),
@@ -293,26 +292,26 @@ class PaginatorAnnotationResolver extends AbstractAnnotationResolver implements 
     /**
      * Return real usable Paginator instance given the definition type.
      *
-     * @param Paginator $paginator     Paginator
-     * @param string    $parameterType Parameter type
-     * @param int       $limitPerPage
-     * @param int       $page
+     * @param DoctrinePaginator $paginator
+     * @param string            $parameterType
+     * @param int               $limitPerPage
+     * @param int               $page
      *
-     * @return mixed Paginator instance
+     * @return mixed
      */
-    public function decidePaginatorFormat(
-        Paginator $paginator,
-        $parameterType,
-        $limitPerPage,
-        $page
+    private function decidePaginatorFormat(
+        DoctrinePaginator $paginator,
+        string $parameterType,
+        int $limitPerPage,
+        int $page
     ) {
-        if ('Pagerfanta\Pagerfanta' === $parameterType) {
+        if (Pagerfanta::class === $parameterType) {
             $paginator = new Pagerfanta(new DoctrineORMAdapter($paginator->getQuery()));
             $paginator->setMaxPerPage($limitPerPage);
             $paginator->setCurrentPage($page);
         }
-        if ('Knp\Component\Pager\Pagination\PaginationInterface' === $parameterType) {
-            $knp = new \Knp\Component\Pager\Paginator();
+        if (PaginationInterface::class === $parameterType) {
+            $knp = new KnpPaginator();
             $paginator = $knp->paginate($paginator->getQuery(), $page, $limitPerPage);
         }
 

@@ -11,6 +11,8 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
+declare(strict_types=1);
+
 namespace Mmoreram\ControllerExtraBundle\Provider;
 
 use ErrorException;
@@ -22,52 +24,54 @@ use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\HttpKernel\KernelInterface;
 
+use Mmoreram\ControllerExtraBundle\Annotation\AnnotationWithEntityReference;
+
 /**
  * Class EntityProvider.
  */
-class EntityProvider
+final class EntityProvider
 {
     /**
      * @var ContainerInterface
      *
      * container
      */
-    protected $container;
+    private $container;
 
     /**
      * @var KernelInterface
      *
      * Kernel
      */
-    protected $kernel;
+    private $kernel;
 
     /**
      * @var string
      *
      * defaultFactoryMethod
      */
-    protected $defaultFactoryMethod;
+    private $defaultFactoryMethod;
 
     /**
      * @var bool
      *
      * defaultFactoryStatic
      */
-    protected $defaultFactoryStatic;
+    private $defaultFactoryStatic;
 
     /**
      * construct method.
      *
-     * @param ContainerInterface $container            Container
-     * @param KernelInterface    $kernel               Kernel
-     * @param string             $defaultFactoryMethod Default factory method
-     * @param string             $defaultFactoryStatic Default factory static
+     * @param ContainerInterface $container
+     * @param KernelInterface    $kernel
+     * @param string             $defaultFactoryMethod
+     * @param string             $defaultFactoryStatic
      */
     public function __construct(
         ContainerInterface $container,
         KernelInterface $kernel,
-        $defaultFactoryMethod,
-        $defaultFactoryStatic
+        string $defaultFactoryMethod,
+        string $defaultFactoryStatic
     ) {
         $this->container = $container;
         $this->kernel = $kernel;
@@ -83,28 +87,28 @@ class EntityProvider
      *   class = "my.class.parameter",
      *   class = "\My\Class\Namespace",
      *   class = "MmoreramCustomBundle:User",
-     *   class = {
+     *   factory = {
      *       "factory": "Mmoreram\ControllerExtraBundle\Factory\EntityFactory",
      *       "factory": "my_factory_service",
      *       "method": "create",
      *       "static": true
      *   }
      *
-     * @param mixed $class Formatted class
+     * @param AnnotationWithEntityReference $annotation
      *
-     * @return object|null Entity if exists, otherwise null
+     * @return object|null
      */
-    public function provide($class)
+    public function create(AnnotationWithEntityReference $annotation)
     {
-        return is_array($class)
-            ? $this->evaluateEntityInstanceFactory($class)
-            : $this->evaluateEntityInstanceNamespace($class);
+        return null !== $annotation->getFactory()
+            ? $this->evaluateEntityInstanceFactory($annotation->getFactory())
+            : $this->evaluateEntityInstanceNamespace($annotation->getNamespace());
     }
 
     /**
      * Evaluates entity instance using a factory.
      *
-     * @param array $class Class
+     * @param array $factory
      *
      * @return object Entity instance
      *
@@ -112,31 +116,31 @@ class EntityProvider
      * @throws ServiceCircularReferenceException When a circular reference is detected
      * @throws ServiceNotFoundException          When the service is not found
      */
-    public function evaluateEntityInstanceFactory(array $class)
+    public function evaluateEntityInstanceFactory(array $factory)
     {
-        if (!isset($class['factory'])) {
+        if (!isset($factory['class'])) {
             throw new InvalidArgumentException();
         }
 
-        $factoryClass = $class['factory'];
+        $factoryReference = $factory['class'];
 
-        $factoryMethod = isset($class['method'])
-            ? $class['method']
+        $factoryMethod = isset($factory['method'])
+            ? $factory['method']
             : $this->defaultFactoryMethod;
 
-        $factoryStatic = isset($class['static'])
-            ? (bool) $class['static']
+        $factoryStatic = isset($factory['static'])
+            ? (bool) $factory['static']
             : (bool) $this->defaultFactoryStatic;
 
-        $factory = class_exists($factoryClass)
+        $factory = class_exists($factoryReference)
             ? (
             $factoryStatic
-                ? $factoryClass
-                : new $factoryClass()
+                ? $factoryReference
+                : new $factoryReference()
             )
             : $this
                 ->container
-                ->get($factoryClass);
+                ->get($factoryReference);
 
         return $factoryStatic
             ? $factory::$factoryMethod()
@@ -146,37 +150,53 @@ class EntityProvider
     /**
      * Evaluates entity instance using the namespace.
      *
-     * @param string $class Class
+     * @param string $namespace
      *
-     * @return object Entity instance
+     * @return object
      *
      * @throws ClassNotFoundException if class is not found
      */
-    public function evaluateEntityInstanceNamespace($class)
+    public function evaluateEntityInstanceNamespace(string $namespace)
+    {
+        $namespace = $this->evaluateEntityNamespace($namespace);
+
+        return new $namespace();
+    }
+
+    /**
+     * Evaluates entity instance using the namespace.
+     *
+     * @param string $namespace
+     *
+     * @return string
+     *
+     * @throws ClassNotFoundException if class is not found
+     */
+    public function evaluateEntityNamespace(string $namespace)
     {
         /**
          * Trying to generate new entity given that the class is the entity
          * namespace.
          */
-        if (class_exists($class)) {
-            return new $class();
+        if (class_exists($namespace)) {
+            return $namespace;
         }
 
         /**
          * Trying to generate new entity given that the namespace is defined in
          * as a Container parameter.
          */
-        try {
-            $classParameter = $this
-                ->container
-                ->getParameter($class);
-            if ($classParameter && class_exists($classParameter)) {
-                return new $classParameter();
-            }
-        } catch (InvalidArgumentException $exception) {
+        $container = $this->container;
+        if (
+            $container->hasParameter($namespace) &&
+            class_exists($container->getParameter($namespace))
+        ) {
+            $namespaceParameter = $container->getParameter($namespace);
+
+            return $namespaceParameter;
         }
 
-        $namespace = explode(':', $class, 2);
+        $resolvedNamespace = explode(':', $namespace, 2);
         $bundles = $this->kernel->getBundles();
 
         /**
@@ -194,14 +214,14 @@ class EntityProvider
          */
         if (
         !(
-            isset($namespace[0]) &&
-            isset($bundles[$namespace[0]]) &&
-            $bundles[$namespace[0]] instanceof Bundle &&
-            isset($namespace[1])
+            isset($resolvedNamespace[0]) &&
+            isset($bundles[$resolvedNamespace[0]]) &&
+            $bundles[$resolvedNamespace[0]] instanceof Bundle &&
+            isset($resolvedNamespace[1])
         )
         ) {
             throw new ClassNotFoundException(
-                $class,
+                $namespace,
                 new ErrorException()
             );
         }
@@ -209,13 +229,13 @@ class EntityProvider
         /**
          * @var Bundle $bundle
          */
-        $bundle = $bundles[$namespace[0]];
+        $bundle = $bundles[$resolvedNamespace[0]];
         $bundleNamespace = $bundle->getNamespace();
-        $entityNamespace = $bundleNamespace . '\\Entity\\' . $namespace[1];
+        $namespace = $bundleNamespace . '\\Entity\\' . $resolvedNamespace[1];
 
-        if (!class_exists($entityNamespace)) {
+        if (!class_exists($namespace)) {
             throw new ClassNotFoundException(
-                $entityNamespace,
+                $namespace,
                 new ErrorException()
             );
         }
@@ -224,6 +244,6 @@ class EntityProvider
          * Otherwise, assume that class is namespace of class.
          */
 
-        return new $entityNamespace();
+        return $namespace;
     }
 }

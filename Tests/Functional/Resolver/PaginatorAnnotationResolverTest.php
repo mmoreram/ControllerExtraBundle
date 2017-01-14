@@ -11,22 +11,25 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
+declare(strict_types=1);
+
 namespace Mmoreram\ControllerExtraBundle\Tests\Functional\Resolver;
 
+use Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\Fake;
 use Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory;
-use Mmoreram\ControllerExtraBundle\Tests\Functional\AbstractWebTestCase;
+use Mmoreram\ControllerExtraBundle\Tests\Functional\FunctionalTest;
 
 /**
  * Class PaginatorResolverTest.
  */
-class PaginatorAnnotationResolverTest extends AbstractWebTestCase
+class PaginatorAnnotationResolverTest extends FunctionalTest
 {
     /**
      * testAnnotation.
      */
     public function testAnnotation()
     {
-        $this->client->request('GET', '/fake/paginator/updatedAt/2/5/10');
+        $this->client->request('GET', '/fake/paginator/field/updatedAt/2/5/10');
 
         $this->assertEquals(
             '{"dql":"SELECT x, r4, r5 FROM Mmoreram\\\\ControllerExtraBundle\\\\Tests\\\\FakeBundle\\\\Entity\\\\Fake x INNER JOIN x.relation3 r3 INNER JOIN x.relation4 r4 LEFT JOIN x.relation r LEFT JOIN x.relation2 r2 LEFT JOIN x.relation5 r5 WHERE x.enabled = ?00 AND x.address1 IS NOT NULL AND x.address2 IS NOT NULL ORDER BY x.createdAt ASC, x.id ASC"}',
@@ -42,15 +45,7 @@ class PaginatorAnnotationResolverTest extends AbstractWebTestCase
      */
     public function testPaginatorSimpleAnnotation()
     {
-        $fake = FakeFactory::create();
-        $fake->setField('');
-        $entityManager = static::$kernel
-            ->getContainer()
-            ->get('doctrine')
-            ->getManagerForClass('Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\Fake');
-
-        $entityManager->persist($fake);
-        $entityManager->flush();
+        $this->addNFakeElements(1);
 
         $this
             ->client
@@ -73,15 +68,8 @@ class PaginatorAnnotationResolverTest extends AbstractWebTestCase
      */
     public function testPaginatorNotMatchingAnnotation()
     {
-        $fake = FakeFactory::create();
-        $fake->setField('');
-        $entityManager = static::$kernel
-            ->getContainer()
-            ->get('doctrine')
-            ->getManagerForClass('Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\Fake');
-
-        $entityManager->persist($fake);
-        $entityManager->flush();
+        $this->reloadSchema();
+        $this->addNFakeElements(1);
 
         $this
             ->client
@@ -104,17 +92,8 @@ class PaginatorAnnotationResolverTest extends AbstractWebTestCase
      */
     public function testPaginatorAnnotationAttributes()
     {
-        $entityManager = static::$kernel
-            ->getContainer()
-            ->get('doctrine')
-            ->getManagerForClass('Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\Fake');
-
-        for ($i = 0; $i < 30; ++$i) {
-            $fake = FakeFactory::create();
-            $fake->setField('');
-            $entityManager->persist($fake);
-        }
-        $entityManager->flush();
+        $this->reloadSchema();
+        $this->addNFakeElements(30);
 
         $this
             ->client
@@ -138,15 +117,8 @@ class PaginatorAnnotationResolverTest extends AbstractWebTestCase
      */
     public function testPaginatorAnnotationPagerfanta()
     {
-        $fake = FakeFactory::create();
-        $fake->setField('');
-        $entityManager = static::$kernel
-            ->getContainer()
-            ->get('doctrine')
-            ->getManagerForClass('Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\Fake');
-
-        $entityManager->persist($fake);
-        $entityManager->flush();
+        $this->reloadSchema();
+        $this->addNFakeElements(1);
 
         $this
             ->client
@@ -169,15 +141,8 @@ class PaginatorAnnotationResolverTest extends AbstractWebTestCase
      */
     public function testPaginatorAnnotationKNPPaginator()
     {
-        $fake = FakeFactory::create();
-        $fake->setField('');
-        $entityManager = static::$kernel
-            ->getContainer()
-            ->get('doctrine')
-            ->getManagerForClass('Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\Fake');
-
-        $entityManager->persist($fake);
-        $entityManager->flush();
+        $this->reloadSchema();
+        $this->addNFakeElements(1);
 
         $this
             ->client
@@ -200,17 +165,8 @@ class PaginatorAnnotationResolverTest extends AbstractWebTestCase
      */
     public function testPaginatorAnnotationQuery()
     {
-        $entityManager = static::$kernel
-            ->getContainer()
-            ->get('doctrine')
-            ->getManagerForClass('Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\Fake');
-
-        for ($i = 0; $i < 30; ++$i) {
-            $fake = FakeFactory::create();
-            $fake->setField('');
-            $entityManager->persist($fake);
-        }
-        $entityManager->flush();
+        $this->reloadSchema();
+        $this->addNFakeElements(30);
 
         $this
             ->client
@@ -235,18 +191,8 @@ class PaginatorAnnotationResolverTest extends AbstractWebTestCase
      */
     public function testPaginatorAnnotationRequest()
     {
-        $entityManager = static::$kernel
-            ->getContainer()
-            ->get('doctrine')
-            ->getManagerForClass('Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\Fake');
-
-        for ($i = 0; $i < 30; ++$i) {
-            $fake = FakeFactory::create();
-            $fake->setField('');
-            $entityManager->persist($fake);
-        }
-        $entityManager->flush();
-
+        $this->reloadSchema();
+        $this->addNFakeElements(30);
         $this
             ->client
             ->request(
@@ -274,17 +220,8 @@ class PaginatorAnnotationResolverTest extends AbstractWebTestCase
      */
     public function testPaginatorAnnotationRequestFilter()
     {
-        $entityManager = static::$kernel
-            ->getContainer()
-            ->get('doctrine')
-            ->getManagerForClass('Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\Fake');
-
-        for ($i = 0; $i < 30; ++$i) {
-            $fake = FakeFactory::create();
-            $fake->setField('');
-            $entityManager->persist($fake);
-        }
-        $entityManager->flush();
+        $this->reloadSchema();
+        $this->addNFakeElements(30);
 
         $this
             ->client
@@ -314,16 +251,8 @@ class PaginatorAnnotationResolverTest extends AbstractWebTestCase
      */
     public function testPaginatorMultipleWhereAnnotation()
     {
-        $fake = FakeFactory::create();
-        $fake->setField('test');
-
-        $entityManager = static::$kernel
-            ->getContainer()
-            ->get('doctrine')
-            ->getManagerForClass('Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\Fake');
-
-        $entityManager->persist($fake);
-        $entityManager->flush();
+        $this->reloadSchema();
+        $this->addNFakeElements(1, 'test');
 
         $this
             ->client
@@ -346,15 +275,8 @@ class PaginatorAnnotationResolverTest extends AbstractWebTestCase
      */
     public function testPaginatorWithLikeWithGetParameterAnnotation()
     {
-        $fake = FakeFactory::create();
-        $fake->setField('we are doing a test from paginator');
-        $entityManager = static::$kernel
-            ->getContainer()
-            ->get('doctrine')
-            ->getManagerForClass('Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\Fake');
-
-        $entityManager->persist($fake);
-        $entityManager->flush();
+        $this->reloadSchema();
+        $this->addNFakeElements(1, 'we are doing a test from paginator');
 
         $this
             ->client
@@ -385,5 +307,24 @@ class PaginatorAnnotationResolverTest extends AbstractWebTestCase
                 ->getResponse()
                 ->getContent()
         );
+    }
+
+    /**
+     * Add $i fake elements.
+     *
+     * @param int    $n
+     * @param string $field
+     */
+    private function addNFakeElements(
+        int $n,
+        string $field = null
+    ) {
+        $field = $field ?? (string) rand(1, 99999999);
+        for ($i = 0; $i < $n; ++$i) {
+            $fake{$i} = FakeFactory::create();
+            $fake{$i}->setField($field);
+            $this->save($fake{$i});
+            $this->clear(Fake::class);
+        }
     }
 }

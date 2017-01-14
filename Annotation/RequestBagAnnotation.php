@@ -11,10 +11,13 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
+declare(strict_types=1);
+
 namespace Mmoreram\ControllerExtraBundle\Annotation;
 
-use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
-
+/**
+ * Class RequestBagAnnotation.
+ */
 abstract class RequestBagAnnotation extends Annotation
 {
     /**
@@ -22,47 +25,30 @@ abstract class RequestBagAnnotation extends Annotation
      *
      * The parameter path
      */
-    public $path;
+    protected $path;
 
     /**
-     * @var null|string
+     * @var string
      *
      * The name that the parameter will get
      */
-    public $name = null;
+    protected $name;
 
     /**
      * @var mixed
      *
      * The default value if the parameter is not set
      */
-    public $default = null;
-
-    /**
-     * @var bool
-     *
-     * If true, a path like foo[bar] will find deeper items
-     */
-    public $deep = false;
+    protected $default;
 
     /**
      * Gets the path.
      *
-     * @return string
+     * @return null|string
      */
-    public function getPath()
+    public function getPath() : ? string
     {
         return $this->path;
-    }
-
-    /**
-     * Sets the path.
-     *
-     * @param string $path
-     */
-    public function setPath($path)
-    {
-        $this->path = $path;
     }
 
     /**
@@ -70,19 +56,9 @@ abstract class RequestBagAnnotation extends Annotation
      *
      * @return null|string
      */
-    public function getName()
+    public function getName() : ? string
     {
         return $this->name;
-    }
-
-    /**
-     * Sets the name.
-     *
-     * @param string $name
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
     }
 
     /**
@@ -93,35 +69,5 @@ abstract class RequestBagAnnotation extends Annotation
     public function getDefault()
     {
         return $this->default;
-    }
-
-    /**
-     * Sets the default.
-     *
-     * @param mixed $default The default value
-     */
-    public function setDefault($default)
-    {
-        $this->default = $default;
-    }
-
-    /**
-     * Is deep.
-     *
-     * @return mixed
-     */
-    public function isDeep()
-    {
-        return $this->deep;
-    }
-
-    /**
-     * Sets is deep.
-     *
-     * @param bool $deep
-     */
-    public function setDeep($deep)
-    {
-        $this->deep = $deep;
     }
 }

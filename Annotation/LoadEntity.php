@@ -11,82 +11,59 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
-namespace Mmoreram\ControllerExtraBundle\Annotation;
+declare(strict_types=1);
 
-use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
+namespace Mmoreram\ControllerExtraBundle\Annotation;
 
 /**
  * Entity annotation driver.
  *
  * @Annotation
+ * @Target({"METHOD"})
  */
-class Entity extends Annotation
+final class LoadEntity extends AnnotationWithEntityReference
 {
-    /**
-     * @var string
-     *
-     * Namespace of entity in a short namespace mode
-     */
-    public $class;
-
     /**
      * @var string
      *
      * Name of the parameter
      */
-    public $name;
+    protected $name;
 
     /**
      * @var array
      *
      * Mapping
      */
-    public $mapping;
+    protected $mapping = [];
 
     /**
      * @var bool
      *
      * Mapping fallback
      */
-    public $mappingFallback;
+    protected $mappingFallback;
 
     /**
      * @var array
      *
      * Setters
      */
-    public $setters = [];
+    protected $setters = [];
 
     /**
      * @var bool
      *
      * Persist entity
      */
-    public $persist;
-
-    /**
-     * @var array
-     *
-     * Not found exception
-     */
-    public $notFoundException;
-
-    /**
-     * return class.
-     *
-     * @return string Class
-     */
-    public function getClass()
-    {
-        return $this->class;
-    }
+    protected $persist;
 
     /**
      * return name.
      *
-     * @return string Name
+     * @return null|string
      */
-    public function getName()
+    public function getName() : ? string
     {
         return $this->name;
     }
@@ -94,9 +71,9 @@ class Entity extends Annotation
     /**
      * return mapping.
      *
-     * @return array Mapping
+     * @return array
      */
-    public function getMapping()
+    public function getMapping() : array
     {
         return $this->mapping;
     }
@@ -104,9 +81,9 @@ class Entity extends Annotation
     /**
      * Get MappingFallback.
      *
-     * @return bool MappingFallback
+     * @return null|bool
      */
-    public function getMappingFallback()
+    public function getMappingFallback() : ? bool
     {
         return $this->mappingFallback;
     }
@@ -114,9 +91,9 @@ class Entity extends Annotation
     /**
      * return setters.
      *
-     * @return array Setters
+     * @return array
      */
-    public function getSetters()
+    public function getSetters() : array
     {
         return $this->setters;
     }
@@ -124,20 +101,10 @@ class Entity extends Annotation
     /**
      * return persist.
      *
-     * @return bool persist
+     * @return null|bool
      */
-    public function getPersist()
+    public function getPersist() : ? bool
     {
         return $this->persist;
-    }
-
-    /**
-     * return the not found exception.
-     *
-     * @return array
-     */
-    public function getNotFoundException()
-    {
-        return $this->notFoundException;
     }
 }

@@ -11,36 +11,31 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
+declare(strict_types=1);
+
 namespace Mmoreram\ControllerExtraBundle\Resolver\Paginator;
 
 use Doctrine\ORM\QueryBuilder;
 
-use Mmoreram\ControllerExtraBundle\Annotation\Paginator as AnnotationPaginator;
-use Mmoreram\ControllerExtraBundle\Resolver\Paginator\Interfaces\PaginatorEvaluatorInterface;
+use Mmoreram\ControllerExtraBundle\Annotation\CreatePaginator;
 
 /**
  * Class PaginatorNotNullsEvaluator.
  */
-class PaginatorNotNullsEvaluator implements PaginatorEvaluatorInterface
+class PaginatorNotNullsEvaluator implements PaginatorEvaluator
 {
     /**
      * Evaluates inner joins.
      *
-     * @param QueryBuilder        $queryBuilder Query builder
-     * @param AnnotationPaginator $annotation   Annotation
-     *
-     * @return PaginatorEvaluatorInterface self Object
+     * @param QueryBuilder    $queryBuilder
+     * @param CreatePaginator $annotation
      */
     public function evaluate(
         QueryBuilder $queryBuilder,
-        AnnotationPaginator $annotation
+        CreatePaginator $annotation
     ) {
-        if (is_array($annotation->getNotNulls())) {
-            foreach ($annotation->getNotNulls() as $notNull) {
-                $queryBuilder->andWhere(trim($notNull[0]) . '.' . trim($notNull[1]) . ' IS NOT NULL');
-            }
+        foreach ($annotation->getNotNulls() as $notNull) {
+            $queryBuilder->andWhere(trim($notNull[0]) . '.' . trim($notNull[1]) . ' IS NOT NULL');
         }
-
-        return $this;
     }
 }

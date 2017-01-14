@@ -11,102 +11,107 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
+declare(strict_types=1);
+
 namespace Mmoreram\ControllerExtraBundle\Resolver\Paginator;
 
 use Doctrine\ORM\QueryBuilder;
 
-use Mmoreram\ControllerExtraBundle\Annotation\Paginator as AnnotationPaginator;
-use Mmoreram\ControllerExtraBundle\Provider\RequestParameterProvider;
-use Mmoreram\ControllerExtraBundle\Resolver\Paginator\Interfaces\PaginatorEvaluatorInterface;
+use Mmoreram\ControllerExtraBundle\Annotation\CreatePaginator;
+use Mmoreram\ControllerExtraBundle\Provider\Provider;
 
 /**
  * Class PaginatorWheresEvaluator.
  */
-class PaginatorWheresEvaluator implements PaginatorEvaluatorInterface
+class PaginatorWheresEvaluator implements PaginatorEvaluator
 {
     /**
-     * @var RequestParameterProvider
+     * @var Provider
      *
-     * Request Parameter provider
+     * Provider collector
      */
-    protected $requestParameterProvider;
+    private $providerCollector;
 
     /**
      * Construct.
      *
-     * @param RequestParameterProvider $requestParameterProvider Request Parameter provider
+     * @param Provider $providerCollector
      */
-    public function __construct(RequestParameterProvider $requestParameterProvider)
+    public function __construct(Provider $providerCollector)
     {
-        $this->requestParameterProvider = $requestParameterProvider;
+        $this->providerCollector = $providerCollector;
     }
 
     /**
      * Evaluates inner joins.
      *
-     * @param QueryBuilder        $queryBuilder Query builder
-     * @param AnnotationPaginator $annotation   Annotation
-     *
-     * @return PaginatorEvaluatorInterface self Object
+     * @param QueryBuilder    $queryBuilder
+     * @param CreatePaginator $annotation
      */
     public function evaluate(
         QueryBuilder $queryBuilder,
-        AnnotationPaginator $annotation
+        CreatePaginator $annotation
     ) {
         $iteration = 0;
 
-        if (is_array($annotation->getWheres())) {
-            foreach ($annotation->getWheres() as $where) {
-                $annotationWhereParameter = $where[3];
+        foreach ($annotation->getWheres() as $where) {
+            $annotationWhereParameter = $where[3];
+            $processedWhereValue = $annotationWhereParameter;
+
+            /**
+             * If string, we can search for references in query parameters.
+             */
+            if (is_string($annotationWhereParameter)) {
                 $whereParameter = $this->clearWildcards($annotationWhereParameter);
 
                 $whereValue = $this
-                    ->requestParameterProvider
-                    ->getParameterValue($whereParameter);
+                    ->providerCollector
+                    ->provide($whereParameter);
 
                 $whereValue = $this->addWildcards($annotationWhereParameter, $whereValue);
-
-                $optionalFilter = (bool) isset($where[4])
-                    ? $where[4]
+                $optionalFilter = isset($where[4])
+                    ? (bool) $where[4]
                     : false;
 
                 if ($optionalFilter && ($whereParameter === $whereValue)) {
                     continue;
                 }
 
-                $queryBuilder
-                    ->andWhere(trim($where[0]) . '.' . trim($where[1]) . ' ' . $where[2] . ' ?0' . $iteration)
-                    ->setParameter('0' . $iteration, $whereValue);
-
-                ++$iteration;
+                $processedWhereValue = $whereValue;
             }
-        }
 
-        return $this;
+            $queryBuilder
+                ->andWhere(trim($where[0]) . '.' . trim($where[1]) . ' ' . $where[2] . ' ?0' . $iteration)
+                ->setParameter('0' . $iteration, $processedWhereValue);
+
+            ++$iteration;
+        }
     }
 
     /**
      * Remove wildcards from query if necessary.
      *
-     * @param string $where Where from annotation
+     * @param string $whereValue
      *
      * @return string
      */
-    private function clearWildcards($where)
+    private function clearWildcards(string $whereValue) : string
     {
-        return trim($where, '%');
+        return trim($whereValue, '%');
     }
 
     /**
      * Add wildcards to query if necessary.
      *
-     * @param string $annotationWhereParameter Where from annotation
-     * @param string $whereValue               Where replaced with request parameters
+     * @param string $annotationWhereParameter
+     * @param string $whereValue
      *
      * @return string
      */
-    private function addWildcards($annotationWhereParameter, $whereValue)
-    {
+    private function addWildcards(
+        string $annotationWhereParameter,
+        string $whereValue
+    ) : string {
         if (substr($annotationWhereParameter, 0, 1) === '%') {
             $whereValue = '%' . $whereValue;
         }

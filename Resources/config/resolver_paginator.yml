@@ -1,68 +1,55 @@
-parameters:
-
-    #
-    # Resolvers
-    #
-    mmoreram.controllerextra.resolver.paginator_annotation_resolver.class: Mmoreram\ControllerExtraBundle\Resolver\PaginatorAnnotationResolver
-    mmoreram.controllerextra.collector.paginator_evaluator_collector.class: Mmoreram\ControllerExtraBundle\Resolver\Paginator\PaginatorEvaluatorCollector
-    mmoreram.controllerextra.evaluator.paginator_innerjoins_evaluator.class: Mmoreram\ControllerExtraBundle\Resolver\Paginator\PaginatorInnerJoinsEvaluator
-    mmoreram.controllerextra.evaluator.paginator_leftjoins_evaluator.class: Mmoreram\ControllerExtraBundle\Resolver\Paginator\PaginatorLeftJoinsEvaluator
-    mmoreram.controllerextra.evaluator.paginator_wheres_evaluator.class: Mmoreram\ControllerExtraBundle\Resolver\Paginator\PaginatorWheresEvaluator
-    mmoreram.controllerextra.evaluator.paginator_orderby_evaluator.class: Mmoreram\ControllerExtraBundle\Resolver\Paginator\PaginatorOrderByEvaluator
-    mmoreram.controllerextra.evaluator.paginator_notnulls_evaluator.class: Mmoreram\ControllerExtraBundle\Resolver\Paginator\PaginatorNotNullsEvaluator
-
 services:
 
     #
     # Resolvers
     #
-    mmoreram.controllerextra.resolver.paginator_annotation_resolver:
-        class: %mmoreram.controllerextra.resolver.paginator_annotation_resolver.class%
+    controller_extra.resolver.paginator_annotation:
+        class: Mmoreram\ControllerExtraBundle\Resolver\PaginatorAnnotationResolver
         arguments:
             - "@doctrine"
-            - "@mmoreram.controllerextra.provider.entity_provider"
-            - "@mmoreram.controllerextra.provider.request_parameter_provider"
-            - "@mmoreram.controllerextra.collector.paginator_evaluator_collector"
-            - %mmoreram.controllerextra.paginator_default_name%
-            - %mmoreram.controllerextra.paginator_default_page%
-            - %mmoreram.controllerextra.paginator_default_limit_per_page%
+            - "@controller_extra.provider.entity"
+            - "@controller_extra.provider_collector"
+            - "@controller_extra.collector.paginator_evaluator"
+            - "%controller_extra.paginator_default_name%"
+            - "%controller_extra.paginator_default_page%"
+            - "%controller_extra.paginator_default_limit_per_page%"
         tags:
-            - { name: controller_extra.annotation }
+            - { name: controller_extra.annotation_resolver }
 
     #
     # Evaluator collector
     #
-    mmoreram.controllerextra.collector.paginator_evaluator_collector:
-        class: %mmoreram.controllerextra.collector.paginator_evaluator_collector.class%
+    controller_extra.collector.paginator_evaluator:
+        class: Mmoreram\ControllerExtraBundle\Resolver\Paginator\PaginatorEvaluatorCollector
 
     #
     # Evaluators
     #
-    mmoreram.controllerextra.evaluator.paginator_innerjoins_evaluator:
-        class: %mmoreram.controllerextra.evaluator.paginator_innerjoins_evaluator.class%
+    controller_extra.evaluator.paginator_innerjoins:
+        class: Mmoreram\ControllerExtraBundle\Resolver\Paginator\PaginatorInnerJoinsEvaluator
         tags:
             - { name: controller_extra.paginator_evaluator }
 
-    mmoreram.controllerextra.evaluator.paginator_leftjoins_evaluator:
-        class: %mmoreram.controllerextra.evaluator.paginator_leftjoins_evaluator.class%
+    controller_extra.evaluator.paginator_leftjoins:
+        class: Mmoreram\ControllerExtraBundle\Resolver\Paginator\PaginatorLeftJoinsEvaluator
         tags:
             - { name: controller_extra.paginator_evaluator }
 
-    mmoreram.controllerextra.evaluator.paginator_wheres_evaluator:
-        class: %mmoreram.controllerextra.evaluator.paginator_wheres_evaluator.class%
+    controller_extra.evaluator.paginator_wheres:
+        class: Mmoreram\ControllerExtraBundle\Resolver\Paginator\PaginatorWheresEvaluator
         arguments:
-            - "@mmoreram.controllerextra.provider.request_parameter_provider"
+            - "@controller_extra.provider.request_parameter"
         tags:
             - { name: controller_extra.paginator_evaluator }
 
-    mmoreram.controllerextra.evaluator.paginator_orderby_evaluator:
-        class: %mmoreram.controllerextra.evaluator.paginator_orderby_evaluator.class%
+    controller_extra.evaluator.paginator_orderby:
+        class: Mmoreram\ControllerExtraBundle\Resolver\Paginator\PaginatorOrderByEvaluator
         arguments:
-            - "@mmoreram.controllerextra.provider.request_parameter_provider"
+            - "@controller_extra.provider.request_parameter"
         tags:
             - { name: controller_extra.paginator_evaluator }
 
-    mmoreram.controllerextra.evaluator.paginator_notnulls_evaluator:
-        class: %mmoreram.controllerextra.evaluator.paginator_notnulls_evaluator.class%
+    controller_extra.evaluator.paginator_notnulls:
+        class: Mmoreram\ControllerExtraBundle\Resolver\Paginator\PaginatorNotNullsEvaluator
         tags:
             - { name: controller_extra.paginator_evaluator }

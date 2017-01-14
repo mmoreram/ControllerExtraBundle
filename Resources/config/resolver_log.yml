@@ -1,21 +1,13 @@
-parameters:
-
-    #
-    # Resolvers
-    #
-    mmoreram.controllerextra.resolver.log_annotation_resolver.class: Mmoreram\ControllerExtraBundle\Resolver\LogAnnotationResolver
-
 services:
 
     #
     # Resolvers
     #
-    mmoreram.controllerextra.resolver.log_annotation_resolver:
-        class: %mmoreram.controllerextra.resolver.log_annotation_resolver.class%
+    controller_extra.resolver.log_annotation:
+        class: Mmoreram\ControllerExtraBundle\Resolver\LogAnnotationResolver
         arguments:
             - "@logger"
-        calls:
-            - [setDefaultLevel, [%mmoreram.controllerextra.log_default_level%]]
-            - [setDefaultExecute, [%mmoreram.controllerextra.log_default_execute%]]
+            - "%controller_extra.log_default_level%"
+            - "%controller_extra.log_default_execute%"
         tags:
-            - { name: controller_extra.annotation }
+            - { name: controller_extra.annotation_resolver }

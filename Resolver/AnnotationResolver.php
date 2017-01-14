@@ -19,13 +19,41 @@ use ReflectionMethod;
 use Symfony\Component\HttpFoundation\Request;
 
 use Mmoreram\ControllerExtraBundle\Annotation\Annotation;
-use Mmoreram\ControllerExtraBundle\Annotation\Get;
 
 /**
- * Class GetAnnotationResolver.
+ * Class AnnotationResolver.
  */
-class GetAnnotationResolver extends AnnotationResolver
+abstract class AnnotationResolver
 {
+    /**
+     * Return parameter type.
+     *
+     * @param ReflectionMethod $method
+     * @param string           $parameterName
+     * @param string|null      $default
+     *
+     * @return string|null
+     */
+    public function getParameterType(
+        ReflectionMethod $method,
+        string $parameterName,
+        ? string $default = null
+    ) : ? string {
+        $parameters = $method->getParameters();
+
+        foreach ($parameters as $parameter) {
+            if ($parameter->getName() === $parameterName) {
+                $class = $parameter->getClass();
+
+                return $class
+                    ? $class->getName()
+                    : $default;
+            }
+        }
+
+        return $default;
+    }
+
     /**
      * Specific annotation evaluation.
      *
@@ -38,32 +66,9 @@ class GetAnnotationResolver extends AnnotationResolver
      * @param Annotation       $annotation
      * @param ReflectionMethod $method
      */
-    public function evaluateAnnotation(
+    abstract public function evaluateAnnotation(
         Request $request,
         Annotation $annotation,
         ReflectionMethod $method
-    ) {
-        /**
-         * Annotation is only loaded if is typeof AnnotationEntity.
-         */
-        if ($annotation instanceof Get) {
-            $param = $request
-                ->query
-                ->get(
-                    $annotation->getPath(),
-                    $annotation->getDefault()
-                );
-
-            $annotationParameterName = $annotation->getName();
-
-            $parameterName = is_null($annotationParameterName)
-                ? $annotation->getPath()
-                : $annotationParameterName;
-
-            $request->attributes->set(
-                $parameterName,
-                $param
-            );
-        }
-    }
+    );
 }

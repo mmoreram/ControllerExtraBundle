@@ -11,15 +11,17 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
+declare(strict_types=1);
+
 namespace Mmoreram\ControllerExtraBundle\Tests\Functional\Resolver;
 
 use Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory;
-use Mmoreram\ControllerExtraBundle\Tests\Functional\AbstractWebTestCase;
+use Mmoreram\ControllerExtraBundle\Tests\Functional\FunctionalTest;
 
 /**
  * Class EntityAnnotationResolverTest.
  */
-class EntityAnnotationResolverTest extends AbstractWebTestCase
+class EntityAnnotationResolverTest extends FunctionalTest
 {
     /**
      * testAnnotation.
@@ -32,6 +34,14 @@ class EntityAnnotationResolverTest extends AbstractWebTestCase
                 'GET',
                 '/fake/entity'
             );
+
+        $this->assertEquals(
+            '[true]',
+            $this
+                ->client
+                ->getResponse()
+                ->getContent()
+        );
     }
 
     /**
@@ -41,13 +51,7 @@ class EntityAnnotationResolverTest extends AbstractWebTestCase
     {
         $fake = FakeFactory::create();
         $fake->setField('');
-        $entityManager = static::$kernel
-            ->getContainer()
-            ->get('doctrine')
-            ->getManagerForClass('Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\Fake');
-
-        $entityManager->persist($fake);
-        $entityManager->flush();
+        $this->save($fake);
 
         $this
             ->client
@@ -70,15 +74,10 @@ class EntityAnnotationResolverTest extends AbstractWebTestCase
      */
     public function testMappingManyAnnotation()
     {
+        $this->reloadSchema();
         $fake = FakeFactory::create();
         $fake->setField('value');
-        $entityManager = static::$kernel
-            ->getContainer()
-            ->get('doctrine')
-            ->getManagerForClass('Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\Fake');
-
-        $entityManager->persist($fake);
-        $entityManager->flush();
+        $this->save($fake);
 
         $this
             ->client
@@ -88,7 +87,7 @@ class EntityAnnotationResolverTest extends AbstractWebTestCase
             );
 
         $this->assertEquals(
-            '{"id":1,"null":null}',
+            '{"id":1,"other":true}',
             $this
                 ->client
                 ->getResponse()
@@ -98,20 +97,13 @@ class EntityAnnotationResolverTest extends AbstractWebTestCase
 
     /**
      * Test fake mapping.
-     *
-     * @expectedException \Mmoreram\ControllerExtraBundle\Exceptions\EntityNotFoundException
      */
     public function testMappingManyFailAnnotation()
     {
+        $this->reloadSchema();
         $fake = FakeFactory::create();
         $fake->setField('value2');
-        $entityManager = static::$kernel
-            ->getContainer()
-            ->get('doctrine')
-            ->getManagerForClass('Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\Fake');
-
-        $entityManager->persist($fake);
-        $entityManager->flush();
+        $this->save($fake);
 
         $this
             ->client
@@ -120,12 +112,14 @@ class EntityAnnotationResolverTest extends AbstractWebTestCase
                 '/fake/entity/mapped/many/1'
             );
 
+        $result = json_decode($this
+            ->client
+            ->getResponse()
+            ->getContent(), true);
+
         $this->assertEquals(
-            '{"id":1}',
-            $this
-                ->client
-                ->getResponse()
-                ->getContent()
+            'Doctrine\ORM\EntityNotFoundException',
+            $result['namespace']
         );
     }
 
@@ -134,12 +128,21 @@ class EntityAnnotationResolverTest extends AbstractWebTestCase
      */
     public function testMappingFallback()
     {
+        $this->reloadSchema();
         $this
             ->client
             ->request(
                 'GET',
                 '/fake/entity/mapped/fallback/1'
             );
+
+        $this->assertEquals(
+            '[true]',
+            $this
+                ->client
+                ->getResponse()
+                ->getContent()
+        );
     }
 
     /**
@@ -147,16 +150,21 @@ class EntityAnnotationResolverTest extends AbstractWebTestCase
      */
     public function testEntityNotFound()
     {
-        $this->setExpectedException(
-            'Symfony\Component\HttpKernel\Exception\NotFoundHttpException',
-            'Entity was not found'
-        );
-
         $this
             ->client
             ->request(
                 'GET',
                 '/fake/entity/not/found/not-found-id'
             );
+
+        $result = json_decode($this
+            ->client
+            ->getResponse()
+            ->getContent(), true);
+
+        $this->assertEquals(
+            'Doctrine\ORM\EntityNotFoundException',
+            $result['namespace']
+        );
     }
 }

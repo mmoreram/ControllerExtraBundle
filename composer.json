@@ -1,6 +1,6 @@
 {
     "name": "mmoreram/controller-extra-bundle",
-    "description": "Some specific controller features",
+    "description": "Some specific controller annotations",
     "keywords": [
         "symfony2",
         "controller",
@@ -23,30 +23,29 @@
         }
     ],
     "require": {
-        "php": ">=5.6",
+        "php": ">=7.1",
         "doctrine/common": "^2.5",
-        "symfony/config": "^2.8|^3.0",
-        "symfony/http-kernel": "^2.8|^3.0",
-        "symfony/http-foundation": "^2.8|^3.0",
-        "symfony/dependency-injection": "^2.8|^3.0"
+        "symfony/config": "^3.2",
+        "symfony/http-kernel": "^3.2",
+        "symfony/http-foundation": "^3.2",
+        "symfony/dependency-injection": "^3.2",
+        "mmoreram/base-bundle": "^1.0.3",
+        "mmoreram/symfony-bundle-dependencies": "^2.0"
     },
     "require-dev": {
-        "doctrine/doctrine-bundle": "~1.2",
-        "doctrine/annotations": "~1.0, >=1.2",
-        "symfony/framework-bundle": "^2.8|^3.0",
-        "symfony/finder": "^2.8|^3.0",
-        "symfony/validator": "^2.8|^3.0",
-        "symfony/browser-kit": "^2.8|^3.0",
-        "symfony/css-selector": "^2.8|^3.0",
-        "symfony/monolog-bundle": "^2.8|^3.0",
-        "symfony/form": "^2.8|^3.0",
-        "doctrine/orm": "^2.5",
+        "doctrine/doctrine-bundle": "^1.6.4",
+        "doctrine/annotations": "^1.2",
+        "doctrine/orm": "^2.5.6",
+
+        "symfony/symfony": "^3.2",
+        "symfony/monolog-bundle": "^3.0",
         "pagerfanta/pagerfanta": "~1.0",
-        "knplabs/knp-paginator-bundle": "~2.5.1",
+        "knplabs/knp-paginator-bundle": "^2.5",
+        "mmoreram/simple-doctrine-mapping": "^1.2",
 
         "phpunit/phpunit": "^5.6.4",
         "friendsofphp/php-cs-fixer": "^1.12.4",
-        "mmoreram/php-formatter": "^1.1.0"
+        "mmoreram/php-formatter": "^1.3.1"
     },
     "suggest": {
         "symfony/monolog-bundle": "To use the @Log annotation",
@@ -58,22 +57,18 @@
     "autoload": {
         "psr-4": {
             "Mmoreram\\ControllerExtraBundle\\": ""
-        }
-    },
-    "config": {
-        "bin-dir": "bin"
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.0-dev"
-        }
+        },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
     },
     "scripts": {
-        "check-style": [
-            "bin/php-cs-fixer fix --config-file=.php_cs",
-            "bin/php-formatter f:h:f .",
-            "bin/php-formatter f:u:s ."
+        "fix-code": [
+            "vendor/bin/php-cs-fixer fix --config-file=.php_cs",
+            "vendor/bin/php-formatter f:h:f . --exclude=vendor",
+            "vendor/bin/php-formatter f:s:f . --exclude=vendor",
+            "vendor/bin/php-formatter f:u:s . --exclude=vendor"
         ],
-        "test": "phpunit"
+        "test": "vendor/bin/phpunit"
     }
 }

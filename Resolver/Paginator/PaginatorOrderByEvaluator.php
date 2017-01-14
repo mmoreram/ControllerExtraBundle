@@ -11,72 +11,67 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
+declare(strict_types=1);
+
 namespace Mmoreram\ControllerExtraBundle\Resolver\Paginator;
 
 use Doctrine\ORM\QueryBuilder;
 
-use Mmoreram\ControllerExtraBundle\Annotation\Paginator as AnnotationPaginator;
-use Mmoreram\ControllerExtraBundle\Provider\RequestParameterProvider;
-use Mmoreram\ControllerExtraBundle\Resolver\Paginator\Interfaces\PaginatorEvaluatorInterface;
+use Mmoreram\ControllerExtraBundle\Annotation\CreatePaginator;
+use Mmoreram\ControllerExtraBundle\Provider\Provider;
 
 /**
  * Class PaginatorOrderByEvaluator.
  */
-class PaginatorOrderByEvaluator implements PaginatorEvaluatorInterface
+class PaginatorOrderByEvaluator implements PaginatorEvaluator
 {
     /**
-     * @var RequestParameterProvider
+     * @var Provider
      *
-     * Request Parameter provider
+     * Provider collector
      */
-    protected $requestParameterProvider;
+    private $providerCollector;
 
     /**
      * Construct.
      *
-     * @param RequestParameterProvider $requestParameterProvider Request Parameter provider
+     * @param Provider $providerCollector
      */
-    public function __construct(RequestParameterProvider $requestParameterProvider)
+    public function __construct(Provider $providerCollector)
     {
-        $this->requestParameterProvider = $requestParameterProvider;
+        $this->providerCollector = $providerCollector;
     }
 
     /**
      * Evaluates inner joins.
      *
-     * @param QueryBuilder        $queryBuilder Query builder
-     * @param AnnotationPaginator $annotation   Annotation
-     *
-     * @return PaginatorEvaluatorInterface self Object
+     * @param QueryBuilder    $queryBuilder
+     * @param CreatePaginator $annotation
      */
     public function evaluate(
         QueryBuilder $queryBuilder,
-        AnnotationPaginator $annotation
+        CreatePaginator $annotation
     ) {
-        if (is_array($annotation->getOrderBy())) {
-            foreach ($annotation->getOrderBy() as $orderBy) {
-                if (is_array($orderBy)) {
-                    $field = $this
-                        ->requestParameterProvider
-                        ->getParameterValue(trim($orderBy[1]));
+        foreach ($annotation->getOrderBy() as $orderBy) {
+            if (is_array($orderBy)) {
+                $field = $this
+                    ->providerCollector
+                    ->provide(trim($orderBy[1]));
 
-                    $direction = $this
-                        ->requestParameterProvider
-                        ->getParameterValue(
-                            trim($orderBy[2]),
-                            isset($orderBy[3]) && is_array($orderBy[3])
-                                ? $orderBy[3]
-                                : null
-                        );
-
-                    $queryBuilder->addOrderBy(
-                        trim($orderBy[0]) . '.' . $field,
-                        $direction
+                $direction = $this
+                    ->providerCollector
+                    ->provide(
+                        trim($orderBy[2]),
+                        isset($orderBy[3]) && is_array($orderBy[3])
+                            ? $orderBy[3]
+                            : []
                     );
-                }
+
+                $queryBuilder->addOrderBy(
+                    trim($orderBy[0]) . '.' . $field,
+                    $direction
+                );
             }
         }
-
-        return $this;
     }
 }

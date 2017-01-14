@@ -11,3 +11,4 @@ Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\Fake:
             column: field
             type: string
             length: 255
+            nullable: true

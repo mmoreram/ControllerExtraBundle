@@ -11,12 +11,14 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
-namespace Mmoreram\ControllerExtraBundle\Annotation\Abstracts;
+declare(strict_types=1);
+
+namespace Mmoreram\ControllerExtraBundle\Annotation;
 
 /**
- * Class AbstractResponse.
+ * Class ResponseAnnotation.
  */
-abstract class AbstractResponse extends Annotation
+abstract class ResponseAnnotation extends Annotation
 {
     /**
      * @var int
@@ -35,9 +37,9 @@ abstract class AbstractResponse extends Annotation
     /**
      * Get response status.
      *
-     * @return int Response status
+     * @return int
      */
-    public function getStatus()
+    public function getStatus() : int
     {
         return $this->status;
     }
@@ -45,9 +47,9 @@ abstract class AbstractResponse extends Annotation
     /**
      * Get response headers.
      *
-     * @return int Response headers
+     * @return array
      */
-    public function getHeaders()
+    public function getHeaders() : array
     {
         return $this->headers;
     }

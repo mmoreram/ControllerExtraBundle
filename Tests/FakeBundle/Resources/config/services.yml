@@ -1,7 +1,17 @@
+parameters:
+
+    #
+    # Parameters defined for testing
+    #
+    controller_extra.entity.fake.class: Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\Fake
+
 services:
 
     #
     # Factories
     #
-    controller_extra_bundle.factory.fake:
-        class: %controller_extra_bundle.factory.fake.class%
+    controller_extra.factory.fake:
+        class: Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory
+
+    controller_extra.alternative_repository:
+        class: Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Repository\AlternativeRepository

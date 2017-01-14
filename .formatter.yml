@@ -5,6 +5,7 @@ use-sort:
     group-type: each
     sort-type: alph
     sort-direction: asc
+strict: true
 header: |
     /*
      * This file is part of the ControllerExtraBundle for Symfony2.

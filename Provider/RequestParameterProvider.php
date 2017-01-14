@@ -11,6 +11,8 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
+declare(strict_types=1);
+
 namespace Mmoreram\ControllerExtraBundle\Provider;
 
 use Symfony\Component\HttpFoundation\ParameterBag;
@@ -20,7 +22,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 /**
  * Class RequestParameterProvider.
  */
-class RequestParameterProvider
+class RequestParameterProvider implements Provider
 {
     /**
      * @var string
@@ -41,59 +43,44 @@ class RequestParameterProvider
      *
      * Request Stack
      */
-    protected $requestStack;
+    private $requestStack;
 
     /**
      * @var string
      *
      * Request type
      */
-    protected $requestType;
+    private $requestType;
 
     /**
-     * Construct method.
+     * RequestParameterProvider constructor.
      *
-     * @param RequestStack $requestStack Request stack
+     * @param RequestStack $requestStack
+     * @param string       $requestType
      */
-    public function __construct(RequestStack $requestStack)
-    {
+    public function __construct(
+        RequestStack $requestStack,
+        string $requestType
+    ) {
         $this->requestStack = $requestStack;
-    }
-
-    /**
-     * Set request type.
-     *
-     * @param string $requestType Request type
-     *
-     * @return $this Self object
-     */
-    public function setRequestType($requestType)
-    {
         $this->requestType = $requestType;
-
-        return $this;
     }
 
     /**
-     * Checks the value format.
+     * Provide related value given reference. If not found, return the same
+     * reference, treated as a value.
      *
-     * If value has parameter format, the referenced parameter will be looked
-     * for in the request query parameters bag
+     * A map array is optional in order to have a normalization guide.
      *
-     * If found, this will be returned, otherwise plain value will be returned
+     * @param string $reference
+     * @param array  $map
      *
-     * In all cases, if returned value is set as key in the injected map, value
-     * of index found will be returned insteadof original value
-     *
-     * If request is null, return just the value
-     *
-     * @param string $value Value
-     * @param array  $map   Map
-     *
-     * @return string Value
+     * @return mixed
      */
-    public function getParameterValue($value, array $map = null)
-    {
+    public function provide(
+        string $reference,
+        array $map = []
+    ) {
         $request = $this->requestType == self::CURRENT_REQUEST
             ? $this
                 ->requestStack
@@ -103,53 +90,41 @@ class RequestParameterProvider
                 ->getMasterRequest();
 
         if ($request instanceof Request) {
+            foreach ([
+                '~' => $request->attributes,
+                '#' => $request->request,
+                '?' => $request->query,
+            ] as $symbol => $parameterBag) {
+                $value = $this->resolveValueFromParameterBag(
+                    $parameterBag,
+                    $symbol,
+                    $reference
+                );
 
-            /**
-             * Resolving the elements from the query.
-             */
-            $value = $this->resolveValueFromParameterBag(
-                $request->attributes,
-                '~',
-                $value
-            );
-
-            /**
-             * Resolving the values from the request ($_POST).
-             */
-            $value = $this->resolveValueFromParameterBag(
-                $request->request,
-                '#',
-                $value
-            );
-
-            /**
-             * Resolving the values from the query ($_GET).
-             */
-            $value = $this->resolveValueFromParameterBag(
-                $request->query,
-                '?',
-                $value
-            );
+                if ($value !== $reference) {
+                    return is_array($map) && isset($map[$value])
+                        ? $map[$value]
+                        : $value;
+                }
+            }
         }
 
-        return is_array($map) && isset($map[$value])
-            ? $map[$value]
-            : $value;
+        return $reference;
     }
 
     /**
      * Given a bag and a delimiter, return the resolved value.
      *
-     * @param ParameterBag $parameterBag Parameter Bag
-     * @param string       $delimiter    Delimiter
-     * @param string       $value        Value
+     * @param ParameterBag $parameterBag
+     * @param string       $delimiter
+     * @param string       $value
      *
-     * @return string Resolved value
+     * @return mixed
      */
     protected function resolveValueFromParameterBag(
         ParameterBag $parameterBag,
-        $delimiter,
-        $value
+        string $delimiter,
+        string $value
     ) {
         $trimmedValue = trim($value, $delimiter);
 

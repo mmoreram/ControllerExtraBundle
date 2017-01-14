@@ -11,13 +11,16 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
+declare(strict_types=1);
+
 namespace Mmoreram\ControllerExtraBundle\Annotation;
 
 /**
  * Post annotation driver.
  *
  * @Annotation
+ * @Target({"METHOD"})
  */
-class Post extends RequestBagAnnotation
+final class Post extends RequestBagAnnotation
 {
 }

@@ -11,37 +11,38 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
-namespace Mmoreram\ControllerExtraBundle\Annotation;
+declare(strict_types=1);
 
-use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
+namespace Mmoreram\ControllerExtraBundle\Annotation;
 
 /**
  * Flush annotation driver.
  *
  * @Annotation
+ * @Target({"METHOD"})
  */
-class Flush extends Annotation
+final class Flush extends Annotation
 {
     /**
      * @var string
      *
      * Manager to use when flushing
      */
-    public $manager;
+    protected $manager;
 
     /**
-     * @var entity
+     * @var string
      *
      * Entity from Request ParameterBag to flush
      */
-    public $entity;
+    protected $entity;
 
     /**
      * return manager.
      *
-     * @return string Manager
+     * @return null|string
      */
-    public function getManager()
+    public function getManager() : ? string
     {
         return $this->manager;
     }
@@ -49,9 +50,9 @@ class Flush extends Annotation
     /**
      * return entity.
      *
-     * @return string Entity
+     * @return null|string
      */
-    public function getEntity()
+    public function getEntity() : ? string
     {
         return $this->entity;
     }

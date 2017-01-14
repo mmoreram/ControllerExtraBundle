@@ -18,9 +18,9 @@ namespace Mmoreram\ControllerExtraBundle\CompilerPass;
 use Mmoreram\BaseBundle\CompilerPass\TagCompilerPass;
 
 /**
- * Resolver compiler pass.
+ * Provider compiler pass.
  */
-final class ResolverCompilerPass extends TagCompilerPass
+final class ProviderCompilerPass extends TagCompilerPass
 {
     /**
      * Get collector service name.
@@ -29,7 +29,7 @@ final class ResolverCompilerPass extends TagCompilerPass
      */
     public function getCollectorServiceName() : string
     {
-        return 'controller_extra.annotation_resolver_collector';
+        return 'controller_extra.provider_collector';
     }
 
     /**
@@ -39,7 +39,7 @@ final class ResolverCompilerPass extends TagCompilerPass
      */
     public function getCollectorMethodName() : string
     {
-        return 'addResolver';
+        return 'addProvider';
     }
 
     /**
@@ -49,6 +49,6 @@ final class ResolverCompilerPass extends TagCompilerPass
      */
     public function getTagName() : string
     {
-        return 'controller_extra.annotation_resolver';
+        return 'controller_extra.provider';
     }
 }
