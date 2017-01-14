@@ -11,43 +11,38 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
+declare(strict_types=1);
+
 namespace Mmoreram\ControllerExtraBundle\Resolver\Paginator;
 
 use Doctrine\ORM\QueryBuilder;
 
-use Mmoreram\ControllerExtraBundle\Annotation\Paginator as AnnotationPaginator;
-use Mmoreram\ControllerExtraBundle\Resolver\Paginator\Interfaces\PaginatorEvaluatorInterface;
+use Mmoreram\ControllerExtraBundle\Annotation\CreatePaginator;
 
 /**
  * Class PaginatorInnerJoinsEvaluator.
  */
-class PaginatorInnerJoinsEvaluator implements PaginatorEvaluatorInterface
+class PaginatorInnerJoinsEvaluator implements PaginatorEvaluator
 {
     /**
      * Evaluates inner joins.
      *
-     * @param QueryBuilder        $queryBuilder Query builder
-     * @param AnnotationPaginator $annotation   Annotation
-     *
-     * @return PaginatorEvaluatorInterface self Object
+     * @param QueryBuilder    $queryBuilder
+     * @param CreatePaginator $annotation
      */
     public function evaluate(
         QueryBuilder $queryBuilder,
-        AnnotationPaginator $annotation
+        CreatePaginator $annotation
     ) {
-        if (is_array($annotation->getInnerJoins())) {
-            foreach ($annotation->getInnerJoins() as $innerJoin) {
-                $queryBuilder->innerJoin(
-                    trim($innerJoin[0]) . '.' . trim($innerJoin[1]),
-                    trim($innerJoin[2])
-                );
+        foreach ($annotation->getInnerJoins() as $innerJoin) {
+            $queryBuilder->innerJoin(
+                trim($innerJoin[0]) . '.' . trim($innerJoin[1]),
+                trim($innerJoin[2])
+            );
 
-                if (isset($innerJoin[3]) && $innerJoin[3]) {
-                    $queryBuilder->addSelect(trim($innerJoin[2]));
-                }
+            if (isset($innerJoin[3]) && $innerJoin[3]) {
+                $queryBuilder->addSelect(trim($innerJoin[2]));
             }
         }
-
-        return $this;
     }
 }

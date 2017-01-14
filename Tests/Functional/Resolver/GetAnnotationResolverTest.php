@@ -11,14 +11,16 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
+declare(strict_types=1);
+
 namespace Mmoreram\ControllerExtraBundle\Tests\Functional\Resolver;
 
-use Mmoreram\ControllerExtraBundle\Tests\Functional\AbstractWebTestCase;
+use Mmoreram\ControllerExtraBundle\Tests\Functional\FunctionalTest;
 
 /**
  * Class GetAnnotationResolverTest.
  */
-class GetAnnotationResolverTest extends AbstractWebTestCase
+class GetAnnotationResolverTest extends FunctionalTest
 {
     /**
      * Test obtain a $_GET parameter.
@@ -85,11 +87,6 @@ class GetAnnotationResolverTest extends AbstractWebTestCase
      */
     public function testObtainNonExistentGetParameterChangingParamNameAnnotation()
     {
-        $getMethod = new \ReflectionMethod('Symfony\Component\HttpFoundation\ParameterBag', 'get');
-        if ($getMethod->getNumberOfParameters() === 2) {
-            $this->markTestSkipped('Feature not allowed in Symfony ^3.0.0');
-        }
-
         $uri = '/fake/getquerystringchangingparamname';
         $this->client->request('GET', $uri);
 
@@ -110,11 +107,6 @@ class GetAnnotationResolverTest extends AbstractWebTestCase
      */
     public function testObtainGetParameterChangingDefaultAnnotation()
     {
-        $getMethod = new \ReflectionMethod('Symfony\Component\HttpFoundation\ParameterBag', 'get');
-        if ($getMethod->getNumberOfParameters() === 2) {
-            $this->markTestSkipped('Feature not allowed in Symfony ^3.0.0');
-        }
-
         $uri = '/fake/getquerystringchangingdefaultvalue?param=value';
         $this->client->request('GET', $uri);
 

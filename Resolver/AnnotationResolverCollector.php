@@ -11,7 +11,9 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
-namespace Mmoreram\ControllerExtraBundle\EventListener;
+declare(strict_types=1);
+
+namespace Mmoreram\ControllerExtraBundle\Resolver;
 
 use Doctrine\Common\Annotations\Reader;
 use ReflectionMethod;
@@ -19,73 +21,54 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\KernelInterface;
 
-use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
-use Mmoreram\ControllerExtraBundle\Resolver\Interfaces\AnnotationResolverInterface;
+use Mmoreram\ControllerExtraBundle\Annotation\Annotation;
 
 /**
- * Resolver Event Listener.
+ * Class AnnotationResolverCollector.
  */
-class ResolverEventListener
+final class AnnotationResolverCollector
 {
     /**
      * @var KernelInterface
      *
      * Kernel
      */
-    protected $kernel;
+    private $kernel;
 
     /**
      * @var Reader
      *
      * Annotation Reader
      */
-    protected $reader;
+    private $reader;
 
     /**
      * @var array
      *
      * Resolver stack
      */
-    protected $resolverStack = [];
+    private $resolverStack = [];
 
     /**
      * Construct method.
      *
-     * @param KernelInterface $kernel Kernel
-     * @param Reader          $reader Reader
+     * @param KernelInterface $kernel
+     * @param Reader          $reader
      */
-    public function __construct(KernelInterface $kernel, Reader $reader)
-    {
+    public function __construct(
+        KernelInterface $kernel,
+        Reader $reader
+    ) {
         $this->kernel = $kernel;
         $this->reader = $reader;
     }
 
     /**
-     * Return kernel object.
-     *
-     * @return KernelInterface Kernel
-     */
-    protected function getKernel()
-    {
-        return $this->kernel;
-    }
-
-    /**
-     * Return reader.
-     *
-     * @return Reader Reader
-     */
-    protected function getReader()
-    {
-        return $this->reader;
-    }
-
-    /**
      * Return resolver stack.
      *
-     * @return array Resolver stack
+     * @return array
      */
-    public function getResolverStack()
+    public function getResolverStack() : array
     {
         return $this->resolverStack;
     }
@@ -93,25 +76,20 @@ class ResolverEventListener
     /**
      * Add resolver into stack.
      *
-     * @param AnnotationResolverInterface $resolver Resolver
-     *
-     * @return AnnotationEventListener self Object
+     * @param AnnotationResolver $resolver
      */
-    public function addResolver(AnnotationResolverInterface $resolver)
+    public function addResolver(AnnotationResolver $resolver)
     {
         $this->resolverStack[] = $resolver;
-
-        return $this;
     }
 
     /**
      * Method executed while loading Controller.
      *
-     * @param FilterControllerEvent $event Filter Controller event
+     * @param FilterControllerEvent $event
      */
     public function onKernelController(FilterControllerEvent $event)
     {
-
         /**
          * Data load.
          */
@@ -130,18 +108,21 @@ class ResolverEventListener
         /**
          * Given specific configuration, analyze full request.
          */
-        $this->analyzeRequest($request, $this->getReader(), $method);
+        $this->analyzeRequest($request, $this->reader, $method);
     }
 
     /**
      * Evaluate request.
      *
-     * @param Request          $request Request
-     * @param Reader           $reader  Reader
-     * @param ReflectionMethod $method  Method
+     * @param Request          $request
+     * @param Reader           $reader
+     * @param ReflectionMethod $method
      */
-    public function analyzeRequest(Request $request, Reader $reader, ReflectionMethod $method)
-    {
+    public function analyzeRequest(
+        Request $request,
+        Reader $reader,
+        ReflectionMethod $method
+    ) {
         /**
          * Annotations load.
          */
@@ -152,7 +133,12 @@ class ResolverEventListener
          */
         foreach ($methodAnnotations as $annotation) {
             if ($annotation instanceof Annotation) {
-                $this->analyzeAnnotation($request, $method, $annotation, $this->resolverStack);
+                $this->analyzeAnnotation(
+                    $request,
+                    $method,
+                    $annotation,
+                    $this->resolverStack
+                );
             }
         }
     }
@@ -160,13 +146,17 @@ class ResolverEventListener
     /**
      * Allow every available resolver to solve its own logic.
      *
-     * @param Request          $request       Request
-     * @param ReflectionMethod $method        Method
-     * @param Annotation       $annotation    Annotation
-     * @param array            $resolverStack Resolver stack
+     * @param Request          $request
+     * @param ReflectionMethod $method
+     * @param Annotation       $annotation
+     * @param array            $resolverStack
      */
-    public function analyzeAnnotation(Request $request, ReflectionMethod $method, Annotation $annotation, array $resolverStack)
-    {
+    public function analyzeAnnotation(
+        Request $request,
+        ReflectionMethod $method,
+        Annotation $annotation,
+        array $resolverStack
+    ) {
 
         /**
          * Every resolver must evaluate its logic.

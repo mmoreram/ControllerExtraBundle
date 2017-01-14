@@ -11,27 +11,28 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
+declare(strict_types=1);
+
 namespace Mmoreram\ControllerExtraBundle\DependencyInjection;
 
-use Symfony\Component\Config\Definition\Builder\TreeBuilder;
-use Symfony\Component\Config\Definition\ConfigurationInterface;
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
+use Mmoreram\BaseBundle\DependencyInjection\BaseConfiguration;
 use Mmoreram\ControllerExtraBundle\Annotation\Log as AnnotationLog;
 use Mmoreram\ControllerExtraBundle\Provider\RequestParameterProvider;
 
 /**
- * Dependency Injection configuration.
+ * Class ControllerExtraConfiguration.
  */
-class Configuration implements ConfigurationInterface
+final class ControllerExtraConfiguration extends BaseConfiguration
 {
     /**
-     * {@inheritdoc}
+     * Configure the root node.
+     *
+     * @param ArrayNodeDefinition $rootNode Root node
      */
-    public function getConfigTreeBuilder()
+    protected function setupTree(ArrayNodeDefinition $rootNode)
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('controller_extra');
-
         $rootNode
             ->children()
 
@@ -51,21 +52,6 @@ class Configuration implements ConfigurationInterface
                         RequestParameterProvider::MASTER_REQUEST,
                     ])
                     ->defaultValue(RequestParameterProvider::CURRENT_REQUEST)
-                ->end()
-
-                /**
-                 * Default factory definition.
-                 */
-                ->arrayNode('factory')
-                    ->addDefaultsIfNotSet()
-                    ->children()
-                        ->scalarNode('default_method')
-                            ->defaultValue('create')
-                        ->end()
-                        ->booleanNode('default_static')
-                            ->defaultValue(true)
-                        ->end()
-                    ->end()
                 ->end()
 
                 /**
@@ -115,6 +101,12 @@ class Configuration implements ConfigurationInterface
                         ->end()
                         ->booleanNode('fallback_mapping')
                             ->defaultFalse()
+                        ->end()
+                         ->scalarNode('default_factory_method')
+                            ->defaultValue('create')
+                        ->end()
+                        ->booleanNode('default_factory_static')
+                            ->defaultValue(true)
                         ->end()
                     ->end()
                 ->end()
@@ -195,21 +187,6 @@ class Configuration implements ConfigurationInterface
                 ->end()
 
                 /**
-                 * Object manager config definition.
-                 */
-                ->arrayNode('object_manager')
-                    ->addDefaultsIfNotSet()
-                    ->children()
-                        ->booleanNode('active')
-                            ->defaultTrue()
-                        ->end()
-                        ->scalarNode('default_name')
-                            ->defaultValue('objectManager')
-                        ->end()
-                    ->end()
-                ->end()
-
-                /**
                  * Get config definition.
                  */
                 ->arrayNode('get')
@@ -235,7 +212,5 @@ class Configuration implements ConfigurationInterface
                 ->end()
 
             ->end();
-
-        return $treeBuilder;
     }
 }

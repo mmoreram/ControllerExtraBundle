@@ -11,160 +11,92 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
+declare(strict_types=1);
+
 namespace Mmoreram\ControllerExtraBundle\Resolver;
 
+use Exception;
 use ReflectionMethod;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
-use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
-use Mmoreram\ControllerExtraBundle\Annotation\JsonResponse as AnnotationJsonResponse;
-use Mmoreram\ControllerExtraBundle\Resolver\Interfaces\AnnotationResolverInterface;
+use Mmoreram\ControllerExtraBundle\Annotation\Annotation;
+use Mmoreram\ControllerExtraBundle\Annotation\ToJsonResponse;
 
 /**
- * FormAnnotationResolver, an implementation of  AnnotationResolverInterface.
+ * Class JsonResponseAnnotationResolver.
  */
-class JsonResponseAnnotationResolver implements AnnotationResolverInterface
+class JsonResponseAnnotationResolver extends AnnotationResolver
 {
     /**
      * @var int
      *
      * Status
      */
-    protected $defaultStatus;
+    private $defaultStatus;
 
     /**
      * @var int
      *
      * Error status
      */
-    protected $defaultErrorStatus;
+    private $defaultErrorStatus;
 
     /**
      * @var array
      *
      * Headers
      */
-    protected $defaultHeaders;
+    private $defaultHeaders;
 
     /**
      * @var int
      *
      * Status
      */
-    protected $status;
+    private $status;
 
     /**
      * @var array
      *
      * Headers
      */
-    protected $headers;
+    private $headers;
 
     /**
      * @var bool
      *
      * Return Json response
      */
-    protected $returnJson = false;
+    private $returnJson = false;
 
     /**
      * Construct method.
      *
-     * @param int   $defaultStatus      Default status
-     * @param int   $defaultErrorStatus Default error status
-     * @param array $defaultHeaders     Default headers
+     * @param int   $defaultStatus
+     * @param int   $defaultErrorStatus
+     * @param array $defaultHeaders
      */
-    public function __construct($defaultStatus, $defaultErrorStatus, array $defaultHeaders)
-    {
+    public function __construct(
+        int $defaultStatus,
+        int $defaultErrorStatus,
+        array $defaultHeaders
+    ) {
         $this->defaultStatus = $defaultStatus;
         $this->defaultErrorStatus = $defaultErrorStatus;
         $this->defaultHeaders = $defaultHeaders;
     }
 
     /**
-     * Get return Json.
-     *
-     * @return bool Return Json
-     */
-    public function getReturnJson()
-    {
-        return $this->returnJson;
-    }
-
-    /**
-     * Get default response status.
-     *
-     * @return int Default Response status
-     */
-    public function getDefaultStatus()
-    {
-        return $this->defaultStatus;
-    }
-
-    /**
-     * Get default error response status.
-     *
-     * @return int Default error Response status
-     */
-    public function getDefaultErrorStatus()
-    {
-        return $this->defaultErrorStatus;
-    }
-
-    /**
-     * Get default response headers.
-     *
-     * @return int Default Response headers
-     */
-    public function getDefaultHeaders()
-    {
-        return $this->defaultHeaders;
-    }
-
-    /**
-     * Get response status.
-     *
-     * @return int Response status
-     */
-    public function getStatus()
-    {
-        return $this->status;
-    }
-
-    /**
-     * Set response status.
-     *
-     * @param int $status The status response to set
-     *
-     * @return int Response status
-     */
-    public function setStatus($status)
-    {
-        $this->status = $status;
-    }
-
-    /**
-     * Get response headers.
-     *
-     * @return array Response headers
-     */
-    public function getHeaders()
-    {
-        return $this->headers;
-    }
-
-    /**
      * Specific annotation evaluation.
      *
-     * @param Request          $request    Request
-     * @param Annotation       $annotation Annotation
-     * @param ReflectionMethod $method     Method
-     *
-     * @return JsonResponseAnnotationResolver self Object
+     * @param Request          $request
+     * @param Annotation       $annotation
+     * @param ReflectionMethod $method
      */
     public function evaluateAnnotation(
         Request $request,
@@ -172,9 +104,9 @@ class JsonResponseAnnotationResolver implements AnnotationResolverInterface
         ReflectionMethod $method
     ) {
         /**
-         * Annotation is only laoded if is typeof WorkAnnotation.
+         * Annotation is only loaded if is typeof WorkAnnotation.
          */
-        if ($annotation instanceof AnnotationJsonResponse) {
+        if ($annotation instanceof ToJsonResponse) {
 
             /**
              * If JsonResponse annotation, set to true for future events.
@@ -182,66 +114,67 @@ class JsonResponseAnnotationResolver implements AnnotationResolverInterface
              * Also saves all needed info from annotation
              */
             $this->returnJson = true;
-            $this->status = $annotation->getStatus() ?: $this->getDefaultStatus();
-            $this->headers = $annotation->getHeaders() ?: $this->getDefaultHeaders();
+            $this->status = $annotation->getStatus() ?: $this->defaultStatus;
+            $this->headers = $annotation->getHeaders() ?: $this->defaultHeaders;
         }
-
-        return $this;
     }
 
     /**
      * Method executed while loading Controller.
      *
-     * @param GetResponseForControllerResultEvent $event Event
+     * @param GetResponseForControllerResultEvent $event
      */
     public function onKernelView(GetResponseForControllerResultEvent $event)
     {
-        /**
-         * Only flushes if exists AnnotationFlush as a controller annotations.
-         */
-        if ($this->getReturnJson()) {
-            $result = $event->getControllerResult();
-
-            if ($result instanceof \Exception) {
-                if ($result instanceof HttpExceptionInterface) {
-                    $this->setStatus($result->getStatusCode());
-                } else {
-                    $this->setStatus($this->getDefaultErrorStatus());
-                }
-                $result = ['message' => $result->getMessage()];
-            }
-
-            $response = JsonResponse::create(
-                $result,
-                $this->getStatus(),
-                $this->getHeaders()
-            );
-
-            $event->setResponse($response);
-        }
+        $this->createJsonResponseIfNeeded(
+            $event,
+            $event->getControllerResult()
+        );
     }
 
     /**
      * Method executed when uncaught exception is launched.
      *
-     * @param GetResponseForExceptionEvent $event Event
+     * @param GetResponseForExceptionEvent $event
      */
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
-        if ($this->getReturnJson()) {
-            $exception = $event->getException();
+        $this->createJsonResponseIfNeeded(
+            $event,
+            $event->getException()
+        );
+    }
 
-            if ($exception instanceof HttpExceptionInterface) {
-                $this->setStatus($exception->getStatusCode());
-            } else {
-                $this->setStatus($this->getDefaultErrorStatus());
+    /**
+     * Create new Json Response if needed.
+     *
+     * @param GetResponseEvent $event
+     * @param mixed            $result
+     */
+    private function createJsonResponseIfNeeded(
+        GetResponseEvent $event,
+        $result
+    ) {
+        /**
+         * Only flushes if exists AnnotationFlush as a controller annotations.
+         */
+        if ($this->returnJson) {
+            if ($result instanceof Exception) {
+                $this->status = $result instanceof HttpExceptionInterface
+                    ? $result->getStatusCode()
+                    : $this->defaultErrorStatus;
+
+                $result = [
+                    'code' => $result->getCode(),
+                    'namespace' => get_class($result),
+                    'message' => $result->getMessage(),
+                ];
             }
-            $result = ['message' => $exception->getMessage()];
 
             $response = JsonResponse::create(
                 $result,
-                $this->getStatus(),
-                $this->getHeaders()
+                $this->status,
+                $this->headers
             );
 
             $event->setResponse($response);

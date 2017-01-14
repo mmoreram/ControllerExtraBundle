@@ -11,16 +11,17 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
-namespace Mmoreram\ControllerExtraBundle\Annotation;
+declare(strict_types=1);
 
-use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
+namespace Mmoreram\ControllerExtraBundle\Annotation;
 
 /**
  * Log annotation driver.
  *
  * @Annotation
+ * @Target({"METHOD"})
  */
-class Log extends Annotation
+final class Log extends Annotation
 {
     /**
      * @var string
@@ -104,21 +105,21 @@ class Log extends Annotation
      *
      * Level
      */
-    public $level;
+    protected $level;
 
     /**
      * @var string
      *
      * Execute time
      */
-    public $execute;
+    protected $execute;
 
     /**
      * return manager.
      *
-     * @return string Manager
+     * @return null|string
      */
-    public function getLevel()
+    public function getLevel() : ? string
     {
         return $this->level;
     }
@@ -126,9 +127,9 @@ class Log extends Annotation
     /**
      * return execution.
      *
-     * @return string execution
+     * @return null|string
      */
-    public function getExecute()
+    public function getExecute() : ? string
     {
         return $this->execute;
     }

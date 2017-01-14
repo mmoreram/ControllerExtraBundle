@@ -1,22 +1,15 @@
-parameters:
-
-    #
-    # Resolvers
-    #
-    mmoreram.controllerextra.resolver.json_resolver_annotation_resolver.class: Mmoreram\ControllerExtraBundle\Resolver\JsonResponseAnnotationResolver
-
 services:
 
     #
     # Resolvers
     #
-    mmoreram.controllerextra.resolver.json_resolver_annotation_resolver:
-        class: %mmoreram.controllerextra.resolver.json_resolver_annotation_resolver.class%
+    controller_extra.resolver.json_resolver_annotation:
+        class: Mmoreram\ControllerExtraBundle\Resolver\JsonResponseAnnotationResolver
         arguments:
-            - %mmoreram.controllerextra.json_response_default_status%
-            - %mmoreram.controllerextra.json_response_default_error_status%
-            - %mmoreram.controllerextra.json_response_default_headers%
+            - "%controller_extra.json_response_default_status%"
+            - "%controller_extra.json_response_default_error_status%"
+            - "%controller_extra.json_response_default_headers%"
         tags:
-            - { name: controller_extra.annotation }
+            - { name: controller_extra.annotation_resolver }
             - { name: kernel.event_listener, event: kernel.view, method: onKernelView, priority: -128 }
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: -128 }

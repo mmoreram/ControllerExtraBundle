@@ -11,59 +11,60 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
+declare(strict_types=1);
+
 namespace Mmoreram\ControllerExtraBundle\Annotation;
 
-use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
-
 /**
- * Form annotation driver.
+ * Class CreateForm.
  *
  * @Annotation
+ * @Target({"METHOD"})
  */
-class Form extends Annotation
+final class CreateForm extends Annotation
 {
     /**
      * @var string
      *
      * Name of the parameter
      */
-    public $name;
+    protected $name;
 
     /**
      * @var string
      *
      * Name of form. This value can refer to a namespace or a service alias
      */
-    public $class;
+    protected $class;
 
     /**
-     * @var entity
+     * @var string
      *
      * Entity from Request ParameterBag to use where building form
      */
-    public $entity;
+    protected $entity;
 
     /**
      * @var bool
      *
      * Handle request
      */
-    public $handleRequest = false;
+    protected $handleRequest = false;
 
     /**
-     * @var validate
+     * @var bool
      *
      * Validates submited form if Request is handled.
      * Name of field to set result
      */
-    public $validate = false;
+    protected $validate = false;
 
     /**
      * return name.
      *
-     * @return string Name
+     * @return null|string
      */
-    public function getName()
+    public function getName() : ? string
     {
         return $this->name;
     }
@@ -71,9 +72,9 @@ class Form extends Annotation
     /**
      * return class.
      *
-     * @return string Class
+     * @return null|string
      */
-    public function getClass()
+    public function getClass() : ? string
     {
         return $this->class;
     }
@@ -81,9 +82,9 @@ class Form extends Annotation
     /**
      * return entity.
      *
-     * @return string Entity
+     * @return string
      */
-    public function getEntity()
+    public function getEntity() : ? string
     {
         return $this->entity;
     }
@@ -91,9 +92,9 @@ class Form extends Annotation
     /**
      * return handle request.
      *
-     * @return string Handle Request
+     * @return bool
      */
-    public function getHandleRequest()
+    public function getHandleRequest() : bool
     {
         return $this->handleRequest;
     }
@@ -101,9 +102,9 @@ class Form extends Annotation
     /**
      * return validate value.
      *
-     * @return string Validate param name
+     * @return bool
      */
-    public function getValidate()
+    public function getValidate() : bool
     {
         return $this->validate;
     }

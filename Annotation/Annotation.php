@@ -11,15 +11,24 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
+declare(strict_types=1);
+
 namespace Mmoreram\ControllerExtraBundle\Annotation;
 
-use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\AbstractResponse;
+use Doctrine\Common\Annotations\Annotation as DoctrineAnnotation;
 
 /**
- * JsonResponse annotation driver.
- *
- * @Annotation
+ * Flush annotation driver.
  */
-class JsonResponse extends AbstractResponse
+abstract class Annotation extends DoctrineAnnotation
 {
+    /**
+     * return value.
+     *
+     * @return null|string Value
+     */
+    public function getValue() : ? string
+    {
+        return $this->value;
+    }
 }

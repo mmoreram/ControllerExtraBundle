@@ -11,6 +11,8 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
+declare(strict_types=1);
+
 namespace Mmoreram\ControllerExtraBundle\Resolver;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -20,120 +22,69 @@ use ReflectionMethod;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 
-use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
+use Mmoreram\ControllerExtraBundle\Annotation\Annotation;
 use Mmoreram\ControllerExtraBundle\Annotation\Flush as AnnotationFlush;
-use Mmoreram\ControllerExtraBundle\Resolver\Interfaces\AnnotationResolverInterface;
 
 /**
- * FormAnnotationResolver, an implementation of  AnnotationResolverInterface.
+ * Class FlushAnnotationResolver.
  */
-class FlushAnnotationResolver implements AnnotationResolverInterface
+class FlushAnnotationResolver extends AnnotationResolver
 {
     /**
      * @var AbstractManagerRegistry
      *
      * Doctrine object
      */
-    protected $doctrine;
+    private $doctrine;
 
     /**
      * @var ObjectManager
      *
      * Manager
      */
-    protected $manager;
+    private $manager;
 
     /**
      * @var string
      *
      * default manager
      */
-    protected $defaultManager;
+    private $defaultManager;
 
     /**
      * @var array
      *
      * Set of entities from Request ParameterBag to flush
      */
-    public $entities;
+    private $entities;
 
     /**
      * @var bool
      *
      * Must flush boolean
      */
-    protected $mustFlush = false;
+    private $mustFlush = false;
 
     /**
      * Construct method.
      *
-     * @param AbstractManagerRegistry $doctrine       Doctrine
-     * @param string                  $defaultManager Default manager
+     * @param AbstractManagerRegistry $doctrine
+     * @param string                  $defaultManager
      */
-    public function __construct(AbstractManagerRegistry $doctrine, $defaultManager)
-    {
+    public function __construct(
+        AbstractManagerRegistry $doctrine,
+        string $defaultManager
+    ) {
         $this->doctrine = $doctrine;
         $this->defaultManager = $defaultManager;
     }
 
     /**
-     * Get Doctrine object.
-     *
-     * @return AbstractManagerRegistry Doctrine instance
-     */
-    public function getDoctrine()
-    {
-        return $this->doctrine;
-    }
-
-    /**
-     * Get default manager name.
-     *
-     * @return string Default manager
-     */
-    public function getDefaultManager()
-    {
-        return $this->defaultManager;
-    }
-
-    /**
-     * Get Manager object.
-     *
-     * @return ObjectManager Manager
-     */
-    public function getManager()
-    {
-        return $this->manager;
-    }
-
-    /**
-     * Get entities.
-     *
-     * @return ArrayCollection Entities to flush
-     */
-    public function getEntities()
-    {
-        return $this->entities;
-    }
-
-    /**
-     * Return if manager must be flushed.
-     *
-     * @return bool Manager must be flushed
-     */
-    public function getMustFlush()
-    {
-        return $this->mustFlush;
-    }
-
-    /**
      * Specific annotation evaluation.
      *
-     * @param Request          $request    Request
-     * @param Annotation       $annotation Annotation
-     * @param ReflectionMethod $method     Method
-     *
-     * @return FlushAnnotationResolver self Object
+     * @param Request          $request
+     * @param Annotation       $annotation
+     * @param ReflectionMethod $method
      */
     public function evaluateAnnotation(
         Request $request,
@@ -145,13 +96,13 @@ class FlushAnnotationResolver implements AnnotationResolverInterface
          */
         if ($annotation instanceof AnnotationFlush) {
             $managerName = $annotation->getManager()
-                ?: $this->getDefaultManager();
+                ?: $this->defaultManager;
 
             /**
              * Loading locally desired Doctrine manager.
              */
             $this->manager = $this
-                ->getDoctrine()
+                ->doctrine
                 ->getManager($managerName);
 
             /**
@@ -185,28 +136,26 @@ class FlushAnnotationResolver implements AnnotationResolverInterface
              */
             $this->mustFlush = true;
         }
-
-        return $this;
     }
 
     /**
      * Method executed while loading Controller.
      *
-     * @param FilterResponseEvent $event Filter Response event
+     * @param FilterResponseEvent $event
      */
     public function onKernelResponse(FilterResponseEvent $event)
     {
         /**
          * Only flushes if exists AnnotationFlush as a controller annotations.
          */
-        if ($this->getMustFlush()) {
+        if ($this->mustFlush) {
 
             /**
              * Flushing manager.
              */
             $this
-                ->getManager()
-                ->flush($this->getEntities());
+                ->manager
+                ->flush($this->entities);
         }
     }
 }

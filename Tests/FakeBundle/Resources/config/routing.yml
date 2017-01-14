@@ -26,10 +26,6 @@ FakeBundleControllerJsonResponseException:
     path: /fake/jsonresponseexception
     defaults: { _controller: FakeBundle:Fake:jsonResponseException }
 
-FakeBundleControllerJsonResponseAnnotationException:
-    path: /fake/jsonresponseannotationexception
-    defaults: { _controller: FakeBundle:Fake:jsonResponseAnnotationException }
-
 FakeBundleControllerJsonResponseHttpException:
     path: /fake/jsonresponsehttpexception
     defaults: { _controller: FakeBundle:Fake:jsonResponseHttpException }
@@ -39,7 +35,7 @@ FakeBundleControllerPaginatorLikeConditionAndGetParameter:
     defaults: { _controller: FakeBundle:Fake:paginatorLikeWithGetParameter }
 
 FakeBundleControllerPaginator:
-    path: /fake/paginator/{field}/{dir}/{page}/{limit}
+    path: /fake/paginator/field/{field}/{dir}/{page}/{limit}
     defaults: { _controller: FakeBundle:Fake:paginator }
 
 FakeBundleControllerPaginatorSimple:
@@ -73,10 +69,6 @@ FakeBundleControllerPaginatorPagerFanta:
 FakeBundleControllerPaginatorKNPPaginator:
     path: /fake/paginator/knppaginator/{field}/{dir}/{page}/{limit}
     defaults: { _controller: FakeBundle:Fake:paginatorKNPPaginator }
-
-FakeBundleControllerObjectManager:
-    path: /fake/objectmanager
-    defaults: { _controller: FakeBundle:Fake:objectManager }
 
 FakeBundleControllerGetQueryString:
     path: /fake/getquerystring

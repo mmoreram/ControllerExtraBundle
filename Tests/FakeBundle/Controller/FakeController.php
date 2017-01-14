@@ -11,19 +11,24 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
+declare(strict_types=1);
+
 namespace Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Controller;
 
-use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+use Mmoreram\ControllerExtraBundle\Annotation\CreateForm;
+use Mmoreram\ControllerExtraBundle\Annotation\CreatePaginator;
+use Mmoreram\ControllerExtraBundle\Annotation\LoadEntity;
+use Mmoreram\ControllerExtraBundle\Annotation\ToJsonResponse;
 use Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\Fake;
 use Mmoreram\ControllerExtraBundle\ValueObject\PaginatorAttributes;
 
@@ -35,87 +40,129 @@ class FakeController extends Controller
     /**
      * Public method.
      *
-     * @\Mmoreram\ControllerExtraBundle\Annotation\Entity(
+     * @LoadEntity(
      *      name = "entityName",
-     *      class = "FakeBundle:Fake",
+     *      namespace = "FakeBundle:Fake",
      *      persist = false
      * )
-     * @\Mmoreram\ControllerExtraBundle\Annotation\Entity(
-     *      class = "FakeBundle:Fake",
+     * @LoadEntity(
+     *      namespace = "FakeBundle:Fake",
      *      persist = false
      * )
-     * @\Mmoreram\ControllerExtraBundle\Annotation\Entity(
+     * @LoadEntity(
      *      name = "entityFactoryClass",
-     *      class = {
-     *          "factory" = "Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory",
+     *      namespace = "FakeBundle:Fake",
+     *      factory = {
+     *          "class" = "Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory",
      *          "method" = "create",
      *      },
      *      persist = false
      * )
-     * @\Mmoreram\ControllerExtraBundle\Annotation\Entity(
+     * @LoadEntity(
      *      name = "entityFactoryClassNoStatic",
-     *      class = {
-     *          "factory" = "Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory",
+     *      namespace = "FakeBundle:Fake",
+     *      factory = {
+     *          "class" = "Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory",
      *          "method" = "createNonStatic",
      *          "static" = false,
      *      },
      *      persist = false
      * )
-     * @\Mmoreram\ControllerExtraBundle\Annotation\Entity(
+     * @LoadEntity(
      *      name = "entityFactoryClassStatic",
-     *      class = {
-     *          "factory" = "Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory",
+     *      namespace = "FakeBundle:Fake",
+     *      factory = {
+     *          "class" = "Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory",
      *          "method" = "create",
      *          "static" = true,
      *      },
      *      persist = false
      * )
-     * @\Mmoreram\ControllerExtraBundle\Annotation\Entity(
-     *      name = "entityFactoryClass",
-     *      class = {
-     *          "factory" = "controller_extra_bundle.factory.fake",
+     * @LoadEntity(
+     *      name = "entityFactoryClass2",
+     *      namespace = "FakeBundle:Fake",
+     *      factory = {
+     *          "class" = "controller_extra.factory.fake",
      *          "method" = "create",
      *      },
-     *      persist = false
+     *      persist = true
      * )
-     * @\Mmoreram\ControllerExtraBundle\Annotation\Entity(
-     *      name = "entityFactoryClassNoStatic",
-     *      class = {
-     *          "factory" = "controller_extra_bundle.factory.fake",
+     * @LoadEntity(
+     *      name = "entityFactoryClassNoStatic2",
+     *      namespace = "FakeBundle:Fake",
+     *      factory = {
+     *          "class" = "controller_extra.factory.fake",
      *          "method" = "createNonStatic",
      *          "static" = false,
      *      },
-     *      persist = false
+     *      persist = true
      * )
-     * @\Mmoreram\ControllerExtraBundle\Annotation\Entity(
-     *      name = "entityFactoryClassStatic",
-     *      class = {
-     *          "factory" = "controller_extra_bundle.factory.fake",
+     * @LoadEntity(
+     *      name = "entityFactoryClassStatic2",
+     *      namespace = "FakeBundle:Fake",
+     *      factory = {
+     *          "class" = "controller_extra.factory.fake",
      *          "method" = "create",
      *          "static" = true,
      *      },
-     *      persist = false
+     *      persist = true
      * )
+     * @ToJsonResponse()
+     *
+     * @param Fake $entity
+     *
+     * @return array
      */
-    public function entityAction(Fake $entity)
-    {
-        return new Response();
+    public function entityAction(
+        Fake $entityName,
+        Fake $entity,
+        Fake $entityFactoryClass,
+        Fake $entityFactoryClassNoStatic,
+        Fake $entityFactoryClassStatic,
+        Fake $entityFactoryClass2,
+        Fake $entityFactoryClassNoStatic2,
+        Fake $entityFactoryClassStatic2
+    ) : array {
+        $this->flush();
+
+        return [
+            is_null($entityName->getId()) &&
+            is_null($entityName->getField()) &&
+            is_null($entity->getId()) &&
+            is_null($entity->getField()) &&
+            is_null($entityFactoryClass->getId()) &&
+            $entityFactoryClass->getField() === 's_c' &&
+            is_null($entityFactoryClassNoStatic->getId()) &&
+            $entityFactoryClassNoStatic->getField() === 'ns_c' &&
+            is_null($entityFactoryClassStatic->getId()) &&
+            $entityFactoryClassStatic->getField() === 's_c' &&
+            !is_null($entityFactoryClass2->getId()) &&
+            $entityFactoryClass2->getField() === 's_c' &&
+            !is_null($entityFactoryClassNoStatic2->getId()) &&
+            $entityFactoryClassNoStatic2->getField() === 'ns_c' &&
+            !is_null($entityFactoryClassStatic2->getId()) &&
+            $entityFactoryClassStatic2->getField() === 's_c',
+        ];
     }
 
     /**
      * Public method.
      *
-     * @\Mmoreram\ControllerExtraBundle\Annotation\Entity(
+     * @LoadEntity(
      *      name = "entity",
-     *      class = "FakeBundle:Fake",
+     *      namespace = "FakeBundle:Fake",
      *      mapping = {
      *          "id" = "~id~"
      *      }
      * )
      *
-     * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
+     * @ToJsonResponse()
+     *
+     * @param Fake $entity
+     *
+     * @return array
      */
-    public function entityMappedAction(Fake $entity)
+    public function entityMappedAction(Fake $entity) : array
     {
         return [
             'id' => $entity->getId(),
@@ -125,53 +172,92 @@ class FakeController extends Controller
     /**
      * Public method.
      *
-     * @\Mmoreram\ControllerExtraBundle\Annotation\Entity(
+     * @LoadEntity(
      *      name = "entity",
-     *      class = "FakeBundle:Fake",
+     *      namespace = "FakeBundle:Fake",
      *      mapping = {
      *          "id" = "~id~",
      *          "field" = "value",
      *      },
      *      mappingFallback = false
      * )
-     *
-     * @\Mmoreram\ControllerExtraBundle\Annotation\Entity(
+     * @LoadEntity(
      *      name = "entityFallback",
-     *      class = "FakeBundle:Fake",
+     *      namespace = "FakeBundle:Fake",
      *      mapping = {
      *          "id" = "~id~",
      *          "field" = "value",
      *      },
      *      mappingFallback = true
      * )
+     * @LoadEntity(
+     *      name = "entityRepo1",
+     *      namespace = "FakeBundle:Fake",
+     *      mapping = {
+     *          "id" = "999"
+     *      },
+     *      repository = {
+     *          "class" = "Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Repository\AlternativeRepository",
+     *          "method" = "findMeOnePlease"
+     *      }
+     * )
+     * @LoadEntity(
+     *      name = "entityRepo2",
+     *      namespace = "FakeBundle:Fake",
+     *      mapping = {
+     *          "id" = "999"
+     *      },
+     *      repository = {
+     *          "class" = "Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Repository\AlternativeRepository"
+     *      }
+     * )
+     * @LoadEntity(
+     *      name = "entityRepo3",
+     *      namespace = "FakeBundle:Fake",
+     *      mapping = {
+     *          "id" = "999"
+     *      },
+     *      repository = {
+     *          "class" = "controller_extra.alternative_repository",
+     *          "method" = "findMeOnePlease"
+     *      }
+     * )
      *
-     * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
+     * @ToJsonResponse()
      */
-    public function entityMappedManyAction(Fake $entity, Fake $entityFallback)
-    {
+    public function entityMappedManyAction(
+        Fake $entity,
+        Fake $entityFallback,
+        Fake $entityRepo1,
+        Fake $entityRepo2,
+        Fake $entityRepo3
+    ) {
+        $other =
+            is_null($entityFallback->getId()) &&
+            $entity->getField() !== 'alt-fob-' . $entity->getId() &&
+            $entityRepo1->getField() === 'alt-999' &&
+            $entityRepo2->getField() === 'alt-fob-999' &&
+            $entityRepo3->getField() === 'alt-999';
+
         return [
             'id' => $entity->getId(),
-            'null' => $entityFallback->getId(),
+            'other' => $other,
         ];
     }
 
     /**
      * Public method.
      *
-     * @\Mmoreram\ControllerExtraBundle\Annotation\Entity(
+     * @LoadEntity(
      *      name = "entity",
-     *      class = "FakeBundle:Fake",
+     *      namespace = "FakeBundle:Fake",
      *      mapping = {
      *          "id" = "~id~",
-     *          "field" = "value",
-     *      },
-     *      notFoundException = {
-     *          "exception" = "Symfony\Component\HttpKernel\Exception\NotFoundHttpException",
-     *          "message" = "Entity was not found"
+     *          "field" = "dflojslk",
      *      }
      * )
      *
-     * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
+     * @ToJsonResponse()
      */
     public function entityNotFoundExceptionAction(Fake $entity)
     {
@@ -180,7 +266,7 @@ class FakeController extends Controller
     /**
      * Public method.
      *
-     * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
+     * @ToJsonResponse()
      */
     public function jsonResponseAction()
     {
@@ -192,7 +278,7 @@ class FakeController extends Controller
     /**
      * Public method.
      *
-     * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
+     * @ToJsonResponse()
      */
     public function jsonResponseExceptionAction()
     {
@@ -202,7 +288,7 @@ class FakeController extends Controller
     /**
      * Public method.
      *
-     * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
+     * @ToJsonResponse()
      */
     public function jsonResponseHttpExceptionAction()
     {
@@ -210,35 +296,10 @@ class FakeController extends Controller
     }
 
     /**
-     * Public method.
-     *
-     * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
-     * @\Mmoreram\ControllerExtraBundle\Annotation\Entity(
-     *      name = "entity",
-     *      class = "FakeBundle:Fake",
-     *      mapping = {
-     *          "id" = "~id~",
-     *          "field" = "value",
-     *      },
-     *      notFoundException = {
-     *          "exception" = "Symfony\Component\HttpKernel\Exception\NotFoundHttpException",
-     *          "message" = "Exception launched from an annotation"
-     *      }
-     * )
-     */
-    public function jsonResponseAnnotationExceptionAction(Fake $entity)
-    {
-    }
-
-    /**
      * Public pagination method.
      *
-     * @\Mmoreram\ControllerExtraBundle\Annotation\Paginator(
-     *      class = {
-     *          "factory" = "Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory",
-     *          "method" = "createNonStatic",
-     *          "static" = false
-     *      },
+     * @CreatePaginator(
+     *      entityNamespace = "FakeBundle:Fake",
      *      page = 1,
      *      limit = 10,
      *      orderBy = {
@@ -263,7 +324,7 @@ class FakeController extends Controller
      *      }
      * )
      *
-     * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
+     * @ToJsonResponse()
      */
     public function paginatorAction(Paginator $paginator)
     {
@@ -279,12 +340,8 @@ class FakeController extends Controller
     /**
      * Public pagination method.
      *
-     * @\Mmoreram\ControllerExtraBundle\Annotation\Paginator(
-     *      class = {
-     *          "factory" = "Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory",
-     *          "method" = "createNonStatic",
-     *          "static" = false
-     *      },
+     * @CreatePaginator(
+     *      entityNamespace = "FakeBundle:Fake",
      *      page = "~page~",
      *      limit = "~limit~",
      *      orderBy = {
@@ -302,7 +359,7 @@ class FakeController extends Controller
      *      }
      * )
      *
-     * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
+     * @ToJsonResponse()
      */
     public function paginatorSimpleAction(Paginator $paginator)
     {
@@ -314,12 +371,8 @@ class FakeController extends Controller
     /**
      * Public pagination method.
      *
-     * @\Mmoreram\ControllerExtraBundle\Annotation\Paginator(
-     *      class = {
-     *          "factory" = "Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory",
-     *          "method" = "createNonStatic",
-     *          "static" = false
-     *      },
+     * @CreatePaginator(
+     *      entityNamespace = "FakeBundle:Fake",
      *      page = "~page~",
      *      limit = "~limit~",
      *      orderBy = {
@@ -338,7 +391,7 @@ class FakeController extends Controller
      *      }
      * )
      *
-     * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
+     * @ToJsonResponse()
      */
     public function paginatorMultipleWhereAction(Paginator $paginator)
     {
@@ -350,12 +403,8 @@ class FakeController extends Controller
     /**
      * Public pagination method.
      *
-     * @\Mmoreram\ControllerExtraBundle\Annotation\Paginator(
-     *      class = {
-     *          "factory" = "Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory",
-     *          "method" = "createNonStatic",
-     *          "static" = false
-     *      },
+     * @CreatePaginator(
+     *      entityNamespace = "FakeBundle:Fake",
      *      page = "~page~",
      *      limit = "~limit~",
      *      orderBy = {
@@ -373,7 +422,7 @@ class FakeController extends Controller
      *      }
      * )
      *
-     * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
+     * @ToJsonResponse()
      */
     public function paginatorNotMatchingAction(Paginator $paginator)
     {
@@ -385,43 +434,31 @@ class FakeController extends Controller
     /**
      * Public pagination method.
      *
-     * @\Mmoreram\ControllerExtraBundle\Annotation\Paginator(
+     * @CreatePaginator(
      *      name = "paginator",
-     *      class = {
-     *          "factory" = "Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory",
-     *          "method" = "createNonStatic",
-     *          "static" = false
-     *      },
+     *      entityNamespace = "FakeBundle:Fake",
      *      wheres = {
      *          { "x", "field" , "LIKE", "%?search?%" }
      *      }
      * )
      *
-     * @\Mmoreram\ControllerExtraBundle\Annotation\Paginator(
+     * @CreatePaginator(
      *      name = "paginatorPartial1",
-     *      class = {
-     *          "factory" = "Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory",
-     *          "method" = "createNonStatic",
-     *          "static" = false
-     *      },
+     *      entityNamespace = "FakeBundle:Fake",
      *      wheres = {
      *          { "x", "field" , "LIKE", "?search1?%" }
      *      }
      * )
      *
-     * @\Mmoreram\ControllerExtraBundle\Annotation\Paginator(
+     * @CreatePaginator(
      *      name = "paginatorPartial2",
-     *      class = {
-     *          "factory" = "Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory",
-     *          "method" = "createNonStatic",
-     *          "static" = false
-     *      },
+     *      entityNamespace = "FakeBundle:Fake",
      *      wheres = {
      *          { "x", "field" , "LIKE", "%?search2?" }
      *      }
      * )
      *
-     * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
+     * @ToJsonResponse()
      */
     public function PaginatorLikeWithGetParameterAction(
         Paginator $paginator,
@@ -438,13 +475,9 @@ class FakeController extends Controller
     /**
      * Public pagination method.
      *
-     * @\Mmoreram\ControllerExtraBundle\Annotation\Paginator(
+     * @CreatePaginator(
      *      attributes = "paginatorAttributes",
-     *      class = {
-     *          "factory" = "Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory",
-     *          "method" = "createNonStatic",
-     *          "static" = false
-     *      },
+     *      entityNamespace = "FakeBundle:Fake",
      *      page = "~page~",
      *      limit = "~limit~",
      *      orderBy = {
@@ -462,7 +495,7 @@ class FakeController extends Controller
      *      }
      * )
      *
-     * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
+     * @ToJsonResponse()
      */
     public function paginatorAttributesAction(
         Paginator $paginator,
@@ -479,12 +512,8 @@ class FakeController extends Controller
     /**
      * Public pagination method with pagerfanta instance.
      *
-     * @\Mmoreram\ControllerExtraBundle\Annotation\Paginator(
-     *      class = {
-     *          "factory" = "Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory",
-     *          "method" = "createNonStatic",
-     *          "static" = false
-     *      },
+     * @CreatePaginator(
+     *      entityNamespace = "FakeBundle:Fake",
      *      page = "~page~",
      *      limit = "~limit~",
      *      orderBy = {
@@ -495,7 +524,7 @@ class FakeController extends Controller
      *      }
      * )
      *
-     * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
+     * @ToJsonResponse()
      */
     public function paginatorPagerFantaAction(
         Pagerfanta $paginator
@@ -508,12 +537,8 @@ class FakeController extends Controller
     /**
      * Public pagination method with knppaginator instance.
      *
-     * @\Mmoreram\ControllerExtraBundle\Annotation\Paginator(
-     *      class = {
-     *          "factory" = "Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory",
-     *          "method" = "createNonStatic",
-     *          "static" = false
-     *      },
+     * @CreatePaginator(
+     *      entityNamespace = "FakeBundle:Fake",
      *      page = "~page~",
      *      limit = "~limit~",
      *      orderBy = {
@@ -524,7 +549,7 @@ class FakeController extends Controller
      *      }
      * )
      *
-     * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
+     * @ToJsonResponse()
      */
     public function paginatorKNPPaginatorAction(
         PaginationInterface $paginator
@@ -535,67 +560,40 @@ class FakeController extends Controller
     }
 
     /**
-     * Public objectManager method.
-     *
-     * @\Mmoreram\ControllerExtraBundle\Annotation\ObjectManager(
-     *      name = "objectManager1",
-     *      class = {
-     *          "factory" = "Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory",
-     *          "method" = "createNonStatic",
-     *          "static" = false
-     *      }
-     * )
-     * @\Mmoreram\ControllerExtraBundle\Annotation\ObjectManager(
-     *      name = "objectManager2",
-     *      class = "Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\Fake"
-     * )
-     * @\Mmoreram\ControllerExtraBundle\Annotation\ObjectManager(
-     *      name = "objectManager3",
-     *      class = "FakeBundle:Fake"
-     * )
-     *
-     * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
-     */
-    public function objectManagerAction(
-        ObjectManager $objectManager1,
-        ObjectManager $objectManager2,
-        ObjectManager $objectManager3
-    ) {
-        return [];
-    }
-
-    /**
      * Tested that works mapping fallback. Mapping fallback disabled and failing.
      *
-     * @\Mmoreram\ControllerExtraBundle\Annotation\Entity(
+     * @LoadEntity(
      *      name = "entity",
-     *      class = "FakeBundle:Fake",
+     *      namespace = "FakeBundle:Fake",
      *      mapping = {
      *          "id" = "~non-existing~",
      *      },
-     *      mappingFallback = true
+     *      mappingFallback = true,
+     *      persist = true
      * )
+     *
+     * @ToJsonResponse()
      */
     public function entityMappingFallbackAction(Fake $entity)
     {
-        return new Response();
+        $this->flush();
+
+        return [
+            !is_null($entity->getId()),
+        ];
     }
 
     /**
      * Public pagination method.
      *
-     * @\Mmoreram\ControllerExtraBundle\Annotation\Paginator(
+     * @CreatePaginator(
      *      attributes = "paginatorAttributes",
-     *      class = {
-     *          "factory" = "Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory",
-     *          "method" = "createNonStatic",
-     *          "static" = false
-     *      },
+     *      entityNamespace = "FakeBundle:Fake",
      *      limit = "?limit?",
      *      page = "?page?",
      * )
      *
-     * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
+     * @ToJsonResponse()
      */
     public function paginatorQueryAction(
         Paginator $paginator,
@@ -612,13 +610,9 @@ class FakeController extends Controller
     /**
      * Public pagination method.
      *
-     * @\Mmoreram\ControllerExtraBundle\Annotation\Paginator(
+     * @CreatePaginator(
      *      attributes = "paginatorAttributes",
-     *      class = {
-     *          "factory" = "Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory",
-     *          "method" = "createNonStatic",
-     *          "static" = false
-     *      },
+     *      entityNamespace = "FakeBundle:Fake",
      *      limit = "#limit#",
      *      page = "#page#",
      *      wheres = {
@@ -626,7 +620,7 @@ class FakeController extends Controller
      *      },
      * )
      *
-     * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
+     * @ToJsonResponse()
      */
     public function paginatorRequestAction(
         Paginator $paginator,
@@ -651,7 +645,7 @@ class FakeController extends Controller
      *      path = "param"
      * )
      *
-     * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
+     * @ToJsonResponse()
      */
     public function queryStringAction(
         $param
@@ -673,7 +667,7 @@ class FakeController extends Controller
      *      name = "getParam"
      * )
      *
-     * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
+     * @ToJsonResponse()
      */
     public function queryStringChangingNameAction(
         $getParam
@@ -695,7 +689,7 @@ class FakeController extends Controller
      *      default = "default-value"
      * )
      *
-     * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
+     * @ToJsonResponse()
      */
     public function queryStringChangingDefaultValueAction(
         $param
@@ -718,7 +712,7 @@ class FakeController extends Controller
      *      deep = true
      * )
      *
-     * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
+     * @ToJsonResponse()
      */
     public function queryStringDeepAction(
         $param
@@ -739,7 +733,7 @@ class FakeController extends Controller
      *      path = "param"
      * )
      *
-     * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
+     * @ToJsonResponse()
      */
     public function postParameterAction(
         $param
@@ -761,7 +755,7 @@ class FakeController extends Controller
      *      name = "getParam"
      * )
      *
-     * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
+     * @ToJsonResponse()
      */
     public function postParameterChangingNameAction(
         $getParam
@@ -783,7 +777,7 @@ class FakeController extends Controller
      *      default = "default-value"
      * )
      *
-     * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
+     * @ToJsonResponse()
      */
     public function postParameterChangingDefaultValueAction(
         $param
@@ -794,53 +788,43 @@ class FakeController extends Controller
     }
 
     /**
-     * Gets a post using deep option.
-     *
-     * @param string $param The post param
-     *
-     * @return array The retrieved param
-     *
-     * @\Mmoreram\ControllerExtraBundle\Annotation\Post(
-     *      path = "param[key]",
-     *      name = "param",
-     *      deep = true
-     * )
-     *
-     * @\Mmoreram\ControllerExtraBundle\Annotation\JsonResponse()
-     */
-    public function postParameterDeepAction(
-        $param
-    ) {
-        return [
-            'param' => $param,
-        ];
-    }
-
-    /**
      * Form methods.
      *
-     * @\Mmoreram\ControllerExtraBundle\Annotation\Form(
+     * @CreateForm(
      *      class = "Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Form\Type\FakeType",
      *      name = "form1"
      * )
-     * @\Mmoreram\ControllerExtraBundle\Annotation\Form(
+     * @CreateForm(
      *      class = "Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Form\Type\FakeType",
      *      name = "form2"
      * )
-     * @\Mmoreram\ControllerExtraBundle\Annotation\Form(
+     * @CreateForm(
      *      class = "Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Form\Type\FakeType",
      *      name = "form3"
      * )
-     * @\Mmoreram\ControllerExtraBundle\Annotation\Form(
+     * @CreateForm(
      *      class = "Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Form\Type\FakeType",
      *      name = "form4"
      * )
+     *
+     * @ToJsonResponse()
      */
     public function formAction(
         AbstractType $form1,
         FormInterface $form2,
-        FormView $form3
+        FormView $form3,
+        Form $form4
     ) {
-        return new Response();
+        return [true];
+    }
+
+    /**
+     * Flush.
+     */
+    private function flush()
+    {
+        $this
+            ->get('doctrine.orm.default_entity_manager')
+            ->flush();
     }
 }

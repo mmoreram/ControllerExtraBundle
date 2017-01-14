@@ -11,14 +11,16 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
+declare(strict_types=1);
+
 namespace Mmoreram\ControllerExtraBundle\Tests\Functional\Resolver;
 
-use Mmoreram\ControllerExtraBundle\Tests\Functional\AbstractWebTestCase;
+use Mmoreram\ControllerExtraBundle\Tests\Functional\FunctionalTest;
 
 /**
  * Class PostAnnotationResolverTest.
  */
-class PostAnnotationResolverTest extends AbstractWebTestCase
+class PostAnnotationResolverTest extends FunctionalTest
 {
     /**
      * Test obtain a $_POST parameter.
@@ -152,65 +154,6 @@ class PostAnnotationResolverTest extends AbstractWebTestCase
             'default-value',
             $response['param'],
             'The resolved param is supposed to be the default value if no param is received'
-        );
-    }
-
-    /**
-     * Test obtain a $_POST parameter using deep mode.
-     */
-    public function testObtainPostParameterDeepAnnotation()
-    {
-        $getMethod = new \ReflectionMethod('Symfony\Component\HttpFoundation\ParameterBag', 'get');
-        if ($getMethod->getNumberOfParameters() === 2) {
-            $this->markTestSkipped('Feature not allowed in Symfony ^3.0.0');
-        }
-
-        $this->client->request(
-            'POST',
-            '/fake/getpostparameterdeep',
-            [
-                'param' => [
-                    'key' => 'value',
-                ],
-            ]
-        );
-
-        $response = json_decode($this
-            ->client
-            ->getResponse()
-            ->getContent(), true);
-
-        $this->assertEquals(
-            'value',
-            $response['param'],
-            'The post parameter is not being correctly resolved'
-        );
-    }
-
-    /**
-     * Test obtain an unexistent $_POST parameter using deep mode.
-     */
-    public function testObtainUnexistentPostParameterDeepAnnotation()
-    {
-        $getMethod = new \ReflectionMethod('Symfony\Component\HttpFoundation\ParameterBag', 'get');
-        if ($getMethod->getNumberOfParameters() === 2) {
-            $this->markTestSkipped('Feature not allowed in Symfony ^3.0.0');
-        }
-
-        $this->client->request(
-            'POST',
-            '/fake/getpostparameterdeep'
-        );
-
-        $response = json_decode($this
-            ->client
-            ->getResponse()
-            ->getContent(), true);
-
-        $this->assertEquals(
-            null,
-            $response['param'],
-            'The resolved param is supposed to be null if no param is received'
         );
     }
 }

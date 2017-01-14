@@ -11,6 +11,8 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
+declare(strict_types=1);
+
 namespace Mmoreram\ControllerExtraBundle\Resolver;
 
 use Psr\Log\LoggerInterface;
@@ -18,180 +20,86 @@ use ReflectionMethod;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 
-use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
+use Mmoreram\ControllerExtraBundle\Annotation\Annotation;
 use Mmoreram\ControllerExtraBundle\Annotation\Log as AnnotationLog;
-use Mmoreram\ControllerExtraBundle\Resolver\Interfaces\AnnotationResolverInterface;
 
 /**
- * LogAnnotationResolver, an implementation of  AnnotationResolverInterface.
+ * Class LogAnnotationResolver.
  */
-class LogAnnotationResolver implements AnnotationResolverInterface
+class LogAnnotationResolver extends AnnotationResolver
 {
     /**
      * @var LoggerInterface
      *
      * Logger
      */
-    protected $logger;
+    private $logger;
 
     /**
      * @var string
      *
      * default level
      */
-    protected $defaultLevel;
+    private $defaultLevel;
 
     /**
      * @var string
      *
      * Default execute
      */
-    protected $defaultExecute;
+    private $defaultExecute;
 
     /**
      * @var bool
      *
      * Must log
      */
-    protected $mustLog = false;
+    private $mustLog = false;
 
     /**
      * @var string
      *
      * Level
      */
-    protected $level;
+    private $level;
 
     /**
      * @var string
      *
      * Execute
      */
-    protected $execute;
+    private $execute;
 
     /**
      * @var string
      *
      * Value
      */
-    protected $value;
+    private $value;
 
     /**
-     * Construct method.
+     * LogAnnotationResolver constructor.
      *
-     * @param LoggerInterface $logger Logger
+     * @param LoggerInterface $logger
+     * @param string          $defaultLevel
+     * @param string          $defaultExecute
      */
-    public function __construct(LoggerInterface $logger)
-    {
+    public function __construct(
+        LoggerInterface $logger,
+        string $defaultLevel,
+        string $defaultExecute
+    ) {
         $this->logger = $logger;
-    }
-
-    /**
-     * Return container.
-     *
-     * @return LoggerInterface Logger
-     */
-    public function getLogger()
-    {
-        return $this->logger;
-    }
-
-    /**
-     * Set default level name.
-     *
-     * @param string $defaultLevel Default level name
-     *
-     * @return LogAnnotationResolver self Object
-     */
-    public function setDefaultLevel($defaultLevel)
-    {
         $this->defaultLevel = $defaultLevel;
-
-        return $this;
-    }
-
-    /**
-     * Get default level name.
-     *
-     * @return string Default level
-     */
-    public function getDefaultLevel()
-    {
-        return $this->defaultLevel;
-    }
-
-    /**
-     * Set default execute name.
-     *
-     * @param string $defaultExecute Default execute value
-     *
-     * @return LogAnnotationResolver self Object
-     */
-    public function setDefaultExecute($defaultExecute)
-    {
         $this->defaultExecute = $defaultExecute;
-
-        return $this;
-    }
-
-    /**
-     * Get default execute value.
-     *
-     * @return string Default execute
-     */
-    public function getDefaultExecute()
-    {
-        return $this->defaultExecute;
-    }
-
-    /**
-     * Get must log.
-     *
-     * @return bool Must log
-     */
-    public function getMustLog()
-    {
-        return $this->mustLog;
-    }
-
-    /**
-     * Get level.
-     *
-     * @return bool Level
-     */
-    public function getLevel()
-    {
-        return $this->level;
-    }
-
-    /**
-     * Get execute.
-     *
-     * @return string Execute
-     */
-    public function getExecute()
-    {
-        return $this->execute;
-    }
-
-    /**
-     * Get value.
-     *
-     * @return string Value
-     */
-    public function getValue()
-    {
-        return $this->value;
     }
 
     /**
      * Specific annotation evaluation.
      *
-     * @param Request          $request    Request
-     * @param Annotation       $annotation Annotation
-     * @param ReflectionMethod $method     Method
-     *
-     * @return LogAnnotationResolver self Object
+     * @param Request          $request
+     * @param Annotation       $annotation
+     * @param ReflectionMethod $method
      */
     public function evaluateAnnotation(
         Request $request,
@@ -204,11 +112,11 @@ class LogAnnotationResolver implements AnnotationResolverInterface
         if ($annotation instanceof AnnotationLog) {
             $this->level = $annotation->getLevel()
                 ? $annotation->getLevel()
-                : $this->getDefaultLevel();
+                : $this->defaultLevel;
 
             $this->execute = $annotation->getExecute()
                 ? $annotation->getExecute()
-                : $this->getDefaultExecute();
+                : $this->defaultExecute;
 
             $this->mustLog = true;
             $this->value = $annotation->getValue();
@@ -216,28 +124,34 @@ class LogAnnotationResolver implements AnnotationResolverInterface
             /**
              * Only logs before controller execution if EXEC_PRE or EXEC_BOTH.
              */
-            if (in_array($this->getExecute(), [AnnotationLog::EXEC_PRE, AnnotationLog::EXEC_BOTH])) {
-                $this->logMessage($this->getLogger(), $this->getLevel(), $this->getValue());
+            if (in_array($this->execute, [AnnotationLog::EXEC_PRE, AnnotationLog::EXEC_BOTH])) {
+                $this->logMessage(
+                    $this->logger,
+                    $this->level,
+                    $this->value
+                );
             }
         }
-
-        return $this;
     }
 
     /**
      * Method executed while loading Controller.
      *
-     * @param FilterResponseEvent $event Filter Response event
+     * @param FilterResponseEvent $event
      */
     public function onKernelResponse(FilterResponseEvent $event)
     {
-        if ($this->getMustLog()) {
+        if ($this->mustLog) {
 
             /**
              * Only logs before controller execution if EXEC_POST or EXEC_BOTH.
              */
-            if (in_array($this->getExecute(), [AnnotationLog::EXEC_POST, AnnotationLog::EXEC_BOTH])) {
-                $this->logMessage($this->getLogger(), $this->getLevel(), $this->getValue());
+            if (in_array($this->execute, [AnnotationLog::EXEC_POST, AnnotationLog::EXEC_BOTH])) {
+                $this->logMessage(
+                    $this->logger,
+                    $this->level,
+                    $this->value
+                );
             }
         }
     }
@@ -245,19 +159,18 @@ class LogAnnotationResolver implements AnnotationResolverInterface
     /**
      * Send value to log.
      *
-     * @param LoggerInterface $logger Logger
-     * @param string          $level  Level
-     * @param string          $value  Value
-     *
-     * @return LogAnnotationResolver self Object
+     * @param LoggerInterface $logger
+     * @param string          $level
+     * @param string          $value
      */
-    public function logMessage(LoggerInterface $logger, $level, $value)
-    {
+    private function logMessage(
+        LoggerInterface $logger,
+        string $level,
+        string $value
+    ) {
         /**
          * Logs content, using specified level.
          */
         $logger->$level($value);
-
-        return $this;
     }
 }

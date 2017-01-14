@@ -11,56 +11,59 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
+declare(strict_types=1);
+
 namespace Mmoreram\ControllerExtraBundle\Resolver;
 
 use ReflectionMethod;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormRegistryInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\Request;
 
-use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
-use Mmoreram\ControllerExtraBundle\Annotation\Form as AnnotationForm;
-use Mmoreram\ControllerExtraBundle\Resolver\Abstracts\AbstractAnnotationResolver;
-use Mmoreram\ControllerExtraBundle\Resolver\Interfaces\AnnotationResolverInterface;
+use Mmoreram\ControllerExtraBundle\Annotation\Annotation;
+use Mmoreram\ControllerExtraBundle\Annotation\CreateForm;
 
 /**
- * FormAnnotationResolver, an implementation of  AnnotationResolverInterface.
+ * Class FormAnnotationResolver.
  */
-class FormAnnotationResolver extends AbstractAnnotationResolver implements AnnotationResolverInterface
+class FormAnnotationResolver extends AnnotationResolver
 {
     /**
      * @var FormRegistryInterface
      *
      * FormRegistry
      */
-    protected $formRegistry;
+    private $formRegistry;
 
     /**
      * @var FormRegistryInterface
      *
      * FormRegistry
      */
-    protected $formFactory;
+    private $formFactory;
 
     /**
      * @var string
      *
      * Default field name
      */
-    protected $defaultName;
+    private $defaultName;
 
     /**
      * Construct method.
      *
-     * @param FormRegistryInterface $formRegistry Form Registry
-     * @param FormFactoryInterface  $formFactory  Form Factory
-     * @param string                $defaultName  Default name
+     * @param FormRegistryInterface $formRegistry
+     * @param FormFactoryInterface  $formFactory
+     * @param string                $defaultName
      */
     public function __construct(
         FormRegistryInterface $formRegistry,
         FormFactoryInterface $formFactory,
-        $defaultName
+        string $defaultName
     ) {
         $this->formRegistry = $formRegistry;
         $this->formFactory = $formFactory;
@@ -70,11 +73,9 @@ class FormAnnotationResolver extends AbstractAnnotationResolver implements Annot
     /**
      * Specific annotation evaluation.
      *
-     * @param Request          $request    Request
-     * @param Annotation       $annotation Annotation
-     * @param ReflectionMethod $method     Method
-     *
-     * @return FormAnnotationResolver self Object
+     * @param Request          $request
+     * @param Annotation       $annotation
+     * @param ReflectionMethod $method
      */
     public function evaluateAnnotation(
         Request $request,
@@ -84,7 +85,7 @@ class FormAnnotationResolver extends AbstractAnnotationResolver implements Annot
         /**
          * Annotation is only laoded if is typeof WorkAnnotation.
          */
-        if ($annotation instanceof AnnotationForm) {
+        if ($annotation instanceof CreateForm) {
 
             /**
              * Once loaded Annotation info, we just instanced Service name.
@@ -106,7 +107,7 @@ class FormAnnotationResolver extends AbstractAnnotationResolver implements Annot
             $parameterClass = $this->getParameterType(
                 $method,
                 $parameterName,
-                'Symfony\\Component\\Form\\FormInterface'
+                FormInterface::class
             );
 
             /**
@@ -124,33 +125,31 @@ class FormAnnotationResolver extends AbstractAnnotationResolver implements Annot
                 )
             );
         }
-
-        return $this;
     }
 
     /**
-     * Built desired object.
+     * Built and return desired object.
      *
-     * @param Request              $request        Request
-     * @param FormFactoryInterface $formFactory    Form Factory
-     * @param AnnotationForm       $annotation     Annotation
-     * @param string               $parameterClass Class type of  method parameter
-     * @param AbstractType         $type           Built Type object
+     * @param Request              $request
+     * @param FormFactoryInterface $formFactory
+     * @param CreateForm           $annotation
+     * @param string               $parameterClass
+     * @param AbstractType         $type
      *
-     * @return mixed object to inject as a method parameter
+     * @return mixed
      */
-    protected function getBuiltObject(
+    private function getBuiltObject(
         Request $request,
         FormFactoryInterface $formFactory,
-        AnnotationForm $annotation,
-        $parameterClass,
+        CreateForm $annotation,
+        string $parameterClass,
         AbstractType $type
     ) {
         /**
          * Checks if parameter typehinting is AbstractType
          * In this case, form type as defined method parameter.
          */
-        if ('Symfony\\Component\\Form\\AbstractType' == $parameterClass) {
+        if (AbstractType::class == $parameterClass) {
             return $type;
         }
 
@@ -181,8 +180,8 @@ class FormAnnotationResolver extends AbstractAnnotationResolver implements Annot
          */
         if (in_array(
             $parameterClass, [
-                'Symfony\\Component\\Form\\Form',
-                'Symfony\\Component\\Form\\FormInterface',
+                Form::class,
+                FormInterface::class,
             ]
         )) {
             return $form;
@@ -192,7 +191,7 @@ class FormAnnotationResolver extends AbstractAnnotationResolver implements Annot
          * Checks if parameter typehinting is FormView
          * In this case, inject form's view as defined method parameter.
          */
-        if ('Symfony\\Component\\Form\\FormView' == $parameterClass) {
+        if (FormView::class == $parameterClass) {
             return $form->createView();
         }
     }

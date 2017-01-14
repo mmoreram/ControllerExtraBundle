@@ -3,17 +3,21 @@ services:
     #
     # Providers
     #
-    mmoreram.controllerextra.provider.entity_provider:
-        class: %mmoreram.controllerextra.provider.entity_provider.class%
+    controller_extra.provider.entity:
+        class: Mmoreram\ControllerExtraBundle\Provider\EntityProvider
         arguments:
             - "@service_container"
             - "@kernel"
-            - %mmoreram.controllerextra.factory_default_method%
-            - %mmoreram.controllerextra.factory_default_static%
+            - "%controller_extra.entity_default_factory_method%"
+            - "%controller_extra.entity_default_factory_static%"
 
-    mmoreram.controllerextra.provider.request_parameter_provider:
-        class: %mmoreram.controllerextra.provider.request_parameter_provider.class%
+    controller_extra.provider_collector:
+        class: Mmoreram\ControllerExtraBundle\Provider\ProviderCollector
+
+    controller_extra.provider.request_parameter:
+        class: Mmoreram\ControllerExtraBundle\Provider\RequestParameterProvider
         arguments:
             - "@request_stack"
-        calls:
-            - [setRequestType, [%mmoreram.controllerextra.request%]]
+            - "%controller_extra.request%"
+        tags:
+            - { name: controller_extra.provider }

@@ -11,11 +11,16 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
+declare(strict_types=1);
+
 namespace Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+
+use Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\Fake;
 
 /**
  * Class FakeType.
@@ -32,7 +37,7 @@ class FakeType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\Fake',
+            'data_class' => Fake::class,
         ]);
     }
 
@@ -44,16 +49,6 @@ class FakeType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('field', 'Symfony\Component\Form\Extension\Core\Type\TextType');
-    }
-
-    /**
-     * Return unique name for this form.
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return 'fake_form_type';
+        $builder->add('field', TextType::class);
     }
 }

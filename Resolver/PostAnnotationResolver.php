@@ -11,19 +11,20 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
+declare(strict_types=1);
+
 namespace Mmoreram\ControllerExtraBundle\Resolver;
 
 use ReflectionMethod;
 use Symfony\Component\HttpFoundation\Request;
 
-use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
+use Mmoreram\ControllerExtraBundle\Annotation\Annotation;
 use Mmoreram\ControllerExtraBundle\Annotation\Post;
-use Mmoreram\ControllerExtraBundle\Resolver\Interfaces\AnnotationResolverInterface;
 
 /**
- * PostAnnotationResolver, an implementation of AnnotationResolverInterface.
+ * Class PostAnnotationResolver.
  */
-class PostAnnotationResolver implements AnnotationResolverInterface
+final class PostAnnotationResolver extends AnnotationResolver
 {
     /**
      * Specific annotation evaluation.
@@ -33,11 +34,9 @@ class PostAnnotationResolver implements AnnotationResolverInterface
      *
      * All method code will executed only if specific active flag is true
      *
-     * @param Request          $request    Request
-     * @param Annotation       $annotation Annotation
-     * @param ReflectionMethod $method     Method
-     *
-     * @return AnnotationResolverInterface self Object
+     * @param Request          $request
+     * @param Annotation       $annotation
+     * @param ReflectionMethod $method
      */
     public function evaluateAnnotation(
         Request $request,
@@ -53,8 +52,7 @@ class PostAnnotationResolver implements AnnotationResolverInterface
                 ->request
                 ->get(
                     $annotation->getPath(),
-                    $annotation->getDefault(),
-                    $annotation->isDeep()
+                    $annotation->getDefault()
                 );
 
             $annotationParameterName = $annotation

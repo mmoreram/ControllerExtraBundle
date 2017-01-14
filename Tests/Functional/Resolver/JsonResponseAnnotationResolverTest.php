@@ -11,14 +11,16 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
+declare(strict_types=1);
+
 namespace Mmoreram\ControllerExtraBundle\Tests\Functional\Resolver;
 
-use Mmoreram\ControllerExtraBundle\Tests\Functional\AbstractWebTestCase;
+use Mmoreram\ControllerExtraBundle\Tests\Functional\FunctionalTest;
 
 /**
  * Class JsonResponseAnnotationResolverTest.
  */
-class JsonResponseAnnotationResolverTest extends AbstractWebTestCase
+class JsonResponseAnnotationResolverTest extends FunctionalTest
 {
     /**
      * Test annotation for a right request.
@@ -48,8 +50,8 @@ class JsonResponseAnnotationResolverTest extends AbstractWebTestCase
             ->getResponse();
 
         $this->assertEquals(
-            '{"message":"Exception message"}',
-            $response->getContent()
+            'Exception message',
+            json_decode($response->getContent(), true)['message']
         );
 
         $this->assertEquals(
@@ -70,30 +72,8 @@ class JsonResponseAnnotationResolverTest extends AbstractWebTestCase
             ->getResponse();
 
         $this->assertEquals(
-            '{"message":"Not found exception"}',
-            $response->getContent()
-        );
-
-        $this->assertEquals(
-            '404',
-            $response->getStatusCode()
-        );
-    }
-
-    /**
-     * Test that an exception is laucned from an annotation.
-     */
-    public function testAnnotationRequestWhenExceptionIsLaunchedByAnnotation()
-    {
-        $this->client->request('GET', '/fake/jsonresponseannotationexception');
-
-        $response = $this
-            ->client
-            ->getResponse();
-
-        $this->assertEquals(
-            '{"message":"Exception launched from an annotation"}',
-            $response->getContent()
+            'Not found exception',
+            json_decode($response->getContent(), true)['message']
         );
 
         $this->assertEquals(

@@ -11,50 +11,44 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
+declare(strict_types=1);
+
 namespace Mmoreram\ControllerExtraBundle\CompilerPass;
 
-use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Reference;
+use Mmoreram\BaseBundle\CompilerPass\TagCompilerPass;
 
 /**
  * Class PaginatorCompilerPass.
  */
-class PaginatorCompilerPass implements CompilerPassInterface
+final class PaginatorCompilerPass extends TagCompilerPass
 {
     /**
-     * Every service tagged as controller_extra.paginator_evaluator will be processed.
+     * Get collector service name.
      *
-     * @param ContainerBuilder $container Container
+     * @return string
      */
-    public function process(ContainerBuilder $container)
+    public function getCollectorServiceName() : string
     {
-        if (!$container->hasDefinition('mmoreram.controllerextra.collector.paginator_evaluator_collector')) {
-            return;
-        }
+        return 'controller_extra.collector.paginator_evaluator';
+    }
 
-        /**
-         * We get our collector.
-         */
-        $definition = $container->getDefinition(
-            'mmoreram.controllerextra.collector.paginator_evaluator_collector'
-        );
+    /**
+     * Get collector method name.
+     *
+     * @return string
+     */
+    public function getCollectorMethodName() : string
+    {
+        return 'addPaginatorEvaluator';
+    }
 
-        /**
-         * We get all tagged services.
-         */
-        $taggedServices = $container->findTaggedServiceIds(
-            'controller_extra.paginator_evaluator'
-        );
-
-        /**
-         * We add every tagged Resolver into EventListener.
-         */
-        foreach ($taggedServices as $id => $attributes) {
-            $definition->addMethodCall(
-                'addPaginatorEvaluator',
-                [new Reference($id)]
-            );
-        }
+    /**
+     * Get tag name.
+     *
+     * @return string
+     */
+    public function getTagName() : string
+    {
+        return 'controller_extra.paginator_evaluator';
     }
 }

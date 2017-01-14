@@ -1,23 +1,17 @@
-parameters:
-
-    #
-    # Resolvers
-    #
-    mmoreram.controllerextra.resolver.entity_annotation_resolver.class: Mmoreram\ControllerExtraBundle\Resolver\EntityAnnotationResolver
-
 services:
 
     #
     # Resolvers
     #
-    mmoreram.controllerextra.resolver.entity_annotation_resolver:
-        class: %mmoreram.controllerextra.resolver.entity_annotation_resolver.class%
+    controller_extra.resolver.entity_annotation:
+        class: Mmoreram\ControllerExtraBundle\Resolver\EntityAnnotationResolver
         arguments:
+            - "@service_container"
             - "@doctrine"
-            - "@mmoreram.controllerextra.provider.entity_provider"
-            - "@mmoreram.controllerextra.provider.request_parameter_provider"
-            - %mmoreram.controllerextra.entity_default_name%
-            - %mmoreram.controllerextra.entity_default_persist%
-            - %mmoreram.controllerextra.entity_fallback_mapping%
+            - "@controller_extra.provider.entity"
+            - "@controller_extra.provider_collector"
+            - "%controller_extra.entity_default_name%"
+            - "%controller_extra.entity_default_persist%"
+            - "%controller_extra.entity_fallback_mapping%"
         tags:
-            - { name: controller_extra.annotation }
+            - { name: controller_extra.annotation_resolver }

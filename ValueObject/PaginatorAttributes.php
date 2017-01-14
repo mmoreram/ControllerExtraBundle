@@ -11,133 +11,99 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
+declare(strict_types=1);
+
 namespace Mmoreram\ControllerExtraBundle\ValueObject;
 
 /**
  * Class PaginatorAttributes.
  */
-class PaginatorAttributes
+final class PaginatorAttributes
 {
     /**
      * @var int
      *
      * total pages
      */
-    protected $totalPages;
+    private $totalPages;
 
     /**
      * @var int
      *
      * total elements
      */
-    protected $totalElements;
+    private $totalElements;
 
     /**
      * @var int
      *
      * total page
      */
-    protected $currentPage;
+    private $currentPage;
 
     /**
      * @var int
      *
      * number of elements per page
      */
-    protected $limitPerPage;
+    private $limitPerPage;
 
     /**
-     * Sets TotalElements.
+     * PaginatorAttributes constructor.
      *
-     * @param int $totalElements TotalElements
-     *
-     * @return PaginatorAttributes Self object
+     * @param int $totalPages
+     * @param int $totalElements
+     * @param int $currentPage
+     * @param int $limitPerPage
      */
-    public function setTotalElements($totalElements)
-    {
+    public function __construct(
+        int $totalPages,
+        int $totalElements,
+        int $currentPage,
+        int $limitPerPage
+    ) {
+        $this->totalPages = $totalPages;
         $this->totalElements = $totalElements;
-
-        return $this;
+        $this->currentPage = $currentPage;
+        $this->limitPerPage = $limitPerPage;
     }
 
     /**
      * Get TotalElements.
      *
-     * @return int TotalElements
+     * @return int
      */
-    public function getTotalElements()
+    public function getTotalElements() : int
     {
         return $this->totalElements;
     }
 
     /**
-     * Sets TotalPages.
-     *
-     * @param int $totalPages TotalPages
-     *
-     * @return PaginatorAttributes Self object
-     */
-    public function setTotalPages($totalPages)
-    {
-        $this->totalPages = $totalPages;
-
-        return $this;
-    }
-
-    /**
      * Get TotalPages.
      *
-     * @return int TotalPages
+     * @return int
      */
-    public function getTotalPages()
+    public function getTotalPages() : int
     {
         return $this->totalPages;
     }
 
     /**
-     * Sets CurrentPage.
-     *
-     * @param int $currentPage CurrentPage
-     *
-     * @return PaginatorAttributes Self object
-     */
-    public function setCurrentPage($currentPage)
-    {
-        $this->currentPage = $currentPage;
-
-        return $this;
-    }
-
-    /**
      * Get CurrentPage.
      *
-     * @return int CurrentPage
+     * @return int
      */
-    public function getCurrentPage()
+    public function getCurrentPage() : int
     {
         return $this->currentPage;
     }
 
     /**
-     * Sets LimitPerPage.
-     *
-     * @param int $limitPerPage
-     *
-     * @return PaginatorAttributes Self object
-     */
-    public function setLimitPerPage($limitPerPage)
-    {
-        $this->limitPerPage = $limitPerPage;
-
-        return $this;
-    }
-
-    /**
      * Get LimitPerPage.
      *
-     * @return int LimitPerPage
+     * @return int
      */
-    public function getLimitPerPage()
+    public function getLimitPerPage() : int
     {
         return $this->limitPerPage;
     }

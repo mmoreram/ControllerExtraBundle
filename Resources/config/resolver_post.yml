@@ -1,16 +1,9 @@
-parameters:
-
-    #
-    # Resolvers
-    #
-    mmoreram.controllerextra.resolver.post_annotation_resolver.class: Mmoreram\ControllerExtraBundle\Resolver\PostAnnotationResolver
-
 services:
 
     #
     # Resolvers
     #
-    mmoreram.controllerextra.resolver.post_annotation_resolver:
-        class: %mmoreram.controllerextra.resolver.post_annotation_resolver.class%
+    controller_extra.resolver.post_annotation:
+        class: Mmoreram\ControllerExtraBundle\Resolver\PostAnnotationResolver
         tags:
-            - { name: controller_extra.annotation }
+            - { name: controller_extra.annotation_resolver }

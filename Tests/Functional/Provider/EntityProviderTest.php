@@ -11,54 +11,61 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
+declare(strict_types=1);
+
 namespace Mmoreram\ControllerExtraBundle\Tests\Functional\Provider;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-
-use Mmoreram\ControllerExtraBundle\Provider\EntityProvider;
+use Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\Fake;
+use Mmoreram\ControllerExtraBundle\Tests\Functional\FunctionalTest;
 
 /**
  * Class EntityProviderTest.
  */
-class EntityProviderTest extends WebTestCase
+class EntityProviderTest extends FunctionalTest
 {
     /**
-     * @var EntityProvider
+     * Testing evaluateEntityNamespace.
      *
-     * entity provider
-     */
-    protected $entityProvider;
-
-    /**
-     * @var string
+     * @param string $namespace
      *
-     * entity namespace
+     * @dataProvider dataEvaluateEntityNamespace
      */
-    protected $entityNamespace = 'Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\Fake';
-
-    /**
-     * Set up.
-     */
-    public function setUp()
+    public function testEvaluateEntityNamespace(string $namespace)
     {
-        static::$kernel = static::createKernel();
-        static::$kernel->boot();
-
-        $this->entityProvider = static::$kernel
-            ->getContainer()
-            ->get('mmoreram.controllerextra.provider.entity_provider');
+        $this->assertEquals(
+            Fake::class,
+            $this
+                ->get('controller_extra.provider.entity')
+                ->evaluateEntityNamespace($namespace)
+        );
     }
 
     /**
-     * Testing class provider with good results.
-     *
-     * @dataProvider dataProvide
+     * Data for testEvaluateEntityNamespace.
      */
-    public function testProvide($entityDefinition)
+    public function dataEvaluateEntityNamespace() : array
+    {
+        return [
+            ['Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity\Fake'],
+            ['controller_extra.entity.fake.class'],
+            ['FakeBundle:Fake'],
+        ];
+    }
+
+    /**
+     * Testing evaluateEntityInstanceFactory.
+     *
+     * @param array $factory
+     *
+     * @dataProvider dataEvaluateEntityInstanceFactory
+     */
+    public function testEvaluateEntityInstanceFactory(array $factory)
     {
         $this->assertInstanceOf(
-            $this->entityNamespace,
-            $this->entityProvider->provide($entityDefinition)
+            Fake::class,
+            $this
+                ->get('controller_extra.provider.entity')
+                ->evaluateEntityInstanceFactory($factory)
         );
     }
 
@@ -67,61 +74,58 @@ class EntityProviderTest extends WebTestCase
      *
      * @return array
      */
-    public function dataProvide()
+    public function dataEvaluateEntityInstanceFactory() : array
     {
         return [
-            [$this->entityNamespace],
-            ['controller_extra_bundle.entity.fake.class'],
-            ['FakeBundle:Fake'],
             [
                 [
-                    'factory' => 'Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory',
+                    'class' => 'Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory',
                     'static' => false,
                 ],
             ],
             [
                 [
-                    'factory' => 'Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory',
+                    'class' => 'Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory',
                     'method' => 'generateNonStatic',
                     'static' => false,
                 ],
             ],
             [
                 [
-                    'factory' => 'Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory',
+                    'class' => 'Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory',
                     'method' => 'generate',
                     'static' => true,
                 ],
             ],
             [
                 [
-                    'factory' => 'Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory',
+                    'class' => 'Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Factory\FakeFactory',
                     'method' => 'generate',
                 ],
             ],
             [
                 [
-                    'factory' => 'controller_extra_bundle.factory.fake',
+                    'class' => 'controller_extra.factory.fake',
                     'static' => false,
                 ],
             ],
             [
                 [
-                    'factory' => 'controller_extra_bundle.factory.fake',
+                    'class' => 'controller_extra.factory.fake',
                     'method' => 'generateNonStatic',
                     'static' => false,
                 ],
             ],
             [
                 [
-                    'factory' => 'controller_extra_bundle.factory.fake',
+                    'class' => 'controller_extra.factory.fake',
                     'method' => 'generate',
                     'static' => true,
                 ],
             ],
             [
                 [
-                    'factory' => 'controller_extra_bundle.factory.fake',
+                    'class' => 'controller_extra.factory.fake',
                     'method' => 'generate',
                 ],
             ],

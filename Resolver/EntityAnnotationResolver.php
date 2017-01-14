@@ -11,88 +11,100 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
+declare(strict_types=1);
+
 namespace Mmoreram\ControllerExtraBundle\Resolver;
 
 use Doctrine\Common\Persistence\AbstractManagerRegistry;
+use Doctrine\ORM\EntityNotFoundException;
+use Mmoreram\ControllerExtraBundle\Provider\Provider;
 use ReflectionMethod;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 
-use Mmoreram\ControllerExtraBundle\Annotation\Abstracts\Annotation;
-use Mmoreram\ControllerExtraBundle\Annotation\Entity as AnnotationEntity;
-use Mmoreram\ControllerExtraBundle\Exceptions\EntityNotFoundException;
+use Mmoreram\ControllerExtraBundle\Annotation\Annotation;
+use Mmoreram\ControllerExtraBundle\Annotation\LoadEntity;
 use Mmoreram\ControllerExtraBundle\Provider\EntityProvider;
-use Mmoreram\ControllerExtraBundle\Provider\RequestParameterProvider;
-use Mmoreram\ControllerExtraBundle\Resolver\Interfaces\AnnotationResolverInterface;
 
 /**
- * EntityAnnotationResolver, an implementation of AnnotationResolverInterface.
+ * Class EntityAnnotationResolver.
  */
-class EntityAnnotationResolver implements AnnotationResolverInterface
+class EntityAnnotationResolver extends AnnotationResolver
 {
+    /**
+     * @var ContainerInterface
+     *
+     * Container
+     */
+    private $container;
+
     /**
      * @var AbstractManagerRegistry
      *
      * Doctrine object
      */
-    protected $doctrine;
+    private $doctrine;
 
     /**
      * @var EntityProvider
      *
      * Entity provider
      */
-    protected $entityProvider;
+    private $entityProvider;
 
     /**
-     * @var RequestParameterProvider
+     * @var Provider
      *
-     * Request parameter provider
+     * Provider collector
      */
-    protected $requestParameterProvider;
+    private $providerCollector;
 
     /**
      * @var string
      *
      * Default field name
      */
-    protected $defaultName;
+    private $defaultName;
 
     /**
      * @var bool
      *
      * Default persist value
      */
-    protected $defaultPersist;
+    private $defaultPersist;
 
     /**
      * @var bool
      *
      * Mapping fallback
      */
-    protected $mappingFallback;
+    private $mappingFallback;
 
     /**
      * Construct method.
      *
-     * @param AbstractManagerRegistry  $doctrine                  Doctrine
-     * @param EntityProvider           $entityProvider            Entity provider
-     * @param RequestParameterProvider $requestParametersProvider Request parameter provider
-     * @param string                   $defaultName               Default name
-     * @param bool                     $defaultPersist            Default persist
-     * @param bool                     $mappingFallback           Mapping fallback
+     * @param ContainerInterface      $container
+     * @param AbstractManagerRegistry $doctrine
+     * @param EntityProvider          $entityProvider
+     * @param Provider                $providerCollector
+     * @param string                  $defaultName
+     * @param bool                    $defaultPersist
+     * @param bool                    $mappingFallback
      */
     public function __construct(
+        ContainerInterface $container,
         AbstractManagerRegistry $doctrine,
         EntityProvider $entityProvider,
-        RequestParameterProvider $requestParametersProvider,
-        $defaultName,
-        $defaultPersist,
-        $mappingFallback = false
+        Provider $providerCollector,
+        string $defaultName,
+        bool $defaultPersist,
+        bool $mappingFallback = false
     ) {
+        $this->container = $container;
         $this->doctrine = $doctrine;
         $this->entityProvider = $entityProvider;
-        $this->requestParametersProvider = $requestParametersProvider;
+        $this->providerCollector = $providerCollector;
         $this->defaultName = $defaultName;
         $this->defaultPersist = $defaultPersist;
         $this->mappingFallback = $mappingFallback;
@@ -101,11 +113,9 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
     /**
      * Specific annotation evaluation.
      *
-     * @param Request          $request    Request
-     * @param Annotation       $annotation Annotation
-     * @param ReflectionMethod $method     Method
-     *
-     * @return EntityAnnotationResolver self Object
+     * @param Request          $request
+     * @param Annotation       $annotation
+     * @param ReflectionMethod $method
      *
      * @throws EntityNotFoundException
      */
@@ -117,20 +127,26 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
         /**
          * Annotation is only loaded if is typeof AnnotationEntity.
          */
-        if ($annotation instanceof AnnotationEntity) {
+        if ($annotation instanceof LoadEntity) {
 
             /**
              * Creating new instance of desired entity.
              */
-            $entity = $this
+            $entityNamespace = $this
                 ->entityProvider
-                ->provide($annotation->getClass());
+                ->evaluateEntityNamespace($annotation->getNamespace());
 
             /**
-             * Tries to get a mapped instance of this entity.
-             * If not mapped, just return old new created.
+             * Tries to get a mapped instance of this entity. If not found,
+             * return null.
              */
-            $entity = $this->evaluateMapping($annotation, $entity);
+            $entity = $this->evaluateMapping($annotation, $entityNamespace);
+
+            if (!$entity instanceof $entityNamespace) {
+                $entity = $this
+                    ->entityProvider
+                    ->create($annotation);
+            }
 
             /**
              * Persists entity if defined.
@@ -158,26 +174,24 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
                 $entity
             );
         }
-
-        return $this;
     }
 
     /**
-     * Resolve doctrine mapping.
+     * Resolve doctrine mapping and return entity given or mapped instance.
      *
-     * @param AnnotationEntity $annotation Annotation
-     * @param object           $entity     Entity
+     * @param LoadEntity $annotation
+     * @param string     $entityNamespace
      *
-     * @return object Entity given or mapped instance
+     * @return null|object
      *
-     * @throws EntityNotFoundException Entity was intended to be mapped but not
-     *                                 exists
+     * @throws EntityNotFoundException
      */
-    public function evaluateMapping(AnnotationEntity $annotation, $entity)
-    {
-        if (is_array($annotation->getMapping())) {
+    private function evaluateMapping(
+        LoadEntity $annotation,
+        string $entityNamespace
+    ) {
+        if (!empty($annotation->getMapping())) {
             $mapping = $annotation->getMapping();
-            $requestParametersProvider = $this->requestParametersProvider;
             $mappingFallback = !is_null($annotation->getMappingFallback())
                 ? $annotation->getMappingFallback()
                 : $this->mappingFallback;
@@ -189,7 +203,9 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
              * look for the real request attribute value
              */
             foreach ($mapping as $mappingKey => $mappingValue) {
-                $parameterValue = $requestParametersProvider->getParameterValue($mappingValue);
+                $parameterValue = $this
+                    ->providerCollector
+                    ->provide($mappingValue);
 
                 /**
                  * Defined field is not found in current route, and we have
@@ -198,28 +214,22 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
                  * the entity itself.
                  */
                 if ($mappingFallback && ($parameterValue === $mappingValue)) {
-                    return $entity;
+                    return null;
                 }
 
                 $mapping[$mappingKey] = $parameterValue;
             }
 
-            $entityClass = get_class($entity);
             $instance = $this
-                ->doctrine
-                ->getManagerForClass($entityClass)
-                ->getRepository($entityClass)
-                ->findOneBy($mapping);
+                ->resolveRepositoryLookup(
+                    $annotation,
+                    $entityNamespace,
+                    $mapping
+                );
 
-            if (!($instance instanceof $entityClass)) {
-                $notFoundException = $annotation->getNotFoundException();
-                if (!empty($notFoundException)) {
-                    $exceptionClassName = $notFoundException['exception'];
-                    throw new $exceptionClassName($notFoundException['message']);
-                }
-
+            if (!$instance instanceof $entityNamespace) {
                 throw new EntityNotFoundException(
-                    'Entity of type ' . $entityClass . ' with mapping ' .
+                    'Entity of type ' . $entityNamespace . ' with mapping ' .
                     json_encode($mapping) . ' was not found.'
                 );
             }
@@ -227,25 +237,63 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
             return $instance;
         }
 
-        return $entity;
+        return null;
     }
 
     /**
      * Evaluate setters.
      *
-     * @param ParameterBag $attributes Request attributes
-     * @param object       $entity     Entity
-     * @param array        $setters    Array of setters
-     *
-     * @return EntityAnnotationResolver self Object
+     * @param ParameterBag $attributes
+     * @param object       $entity
+     * @param array        $setters
      */
-    public function evaluateSetters(ParameterBag $attributes, $entity, array $setters)
-    {
+    private function evaluateSetters(
+        ParameterBag $attributes,
+        $entity,
+        array $setters
+    ) {
         foreach ($setters as $method => $value) {
             $entity->$method($attributes->get($value));
         }
+    }
 
-        return $this;
+    /**
+     * Resolve repository lookup.
+     *
+     * @param LoadEntity $annotation
+     * @param string     $entityClass
+     * @param array      $mapping
+     *
+     * @return object|null
+     */
+    private function resolveRepositoryLookup(
+        LoadEntity $annotation,
+        string $entityClass,
+        array $mapping
+    ) {
+        $annotationRepository = $annotation->getRepository();
+        $annotationHasRepository = !is_null($annotationRepository) && is_array($annotationRepository);
+        if ($annotationHasRepository) {
+            $class = $annotation->getRepository()['class'];
+            $repository = $this
+                    ->container
+                    ->has($class)
+                ? $this
+                    ->container
+                    ->get($class)
+                : new $class();
+        } else {
+            $repository = $this
+                ->doctrine
+                ->getManagerForClass($entityClass)
+                ->getRepository($entityClass);
+        }
+
+        $method = $annotationHasRepository && isset($annotationRepository['method'])
+            ? $annotationRepository['method']
+            : 'findOneBy';
+
+        return $repository->$method($mapping);
     }
 
     /**
@@ -261,12 +309,10 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
      * parameters and can be overwritten there. Can also be defined in
      * every single annotation
      *
-     * @param AnnotationEntity $annotation Annotation
-     * @param object           $entity     Entity
-     *
-     * @return EntityAnnotationResolver self Object
+     * @param LoadEntity $annotation
+     * @param object     $entity
      */
-    protected function resolvePersist(AnnotationEntity $annotation, $entity)
+    private function resolvePersist(LoadEntity $annotation, $entity)
     {
         /**
          * Persist block.
@@ -299,7 +345,5 @@ class EntityAnnotationResolver implements AnnotationResolverInterface
                 ->getManagerForClass(get_class($entity))
                 ->persist($entity);
         }
-
-        return $this;
     }
 }

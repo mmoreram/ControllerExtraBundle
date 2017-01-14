@@ -11,27 +11,27 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
-namespace Mmoreram\ControllerExtraBundle\Resolver\Paginator\Interfaces;
+declare(strict_types=1);
+
+namespace Mmoreram\ControllerExtraBundle\Resolver\Paginator;
 
 use Doctrine\ORM\QueryBuilder;
 
-use Mmoreram\ControllerExtraBundle\Annotation\Paginator as AnnotationPaginator;
+use Mmoreram\ControllerExtraBundle\Annotation\CreatePaginator;
 
 /**
- * Class PaginatorEvaluatorInterface.
+ * Class PaginatorEvaluator.
  */
-interface PaginatorEvaluatorInterface
+interface PaginatorEvaluator
 {
     /**
      * Evaluates inner joins.
      *
-     * @param QueryBuilder        $queryBuilder Query builder
-     * @param AnnotationPaginator $annotation   Annotation
-     *
-     * @return PaginatorEvaluatorInterface self Object
+     * @param QueryBuilder    $queryBuilder
+     * @param CreatePaginator $annotation
      */
     public function evaluate(
         QueryBuilder $queryBuilder,
-        AnnotationPaginator $annotation
+        CreatePaginator $annotation
     );
 }

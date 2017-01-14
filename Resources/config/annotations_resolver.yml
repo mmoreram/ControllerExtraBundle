@@ -1,0 +1,12 @@
+services:
+
+    #
+    # Event Listeners
+    #
+    controller_extra.annotation_resolver_collector:
+        class: Mmoreram\ControllerExtraBundle\Resolver\AnnotationResolverCollector
+        arguments:
+            - "@kernel"
+            - "@annotation_reader"
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController, priority: %controller_extra.resolver_priority% }

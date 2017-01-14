@@ -11,6 +11,8 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
+declare(strict_types=1);
+
 namespace Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Entity;
 
 /**
@@ -23,21 +25,21 @@ class Fake
      *
      * Id
      */
-    protected $id;
+    private $id;
 
     /**
      * @var string
      *
      * Field
      */
-    protected $field;
+    private $field;
 
     /**
      * Get id.
      *
-     * @return int $id Id
+     * @return null|int
      */
-    public function getId()
+    public function getId() : ? int
     {
         return $this->id;
     }
@@ -45,23 +47,19 @@ class Fake
     /**
      * Sets Field.
      *
-     * @param string $field Field
-     *
-     * @return Fake Self object
+     * @param null|string $field
      */
-    public function setField($field)
+    public function setField(? string $field)
     {
         $this->field = $field;
-
-        return $this;
     }
 
     /**
      * Get Field.
      *
-     * @return string Field
+     * @return null|string
      */
-    public function getField()
+    public function getField() : ? string
     {
         return $this->field;
     }

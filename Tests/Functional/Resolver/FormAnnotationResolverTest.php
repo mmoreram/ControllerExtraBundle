@@ -11,14 +11,16 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
+declare(strict_types=1);
+
 namespace Mmoreram\ControllerExtraBundle\Tests\Functional\Resolver;
 
-use Mmoreram\ControllerExtraBundle\Tests\Functional\AbstractWebTestCase;
+use Mmoreram\ControllerExtraBundle\Tests\Functional\FunctionalTest;
 
 /**
  * Class FormAnnotationResolverTest.
  */
-class FormAnnotationResolverTest extends AbstractWebTestCase
+class FormAnnotationResolverTest extends FunctionalTest
 {
     /**
      * testAnnotation.
@@ -28,5 +30,13 @@ class FormAnnotationResolverTest extends AbstractWebTestCase
         $this
             ->client
             ->request('GET', '/fake/form');
+
+        $this->assertEquals(
+            '[true]',
+            $this
+                ->client
+                ->getResponse()
+                ->getContent()
+        );
     }
 }
