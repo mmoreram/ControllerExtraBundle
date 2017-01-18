@@ -17,7 +17,6 @@ namespace Mmoreram\ControllerExtraBundle\Resolver;
 
 use Doctrine\Common\Persistence\AbstractManagerRegistry;
 use Doctrine\ORM\EntityNotFoundException;
-use Mmoreram\ControllerExtraBundle\Provider\Provider;
 use ReflectionMethod;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
@@ -26,6 +25,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Mmoreram\ControllerExtraBundle\Annotation\Annotation;
 use Mmoreram\ControllerExtraBundle\Annotation\LoadEntity;
 use Mmoreram\ControllerExtraBundle\Provider\EntityProvider;
+use Mmoreram\ControllerExtraBundle\Provider\Provider;
 
 /**
  * Class EntityAnnotationResolver.

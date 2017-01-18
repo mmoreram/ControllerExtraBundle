@@ -16,12 +16,12 @@ declare(strict_types=1);
 namespace Mmoreram\ControllerExtraBundle;
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
-use Mmoreram\ControllerExtraBundle\CompilerPass\ProviderCompilerPass;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 
 use Mmoreram\BaseBundle\BaseBundle;
 use Mmoreram\ControllerExtraBundle\CompilerPass\PaginatorCompilerPass;
+use Mmoreram\ControllerExtraBundle\CompilerPass\ProviderCompilerPass;
 use Mmoreram\ControllerExtraBundle\CompilerPass\ResolverCompilerPass;
 use Mmoreram\ControllerExtraBundle\DependencyInjection\ControllerExtraExtension;
 

@@ -796,15 +796,21 @@ class FakeController extends Controller
      * )
      * @CreateForm(
      *      class = "Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Form\Type\FakeType",
-     *      name = "form2"
+     *      name = "form2",
+     *      handleRequest = true,
+     *      validate = "validate2"
      * )
      * @CreateForm(
      *      class = "Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Form\Type\FakeType",
-     *      name = "form3"
+     *      name = "form3",
+     *      handleRequest = true,
+     *      validate = "validate3"
      * )
      * @CreateForm(
      *      class = "Mmoreram\ControllerExtraBundle\Tests\FakeBundle\Form\Type\FakeType",
-     *      name = "form4"
+     *      name = "form4",
+     *      handleRequest = true,
+     *      validate = "validate4"
      * )
      *
      * @ToJsonResponse()
@@ -813,7 +819,10 @@ class FakeController extends Controller
         AbstractType $form1,
         FormInterface $form2,
         FormView $form3,
-        Form $form4
+        Form $form4,
+        bool $validate2,
+        bool $validate3,
+        bool $validate4
     ) {
         return [true];
     }

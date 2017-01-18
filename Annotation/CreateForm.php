@@ -52,12 +52,12 @@ final class CreateForm extends Annotation
     protected $handleRequest = false;
 
     /**
-     * @var bool
+     * @var string
      *
      * Validates submited form if Request is handled.
      * Name of field to set result
      */
-    protected $validate = false;
+    protected $validate;
 
     /**
      * return name.
@@ -102,9 +102,9 @@ final class CreateForm extends Annotation
     /**
      * return validate value.
      *
-     * @return bool
+     * @return string
      */
-    public function getValidate() : bool
+    public function getValidate() : string
     {
         return $this->validate;
     }
