@@ -20,7 +20,6 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Knp\Component\Pager\Paginator as KnpPaginator;
-use Mmoreram\ControllerExtraBundle\Provider\Provider;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use ReflectionMethod;
@@ -29,6 +28,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Mmoreram\ControllerExtraBundle\Annotation\Annotation;
 use Mmoreram\ControllerExtraBundle\Annotation\CreatePaginator;
 use Mmoreram\ControllerExtraBundle\Provider\EntityProvider;
+use Mmoreram\ControllerExtraBundle\Provider\Provider;
 use Mmoreram\ControllerExtraBundle\Resolver\Paginator\PaginatorEvaluatorCollector;
 use Mmoreram\ControllerExtraBundle\ValueObject\PaginatorAttributes;
 
