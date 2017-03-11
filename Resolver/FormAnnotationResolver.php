@@ -169,7 +169,7 @@ class FormAnnotationResolver extends AnnotationResolver
             if ($annotation->getValidate()) {
                 $request->attributes->set(
                     $annotation->getValidate(),
-                    $form->isValid()
+                    ($form->isSubmitted() && $form->isValid())
                 );
             }
         }
