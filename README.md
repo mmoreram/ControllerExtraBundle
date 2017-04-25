@@ -1754,7 +1754,7 @@ use Mmoreram\ControllerExtraBundle\Annotation\Annotation;
  */
 class MyCustomAnnotationResolver extends AnnotationResolver
 {
-    **
+    /**
      * Specific annotation evaluation.
      *
      * This method must be implemented in every single EventListener
