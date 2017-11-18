@@ -25,10 +25,10 @@
     "require": {
         "php": ">=7.1",
         "doctrine/common": "^2.5",
-        "symfony/config": "^3.2",
-        "symfony/http-kernel": "^3.2",
-        "symfony/http-foundation": "^3.2",
-        "symfony/dependency-injection": "^3.2",
+        "symfony/config": "^3.2 || ^4.0",
+        "symfony/http-kernel": "^3.2 || ^4.0",
+        "symfony/http-foundation": "^3.2 || ^4.0",
+        "symfony/dependency-injection": "^3.2 || ^4.0",
         "mmoreram/base-bundle": "^1.0.3",
         "mmoreram/symfony-bundle-dependencies": "^2.0"
     },
@@ -37,7 +37,11 @@
         "doctrine/annotations": "^1.2",
         "doctrine/orm": "^2.5.6",
 
-        "symfony/symfony": "^3.2",
+        "symfony/yaml": "^3.2 || ^4.0",
+        "symfony/translation": "^3.2 || ^4.0",
+        "symfony/validator": "^3.2 || ^4.0",
+        "symfony/browser-kit": "^3.2 || ^4.0",
+        "symfony/form": "^3.2 || ^4.0",
         "symfony/monolog-bundle": "^3.0",
         "pagerfanta/pagerfanta": "~1.0",
         "knplabs/knp-paginator-bundle": "^2.5",

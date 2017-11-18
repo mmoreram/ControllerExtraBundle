@@ -3,15 +3,22 @@ language: php
 sudo: false
 
 matrix:
+    fast_finish: true
     include:
         - php: 7.1
           env: $SYMFONY_VERSION="^3.2"
+        # test the latest release (including beta releases)
+        - php: 7.1
+          env: DEPENDENCIES=beta
 
 before_install:
     - 'if [ "$SYMFONY_VERSION" != "" ]; then composer require --no-update symfony/symfony:${SYMFONY_VERSION}; fi;'
 
 install:
     - composer update --prefer-source --no-interaction ${COMPOSER_OPTIONS}
+
+before_script:
+    - if [ "$DEPENDENCIES" = "beta" ]; then composer config minimum-stability beta; fi;
 
 script:
     - php vendor/bin/phpunit
