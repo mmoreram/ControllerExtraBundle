@@ -9,4 +9,4 @@ services:
             - "@kernel"
             - "@annotation_reader"
         tags:
-            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController, priority: %controller_extra.resolver_priority% }
+            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController, priority: '%controller_extra.resolver_priority%' }
